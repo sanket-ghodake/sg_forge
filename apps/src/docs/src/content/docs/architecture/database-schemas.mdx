@@ -1,0 +1,78 @@
+---
+title: Database Schemas & Entity Catalog
+description: Complete schema catalog for dedicated Turso libSQL SQLite databases across Auth, Portal, Dev Dashboard, Code, and Telemetry microservices.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Hermetic Entity Boundaries per Application"
+  analogy="In a well-designed city, electrical grids, water lines, and communications channels operate over distinct conduits to prevent a single water pipe rupture from causing a city-wide blackout. SG Forge partitions database schemas similarly: each micro-app has an independent schema and isolated storage file."
+  impact="Mathematically eliminates cross-app data corruption, SQL injection blast radius, and multi-tenant leakage."
+/>
+
+<TraceabilityBadge reqId="SR-TURSO-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-DB-001" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-DB-002" type="LLR" status="verified" />
+
+## 1. Multi-Database Architecture
+
+Every platform microservice and independent Forge App manages an isolated Turso libSQL SQLite database located in `data/`:
+
+| Database File | Managing Microservice | Primary Entities | Scoping Invariants |
+| :--- | :--- | :--- | :--- |
+| `data/auth.db` | `@forge/auth` | Users, Organizations, Roles, Sessions, Refresh Tokens, Audit Logs | `org_id`, `user_id` |
+| `data/portal.db` | `@forge/portal` | Notifications, Announcements, Canvas Layouts, User Preferences | `org_id`, `user_id` |
+| `data/dev_dashboard.db` | `@forge/dev-dashboard` | Employees, Org Nodes, Hierarchy Links, Remote DB Bookmarks | `org_id` |
+| `data/code.db` | `forge-apps/code` | Workspaces, Code Snippets, Editor Settings | `org_id`, `user_id` |
+| `data/telemetry.db` | `forge-apps/telemetry` | Heartbeat Events, Golden Signal Logs, Alert Rules | `service_name` |
+
+## 2. Drizzle ORM Entity Specifications
+
+### Central Auth Service (`data/auth.db`)
+```typescript
+// Users Table
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  salt: text('salt').notNull(),
+  orgId: text('org_id').notNull(),
+  role: text('role').notNull().default('user'),
+  mustChangePassword: integer('must_change_password', { mode: 'boolean' }).default(true),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
+});
+
+// Refresh Tokens Table (Rotation & Anti-Replay)
+export const refreshTokens = sqliteTable('refresh_tokens', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => users.id),
+  tokenHash: text('token_hash').notNull(),
+  familyId: text('family_id').notNull(),
+  isRevoked: integer('is_revoked', { mode: 'boolean' }).default(false),
+  expiresAt: text('expires_at').notNull(),
+});
+```
+
+### Dev Dashboard & Organization Directory (`data/dev_dashboard.db`)
+```typescript
+// Organization Tree Nodes (Polymorphic Hierarchy)
+export const orgNodes = sqliteTable('org_nodes', {
+  id: text('id').primaryKey(),
+  orgId: text('org_id').notNull(),
+  name: text('name').notNull(),
+  type: text('type').notNull(), // 'division' | 'department' | 'squad'
+  parentId: text('parent_id'),
+  materializedPath: text('materialized_path').notNull(), // e.g. "/org-1/div-eng/squad-infra"
+  createdAt: text('created_at').notNull(),
+});
+```
+
+## 3. Storage Hardening & Permissions
+
+All SQLite files in `data/` are governed by POSIX access control rules:
+* Directories: `0700` (`rwx------`) owned strictly by the service runtime user.
+* Database files: `0600` (`rw-------`) preventing unauthorized host read access.

@@ -1,0 +1,23 @@
+[Unit]
+Description=SG Forge Standalone Host Fallback Server (Approach A)
+After=network.target docker.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=%I
+WorkingDirectory=/opt/sg-forge
+ExecStart=/opt/sg-forge/portables/bun/bin/bun run scripts/fallback-server.ts
+Restart=always
+RestartSec=3
+Environment=NODE_ENV=production
+Environment=PORT=80
+
+# Security Hardening
+ProtectSystem=full
+ProtectHome=read-only
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

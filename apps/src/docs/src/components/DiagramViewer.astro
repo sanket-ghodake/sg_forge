@@ -1,0 +1,230 @@
+---
+/**
+ * DiagramViewer.astro
+ * Responsive diagram viewer embedding vector-crisp Astryx diagrams.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  src?: string;
+  diagram?: string;
+  title: string;
+  caption?: string;
+}
+
+const { src, diagram, title, caption } = Astro.props;
+
+let svgContent = '';
+const targetDiagram = diagram || (src ? path.basename(src) : '');
+
+if (targetDiagram) {
+  const fileName = targetDiagram.endsWith('.html') ? targetDiagram : `${targetDiagram}.html`;
+  const candidates = [
+    path.resolve(process.cwd(), 'diagrams', fileName),
+    path.resolve(process.cwd(), 'public/diagrams', fileName),
+    path.resolve(process.cwd(), 'apps/src/docs/diagrams', fileName),
+    path.resolve(process.cwd(), 'apps/src/docs/public/diagrams', fileName),
+    path.resolve(process.cwd(), '../diagrams', fileName),
+    path.resolve(process.cwd(), '../public/diagrams', fileName),
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) {
+      const rawHtml = fs.readFileSync(p, 'utf-8');
+      const svgMatch = rawHtml.match(/<svg[\s\S]*?<\/svg>/i);
+      if (svgMatch) {
+        svgContent = svgMatch[0];
+      }
+      break;
+    }
+  }
+}
+---
+
+<figure class="diagram-container">
+  <div class="diagram-toolbar">
+    <span class="diagram-title">{title}</span>
+    <span class="diagram-badge">Astryx SVG</span>
+  </div>
+  <div class="diagram-canvas">
+    {svgContent ? (
+      <div class="diagram-svg-inner" set:html={svgContent} />
+    ) : src ? (
+      <iframe src={src} title={title} loading="lazy" class="diagram-frame" />
+    ) : (
+      <div class="diagram-slot">
+        <slot />
+      </div>
+    )}
+  </div>
+  {caption && <figcaption class="diagram-caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .diagram-container {
+    margin: 2rem 0;
+    border-radius: 12px;
+    border: 1px solid var(--forge-border, #282828);
+    background: var(--forge-bg-card, #1c1c1c);
+    overflow: hidden;
+    box-shadow: var(--forge-shadow-card, 0 4px 24px rgba(0, 0, 0, 0.25));
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .diagram-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: var(--forge-bg-surface, #171717);
+    border-bottom: 1px solid var(--forge-border, #282828);
+  }
+
+  .diagram-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--forge-text-main, #ededed);
+  }
+
+  .diagram-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    color: var(--forge-primary, #3ecf8e);
+    border: 1px solid var(--forge-border-medium, #383838);
+  }
+
+  .diagram-canvas {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto;
+    background: radial-gradient(circle at 50% 50%, var(--forge-primary-bg, rgba(62, 207, 142, 0.03)) 0%, var(--forge-bg-elevated, #191919) 100%);
+  }
+
+  .diagram-frame {
+    width: 100%;
+    min-height: 380px;
+    border: none;
+  }
+
+  .diagram-svg-inner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  :global(.diagram-svg-inner svg) {
+    width: 100% !important;
+    max-width: 860px;
+    height: auto !important;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+  }
+
+  /* ── Light Theme Adaptations for Inlined SVG Elements ── */
+  :global([data-theme="light"] .diagram-container) {
+    background: #ffffff !important;
+    border-color: #eaeaea !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  :global([data-theme="light"] .diagram-toolbar) {
+    background: #ffffff !important;
+    border-bottom-color: #eaeaea !important;
+  }
+
+  :global([data-theme="light"] .diagram-canvas) {
+    background: radial-gradient(circle at 50% 50%, rgba(36, 180, 126, 0.04) 0%, #f9fafb 100%) !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg) {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.06)) !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="#111827"]) {
+    fill: #ffffff !important;
+    stroke: #e2e8f0;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[stroke="rgba(255,255,255,0.1)"]),
+  :global([data-theme="light"] .diagram-svg-inner svg rect[stroke="rgba(255,255,255,0.08)"]) {
+    stroke: #e2e8f0 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="#1E1B4B"]) {
+    fill: #eef2ff !important;
+    stroke: #818cf8 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="#064E3B"]) {
+    fill: #ecfdf5 !important;
+    stroke: #10b981 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="#164E63"]) {
+    fill: #f0fdfa !important;
+    stroke: #06b6d4 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="#312E81"]) {
+    fill: #e0e7ff !important;
+    stroke: #818cf8 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#F3F4F6"]) {
+    fill: #0f172a !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#9CA3AF"]) {
+    fill: #475569 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#818CF8"]),
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#A5B4FC"]) {
+    fill: #4338ca !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#34D399"]) {
+    fill: #047857 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#67E8F9"]) {
+    fill: #0e7490 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#FBBF24"]),
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#F59E0B"]) {
+    fill: #b45309 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg text[fill="#EF4444"]) {
+    fill: #dc2626 !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="rgba(99,102,241,0.05)"]) {
+    fill: rgba(99, 102, 241, 0.08) !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="rgba(16,185,129,0.05)"]) {
+    fill: rgba(16, 185, 129, 0.08) !important;
+  }
+
+  :global([data-theme="light"] .diagram-svg-inner svg rect[fill="rgba(17,24,39,0.95)"]) {
+    fill: #ffffff !important;
+    stroke: #e2e8f0 !important;
+  }
+
+  .diagram-caption {
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    background: var(--forge-bg-surface, #171717);
+    border-top: 1px solid var(--forge-border, #282828);
+    text-align: center;
+  }
+</style>

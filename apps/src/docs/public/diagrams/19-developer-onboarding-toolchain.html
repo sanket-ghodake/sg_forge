@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developer Onboarding & Scaffolding Toolchain</title>
+  <style>
+    :root {
+      --bg-root: #0b0f19;
+      --bg-surface: #111827;
+      --primary: #6366f1;
+      --accent: #06b6d4;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background: var(--bg-root);
+      color: var(--text);
+      font-family: var(--font);
+      margin: 0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    svg { width: 100%; height: auto; display: block; }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-root: #f8fafc;
+        --bg-surface: #ffffff;
+        --primary: #059669;
+        --accent: #06b6d4;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+      }
+      .card { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+      svg rect[fill="#111827"] { fill: #ffffff !important; stroke: #e2e8f0; }
+      svg rect[stroke="rgba(255,255,255,0.1)"], svg rect[stroke="rgba(255,255,255,0.08)"] { stroke: #e2e8f0 !important; }
+      svg text[fill="#F3F4F6"] { fill: #0f172a !important; }
+      svg text[fill="#9CA3AF"] { fill: #475569 !important; }
+      svg rect[fill="#1E1B4B"] { fill: #eef2ff !important; stroke: #818cf8 !important; }
+      svg rect[fill="#064E3B"] { fill: #ecfdf5 !important; stroke: #10b981 !important; }
+      svg rect[fill="#164E63"] { fill: #f0fdfa !important; stroke: #06b6d4 !important; }
+      svg rect[fill="#312E81"] { fill: #e0e7ff !important; stroke: #818cf8 !important; }
+      svg text[fill="#818CF8"], svg text[fill="#A5B4FC"] { fill: #4338ca !important; }
+      svg text[fill="#34D399"] { fill: #047857 !important; }
+      svg text[fill="#67E8F9"] { fill: #0e7490 !important; }
+      svg text[fill="#FBBF24"], svg text[fill="#F59E0B"] { fill: #b45309 !important; }
+      svg text[fill="#EF4444"] { fill: #dc2626 !important; }
+      svg rect[fill="rgba(17,24,39,0.95)"] { fill: #ffffff !important; stroke: #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <svg viewBox="0 0 860 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Developer Onboarding and Toolchain Pipeline">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#6366f1"/>
+        </marker>
+        <marker id="arrow-emerald" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+        </marker>
+      </defs>
+
+      <!-- Background Canvas -->
+      <rect x="0" y="0" width="860" height="480" rx="10" fill="#111827" stroke="rgba(255,255,255,0.08)"/>
+
+      <!-- Header Title -->
+      <text x="32" y="44" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="700" fill="#F3F4F6">Developer Lifecycle & Scaffolding Toolchain</text>
+      <text x="32" y="66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#9CA3AF">Zero Host Modifications ➔ Golden App Generator ➔ Rapid HMR ➔ 29-Check Quality Gate</text>
+
+      <!-- Phase 1: Zero Host Mod -->
+      <g transform="translate(32, 95)">
+        <rect width="180" height="220" rx="8" fill="#1E1B4B" stroke="#6366f1" stroke-width="1.5"/>
+        <rect x="12" y="14" width="28" height="28" rx="6" fill="#312E81"/>
+        <text x="21" y="33" font-family="monospace" font-size="12" font-weight="bold" fill="#818CF8">01</text>
+        <text x="50" y="26" font-family="sans-serif" font-size="13" font-weight="600" fill="#F3F4F6">Zero Host Mod</text>
+        <text x="50" y="40" font-family="sans-serif" font-size="10" fill="#9CA3AF">Portable Toolchain</text>
+
+        <rect x="12" y="58" width="156" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="20" y="76" font-family="monospace" font-size="11" fill="#34D399">portables/bun/bin</text>
+        <text x="20" y="92" font-family="sans-serif" font-size="10" fill="#9CA3AF">Zero npm/apt installs</text>
+
+        <rect x="12" y="112" width="156" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="20" y="130" font-family="monospace" font-size="11" fill="#818CF8">rtk run.sh</text>
+        <text x="20" y="146" font-family="sans-serif" font-size="10" fill="#9CA3AF">POSIX self-resolving</text>
+
+        <rect x="12" y="166" width="156" height="42" rx="4" fill="#312E81" stroke="#818cf8"/>
+        <text x="20" y="186" font-family="monospace" font-size="10" fill="#818CF8">eol=lf gitattributes</text>
+        <text x="20" y="200" font-family="sans-serif" font-size="9" fill="#9CA3AF">Cross-platform drift free</text>
+      </g>
+
+      <line x1="214" y1="205" x2="238" y2="205" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Phase 2: Scaffolding Generator -->
+      <g transform="translate(244, 95)">
+        <rect width="180" height="220" rx="8" fill="#064E3B" stroke="#10b981" stroke-width="1.5"/>
+        <rect x="12" y="14" width="28" height="28" rx="6" fill="#065F46"/>
+        <text x="21" y="33" font-family="monospace" font-size="12" font-weight="bold" fill="#34D399">02</text>
+        <text x="50" y="26" font-family="sans-serif" font-size="13" font-weight="600" fill="#F3F4F6">App Generator</text>
+        <text x="50" y="40" font-family="sans-serif" font-size="10" fill="#9CA3AF">Golden Scaffolding</text>
+
+        <rect x="12" y="58" width="156" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="20" y="76" font-family="monospace" font-size="11" fill="#34D399">run.sh create-app</text>
+        <text x="20" y="92" font-family="sans-serif" font-size="10" fill="#9CA3AF">Automatic port allocation</text>
+
+        <rect x="12" y="112" width="156" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="20" y="130" font-family="sans-serif" font-size="11" font-weight="600" fill="#F3F4F6">Dedicated Turso DB</text>
+        <text x="20" y="146" font-family="sans-serif" font-size="10" fill="#9CA3AF">data/app.db provisioned</text>
+
+        <rect x="12" y="166" width="156" height="42" rx="4" fill="#065F46" stroke="#10b981"/>
+        <text x="20" y="186" font-family="monospace" font-size="10" fill="#34D399">Isolated Git Submodule</text>
+        <text x="20" y="200" font-family="sans-serif" font-size="9" fill="#9CA3AF">Standalone Dockerfile</text>
+      </g>
+
+      <line x1="426" y1="205" x2="450" y2="205" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-emerald)"/>
+
+      <!-- Phase 3: Instant Local Dev -->
+      <g transform="translate(456, 95)">
+        <rect width="180" height="220" rx="8" fill="#164E63" stroke="#06b6d4" stroke-width="1.5"/>
+        <rect x="12" y="14" width="28" height="28" rx="6" fill="#155E75"/>
+        <text x="21" y="33" font-family="monospace" font-size="12" font-weight="bold" fill="#67E8F9">03</text>
+        <text x="50" y="26" font-family="sans-serif" font-size="13" font-weight="600" fill="#F3F4F6">Live Local Dev</text>
+        <text x="50" y="40" font-family="sans-serif" font-size="10" fill="#9CA3AF">Rapid Iteration</text>
+
+        <rect x="12" y="58" width="156" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="20" y="76" font-family="monospace" font-size="11" fill="#67E8F9">run.sh dev</text>
+        <text x="20" y="92" font-family="sans-serif" font-size="10" fill="#9CA3AF">Watchdog & Hot Reload</text>
+
+        <rect x="12" y="112" width="156" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="20" y="130" font-family="sans-serif" font-size="11" font-weight="600" fill="#F3F4F6">SDK & UI Packages</text>
+        <text x="20" y="146" font-family="sans-serif" font-size="10" fill="#9CA3AF">@forge/sdk & @forge/ui</text>
+
+        <rect x="12" y="166" width="156" height="42" rx="4" fill="#155E75" stroke="#06b6d4"/>
+        <text x="20" y="186" font-family="monospace" font-size="10" fill="#67E8F9">Isolated logs/</text>
+        <text x="20" y="200" font-family="sans-serif" font-size="9" fill="#9CA3AF">5MB rolling rotation</text>
+      </g>
+
+      <line x1="638" y1="205" x2="662" y2="205" stroke="#06b6d4" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <!-- Phase 4: Pre-Commit Gate -->
+      <g transform="translate(668, 95)">
+        <rect width="160" height="220" rx="8" fill="#312E81" stroke="#818cf8" stroke-width="1.5"/>
+        <rect x="10" y="14" width="28" height="28" rx="6" fill="#3730A3"/>
+        <text x="19" y="33" font-family="monospace" font-size="12" font-weight="bold" fill="#A5B4FC">04</text>
+        <text x="46" y="26" font-family="sans-serif" font-size="13" font-weight="600" fill="#F3F4F6">Quality Gate</text>
+        <text x="46" y="40" font-family="sans-serif" font-size="10" fill="#9CA3AF">Pre-Commit</text>
+
+        <rect x="10" y="58" width="140" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="16" y="76" font-family="monospace" font-size="11" fill="#A5B4FC">run.sh verify</text>
+        <text x="16" y="92" font-family="sans-serif" font-size="10" fill="#9CA3AF">29 automated gates</text>
+
+        <rect x="10" y="112" width="140" height="46" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)"/>
+        <text x="16" y="130" font-family="sans-serif" font-size="11" font-weight="600" fill="#F3F4F6">Complexity Cap</text>
+        <text x="16" y="146" font-family="sans-serif" font-size="10" fill="#9CA3AF">CCN ≤ 10, ≤ 500 lines</text>
+
+        <rect x="10" y="166" width="140" height="42" rx="4" fill="#3730A3" stroke="#818cf8"/>
+        <text x="16" y="186" font-family="monospace" font-size="10" fill="#A5B4FC">Zero Auto-Commits</text>
+        <text x="16" y="200" font-family="sans-serif" font-size="9" fill="#9CA3AF">Deterministic audit</text>
+      </g>
+
+      <!-- Bottom Summary Box -->
+      <g transform="translate(32, 335)">
+        <rect width="796" height="110" rx="8" fill="rgba(17,24,39,0.95)" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="24" y="32" font-family="sans-serif" font-size="14" font-weight="700" fill="#F3F4F6">Hermetic Developer Experience Baseline</text>
+        <text x="24" y="52" font-family="sans-serif" font-size="11" fill="#9CA3AF">Any developer can clone on macOS, Linux, or Windows WSL2 and begin coding in 60 seconds with zero toolchain drift.</text>
+        
+        <rect x="24" y="66" width="240" height="30" rx="4" fill="#1E1B4B" stroke="#6366f1" stroke-width="1"/>
+        <text x="36" y="86" font-family="monospace" font-size="11" fill="#818CF8">📦 100% Portable Bundles</text>
+
+        <rect x="280" y="66" width="230" height="30" rx="4" fill="#064E3B" stroke="#10b981" stroke-width="1"/>
+        <text x="292" y="86" font-family="monospace" font-size="11" fill="#34D399">🛡️ Bidirectional Traceability</text>
+
+        <rect x="526" y="66" width="270" height="30" rx="4" fill="#164E63" stroke="#06b6d4" stroke-width="1"/>
+        <text x="538" y="86" font-family="monospace" font-size="11" fill="#67E8F9">⚡ Sub-second Bun Test Engine</text>
+      </g>
+    </svg>
+  </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+---
+title: LLR-SDK-004 - RFC 7807 Problem Details Response Generator (createSafeHandler)
+description: Low-level requirement wrapping HTTP request handlers in standardized error translation boundaries.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SDK-004" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Generate unique traceId (UUIDv4) at the entry of createSafeHandler wrapper
+2. Execute wrapped route handler inside try/catch boundary
+3. On uncaught exception, log structured error record with traceId and stack
+4. Construct RFC 7807 payload: `{ type, title, status: 500, detail, instance, traceId }`
+5. Set Response header 'Content-Type: application/problem+json' and return HTTP response
+
+## 2. Safety & Verification Invariants
+
+* **All API errors must return application/problem+json conforming to RFC 7807**
+* **Every error response must carry an immutable traceId matching the SRE log sink**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/sdk/src/error-handler.ts`
+* **Verified in Test Suite**: `apps/src/sdk/test/unit/error-handler.test.ts`

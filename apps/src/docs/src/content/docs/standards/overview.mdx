@@ -1,0 +1,54 @@
+---
+title: Living Engineering Standards & Traceability
+description: Architectural specifications for SG Forge Living Standards (High-Reliability Distributed Systems, Engineering Documentation, and Modular C4 Architecture).
+
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Mission-Critical Systems Traceability & Living Standards"
+  analogy="In mission-critical distributed engineering, no code exists without purpose. Every single function, route handler, and state machine directly traces up to an approved requirement and down to an automated test verifying its truth."
+  impact="Guarantees 100% symbol coverage, zero orphan code, and deterministic mathematical verification across all 29 pre-commit quality checks."
+/>
+
+<TraceabilityBadge reqId="SR-DOC-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="SR-GATE-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-HUB-601" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-007" type="LLR" status="verified" />
+
+## 1. Traceability Hierarchy & Verification Flow
+
+The SG Forge platform implements an unbroken bidirectional requirement chain (`SR -> HLR -> LLR -> Code -> Test`):
+
+<DiagramEmbed 
+  diagram="systems-traceability" 
+  title="SG Forge Systems Traceability & Verification Hierarchy" 
+  caption="Bidirectional trace: System Requirements to High-Level Requirements, Low-Level Requirements, Annotated Code, and 5-Tier Tests."
+/>
+
+### The Traceability Tiers
+1. **System Requirements (SR)**: Top-level platform invariants (Air-Gap Network, Turso DB Isolation, Zero-Trust Auth, Astryx UI, SPA Navigation).
+2. **High-Level Requirements (HLR)**: Subsystem behavioral contracts, state machines, and API boundaries.
+3. **Low-Level Requirements (LLR)**: Function-level algorithm specifications, parameter validations, and error conditions.
+4. **Annotated Code**: Every exported TypeScript symbol carries an `@requirements [LLR-...]` TSDoc tag.
+5. **5-Tier Automated Tests**: Unit, Integration, Security, Contract, and E2E tests validating the requirement invariants.
+
+## 2. Risk-Tiered 5-Tier Testing Rigor
+
+All platform code is subjected to the 5-Tier Testing Pyramid:
+
+<DiagramEmbed 
+  diagram="test-pyramid" 
+  title="5-Tier Testing Rigor & Verification Pyramid" 
+  caption="Unit, Integration, Security, Contract, and E2E tiers delivering 100% branch coverage on auth boundaries."
+/>
+
+### Test Subtiers
+* **Tier 1 (Unit)**: Fast, hermetic tests validating pure functions and component rendering.
+* **Tier 2 (Integration)**: Multi-component workflows, database transactions, and state dispatchers.
+* **Tier 3 (Security)**: In-chat AST audit, anti-replay token checks, brute-force defense, and SQL injection prevention.
+* **Tier 4 (Contracts)**: OpenAPI 3.1 schema validation via Spectral linting.
+* **Tier 5 (E2E)**: Real browser automation (Playwright) testing genuine network sockets, cookies, and destination rendering.

@@ -1,0 +1,38 @@
+name: "DCO (Developer Certificate of Origin)"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  dco:
+    name: "Enforce DCO 1.1 Sign-Off"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR Commits
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify DCO Sign-off Trailer
+        run: |
+          echo "🔍 Auditing PR commits for DCO 1.1 (Signed-off-by) trailer..."
+          FAILED=0
+          for commit in $(git rev-list origin/${{ github.base_ref }}..HEAD); do
+            AUTHOR_EMAIL=$(git log -1 --format='%ae' $commit)
+            COMMIT_MSG=$(git log -1 --format='%B' $commit)
+            if ! echo "$COMMIT_MSG" | grep -qE "^Signed-off-by: .+ <.+@.+>"; then
+              echo "❌ Commit $commit is missing 'Signed-off-by:' trailer."
+              FAILED=1
+            else
+              echo "✅ Commit $commit verified with valid DCO sign-off."
+            fi
+          done
+
+          if [ $FAILED -ne 0 ]; then
+            echo ""
+            echo "❌ Pull Request contains unsigned commits."
+            echo "   Please rebase and sign all commits using: git commit --amend -s"
+            exit 1
+          fi
+          echo "🎉 All commits in PR satisfy Developer Certificate of Origin (DCO 1.1)!"

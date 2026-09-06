@@ -1,0 +1,21 @@
+---
+title: Forge Apps Submodule Architecture
+description: Specification of autonomous Git submodule isolation, standalone Docker runtimes, and local quality gates.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<ExecutiveCard 
+  title="Autonomous Submodules: Decoupled by Design"
+  analogy="Each Forge App is like an independent satellite in the SG Forge constellation. They share communication frequencies with the mother ship, but generate their own power, carry their own thrusters, and operate safely if communication is lost."
+  impact="Allows engineering teams to develop, test, and release micro-apps independently with zero monorepo coupling."
+/>
+
+## 1. Submodule Invariants
+
+All Forge Apps in `forge-apps/*` must maintain:
+1. Independent Git submodules with standalone `.git` references.
+2. Independent Dockerfiles with zero monorepo dependencies.
+3. Isolated local Turso SQLite databases in `data/`.
+4. Dedicated 5-Tier test architectures (`test/unit`, `test/integration`, `test/security`, `test/contracts`, `test/e2e`).
+5. Colocated `docs/` with high-level and low-level requirement specifications.

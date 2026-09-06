@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forge-dev-dashboard
+  labels:
+    app.kubernetes.io/name: forge-dev-dashboard
+    app.kubernetes.io/part-of: ag-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forge-dev-dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: forge-dev-dashboard
+    spec:
+      containers:
+        - name: dev-dashboard
+          image: ag-dashboard/dev-dashboard:latest
+          env:
+            - name: PORT
+              value: "3002"
+            - name: NODE_ENV
+              value: "production"
+          ports:
+            - containerPort: 3002
+              name: http
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 500m
+            requests:
+              memory: 32Mi
+              cpu: 50m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: dev-dashboard-db-storage
+              mountPath: /app/data
+      volumes:
+        - name: dev-dashboard-db-storage
+          persistentVolumeClaim:
+            claimName: forge-dev-dashboard-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forge-dev-dashboard-service
+  labels:
+    app.kubernetes.io/name: forge-dev-dashboard-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3002
+      targetPort: 3002
+      name: http
+  selector:
+    app.kubernetes.io/name: forge-dev-dashboard
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: forge-dev-dashboard-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

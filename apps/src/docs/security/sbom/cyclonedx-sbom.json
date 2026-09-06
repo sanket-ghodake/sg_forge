@@ -1,0 +1,171 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:89f80695-13a4-462c-beb8-af08aa7c9f77",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-06T21:45:00.000Z",
+    "tools": [
+      {
+        "vendor": "SG Forge",
+        "name": "generate-sbom",
+        "version": "2.0.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "sg-forge-monorepo",
+      "version": "2.0.0",
+      "description": "SG Forge Internal Enterprise Platform & Monorepo"
+    }
+  },
+  "components": [
+    {
+      "type": "application",
+      "name": "bun",
+      "version": "1.3.14",
+      "purl": "pkg:generic/bun@1.3.14",
+      "description": "High-performance all-in-one JavaScript/TypeScript runtime & toolkit"
+    },
+    {
+      "type": "library",
+      "name": "@axe-core/playwright",
+      "version": "4.10.1",
+      "purl": "pkg:npm/%40axe-core/playwright@4.10.1",
+      "description": "Dependency @axe-core/playwright"
+    },
+    {
+      "type": "library",
+      "name": "@libsql/client",
+      "version": "0.17.4",
+      "purl": "pkg:npm/%40libsql/client@0.17.4",
+      "description": "Dependency @libsql/client"
+    },
+    {
+      "type": "library",
+      "name": "@lhci/cli",
+      "version": "0.14.0",
+      "purl": "pkg:npm/%40lhci/cli@0.14.0",
+      "description": "Dependency @lhci/cli"
+    },
+    {
+      "type": "library",
+      "name": "@stoplight/spectral-cli",
+      "version": "6.14.0",
+      "purl": "pkg:npm/%40stoplight/spectral-cli@6.14.0",
+      "description": "Dependency @stoplight/spectral-cli"
+    },
+    {
+      "type": "library",
+      "name": "@types/bun",
+      "version": "1.4.0",
+      "purl": "pkg:npm/%40types/bun@1.4.0",
+      "description": "Dependency @types/bun"
+    },
+    {
+      "type": "library",
+      "name": "@types/node",
+      "version": "22.0.0",
+      "purl": "pkg:npm/%40types/node@22.0.0",
+      "description": "Dependency @types/node"
+    },
+    {
+      "type": "library",
+      "name": "dependency-cruiser",
+      "version": "16.10.0",
+      "purl": "pkg:npm/dependency-cruiser@16.10.0",
+      "description": "Dependency dependency-cruiser"
+    },
+    {
+      "type": "library",
+      "name": "drizzle-orm",
+      "version": "0.45.2",
+      "purl": "pkg:npm/drizzle-orm@0.45.2",
+      "description": "Dependency drizzle-orm"
+    },
+    {
+      "type": "library",
+      "name": "madge",
+      "version": "8.0.0",
+      "purl": "pkg:npm/madge@8.0.0",
+      "description": "Dependency madge"
+    },
+    {
+      "type": "library",
+      "name": "type-coverage",
+      "version": "2.29.7",
+      "purl": "pkg:npm/type-coverage@2.29.7",
+      "description": "Dependency type-coverage"
+    },
+    {
+      "type": "library",
+      "name": "typescript",
+      "version": "5.6.3",
+      "purl": "pkg:npm/typescript@5.6.3",
+      "description": "Dependency typescript"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/types",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/types@2.0.0",
+      "description": "Dependency @forge/types"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/portal",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/portal@2.0.0",
+      "description": "Dependency @forge/portal"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/landing",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/landing@2.0.0",
+      "description": "Dependency @forge/landing"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/auth",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/auth@2.0.0",
+      "description": "Dependency @forge/auth"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/dev-dashboard",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/dev-dashboard@2.0.0",
+      "description": "Dependency @forge/dev-dashboard"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/sdk",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/sdk@2.0.0",
+      "description": "Dependency @forge/sdk"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/ui",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/ui@2.0.0",
+      "description": "Dependency @forge/ui"
+    },
+    {
+      "type": "framework",
+      "name": "@forge/dev-hub",
+      "version": "2.0.0",
+      "purl": "pkg:npm/%40forge/dev-hub@2.0.0",
+      "description": "Dependency @forge/dev-hub"
+    },
+    {
+      "type": "framework",
+      "name": "@forge-apps/template",
+      "version": "1.0.0",
+      "purl": "pkg:npm/%40forge-apps/template@1.0.0",
+      "description": "Dependency @forge-apps/template"
+    }
+  ]
+}

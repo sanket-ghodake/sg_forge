@@ -1,0 +1,25 @@
+---
+title: HLR-CODE-701 Forge Code Autonomous Submodule Service
+description: High-Level Requirement defining isolated Monaco code editing, syntax tokens, and sandboxed file tree traversal.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-CODE-701" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Forge Code microservice (`forge-apps/code`) shall provide cloud code editing:
+
+1. Runs as an autonomous service on port 8088 (`/apps/code`).
+2. Enforces strict chroot/sandboxing: file reads and writes are restricted to the designated workspace directory with directory traversal (`../`) prevention.
+3. Provides syntax highlighting and code editing via embedded Monaco / VS Code components.
+4. Manages dedicated SQLite storage in `forge-apps/code/data/code.db`.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-SUB-001" type="SR" status="verified" />
+* **Implemented in Code**: `forge-apps/code/src/server.ts`
+* **Verified in Tests**: `forge-apps/code/test/security/sandbox.test.ts`

@@ -1,0 +1,26 @@
+---
+title: HLR-AUTH-102 Multi-Tenant Role-Based Access Control (RBAC) Guards
+description: High-Level Requirement defining role hierarchy, permission checks, and route protection.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Central Auth service (`apps/src/auth`) shall enforce strict Role-Based Access Control across all authenticated routes. The role hierarchy is strictly defined as:
+
+`admin` ≻ `engineer` ≻ `viewer`
+
+1. **Admin (`admin`)**: Unrestricted access to tenant settings, API key issuance, user provisioning, and micro-app deployment.
+2. **Engineer (`engineer`)**: Full access to developer dashboard, SDK playgrounds, telemetry metrics, and code services.
+3. **Viewer (`viewer`)**: Read-only access to portal canvas, workspaces, and published documents.
+
+## 2. Invariants & Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-AUTH-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/auth/src/rbac.ts`
+* **Verified in Tests**: `apps/src/auth/test/security/rbac.test.ts` (100% Branch Coverage)

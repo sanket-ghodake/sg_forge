@@ -1,0 +1,128 @@
+---
+title: Organization Deployment & Quickstart
+description: Production deployment guide detailing Docker container orchestration, Caddy TLS reverse proxy configuration, and multi-tenant setup.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Hermetic Production Deployment in Minutes"
+  analogy="Deploying SG Forge is automated and deterministic: all environment variables, port mappings, database directories, and TLS proxy rules are synchronized from a single configuration file."
+  impact="Guarantees zero port collisions, automated local or public HTTPS, and isolated container execution."
+/>
+
+<TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-NET-001" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SDK-005" type="LLR" status="verified" />
+
+## 1. System Prerequisites
+
+| Component | Requirement | Purpose |
+| :--- | :--- | :--- |
+| **Operating System** | Linux (Ubuntu/Debian/RHEL/Alpine), macOS, or Windows WSL2 | Host platform |
+| **Container Engine** | Docker Engine 24.0+ & Docker Compose v2.20+ | Production microservice isolation |
+| **Host Toolchain** | **Zero host dependencies required** | Runtimes (`bun`, `rtk`) are bundled portably |
+| **Network Ports** | Port `80` (HTTP) and Port `443` (HTTPS) | Public reverse proxy gateway ingress |
+
+---
+
+## 2. 3-Step Production Quickstart
+
+### Step 1: Clone the Repository
+```bash
+rtk git clone <your-organization-repo-url> sg-forge
+cd sg-forge
+```
+
+### Step 2: Configure Organization Environment (`.env`)
+Create your active configuration from the template:
+```bash
+cp .env.example .env
+```
+
+Open `.env` and configure your organization's identity and security keys:
+```env
+# 🏢 Organization Identity & White-Labeling
+NEXT_PUBLIC_BRAND_NAME="Acme Corporation"
+NEXT_PUBLIC_ORG_NAME="Acme Corp"
+NEXT_PUBLIC_BRAND_SHORT="ACME"
+NEXT_PUBLIC_BRAND_TAGLINE="Internal Enterprise Workspace & App Hub"
+AUTH_ORG_DOMAIN="acme.internal"
+PUBLIC_DOMAIN="portal.acme.com"
+
+# 🔒 Cryptographic Secrets (Generate with: openssl rand -hex 32)
+JWT_SECRET="replace-with-a-random-32-character-secret-key-for-jwt"
+DEV_DASHBOARD_PASSWORD="replace-with-a-strong-12-plus-char-operator-password"
+DATA_ENCRYPTION_KEY="replace-with-a-random-32-char-aes256-encryption-key"
+
+# 🔀 Ports & Runtime Mode
+NODE_ENV="production"
+PORTAL_PORT=3001
+AUTH_PORT=3004
+DEV_DASHBOARD_PORT=3002
+DEV_HUB_PORT=3003
+DOCS_PORT=3005
+```
+
+Whenever routes or ports in `.env` are modified:
+```bash
+rtk bun scripts/generate-proxy.ts
+```
+
+### Step 3: Bootstrap & Launch Production Stack
+```bash
+# Bootstrap portable runtimes & sync configuration
+rtk ./run.sh setup
+
+# Launch production microservices & proxy gateway
+rtk ./run.sh up
+```
+
+All core platform containers communicate over `core-airgap-net` (`internal: true`) with zero outbound internet egress, while Caddy reverse proxy handles inbound requests on ports `80` and `443`.
+
+---
+
+## 3. Ingress Routing & Service Endpoints
+
+All platform services are accessible through a single port via the Caddy reverse proxy:
+
+| Endpoint Route | Service | Description | Access Tier |
+| :--- | :--- | :--- | :--- |
+| `http://localhost/` | Landing Hub | Platform discovery, status, and navigation hub | Public |
+| `http://localhost/portal` | Portal SPA | Unified organizational workspace & Org Canvas | Authenticated |
+| `http://localhost/auth` | Central IAM | Single sign-on, session manager & role guards | Public / Auth |
+| `http://localhost/devcenter` | Dev Dashboard | Container observability, telemetry, and live error triage | Admin / Dev |
+| `http://localhost/gateway` | Dev Hub | SDK documentation, API specs & integration sandbox | Developer |
+| `http://localhost/docs` | Engineering Docs | Living documentation & systems traceability portal | Public / Dev |
+| `http://localhost/apps/telemetry` | Telemetry App | Real-time platform resource & load telemetry | Public / Ops |
+| `http://localhost/apps/code` | Code Microservice | Cloud workspace and syntax explorer | Developer |
+
+---
+
+## 4. Production Reliability & Operational Safeguards
+
+1. **Dedicated Turso Database Isolation**: Every microservice maintains an isolated Turso/SQLite database instance (`auth.db`, `portal.db`, `dev_dashboard.db`, `code.db`, `telemetry.db`) stored in `data/`. Microservices never share or access each other's databases.
+2. **Automated Database Snapshots**: Atomic SQLite `VACUUM INTO` snapshots with SHA-256 verification and automatic 7-day retention:
+   ```bash
+   rtk ./run.sh backup
+   ```
+3. **Container Health Watchdog**: Monitors `/health` and `/ready` probes. Automatically restarts degraded containers with zero downtime.
+
+---
+
+## 5. Diagnostic & Management Commands
+
+```bash
+# Check status and health of all microservice containers
+rtk ./run.sh status
+
+# Tail centralized logs from platform containers
+rtk ./run.sh logs
+
+# Run full 29-gate architectural verification
+rtk ./run.sh verify
+
+# Gracefully shut down the stack
+rtk ./run.sh down
+```

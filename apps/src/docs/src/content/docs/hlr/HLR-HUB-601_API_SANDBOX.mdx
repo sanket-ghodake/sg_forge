@@ -1,0 +1,25 @@
+---
+title: HLR-HUB-601 Developer Hub & API Contract Sandbox
+description: High-Level Requirement defining OpenAPI 3.1 specification explorer, token minter, and polyglot generator.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-HUB-601" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Developer Hub (`apps/src/dev-hub`) shall provide an interactive developer workspace:
+
+1. Renders OpenAPI 3.1 endpoint documentation with live parameter schemas and RFC 7807 problem matrix.
+2. Provides a 1-click JWT token minter with preset roles (`admin`, `engineer`, `viewer`) for rapid local testing.
+3. Generates polyglot API request snippets in cURL, TypeScript, Python, and Go.
+4. Simulates air-gapped API requests against running platform microservices.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-DOC-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/dev-hub/src/sandbox.ts`
+* **Verified in Tests**: `apps/src/dev-hub/test/unit/sections.test.ts`

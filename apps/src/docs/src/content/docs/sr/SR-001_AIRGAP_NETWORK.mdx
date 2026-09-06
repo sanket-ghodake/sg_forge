@@ -1,0 +1,23 @@
+---
+title: SR-SEC-001 Zero-Egress Air-Gapped Network
+description: System Requirement defining mandatory network boundaries and egress prevention.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+</div>
+
+## 1. Requirement Statement
+
+The SG Forge Core Platform shall operate exclusively within an isolated Docker bridge network (`core-airgap-net`) configured with `internal: true`. Central services shall have no default route to external internet gateways.
+
+## 2. Rationale & Systems Traceability
+
+Under mission-critical distributed engineering standards, enterprise systems handling sensitive credentials and customer databases must prevent unintentional packet egress.
+
+## 3. High-Level Requirements Satisfied
+
+* <TraceabilityBadge reqId="HLR-NET-001" type="HLR" status="verified" /> Core Gateway Ingress Filtering
+* <TraceabilityBadge reqId="HLR-NET-002" type="HLR" status="verified" /> Forge Apps Submodule Boundary Isolation

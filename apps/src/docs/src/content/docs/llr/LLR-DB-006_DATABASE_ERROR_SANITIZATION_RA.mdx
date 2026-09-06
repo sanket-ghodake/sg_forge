@@ -1,0 +1,30 @@
+---
+title: LLR-DB-006 - Database Error Sanitization & Raw SQL Leak Prevention
+description: Low-level requirement masking SQLite/libSQL internal error strings before client transmission.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-DB-006" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Catch database exception during repository execution
+2. Log full raw error details (query string, parameters, stack) to internal SRE logger
+3. Map internal error codes (e.g. SQLITE_CONSTRAINT) to generic RFC 7807 problem details
+4. Replace error detail with safe generic text: 'A database constraint error occurred.'
+5. Return sanitized problem response with traceId for telemetry lookup
+
+## 2. Safety & Verification Invariants
+
+* **Raw SQL statements, table names, and column identifiers must never appear in HTTP response bodies**
+* **Internal stack traces must be suppressed in all non-local development environments**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/sdk/src/error-handler.ts`
+* **Verified in Test Suite**: `apps/src/sdk/test/unit/error-handler.test.ts`

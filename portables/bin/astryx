@@ -1,0 +1,19 @@
+#!/usr/bin/env bun
+/**
+ * Astryx Standalone Portable Binary (Zero Host Install)
+ * Dispatches to Astryx CLI engine in portables/astryx/bin/astryx.ts
+ */
+import { spawnSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
+const REPO_ROOT = process.cwd();
+const ASTRYX_SCRIPT = join(REPO_ROOT, "portables", "astryx", "bin", "astryx.ts");
+
+const args = process.argv.slice(2);
+const proc = spawnSync("bun", ["run", ASTRYX_SCRIPT, ...args], {
+  stdio: "inherit",
+  cwd: REPO_ROOT,
+});
+
+process.exit(proc.status ?? 0);

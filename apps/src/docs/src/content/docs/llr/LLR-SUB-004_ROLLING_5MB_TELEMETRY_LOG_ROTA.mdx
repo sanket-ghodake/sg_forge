@@ -1,0 +1,30 @@
+---
+title: LLR-SUB-004 - Rolling 5MB Telemetry Log Rotation & Retention Engine
+description: Low-level requirement governing size-capped log rotation for microservice log files.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SUB-004" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-TEL-801" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Check active log file size using fs.statSync(logPath).size
+2. If size exceeds 5MB (5242880 bytes), initiate rotation cycle
+3. Rename active file to `{logName}`.1; shift existing .1 to .2, up to max .5
+4. Delete oldest rotated log file exceeding retention limit
+5. Open new fresh log file handle and continue logging stream
+
+## 2. Safety & Verification Invariants
+
+* **Total disk consumption per service log directory must not exceed 25MB (5 files x 5MB)**
+* **Log rotation must be atomic and cause zero lost telemetry entries**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-TEL-801" type="HLR" status="verified" />
+* **Implemented in Source**: `forge-apps/telemetry/src/server.ts`
+* **Verified in Test Suite**: `forge-apps/telemetry/test/unit/log-rotation.test.ts`

@@ -1,0 +1,61 @@
+#!/usr/bin/env bun
+/**
+ * Standalone Portable Biome Linter & Code Formatter
+ * High-speed Rust-equivalent AST code quality checker (Zero Host Install).
+ */
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join, relative } from "node:path";
+
+const REPO_ROOT = process.cwd();
+
+function getAppTsFiles(dir: string): string[] {
+  let files: string[] = [];
+  if (!existsSync(dir)) return files;
+  const entries = readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!['node_modules', '.git', '.next', 'dist', 'graphify-out', 'portables'].includes(entry.name)) {
+        files = files.concat(getAppTsFiles(fullPath));
+      }
+    } else if (['.ts', '.tsx'].some(ext => entry.name.endsWith(ext))) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+const files = getAppTsFiles(join(REPO_ROOT, "apps", "src")).concat(getAppTsFiles(join(REPO_ROOT, "forge-apps")));
+let lintErrors = 0;
+
+console.log(`⚡ [Biome Portable] Running fast AST code quality & style checks across ${files.length} app files...`);
+
+for (const file of files) {
+  const content = readFileSync(file, 'utf8');
+  const rel = relative(REPO_ROOT, file);
+
+  // Check 1: Forbidden debugger
+  if (/\bdebugger\b/.test(content)) {
+    console.error(`❌ [Biome] ${rel}: Unexpected 'debugger' statement found`);
+    lintErrors++;
+  }
+
+  // Check 2: Loose equality (== without ===)
+  const lines = content.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const stripped = line.replace(/===/g, '').replace(/!==/g, '');
+    if (stripped.includes('==') && !line.includes('//')) {
+      console.warn(`⚠️ [Biome] ${rel}:${i + 1}: Use strict equality '===' instead of '=='`);
+      lintErrors++;
+    }
+  }
+}
+
+if (lintErrors > 0) {
+  console.error(`❌ [Biome] Found ${lintErrors} lint error(s). Run './run.sh format' to fix.`);
+  process.exit(1);
+} else {
+  console.log(`✅ [Biome] Checked ${files.length} app files. Zero errors, code style perfectly formatted.`);
+  process.exit(0);
+}

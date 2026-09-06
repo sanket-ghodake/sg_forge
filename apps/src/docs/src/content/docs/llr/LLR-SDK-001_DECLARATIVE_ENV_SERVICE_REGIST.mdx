@@ -1,0 +1,30 @@
+---
+title: LLR-SDK-001 - Declarative .env Service Registry Parser
+description: Low-level requirement parsing APP_* environment variables into validated service metadata objects.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SDK-001" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-SDK-301" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Iterate over process.env keys matching regex: ^APP_([A-Z0-9_]+)$
+2. Parse comma/semicolon delimited service attributes: name, port, path, type, health
+3. Validate port is numeric and within range [1024, 65535]
+4. Ensure service ingress path begins with '/' and contains no illegal characters
+5. Return frozen immutable ServiceRegistry record map
+
+## 2. Safety & Verification Invariants
+
+* **No hardcoded static port bindings; all microservice ports must resolve dynamically from registry**
+* **Invalid service definitions must trigger immediate startup validation failure**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-SDK-301" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/sdk/src/registry.ts`
+* **Verified in Test Suite**: `apps/src/sdk/test/unit/registry.test.ts`

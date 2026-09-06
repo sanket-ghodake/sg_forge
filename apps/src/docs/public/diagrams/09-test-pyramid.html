@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enterprise 5-Tier Test Architecture Pyramid</title>
+  <style>
+    :root {
+      --bg-root: #0b0f19;
+      --bg-surface: #111827;
+      --primary: #6366f1;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body { background: var(--bg-root); color: var(--text); font-family: var(--font); margin: 0; padding: 24px; display: flex; justify-content: center; }
+    .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 900px; width: 100%; }
+    svg { width: 100%; height: auto; display: block; }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-root: #f8fafc;
+        --bg-surface: #ffffff;
+        --primary: #059669;
+        --accent: #06b6d4;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+      }
+      .card {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      }
+      svg rect[fill="#111827"] { fill: #ffffff !important; stroke: #e2e8f0; }
+      svg rect[stroke="rgba(255,255,255,0.1)"], svg rect[stroke="rgba(255,255,255,0.08)"] { stroke: #e2e8f0 !important; }
+      svg text[fill="#F3F4F6"] { fill: #0f172a !important; }
+      svg text[fill="#9CA3AF"] { fill: #475569 !important; }
+      svg rect[fill="#1E1B4B"] { fill: #eef2ff !important; stroke: #818cf8 !important; }
+      svg rect[fill="#064E3B"] { fill: #ecfdf5 !important; stroke: #10b981 !important; }
+      svg rect[fill="#164E63"] { fill: #f0fdfa !important; stroke: #06b6d4 !important; }
+      svg rect[fill="#312E81"] { fill: #e0e7ff !important; stroke: #818cf8 !important; }
+      svg text[fill="#818CF8"], svg text[fill="#A5B4FC"] { fill: #4338ca !important; }
+      svg text[fill="#34D399"] { fill: #047857 !important; }
+      svg text[fill="#67E8F9"] { fill: #0e7490 !important; }
+      svg text[fill="#FBBF24"], svg text[fill="#F59E0B"] { fill: #b45309 !important; }
+      svg text[fill="#EF4444"] { fill: #dc2626 !important; }
+      svg rect[fill="rgba(17,24,39,0.95)"] { fill: #ffffff !important; stroke: #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <svg viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-09 desc-09">
+      <title id="title-09">Enterprise Standard 5-Tier Test Architecture</title>
+      <desc id="desc-09">Pyramid diagram illustrating the 5 risk-tiered test layers across all microservices and Forge Apps.</desc>
+      
+      <!-- Tier 5: E2E -->
+      <polygon points="400,40 310,100 490,100" fill="#312E81" stroke="#818CF8" stroke-width="1.5"/>
+      <text x="400" y="80" text-anchor="middle" fill="#F3F4F6" font-size="12" font-weight="700">Tier 5: E2E</text>
+      
+      <!-- Tier 4: Contracts -->
+      <polygon points="310,105 490,105 530,165 270,165" fill="#1E1B4B" stroke="#6366F1" stroke-width="1.5"/>
+      <text x="400" y="140" text-anchor="middle" fill="#F3F4F6" font-size="12" font-weight="700">Tier 4: Contract Tests (OpenAPI 3.1 &amp; Schemas)</text>
+      
+      <!-- Tier 3: Security -->
+      <polygon points="270,170 530,170 570,230 230,230" fill="#164E63" stroke="#06B6D4" stroke-width="1.5"/>
+      <text x="400" y="205" text-anchor="middle" fill="#F3F4F6" font-size="12" font-weight="700">Tier 3: Security &amp; Pentest (Zero Injection / RBAC)</text>
+      
+      <!-- Tier 2: Integration -->
+      <polygon points="230,235 570,235 610,295 190,295" fill="#064E3B" stroke="#10B981" stroke-width="1.5"/>
+      <text x="400" y="270" text-anchor="middle" fill="#F3F4F6" font-size="12" font-weight="700">Tier 2: Integration (Real HTTP, Cookies, Sockets)</text>
+      
+      <!-- Tier 1: Unit -->
+      <polygon points="190,300 610,300 650,370 150,370" fill="#111827" stroke="#9CA3AF" stroke-width="1.5"/>
+      <text x="400" y="335" text-anchor="middle" fill="#F3F4F6" font-size="13" font-weight="700">Tier 1: Unit Tests (3A Pattern: Arrange, Act, Assert)</text>
+      <text x="400" y="355" text-anchor="middle" fill="#10B981" font-size="11">511+ Passing Tests across 159 Files (100% Pass Rate)</text>
+    </svg>
+  </div>
+</body>
+</html>

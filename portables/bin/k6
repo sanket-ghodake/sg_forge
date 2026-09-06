@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Wrapper for k6 (Modern Load Testing Engine)
+# Zero Host Modification - Standalone Binary / Docker / Native Fallback
+# ==============================================================================
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+LOCAL_BIN="$REPO_ROOT/portables/k6/k6"
+
+SYS_K6="$(which -a k6 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+if [ -x "$LOCAL_BIN" ]; then
+    exec "$LOCAL_BIN" "$@"
+elif [ -n "$SYS_K6" ] && [ -x "$SYS_K6" ]; then
+    exec "$SYS_K6" "$@"
+elif command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1 && docker image inspect grafana/k6:latest >/dev/null 2>&1; then
+    exec docker run --rm --net=host -v "$REPO_ROOT:/src" -w /src grafana/k6:latest "$@"
+else
+    # Zero-dependency portable fallback: Uses instant autocannon runner
+    echo "⚡ [k6 Portable] k6 image not cached locally. Running instant load benchmark via Autocannon (< 3s)..."
+    exec "$REPO_ROOT/portables/bin/autocannon" "$@"
+fi

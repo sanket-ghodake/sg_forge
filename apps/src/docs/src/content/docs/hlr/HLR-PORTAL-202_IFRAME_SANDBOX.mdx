@@ -1,0 +1,24 @@
+---
+title: HLR-PORTAL-202 Sandboxed Micro-App Iframe Isolation & PostMessage Bridge
+description: High-Level Requirement defining hermetic micro-app containment and origin-verified message passing.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-PORTAL-202" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+When rendering autonomous Forge Apps inside the Portal canvas:
+
+1. Micro-apps shall be embedded within strict HTML5 `<iframe>` elements configured with `sandbox="allow-scripts allow-forms allow-same-origin"`.
+2. Cross-frame communication shall use bidirectional `window.postMessage` with strict origin verification (`event.origin === window.location.origin`).
+3. Iframe sandboxes shall be prevented from accessing parent DOM, top-level cookie jars, or executing unauthorized top-level redirects.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/portal/src/iframe-bridge.ts`
+* **Verified in Tests**: `apps/src/portal/test/security/sandbox.test.ts`

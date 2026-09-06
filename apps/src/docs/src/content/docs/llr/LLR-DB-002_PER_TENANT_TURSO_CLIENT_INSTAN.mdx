@@ -1,0 +1,30 @@
+---
+title: LLR-DB-002 - Per-Tenant Turso Client Instantiation & Pool Management
+description: Low-level requirement managing connection pooling and client caching for libSQL instances.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-DB-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Check in-memory client pool cache for key: client:`{appId}`:`{orgId}`
+2. If client exists and connection probe succeeds, return pooled client
+3. Otherwise, instantiate new `createClient({ url: 'file:' + dbPath })` instance
+4. Execute PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL; PRAGMA foreign_keys = ON;
+5. Store client in pool cache with 10-minute idle eviction timer
+
+## 2. Safety & Verification Invariants
+
+* **WAL (Write-Ahead Logging) mode must be enabled on every SQLite instance**
+* **Idle connections must be safely closed after eviction timeout**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/sdk/src/database.ts`
+* **Verified in Test Suite**: `apps/src/sdk/test/integration/database-pool.test.ts`

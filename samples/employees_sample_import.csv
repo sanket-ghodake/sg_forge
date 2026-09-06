@@ -1,0 +1,13 @@
+display_name,email,job_title,employee_code,department,manager_email,role,status
+Elena Rostova,elena.rostova@forge.internal,Chief Revenue Officer (CRO),CRO-001,Revenue & Commercial Org,,roles/super_admin,ACTIVE
+Marcus Thorne,marcus.thorne@forge.internal,VP of Global Enterprise Sales,CRO-010,Enterprise Sales,elena.rostova@forge.internal,roles/super_admin,ACTIVE
+Sophia Mercer,sophia.mercer@forge.internal,VP of Marketing & Brand Growth,CRO-020,Marketing & Growth,elena.rostova@forge.internal,roles/super_admin,ACTIVE
+David Kalu,david.kalu@forge.internal,VP of Customer Success & Renewals,CRO-030,Customer Success,elena.rostova@forge.internal,roles/super_admin,ACTIVE
+Aria Sterling,aria.sterling@forge.internal,VP of Revenue Operations & Strategy,CRO-040,Revenue Operations,elena.rostova@forge.internal,roles/super_admin,ACTIVE
+Liam O'Connor,liam.oconnor@forge.internal,VP of Solutions Engineering & GTM,CRO-050,Solutions Engineering,elena.rostova@forge.internal,roles/super_admin,ACTIVE
+Rachel Adams,rachel.adams@forge.internal,Director of Enterprise Sales (Americas),CRO-101,Sales - Americas,marcus.thorne@forge.internal,roles/super_admin,ACTIVE
+James Wilson,james.wilson@forge.internal,Senior Strategic AE (US West),CRO-111,Sales - Americas,rachel.adams@forge.internal,roles/employee,ACTIVE
+Chloe Bowman,chloe.bowman@forge.internal,Inbound SDR Team Lead,CRO-143,Commercial Sales,marcus.thorne@forge.internal,roles/employee,ACTIVE
+Milo Morris,milo.morris@forge.internal,Senior Business Development Rep,CRO-151,Commercial Sales,chloe.bowman@forge.internal,roles/employee,ACTIVE
+Klaus Becker,klaus.becker@forge.internal,Principal Revenue Systems Architect,CRO-401,RevOps Systems,aria.sterling@forge.internal,roles/super_admin,ACTIVE
+Anthony Stone,anthony.stone@forge.internal,Senior Enterprise Solutions Architect,CRO-511,Solutions Architecture,liam.oconnor@forge.internal,roles/employee,ACTIVE

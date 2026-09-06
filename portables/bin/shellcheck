@@ -1,0 +1,81 @@
+#!/usr/bin/env bun
+/**
+ * Standalone Portable ShellCheck Runner (Zero Host Install)
+ * Performs static analysis and safety checks across all monorepo shell scripts.
+ */
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join, relative } from "node:path";
+
+const REPO_ROOT = process.cwd();
+
+console.log("🐚 [ShellCheck Portable] Auditing bash scripts for POSIX traps, unquoted vars & safety...");
+
+function getShellFiles(dir: string): string[] {
+  let files: string[] = [];
+  if (!existsSync(dir)) return files;
+  const entries = readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!['node_modules', '.git', 'dist', 'portables'].includes(entry.name)) {
+        files = files.concat(getShellFiles(fullPath));
+      }
+    } else if (entry.name.endsWith('.sh') || entry.name.endsWith('.bash')) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+const rootShells = [
+  join(REPO_ROOT, 'run.sh'),
+  ...getShellFiles(join(REPO_ROOT, 'scripts')),
+  ...getShellFiles(join(REPO_ROOT, 'deploy')),
+].filter(f => existsSync(f));
+
+let errors = 0;
+let warnings = 0;
+
+for (const file of rootShells) {
+  const content = readFileSync(file, 'utf8');
+  const lines = content.split('\n');
+  const rel = relative(REPO_ROOT, file);
+
+  // Check 1: Must have shebang
+  if (!lines[0].startsWith('#!/usr/bin/env bash') && !lines[0].startsWith('#!/bin/bash') && !lines[0].startsWith('#!/bin/sh')) {
+    console.warn(`⚠️ [ShellCheck] ${rel}:1 Missing canonical bash shebang (#!/usr/bin/env bash)`);
+    warnings++;
+  }
+
+  // Check 2: Error handling set -e
+  if (!content.includes('set -e') && !content.includes('set -o errexit')) {
+    console.warn(`⚠️ [ShellCheck] ${rel}: Missing 'set -e' for strict error bubbling`);
+    warnings++;
+  }
+
+  // Check 3: Check lines for dangerous unquoted variables or anti-patterns
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.startsWith('#')) continue;
+
+    // Check raw rm -rf with unvalidated variable
+    if (/rm\s+-rf\s+\$[A-Za-z0-9_]+$/.test(line)) {
+      console.error(`❌ [ShellCheck] ${rel}:${i + 1} Dangerous unquoted 'rm -rf $VAR' pattern`);
+      errors++;
+    }
+
+    // Check unescaped eval
+    if (/\beval\s+\$/.test(line) && !line.includes('//')) {
+      console.warn(`⚠️ [ShellCheck] ${rel}:${i + 1} 'eval' usage with variable detected - verify sanitization`);
+      warnings++;
+    }
+  }
+}
+
+if (errors > 0) {
+  console.error(`❌ [ShellCheck] Found ${errors} critical shell script issue(s).`);
+  process.exit(1);
+} else {
+  console.log(`✅ [ShellCheck] Scanned ${rootShells.length} shell script(s). Zero fatal issues (${warnings} notice(s)).`);
+  process.exit(0);
+}

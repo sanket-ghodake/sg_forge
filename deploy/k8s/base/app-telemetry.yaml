@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forge-app-telemetry
+  labels:
+    app.kubernetes.io/name: forge-app-telemetry
+    app.kubernetes.io/part-of: ag-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forge-app-telemetry
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: forge-app-telemetry
+    spec:
+      containers:
+        - name: telemetry
+          image: ag-dashboard/app-telemetry:latest
+          env:
+            - name: PORT
+              value: "8087"
+            - name: NODE_ENV
+              value: "production"
+          ports:
+            - containerPort: 8087
+              name: http
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 500m
+            requests:
+              memory: 32Mi
+              cpu: 50m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8087
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8087
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: telemetry-db-storage
+              mountPath: /app/data
+      volumes:
+        - name: telemetry-db-storage
+          persistentVolumeClaim:
+            claimName: forge-telemetry-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forge-app-telemetry-service
+  labels:
+    app.kubernetes.io/name: forge-app-telemetry-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8087
+      targetPort: 8087
+      name: http
+  selector:
+    app.kubernetes.io/name: forge-app-telemetry
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: forge-telemetry-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,39 @@
+---
+title: SR-TURSO-001 Multi-Tenant Dedicated Database Isolation
+description: System Requirement mandating dedicated Turso (libSQL) database instances per Forge App.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="SR-TURSO-001" type="SR" status="verified" />
+</div>
+
+<ExecutiveCard 
+  title="Physical Vaults for Micro-App Data"
+  analogy="Instead of housing every department's gold in one giant communal vault with internal wooden dividers, each micro-app has its own separate titanium safe. If one app is compromised, the attacker cannot physically reach into another safe."
+  impact="Guarantees 100% mathematical tenant data isolation, zero cross-app database queries, and frictionless tenant data deletion (GDPR compliance)."
+/>
+
+## 1. Requirement Statement
+
+1. Every Forge Micro-App (`forge-apps/*`) and core platform service shall operate on its own dedicated Turso (libSQL) SQLite database instance residing in its local `data/` directory.
+2. Micro-apps are **STRICTLY PROHIBITED** from establishing database connections, executing SQL queries, or reading raw SQLite files belonging to another micro-app.
+3. Every database table containing tenant records shall enforce an immutable `org_id` foreign key column, validated on all read, write, and delete mutations.
+
+## 2. Verification Invariants
+
+```
+∀ app_i, app_j ∈ ForgeApps (i ≠ j ⟹ DB(app_i) ∩ DB(app_j) = ∅)
+```
+
+* **Verification Method**: Automated AST SAST analysis (`scripts/verify-checks.ts` Check 21) verifying zero cross-app imports or query references.
+* **Failure Handling**: Immediate RFC 7807 problem details response (HTTP 403 Forbidden) and security audit log entry.
+
+## 3. Traceability Links
+
+* **Satisfies**: Enterprise Architecture Standard (Data Coupling & Independence)
+* **Traced to High-Level Requirements**:
+  * <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" /> Multi-Tenant Turso Database Manager
+  * <TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" /> Portal Dynamic Data Scoping

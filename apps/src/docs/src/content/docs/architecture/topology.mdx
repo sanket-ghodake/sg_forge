@@ -1,0 +1,48 @@
+---
+title: Platform Topology & Ingress Gateway
+description: Detailed visual guide to the Caddy reverse proxy, dynamic ingress resolution, and microservice communication.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Dynamic Edge Gateway & Air-Gapped Topology"
+  analogy="The Caddy Gateway acts as an intelligent traffic control tower: it terminates all TLS connections at the perimeter, inspects headers, enforces RFC 7807 error boundaries, and routes incoming traffic to internal microservices without exposing internal ports."
+  impact="Guarantees clean URL paths, centralized SSL termination, automated PII scrubbing, and complete isolation of internal container networks."
+/>
+
+<TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-NET-001" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SDK-005" type="LLR" status="verified" />
+
+## 1. Architectural Topology Overview
+
+The SG Forge platform separates edge routing from internal business execution. The entire platform ingress is dynamically generated from environment variables via `@forge/sdk/registry` and rendered into a unified Caddy reverse proxy configuration.
+
+<DiagramEmbed 
+  diagram="topology" 
+  title="SG Forge Platform Topology & Ingress Gateway" 
+  caption="Client requests pass through Caddy Gateway on ports 80/443, routing dynamically to air-gapped core services and autonomous Forge submodules."
+/>
+
+## 2. Ingress & Routing Specifications
+
+### Gateway Boundaries
+* **Perimeter Ingress**: Caddy listens on port `80` (HTTP with automated redirect) and port `443` (HTTPS with modern TLS 1.3 ciphers).
+* **Single Source of Truth**: Microservice ports and paths are strictly derived from `@forge/sdk/registry`. Zero hardcoded proxy tables or static ports.
+* **RFC 7807 Problem Details**: When an upstream microservice fails or returns an error, the Gateway wraps the response in an RFC 7807 standard JSON structure including an immutable `traceId`.
+
+### Dynamic Path Allocations
+| Public Path | Internal Service | Network Zone | Description |
+| :--- | :--- | :--- | :--- |
+| `/` | `portal` (Port 3001) | `core-airgap-net` | Single Page Application portal shell & navigation |
+| `/auth/*` | `auth` (Port 3004) | `core-airgap-net` | Zero-trust authentication engine & session manager |
+| `/dev-dashboard/*` | `dev-dashboard` (Port 3002) | `core-airgap-net` | Real-time system monitoring & health telemetry |
+| `/apps/code/*` | `forge-apps/code` (Port 8088) | `forge-apps-net` | Autonomous code editor microservice |
+| `/docs/*` | `docs-site` (Port 4321) | Edge documentation | Searchable living architecture documentation |
+
+## 3. Network Separation & Air-Gap Boundary
+
+All core platform containers communicate over the isolated `core-airgap-net` Docker network configured with `internal: true`. This guarantees that even if a container process is compromised, it cannot make outbound DNS requests or open outbound socket connections to the internet.

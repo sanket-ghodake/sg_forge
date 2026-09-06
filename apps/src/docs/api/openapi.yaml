@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: SG Forge Enterprise Gateway API
+  description: Core microservice platform API endpoints and dual-probe healthcheck contracts.
+  version: 2.0.0
+servers:
+  - url: http://localhost
+    description: Local development gateway
+tags:
+  - name: Health
+    description: Service healthcheck probes
+paths:
+  /health:
+    get:
+      operationId: getHealthStatus
+      tags:
+        - Health
+      summary: Dual-probe liveness and readiness healthcheck
+      description: Returns service status, port allocation, and uptime metrics.
+      responses:
+        '200':
+          description: Operational health status
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - service
+                  - port
+                  - uptime
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: portal
+                  port:
+                    type: integer
+                    example: 3188
+                  uptime:
+                    type: number
+                    example: 120.5
+  /api/health:
+    get:
+      operationId: getApiHealthStatus
+      tags:
+        - Health
+      summary: API healthcheck probe
+      description: Returns operational status for API gateway.
+      responses:
+        '200':
+          description: API Gateway operational
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                properties:
+                  status:
+                    type: string
+                    example: ok

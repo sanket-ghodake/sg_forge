@@ -1,0 +1,29 @@
+---
+title: SR-SUB-001 Autonomous Submodule Governance
+description: System Requirement establishing decoupled Git submodule architecture, standalone container builds, and zero monorepo bleed.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="SR-SUB-001" type="SR" status="verified" />
+</div>
+
+<ExecutiveCard 
+  title="Independent Ships in a Coordinated Fleet"
+  analogy="Each micro-app is a ship with its own captain, engines, and navigation charts. Even if the mother port is unavailable, each ship can dock, operate, and be maintained independently."
+  impact="Allows isolated micro-app lifecycles, zero cross-service contamination, and seamless deployment across distributed infrastructure."
+/>
+
+## 1. Requirement Statement
+
+1. All micro-applications in `forge-apps/*` shall operate as decoupled Git submodules maintaining their own standalone repositories, `.git` references, `Dockerfile`, `package.json`, and local agent directives.
+2. AI agents and developers are **STRICTLY PROHIBITED** from importing code from central platform directories (`apps/src/*`) into `forge-apps/*`.
+3. Forge Apps shall run on `forge-apps-net` with autonomous outbound egress permissions, managing local credentials, timeouts, and health probes independently.
+
+## 2. Traceability Links
+
+* **Traced to High-Level Requirements**:
+  * <TraceabilityBadge reqId="HLR-CODE-701" type="HLR" status="verified" /> Forge Code Service
+  * <TraceabilityBadge reqId="HLR-TEL-801" type="HLR" status="verified" /> Forge Telemetry Collector

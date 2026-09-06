@@ -1,0 +1,30 @@
+---
+title: LLR-UI-004 - Astryx Custom Dropdown Select Generator & Keyboard Navigation
+description: Low-level requirement rendering accessible custom selector controls replacing native HTML select.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-UI-004" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Render custom button container with role='combobox' and aria-expanded state
+2. Render options listbox with role='listbox' and active item aria-selected indicator
+3. Listen for keyboard navigation keys: ArrowUp, ArrowDown, Enter, Space, Escape
+4. Update highlighted option on arrow key navigation and scroll into view if needed
+5. Close dropdown when user clicks outside or presses Escape
+
+## 2. Safety & Verification Invariants
+
+* **Native browser unstyled select dropdowns are strictly prohibited**
+* **Full keyboard navigation parity must be guaranteed for all dropdown menus**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/ui/src/components/select.ts`
+* **Verified in Test Suite**: `apps/src/ui/test/unit/select.test.ts`

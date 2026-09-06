@@ -1,0 +1,25 @@
+---
+title: HLR-TEL-801 Forge Telemetry Submodule Collector
+description: High-Level Requirement defining rolling timeseries performance aggregation and dual-probe health reporting.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-TEL-801" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Forge Telemetry service (`forge-apps/telemetry`) shall collect platform operational metrics:
+
+1. Runs as an autonomous service on port 8087 (`/apps/telemetry`).
+2. Collects CPU, memory, event loop latency, and request durations across registered microservices.
+3. Implements rolling timeseries metric rotation: retains up to 5MB of historical samples in `telemetry.db` before pruning oldest records.
+4. Exposes `/health` and `/ready` probes reporting system load.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-LOG-001" type="SR" status="verified" />
+* **Implemented in Code**: `forge-apps/telemetry/src/server.ts`
+* **Verified in Tests**: `forge-apps/telemetry/test/integration/metrics.test.ts`

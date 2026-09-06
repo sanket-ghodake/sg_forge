@@ -1,0 +1,44 @@
+---
+title: Auth Engine & Session Lifecycle
+description: Visual specifications for zero-trust authentication, sliding window session renewal, inactivity timeouts, and token replay defense.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Zero-Trust Sliding Session & Cryptographic Defense"
+  analogy="Like a secure badge access system in high-security environments, credentials are valid only for a brief window. If a user steps away, the session safely locks. If anyone attempts to replay a stolen badge token, the system instantly invalidates the session."
+  impact="Protects enterprise workloads from token theft, session hijacking, replay attacks, and credential stuffing."
+/>
+
+<TraceabilityBadge reqId="SR-AUTH-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-AUTH-001" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-AUTH-002" type="LLR" status="verified" />
+
+## 1. Authentication & Session Lifecycle Overview
+
+The SG Forge Authentication Engine operates inside the core air-gap zone (`core-airgap-net`). It issues cryptographically signed JWT cookies with strict `HttpOnly`, `SameSite=Lax`, and `Secure` attributes.
+
+<DiagramEmbed 
+  diagram="auth-session" 
+  title="Zero-Trust Authentication & Sliding Session Lifecycle" 
+  caption="Visual lifecycle from login credential verification, sliding window refresh, inactivity timeout, to token replay defense."
+/>
+
+## 2. Invariants & Security Specifications
+
+### Invariant 1: Sliding Window & Inactivity Timeout
+* Sessions have an active sliding expiration (default 30 minutes of idle inactivity).
+* Every authenticated request automatically renews the session timestamp in the session store.
+* Once the idle limit is exceeded, subsequent requests return an RFC 7807 `401 Unauthorized` with `urn:sgforge:error:session-expired`.
+
+### Invariant 2: Anti-Replay Token Defense
+* Session tokens include unique cryptographic `jti` (JWT ID) identifiers and sequence counters.
+* The Auth Engine maintains an in-memory or SQLite-backed token revocation blacklist. If a previously refreshed token is presented again, both the replayed token and the current active session are immediately revoked to protect against man-in-the-middle interception.
+
+### Invariant 3: Zero Credential Exposure
+* All authentication cookies are marked `HttpOnly`, preventing client-side JavaScript from accessing session tokens.
+* Cross-Site Request Forgery (CSRF) is neutralized through strict origin verification and SameSite cookie policies.

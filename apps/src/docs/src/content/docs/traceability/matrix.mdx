@@ -1,0 +1,19 @@
+---
+title: Bidirectional Traceability Matrix
+description: Live verification ledger linking System Requirements, High-Level Requirements, Low-Level Requirements, Source Symbols, and Tests.
+---
+
+import CoverageMatrix from '../../../components/CoverageMatrix.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<CoverageMatrix />
+
+## 1. Traceability Ledger
+
+| Requirement ID | Type | Description | Source Implementation | 5-Tier Verification Test |
+| :--- | :---: | :--- | :--- | :--- |
+| **SR-SEC-001** | `SR` | Zero-Egress Air-Gapped Network | `docker-compose.yml` (`internal: true`) | `scripts/verify-checks.ts` (Check 06) |
+| **HLR-AUTH-101** | `HLR` | Tenant Session Verification & Org Scoping | `apps/src/auth/src/session.ts` | `apps/src/auth/test/integration/session.test.ts` |
+| **LLR-AUTH-001** | `LLR` | Token Signature & Clock Skew Validation | `apps/src/auth/src/session.ts` | `apps/src/auth/test/security/token-replay.test.ts` |
+| **SR-TURSO-001** | `SR` | Multi-Tenant Database Isolation | `apps/src/portal/src/db.ts` | `scripts/verify-checks.ts` (Check 21) |
+| **HLR-UI-001** | `HLR` | Astryx Design Token Compliance | `apps/src/ui/src/tokens.ts` | `apps/src/ui/test/contracts/theme-tokens-schema.test.ts` |

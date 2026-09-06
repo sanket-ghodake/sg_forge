@@ -1,0 +1,24 @@
+---
+title: HLR-SDK-303 Enterprise SRE Structured Logger & PII Redaction
+description: High-Level Requirement defining standardized JSON telemetry output and secret masking.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Logger engine (`@forge/sdk/logger`) shall output structured JSON logs matching Enterprise SRE observability standards:
+
+1. Every log entry includes: `timestamp` (RFC 3339 UTC), `level` (`debug`, `info`, `warn`, `error`), `service`, `msg`, and `traceId`.
+2. Implements recursive deep redaction (`redactSensitiveData`) neutralizing passwords, tokens, bearer headers, and credit card numbers.
+3. Provides a browser console bridge (`initBrowserLogBridge`) syncing client-side telemetry to server endpoints without leaking credentials.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-LOG-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/sdk/src/logger.ts`
+* **Verified in Tests**: `apps/src/sdk/test/security/logger-pii.test.ts`

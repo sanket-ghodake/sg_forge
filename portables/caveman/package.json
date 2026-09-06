@@ -1,0 +1,8 @@
+{
+  "name": "portable-caveman",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone Portable Caveman Token Compressor & Agent Controller",
+  "type": "module",
+  "dependencies": {}
+}

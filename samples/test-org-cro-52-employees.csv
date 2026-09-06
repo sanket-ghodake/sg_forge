@@ -1,0 +1,55 @@
+display_name,email,job_title,employee_code,department,manager_email,role
+Elena Rostova,elena.rostova@forge.internal,Chief Revenue Officer (CRO),CRO-001,Revenue & Commercial Org,,roles/super_admin
+Marcus Thorne,marcus.thorne@forge.internal,VP of Global Enterprise Sales,CRO-010,Enterprise Sales,elena.rostova@forge.internal,roles/super_admin
+Sophia Mercer,sophia.mercer@forge.internal,VP of Marketing & Brand Growth,CRO-020,Marketing & Growth,elena.rostova@forge.internal,roles/super_admin
+David Kalu,david.kalu@forge.internal,VP of Customer Success & Renewals,CRO-030,Customer Success,elena.rostova@forge.internal,roles/super_admin
+Aria Sterling,aria.sterling@forge.internal,VP of Revenue Operations & Strategy,CRO-040,Revenue Operations,elena.rostova@forge.internal,roles/super_admin
+Liam O'Connor,liam.oconnor@forge.internal,VP of Solutions Engineering & GTM,CRO-050,Solutions Engineering,elena.rostova@forge.internal,roles/super_admin
+Rachel Adams,rachel.adams@forge.internal,Director of Enterprise Sales (Americas),CRO-101,Sales - Americas,marcus.thorne@forge.internal,roles/admin
+Vikram Patel,vikram.patel@forge.internal,Director of Enterprise Sales (EMEA),CRO-102,Sales - EMEA,marcus.thorne@forge.internal,roles/admin
+Mei Ling,mei.ling@forge.internal,Director of Enterprise Sales (APAC),CRO-103,Sales - APAC,marcus.thorne@forge.internal,roles/admin
+Carlos Mendez,carlos.mendez@forge.internal,Head of Commercial & Mid-Market Sales,CRO-104,Commercial Sales,marcus.thorne@forge.internal,roles/employee
+James Wilson,james.wilson@forge.internal,Senior Strategic Account Executive (US West),CRO-111,Sales - Americas,rachel.adams@forge.internal,roles/employee
+Maya Lin,maya.lin@forge.internal,Strategic Account Executive (US East),CRO-112,Sales - Americas,rachel.adams@forge.internal,roles/employee
+Lucas Silva,lucas.silva@forge.internal,Enterprise Account Executive (LATAM),CRO-113,Sales - Americas,rachel.adams@forge.internal,roles/employee
+Tyler Brooks,tyler.brooks@forge.internal,Account Executive (Midwest & Canada),CRO-114,Sales - Americas,rachel.adams@forge.internal,roles/employee
+Astrid Lund,astrid.lund@forge.internal,Senior Enterprise AE (Nordics & UK),CRO-121,Sales - EMEA,vikram.patel@forge.internal,roles/employee
+Julian Picard,julian.picard@forge.internal,Enterprise Account Executive (DACH & France),CRO-122,Sales - EMEA,vikram.patel@forge.internal,roles/employee
+Matteo Rossi,matteo.rossi@forge.internal,Account Executive (Southern Europe),CRO-123,Sales - EMEA,vikram.patel@forge.internal,roles/employee
+Hiroshi Tanaka,hiroshi.tanaka@forge.internal,Strategic Account Executive (Japan & Korea),CRO-131,Sales - APAC,mei.ling@forge.internal,roles/employee
+Ananya Sen,ananya.sen@forge.internal,Enterprise Account Executive (India & ASEAN),CRO-132,Sales - APAC,mei.ling@forge.internal,roles/employee
+Lachlan Shaw,lachlan.shaw@forge.internal,Enterprise Account Executive (ANZ),CRO-133,Sales - APAC,mei.ling@forge.internal,roles/employee
+Jessica Price,jessica.price@forge.internal,Senior Commercial Account Executive,CRO-141,Commercial Sales,carlos.mendez@forge.internal,roles/employee
+Daniel Jenkins,daniel.jenkins@forge.internal,Mid-Market Account Executive,CRO-142,Commercial Sales,carlos.mendez@forge.internal,roles/employee
+Chloe Bowman,chloe.bowman@forge.internal,Inbound SDR Team Lead,CRO-143,Commercial Sales,carlos.mendez@forge.internal,roles/employee
+Milo Morris,milo.morris@forge.internal,Senior Business Development Rep (BDR),CRO-151,Commercial Sales,chloe.bowman@forge.internal,roles/employee
+Grace Stanley,grace.stanley@forge.internal,Outbound Sales Representative,CRO-152,Commercial Sales,chloe.bowman@forge.internal,roles/employee
+Hannah Archer,hannah.archer@forge.internal,Director of Product Marketing,CRO-201,Product Marketing,sophia.mercer@forge.internal,roles/admin
+Tariq Mansoor,tariq.mansoor@forge.internal,Head of Demand Generation & Paid Media,CRO-202,Demand Generation,sophia.mercer@forge.internal,roles/employee
+Clara Owens,clara.owens@forge.internal,Head of Brand, PR & Communications,CRO-203,Brand & Communications,sophia.mercer@forge.internal,roles/employee
+Owen Quinn,owen.quinn@forge.internal,Senior Technical Product Marketing Manager,CRO-211,Product Marketing,hannah.archer@forge.internal,roles/employee
+Selena Cruz,selena.cruz@forge.internal,Competitive Intelligence & Market Analyst,CRO-212,Product Marketing,hannah.archer@forge.internal,roles/employee
+Felix Vance,felix.vance@forge.internal,Senior Growth Marketing Specialist,CRO-221,Demand Generation,tariq.mansoor@forge.internal,roles/employee
+Amara Diallo,amara.diallo@forge.internal,Marketing Automation & Paid Ads Engineer,CRO-222,Demand Generation,tariq.mansoor@forge.internal,roles/employee
+Samira Khan,samira.khan@forge.internal,SEO & Content Campaign Strategist,CRO-223,Demand Generation,tariq.mansoor@forge.internal,roles/employee
+Gabriel Reid,gabriel.reid@forge.internal,Senior Visual Designer & Brand Lead,CRO-231,Brand & Communications,clara.owens@forge.internal,roles/employee
+Lydia Mitchell,lydia.mitchell@forge.internal,Corporate Communications Specialist,CRO-232,Brand & Communications,clara.owens@forge.internal,roles/employee
+Siddharth Rao,siddharth.rao@forge.internal,Director of Global Enterprise Support,CRO-301,Enterprise Support,david.kalu@forge.internal,roles/admin
+Emma Bell,emma.bell@forge.internal,Head of Client Onboarding & Implementation,CRO-302,Client Onboarding,david.kalu@forge.internal,roles/employee
+Nathan Blake,nathan.blake@forge.internal,Director of Renewals & Account Retention,CRO-303,Renewals,david.kalu@forge.internal,roles/employee
+Peter Wright,peter.wright@forge.internal,Senior Tier-3 Enterprise Support Engineer,CRO-311,Enterprise Support,siddharth.rao@forge.internal,roles/employee
+Wanda Morrison,wanda.morrison@forge.internal,Customer Escalation & Incident Manager,CRO-312,Enterprise Support,siddharth.rao@forge.internal,roles/employee
+Bruce Miller,bruce.miller@forge.internal,Cloud Support Specialist (Data & API),CRO-313,Enterprise Support,siddharth.rao@forge.internal,roles/employee
+Arthur Daniels,arthur.daniels@forge.internal,Senior Implementation Specialist,CRO-321,Client Onboarding,emma.bell@forge.internal,roles/employee
+Natalie Ross,natalie.ross@forge.internal,Customer Onboarding Project Manager,CRO-322,Client Onboarding,emma.bell@forge.internal,roles/employee
+Diana Hayes,diana.hayes@forge.internal,Senior Enterprise Customer Success Manager,CRO-331,Renewals,nathan.blake@forge.internal,roles/employee
+Barry Scott,barry.scott@forge.internal,Renewals & Expansion Specialist,CRO-332,Renewals,nathan.blake@forge.internal,roles/employee
+Klaus Becker,klaus.becker@forge.internal,Principal Revenue Systems Architect,CRO-401,RevOps Systems,aria.sterling@forge.internal,roles/super_admin
+Nadia Ivanova,nadia.ivanova@forge.internal,Lead Sales Compensation Analyst,CRO-402,Compensation,aria.sterling@forge.internal,roles/employee
+Kenji Sato,kenji.sato@forge.internal,Head of GTM Enablement & Sales Academy,CRO-403,Enablement,aria.sterling@forge.internal,roles/employee
+Carlos Ramon,carlos.ramon@forge.internal,Senior Enterprise CRM Architect,CRO-411,RevOps Systems,klaus.becker@forge.internal,roles/employee
+Fiona Smith,fiona.smith@forge.internal,Revenue Data Pipeline Engineer,CRO-412,RevOps Systems,klaus.becker@forge.internal,roles/employee
+Zoe Warren,zoe.warren@forge.internal,Lead Enterprise Solutions Architect,CRO-501,Solutions Architecture,liam.oconnor@forge.internal,roles/super_admin
+Devon Hayes,devon.hayes@forge.internal,Principal Technical Pre-Sales Specialist,CRO-502,Solutions Architecture,liam.oconnor@forge.internal,roles/employee
+Anthony Stone,anthony.stone@forge.internal,Senior Enterprise Solutions Architect,CRO-511,Solutions Architecture,zoe.warren@forge.internal,roles/employee
+Shari Davis,shari.davis@forge.internal,Cloud Integrations Solutions Engineer,CRO-512,Solutions Architecture,zoe.warren@forge.internal,roles/employee

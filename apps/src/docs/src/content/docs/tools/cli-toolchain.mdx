@@ -1,0 +1,54 @@
+---
+title: Developer CLI & Portable Toolchain
+description: Complete reference for the ./run.sh developer runner, portable zero-host binaries, RTK token compression, and cross-platform POSIX scripts.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="1-Command Zero-Host-Modification Toolchain"
+  analogy="In precision manufacturing, craftsmen use a self-contained, calibrated toolbox rather than borrowing random uncalibrated tools from the host workshop. SG Forge bundles its own portable runtimes and CLI wrappers directly in the repository."
+  impact="Eliminates 'works on my machine' defects, prevents host package manager pollution, and guarantees byte-for-byte reproducibility on Linux, macOS, and Windows."
+/>
+
+<TraceabilityBadge reqId="SR-GATE-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-001" type="LLR" status="verified" />
+
+<DiagramEmbed 
+  diagram="developer-toolchain" 
+  title="Developer Lifecycle & Scaffolding Toolchain" 
+  caption="Zero host modifications, portable runtime bootstrap, golden app generator, live HMR development, and 29-check quality gate."
+/>
+
+## 1. Zero Host Modification & Portable Architecture
+
+Architectural Directive 1.2 enforces **Zero Host Modification**:
+- Runtimes, compilers, and linters strictly consume repository-local portable binaries (`portables/bun/bin/bun`, `portables/bin/*`).
+- Zero reliance on global package managers (`npm -g`, `brew`, `apt`, `pip install`).
+- Line endings are strictly normalized to `eol=lf` via `.gitattributes` to prevent Git drift across platforms.
+
+## 2. Master CLI Reference (`./run.sh`)
+
+All platform tasks are orchestrated through the root `./run.sh` script (or `run.bat` on Windows):
+
+| Command | Action / Role | Target Subsystem |
+| :--- | :--- | :--- |
+| `rtk ./run.sh dev` | Launches all platform microservices in development mode | Full Platform |
+| `rtk ./run.sh test` | Runs the monorepo-wide 5-tier test suites (511+ tests) | Test Runner |
+| `rtk ./run.sh verify` | Runs the 29-check deterministic & semantic quality gate | Pre-Commit Gate |
+| `rtk ./run.sh docs:dev` | Starts the Astro Starlight documentation portal on port 3005 | Living Docs |
+| `rtk ./run.sh docs:build` | Compiles static documentation bundle & Pagefind WASM index | Living Docs |
+| `rtk ./run.sh docs:coverage`| Audits 100% symbol-to-requirement bidirectional parity | Traceability Gate |
+| `rtk ./run.sh backup` | Executes atomic `VACUUM INTO` backup across all SQLite DBs | Database Ops |
+| `rtk ./run.sh create-app <name>` | Scaffolds a new decoupled Forge submodule micro-app | Forge Submodules |
+| `rtk ./run.sh check-pkg <pkg>` | Verifies supply-chain provenance, package age (&ge; 14 days) | Security Gate |
+| `rtk ./run.sh sbom` | Generates and validates CycloneDX 1.5 software bill of materials | Supply Chain |
+| `rtk ./run.sh complexity` | Audits cyclomatic complexity (CCN &le; 10) and line caps | AST Quality |
+| `rtk ./run.sh licenses` | Validates 100% OSI-permissive licenses (zero copyleft AGPL/GPL) | Legal Governance |
+| `rtk ./run.sh contracts` | Spectral ruleset linting on OpenAPI 3.1 contract specifications | API Schemas |
+
+## 3. RTK Token Optimization
+
+All CLI commands executed by AI agents and developers should be prefixed with `rtk` (e.g. `rtk git status`, `rtk bun test`). RTK compresses redundant terminal output, reducing LLM context window consumption by up to 70% while preserving critical error stack traces.

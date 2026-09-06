@@ -1,0 +1,25 @@
+---
+title: HLR-SDK-302 Multi-Tenant Turso Database Connection Manager
+description: High-Level Requirement defining isolated database instantiation, connection pooling, and snapshotting.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Database Manager module (`@forge/sdk/database`) shall manage hermetic SQLite / libSQL database connections:
+
+1. Resolves canonical database paths using zero-host modification rules (`apps/data/` or `forge-apps/<id>/data/`).
+2. Implements connection pooling and prepared statement caching via `bun:sqlite` and `@libsql/client`.
+3. Enforces write-ahead logging (`PRAGMA journal_mode = WAL`) and strict foreign key integrity (`PRAGMA foreign_keys = ON`).
+4. Executes non-blocking rolling database snapshots during backup operations.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-TURSO-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/sdk/src/database.ts`
+* **Verified in Tests**: `apps/src/sdk/test/integration/database.test.ts`

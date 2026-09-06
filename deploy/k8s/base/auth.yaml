@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forge-auth
+  labels:
+    app.kubernetes.io/name: forge-auth
+    app.kubernetes.io/part-of: ag-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: forge-auth
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: forge-auth
+    spec:
+      containers:
+        - name: auth
+          image: ag-dashboard/auth:latest
+          env:
+            - name: PORT
+              value: "3004"
+            - name: NODE_ENV
+              value: "production"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: forge-secrets
+                  key: jwt-secret
+                  optional: true
+          ports:
+            - containerPort: 3004
+              name: http
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: 500m
+            requests:
+              memory: 32Mi
+              cpu: 50m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: auth-db-storage
+              mountPath: /app/data
+      volumes:
+        - name: auth-db-storage
+          persistentVolumeClaim:
+            claimName: forge-auth-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: forge-auth-service
+  labels:
+    app.kubernetes.io/name: forge-auth-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3004
+      targetPort: 3004
+      name: http
+  selector:
+    app.kubernetes.io/name: forge-auth
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: forge-auth-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,30 @@
+---
+title: LLR-SUB-001 - Git Submodule Branch & Remote Provenance Validator
+description: Low-level requirement verifying integrity and tracking branches of autonomous Forge Apps.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SUB-001" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-CODE-701" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Parse .gitmodules file to extract path, url, and branch for all submodules
+2. Verify submodule path exists inside forge-apps/ directory
+3. Verify submodule URL points to approved organization repository
+4. Execute git submodule status to verify commit sha matches recorded pointer
+5. Report any detached HEAD states or untracked changes as verification error
+
+## 2. Safety & Verification Invariants
+
+* **All submodules must track explicit main/master branches without detached pointers**
+* **Submodules must maintain zero file modifications in parent monorepo index**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-CODE-701" type="HLR" status="verified" />
+* **Implemented in Source**: `scripts/sync-submodule-docs.ts`
+* **Verified in Test Suite**: `forge-apps/code/test/contracts/submodule-config.test.ts`

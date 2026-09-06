@@ -1,0 +1,17 @@
+{
+  "name": "@forge/portal",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Portal service ready'",
+    "build": "echo 'Portal built'"
+  },
+  "dependencies": {
+    "@forge/types": "workspace:*",
+    "@forge/ui": "workspace:*",
+    "@forge/sdk": "workspace:*"
+  },
+  "license": "Apache-2.0",
+  "author": "Sanket Ghodake <sanketghodke03@gmail.com>"
+}

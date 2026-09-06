@@ -1,0 +1,75 @@
+---
+title: Autonomous Forge Submodules Architecture
+description: Comprehensive governance model for decoupled Git submodules, independent Dockerfiles, and zero central imports.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Decoupled Git Submodules with Autonomous Ownership"
+  analogy="Rather than forcing every developer into a monolithic repository where a broken test stops everyone, SG Forge operates like a federation of sovereign city-states: each Forge App maintains its own Git repository, its own CI, and its own release schedule."
+  impact="Guarantees independent versioning, zero tight coupling to central platform code, and plug-and-play developer velocity."
+/>
+
+<TraceabilityBadge reqId="SR-SUB-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-CODE-701" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-001" type="LLR" status="verified" />
+
+## 1. Submodule Governance & Isolation Model
+
+Forge Apps reside in `forge-apps/*` as autonomous Git submodules. They possess complete independence from core platform internal libraries.
+
+<DiagramEmbed 
+  diagram="submodules" 
+  title="Autonomous Forge Submodules Governance Architecture" 
+  caption="Submodule isolation, standalone Dockerfiles, local agent rules, and decoupled network governance."
+/>
+
+## 2. Invariants & Autonomous Rules
+
+### Invariant 1: Zero Imports from Core (`apps/src/*`)
+* Forge submodules MUST NEVER import code from `apps/src/*`.
+* Shared platform functionality is consumed exclusively through published, versioned packages (`@forge/sdk`, `@forge/ui`, `@forge/types`).
+
+### Invariant 2: Independent Container Lifecycle
+* Each Forge App maintains its own standalone `Dockerfile` and `.dockerignore`.
+* Micro-apps operate on `forge-apps-net` with their own environment variables, local port mappings, and health checks.
+
+### Invariant 3: Independent AI Agent Governance
+* Each submodule maintains its own local `AGENTS.md` and `GEMINI.md` with localized instructions and domain invariants.
+* Changes to submodule applications do not invalidate or require rebuilding core platform containers.
+
+## 3. Developer Workflow & Submodule Operations
+
+### Cloning with Submodules
+```bash
+# Clone repository including all autonomous micro-apps
+rtk git clone --recurse-submodules <repo-url>
+
+# Or inside an existing workspace:
+rtk git submodule update --init --recursive
+```
+
+### Developing Inside a Forge App Submodule
+```bash
+# Navigate to submodule
+cd forge-apps/app-template
+
+# Run local development with instant watch mode
+rtk ./run.sh dev
+
+# Execute local isolated 5-tier test suite
+rtk ./run.sh test
+
+# Verify submodule pre-commit gates
+rtk ./run.sh verify
+```
+
+### Standalone Docker Execution
+```bash
+# Launch submodule in isolation
+cd forge-apps/app-template
+docker compose up -d --build
+```

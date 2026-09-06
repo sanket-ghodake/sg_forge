@@ -1,0 +1,41 @@
+---
+title: Client State & Storage Engine
+description: Engineering specifications for enterprise deterministic state management, optimistic UI updates, and session synchronization.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Predictable, Deterministic Client State"
+  analogy="Like a precision flight telemetry recorder, client state transitions must be completely auditable, deterministic, and resilient against network interruptions."
+  impact="Guarantees immediate optimistic UI feedback, zero race conditions, and synchronized multi-tab session state."
+/>
+
+<TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-UI-403" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-UI-006" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-UI-007" type="LLR" status="verified" />
+
+## 1. Client State Architecture & Lifecycle
+
+The SG Forge client state engine implements the Enterprise Web Engineering Standard: unidirectional data flow, explicit action dispatchers, and type-safe state hydration.
+
+<DiagramEmbed 
+  diagram="client-state" 
+  title="Client State Engine & Storage Lifecycle" 
+  caption="Action dispatching, reducer pipeline, localStorage persistence, and cross-tab BroadcastChannel synchronization."
+/>
+
+## 2. Core Invariants
+
+### 1. Single Source of Truth
+* All UI component state is derived from immutable application stores defined in `@forge/ui/state`.
+* State mutations are strictly dispatched through typed actions with payload validation.
+
+### 2. Multi-Tab Synchronization
+* State changes broadcast across browser tabs via the `BroadcastChannel` API (`forge_state_channel`), ensuring user actions in one tab reflect across all active sessions without a page reload.
+
+### 3. Graceful Storage Degradation
+* In private browsing mode or environments with restricted storage access, the client engine falls back cleanly to an in-memory storage dictionary without throwing uncaught exceptions.

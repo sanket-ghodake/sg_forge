@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astryx Design Token Cascade & Styling Architecture</title>
+  <style>
+    :root {
+      --bg-root: #0b0f19;
+      --bg-surface: #111827;
+      --primary: #6366f1;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body { background: var(--bg-root); color: var(--text); font-family: var(--font); margin: 0; padding: 24px; display: flex; justify-content: center; }
+    .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 900px; width: 100%; }
+    svg { width: 100%; height: auto; display: block; }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-root: #f8fafc;
+        --bg-surface: #ffffff;
+        --primary: #059669;
+        --accent: #06b6d4;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+      }
+      .card {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      }
+      svg rect[fill="#111827"] { fill: #ffffff !important; stroke: #e2e8f0; }
+      svg rect[stroke="rgba(255,255,255,0.1)"], svg rect[stroke="rgba(255,255,255,0.08)"] { stroke: #e2e8f0 !important; }
+      svg text[fill="#F3F4F6"] { fill: #0f172a !important; }
+      svg text[fill="#9CA3AF"] { fill: #475569 !important; }
+      svg rect[fill="#1E1B4B"] { fill: #eef2ff !important; stroke: #818cf8 !important; }
+      svg rect[fill="#064E3B"] { fill: #ecfdf5 !important; stroke: #10b981 !important; }
+      svg rect[fill="#164E63"] { fill: #f0fdfa !important; stroke: #06b6d4 !important; }
+      svg rect[fill="#312E81"] { fill: #e0e7ff !important; stroke: #818cf8 !important; }
+      svg text[fill="#818CF8"], svg text[fill="#A5B4FC"] { fill: #4338ca !important; }
+      svg text[fill="#34D399"] { fill: #047857 !important; }
+      svg text[fill="#67E8F9"] { fill: #0e7490 !important; }
+      svg text[fill="#FBBF24"], svg text[fill="#F59E0B"] { fill: #b45309 !important; }
+      svg text[fill="#EF4444"] { fill: #dc2626 !important; }
+      svg rect[fill="rgba(17,24,39,0.95)"] { fill: #ffffff !important; stroke: #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <svg viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-05 desc-05">
+      <title id="title-05">Astryx Design Token Cascade Hierarchy</title>
+      <desc id="desc-05">Architectural diagram detailing root tokens cascading into semantic component wrappers with zero OS defaults.</desc>
+      
+      <!-- Tier 1: Primitive Tokens -->
+      <rect x="50" y="40" width="700" height="70" rx="8" fill="#1E1B4B" stroke="#6366F1" stroke-width="1.5"/>
+      <text x="400" y="70" text-anchor="middle" fill="#818CF8" font-size="14" font-weight="700">1. PRIMITIVE ASTRYX TOKENS (Base Palette)</text>
+      <text x="400" y="92" text-anchor="middle" fill="#F3F4F6" font-size="12">Indigo #6366f1 • Cyan #06b6d4 • Slate #0b0f19 • Card rgba(17,24,39,0.75)</text>
+      
+      <path d="M400 110 V150" stroke="#6366F1" stroke-width="2"/>
+      <polygon points="396,150 404,150 400,158" fill="#6366F1"/>
+      
+      <!-- Tier 2: Semantic Variables -->
+      <rect x="50" y="160" width="700" height="70" rx="8" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
+      <text x="400" y="190" text-anchor="middle" fill="#67E8F9" font-size="14" font-weight="700">2. SEMANTIC CSS VARIABLES (--forge-*)</text>
+      <text x="400" y="212" text-anchor="middle" fill="#F3F4F6" font-size="12">--forge-bg-root • --forge-border • --forge-primary • --forge-text-main</text>
+      
+      <path d="M400 230 V270" stroke="#06B6D4" stroke-width="2"/>
+      <polygon points="396,270 404,270 400,278" fill="#06B6D4"/>
+      
+      <!-- Tier 3: Component Enforcements -->
+      <rect x="50" y="280" width="700" height="90" rx="8" fill="rgba(16,185,129,0.06)" stroke="#10B981" stroke-width="1.5"/>
+      <text x="400" y="310" text-anchor="middle" fill="#34D399" font-size="14" font-weight="700">3. COMPONENT IMPLEMENTATIONS (ZERO BROWSER DEFAULTS)</text>
+      <text x="400" y="332" text-anchor="middle" fill="#F3F4F6" font-size="12">Slim Astryx Scrollbars • Toast Overlays • Glassmorphic Dialogs • Tooltip Viewport Engine</text>
+      <text x="400" y="352" text-anchor="middle" fill="#9CA3AF" font-size="11">Enforced by Pre-Commit Check 14 across 100% of frontend views</text>
+    </svg>
+  </div>
+</body>
+</html>

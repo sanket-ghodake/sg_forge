@@ -1,0 +1,25 @@
+---
+title: HLR-UI-402 Viewport Collision Detection Engine
+description: High-Level Requirement defining automatic boundary detection and overlay repositioning algorithms.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-UI-402" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Viewport Engine (`@forge/ui/tooltip`, `@forge/ui/toast`) shall mathematically prevent UI overlays from clipping outside the active browser window:
+
+1. **Auto-Flip**: If an element's bottom edge exceeds `window.innerHeight - margin`, the overlay automatically flips above the trigger element.
+2. **Horizontal Clamping**: If an element's right edge exceeds `window.innerWidth - margin`, the overlay shifts horizontally to remain within the safe zone.
+3. **Max-Height Clamping**: If content exceeds available screen height, the overlay enables an internal Astryx scrollbar.
+4. Operates without third-party Popper or Floating UI dependencies (zero bundle bloat).
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/ui/src/tooltip.ts`
+* **Verified in Tests**: `apps/src/ui/test/unit/tooltip-collision.test.ts`

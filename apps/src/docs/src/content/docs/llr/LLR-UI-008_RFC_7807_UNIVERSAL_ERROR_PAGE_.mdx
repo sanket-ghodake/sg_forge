@@ -1,0 +1,30 @@
+---
+title: LLR-UI-008 - RFC 7807 Universal Error Page Template Renderer
+description: Low-level requirement rendering structured, accessible error screens for 400/403/404/500 faults.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-UI-008" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Receive RFC 7807 problem object: `{ type, title, status, detail, instance, traceId }`
+2. Render Astryx glassmorphic card with status badge and user-friendly explanation
+3. Display copyable Trace ID pill for fast SRE log correlation
+4. Provide 'Return to Dashboard' and 'Retry' recovery action buttons
+5. Never render internal raw stack traces or SQL snippets
+
+## 2. Safety & Verification Invariants
+
+* **Error UI must be fully responsive across mobile (320px) to desktop displays**
+* **Trace ID must always be visible to end users for troubleshooting support**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/ui/src/error-page.ts`
+* **Verified in Test Suite**: `apps/src/ui/test/unit/error-page.test.ts`

@@ -1,0 +1,43 @@
+---
+title: Core Air-Gap Network & Isolation
+description: Deep dive into the zero-egress internal container network, supply chain immunity, and submodule decoupling.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Zero-Egress Hermetic Network Boundary"
+  analogy="In mission-critical research facilities, core control computers are physically air-gapped from the public internet to eliminate remote threats. SG Forge implements this virtually at the Docker network layer: core services are mathematically unable to send packets outbound."
+  impact="Eliminates the threat of supply-chain trojans, rogue dependency phone-homes, and inadvertent data exfiltration."
+/>
+
+<TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-NET-002" type="HLR" status="verified" />
+
+## 1. Network Topology & Dual-Zone Architecture
+
+The SG Forge platform strictly partitions container communication into two decoupled Docker networks:
+
+<DiagramEmbed 
+  diagram="airgap" 
+  title="SG Forge Dual-Zone Network Air-Gap Model" 
+  caption="Core services reside inside Zone A with internal: true, while autonomous Forge submodules live in Zone B."
+/>
+
+## 2. Invariants & Security Boundaries
+
+### Zone A: Core Air-Gap Network (`core-airgap-net`)
+1. **Zero Outbound Sockets**: Configured with `internal: true`. Docker blocks all default gateway packet routing for member containers.
+2. **Inbound Only via Reverse Proxy**: The only ingress point is the Caddy Gateway container, which mediates external client requests.
+3. **Internal Microservices**:
+   - `portal` (Port 3001)
+   - `auth` (Port 3004)
+   - `dev-dashboard` (Port 3002)
+4. **Supply Chain Defense**: Even if an attacker injects a malicious payload into an internal dependency, the payload cannot reach an external command-and-control server or leak tokens.
+
+### Zone B: Autonomous Forge Apps Network (`forge-apps-net`)
+1. **Autonomous Egress Governance**: Forge apps (such as `forge-apps/code`) live in their own network partition.
+2. **Decoupled Lifecycle**: Submodules can interact with approved external developer webhooks or APIs according to their own local configurations.
+3. **Zero Inward Traversal**: Submodules have no routing access to `core-airgap-net` internal databases or services.

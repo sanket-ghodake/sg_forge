@@ -1,0 +1,59 @@
+---
+title: Developer Hub & SDK Playground
+description: Complete developer guide to the interactive token minting sandbox, health mesh prober, polyglot starter generator, and SDK simulation playground.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Interactive Onboarding & Micro-App Developer Gateway"
+  analogy="The Developer Hub acts as an interactive flight simulator for developers: it lets engineers test API routes, mint test authentication tokens, inspect living SDK specifications, and generate polyglot starters in real time without touching production."
+  impact="Accelerates developer onboarding from days to seconds while eliminating token spoofing bugs and contract mismatches."
+/>
+
+<TraceabilityBadge reqId="HLR-HUB-601" type="HLR" status="verified" />
+<TraceabilityBadge reqId="SR-DOC-001" type="SR" status="verified" />
+
+## 1. Architectural Role & Ingress
+
+The **Developer Hub & SDK Playground** (`@forge/dev-hub`) serves on internal port `:3003` and is exposed via the reverse proxy at `/gateway`. It operates statelessly as a mesh client consuming `@forge/sdk` and central authentication services.
+
+<DiagramEmbed 
+  diagram="dev-hub" 
+  title="Developer Hub & SDK Playground Architecture" 
+  caption="Visual architecture showing the 11 interactive sections, token minting sandbox, and polyglot scaffolding engine."
+/>
+
+## 2. Eleven Core Sections & Capabilities
+
+The Developer Hub UI is organized into 11 high-density, interactive sections:
+
+1. **System Topology & Architecture Invariants**:
+   - Interactive live view of Enterprise architectural standards enforced across the monorepo.
+2. **Health Mesh Prober**:
+   - 1-click **Ping All Services** trigger measuring microsecond round-trip latencies across all 8 registered microservices and micro-apps.
+3. **Token Minting Sandbox**:
+   - Instant 1-click test token generation for seeded platform personas (`superadmin@forge.internal`, `developer@forge.internal`, etc.).
+   - Interactive JWT payload and claims inspector demonstrating Ed25519 asymmetric signature validity.
+4. **Declarative Ingress Matrix**:
+   - Real-time route inspector reflecting active reverse proxy upstreams dynamically parsed from `.env`.
+5. **Polyglot Code Scaffolding Generator**:
+   - Interactive multi-language starter generator delivering complete boilerplate code for **TypeScript / Bun**, **Python FastAPI**, and **Go Fiber**.
+6. **SDK Interactive Playground**:
+   - In-browser sandbox simulating `postMessage` iframe bridge handshakes, theme synchronization, and authenticated API requests.
+7. **Security & RFC 7807 Matrix**:
+   - Comprehensive error catalog detailing standard problem details (`application/problem+json`), HTTP status codes, and immutable `traceId` correlation.
+8. **Testing Rigor & Pyramid**:
+   - Live examples of 3A Pattern (Arrange, Act, Assert) unit, integration, and security tests.
+
+## 3. Local Execution & Testing
+
+```bash
+# Run Dev Hub standalone server
+rtk bun apps/src/dev-hub/src/server.ts
+
+# Run Dev Hub 5-Tier test suite
+rtk bun test apps/src/dev-hub/test
+```

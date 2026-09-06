@@ -1,0 +1,24 @@
+---
+title: HLR-PORTAL-201 Single Page Application (SPA) Client Routing
+description: High-Level Requirement mandating instantaneous client-side navigation with zero full-page hard reloads.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Portal Application (`apps/src/portal`) shall operate strictly as an instantaneous Single Page Application (SPA):
+
+1. Navigation between workspaces, apps, and settings shall utilize client-side history state manipulation (`history.pushState`) without triggering hard browser reloads.
+2. Active tab states and view models shall be preserved across internal transitions.
+3. Fluid responsiveness down to 320px viewport shall maintain zero horizontal page overflow.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/portal/src/router.ts`
+* **Verified in Tests**: `apps/src/portal/test/e2e/spa-navigation.test.ts`

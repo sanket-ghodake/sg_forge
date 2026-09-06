@@ -1,0 +1,425 @@
+---
+/**
+ * DiagramEmbed.astro
+ *
+ * Inlines Astryx vector SVG diagrams directly into documentation pages.
+ * Delivers zero-latency, high-DPI scaling, dark/light theme integration,
+ * and eliminates iframe sandbox restrictions.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  diagram: string;
+  title?: string;
+  caption?: string;
+}
+
+const { diagram, title, caption } = Astro.props;
+
+const DIAGRAM_MAP: Record<string, string> = {
+  'topology': '01-platform-topology.html',
+  '01': '01-platform-topology.html',
+  '01-platform-topology': '01-platform-topology.html',
+
+  'airgap': '02-network-airgap.html',
+  '02': '02-network-airgap.html',
+  '02-network-airgap': '02-network-airgap.html',
+
+  'database': '03-turso-db-isolation.html',
+  'db': '03-turso-db-isolation.html',
+  '03': '03-turso-db-isolation.html',
+  '03-turso-db-isolation': '03-turso-db-isolation.html',
+
+  'auth-session': '04-auth-session-lifecycle.html',
+  'auth': '04-auth-session-lifecycle.html',
+  '04': '04-auth-session-lifecycle.html',
+  '04-auth-session-lifecycle': '04-auth-session-lifecycle.html',
+
+  'astryx-tokens': '05-astryx-token-hierarchy.html',
+  'tokens': '05-astryx-token-hierarchy.html',
+  '05': '05-astryx-token-hierarchy.html',
+  '05-astryx-token-hierarchy': '05-astryx-token-hierarchy.html',
+
+  'tooltip-collision': '06-tooltip-collision.html',
+  'tooltips': '06-tooltip-collision.html',
+  '06': '06-tooltip-collision.html',
+  '06-tooltip-collision': '06-tooltip-collision.html',
+
+  'client-state': '07-client-state-engine.html',
+  'state': '07-client-state-engine.html',
+  '07': '07-client-state-engine.html',
+  '07-client-state-engine': '07-client-state-engine.html',
+
+  'portal-spa': '08-portal-spa-routing.html',
+  'spa': '08-portal-spa-routing.html',
+  '08': '08-portal-spa-routing.html',
+  '08-portal-spa-routing': '08-portal-spa-routing.html',
+
+  'test-pyramid': '09-test-pyramid.html',
+  'tests': '09-test-pyramid.html',
+  '09': '09-test-pyramid.html',
+  '09-test-pyramid': '09-test-pyramid.html',
+
+  'precommit-gate': '10-precommit-quality-gate.html',
+  'precommit': '10-precommit-quality-gate.html',
+  '10': '10-precommit-quality-gate.html',
+  '10-precommit-quality-gate': '10-precommit-quality-gate.html',
+
+  'submodules': '11-submodule-governance.html',
+  'submodule-governance': '11-submodule-governance.html',
+  '11': '11-submodule-governance.html',
+  '11-submodule-governance': '11-submodule-governance.html',
+
+  'systems-traceability': '12-systems-traceability.html',
+  'traceability': '12-systems-traceability.html',
+  '12': '12-systems-traceability.html',
+  '12-systems-traceability': '12-systems-traceability.html',
+
+  'dev-hub': '13-dev-hub-architecture.html',
+  'hub': '13-dev-hub-architecture.html',
+  '13': '13-dev-hub-architecture.html',
+  '13-dev-hub-architecture': '13-dev-hub-architecture.html',
+
+  'dev-dashboard': '14-dev-dashboard-telemetry.html',
+  'dashboard': '14-dev-dashboard-telemetry.html',
+  '14': '14-dev-dashboard-telemetry.html',
+  '14-dev-dashboard-telemetry': '14-dev-dashboard-telemetry.html',
+
+  'sdk-storage': '15-sdk-storage-pipeline.html',
+  'storage-pipeline': '15-sdk-storage-pipeline.html',
+  '15': '15-sdk-storage-pipeline.html',
+  '15-sdk-storage-pipeline': '15-sdk-storage-pipeline.html',
+
+  'portal-canvas': '16-portal-canvas-inbox.html',
+  'canvas-inbox': '16-portal-canvas-inbox.html',
+  '16': '16-portal-canvas-inbox.html',
+  '16-portal-canvas-inbox': '16-portal-canvas-inbox.html',
+
+  'observability-flow': '17-observability-telemetry-flow.html',
+  'observability': '17-observability-telemetry-flow.html',
+  '17': '17-observability-telemetry-flow.html',
+  '17-observability-telemetry-flow': '17-observability-telemetry-flow.html',
+
+  'user-journey': '18-user-journey-workspace.html',
+  'journey': '18-user-journey-workspace.html',
+  '18': '18-user-journey-workspace.html',
+  '18-user-journey-workspace': '18-user-journey-workspace.html',
+
+  'developer-toolchain': '19-developer-onboarding-toolchain.html',
+  'toolchain': '19-developer-onboarding-toolchain.html',
+  'developer-journey': '19-developer-onboarding-toolchain.html',
+  '19': '19-developer-onboarding-toolchain.html',
+  '19-developer-onboarding-toolchain': '19-developer-onboarding-toolchain.html',
+
+  'disaster-recovery': '20-disaster-recovery-backup.html',
+  'backup-recovery': '20-disaster-recovery-backup.html',
+  'backup': '20-disaster-recovery-backup.html',
+  '20': '20-disaster-recovery-backup.html',
+  '20-disaster-recovery-backup': '20-disaster-recovery-backup.html',
+
+  'security-audit': '21-security-strix-audit.html',
+  'strix-audit': '21-security-strix-audit.html',
+  'pentest': '21-security-strix-audit.html',
+  '21': '21-security-strix-audit.html',
+  '21-security-strix-audit': '21-security-strix-audit.html',
+};
+
+const fileName = DIAGRAM_MAP[diagram] || (diagram.endsWith('.html') ? diagram : `${diagram}.html`);
+
+const candidates = [
+  path.resolve(process.cwd(), 'diagrams', fileName),
+  path.resolve(process.cwd(), 'public/diagrams', fileName),
+  path.resolve(process.cwd(), 'apps/src/docs/diagrams', fileName),
+  path.resolve(process.cwd(), 'apps/src/docs/public/diagrams', fileName),
+  path.resolve(process.cwd(), '../diagrams', fileName),
+  path.resolve(process.cwd(), '../public/diagrams', fileName),
+];
+
+let rawHtml = '';
+for (const p of candidates) {
+  if (fs.existsSync(p)) {
+    rawHtml = fs.readFileSync(p, 'utf-8');
+    break;
+  }
+}
+
+let svgContent = '';
+let extractedTitle = title;
+if (rawHtml) {
+  const svgMatch = rawHtml.match(/<svg[\s\S]*?<\/svg>/i);
+  if (svgMatch) {
+    svgContent = svgMatch[0];
+  }
+  if (!extractedTitle) {
+    const titleMatch = rawHtml.match(/<title[^>]*>(.*?)<\/title>/i);
+    if (titleMatch) extractedTitle = titleMatch[1];
+  }
+}
+
+const displayTitle = extractedTitle || title || fileName;
+const standaloneHref = `/docs/diagrams/${fileName}`;
+---
+
+<figure class="astryx-diagram-card">
+  <header class="astryx-diagram-header">
+    <div class="diagram-info">
+      <span class="diagram-dot"></span>
+      <span class="diagram-name">{displayTitle}</span>
+    </div>
+    <div class="diagram-actions">
+      <span class="diagram-chip">Astryx Vector</span>
+      <a href={standaloneHref} target="_blank" rel="noopener noreferrer" class="diagram-link" data-astryx-tooltip="Open diagram in standalone window">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        <span>Standalone</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="astryx-diagram-body">
+    {svgContent ? (
+      <div class="astryx-svg-wrapper" set:html={svgContent} />
+    ) : (
+      <div class="astryx-fallback-box">
+        <p>Diagram source <code>{fileName}</code> not found.</p>
+      </div>
+    )}
+  </div>
+
+  {caption && (
+    <footer class="astryx-diagram-caption">
+      <p>{caption}</p>
+    </footer>
+  )}
+</figure>
+
+<style>
+  .astryx-diagram-card {
+    margin: 2.2rem 0;
+    border-radius: 12px;
+    border: 1px solid var(--forge-border, #282828);
+    background: var(--forge-bg-card, #1c1c1c);
+    overflow: hidden;
+    box-shadow: var(--forge-shadow-card, 0 4px 20px rgba(0, 0, 0, 0.3));
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .astryx-diagram-card:hover {
+    border-color: var(--forge-primary, #3ecf8e);
+    box-shadow: var(--forge-shadow-hover, 0 8px 30px rgba(0, 0, 0, 0.4));
+  }
+
+  .astryx-diagram-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.1rem;
+    background: var(--forge-bg-surface, #171717);
+    border-bottom: 1px solid var(--forge-border, #282828);
+  }
+
+  .diagram-info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .diagram-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--forge-primary, #3ecf8e);
+    box-shadow: 0 0 8px var(--forge-primary, #3ecf8e);
+  }
+
+  .diagram-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--forge-text-main, #ededed);
+    letter-spacing: -0.01em;
+  }
+
+  .diagram-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .diagram-chip {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    color: var(--forge-primary, #3ecf8e);
+    border: 1px solid var(--forge-border-medium, #383838);
+  }
+
+  .diagram-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--forge-text-muted, #8a8a8a);
+    text-decoration: none;
+    padding: 3px 8px;
+    border-radius: var(--forge-radius-sm, 5px);
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    transition: var(--forge-transition);
+  }
+
+  .diagram-link:hover {
+    color: var(--forge-text-main, #ededed);
+    background: var(--forge-bg-card-hover, #232323);
+    border-color: var(--forge-border-hover, #383838);
+  }
+
+  .astryx-diagram-body {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at 50% 50%, var(--forge-primary-bg, rgba(62, 207, 142, 0.03)) 0%, var(--forge-bg-elevated, #191919) 100%);
+    overflow-x: auto;
+  }
+
+  .astryx-svg-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  :global(.astryx-svg-wrapper svg) {
+    width: 100% !important;
+    max-width: 860px;
+    height: auto !important;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+    transition: filter 0.2s ease;
+  }
+
+  /* ── Light Theme Adaptations for Inlined SVG Elements ── */
+  :global([data-theme="light"] .astryx-diagram-card) {
+    background: #ffffff !important;
+    border-color: #eaeaea !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  :global([data-theme="light"] .astryx-diagram-header) {
+    background: #ffffff !important;
+    border-bottom-color: #eaeaea !important;
+  }
+
+  :global([data-theme="light"] .astryx-diagram-body) {
+    background: radial-gradient(circle at 50% 50%, rgba(36, 180, 126, 0.04) 0%, #f9fafb 100%) !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg) {
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.06)) !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="#111827"]) {
+    fill: #ffffff !important;
+    stroke: #e2e8f0;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[stroke="rgba(255,255,255,0.1)"]),
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[stroke="rgba(255,255,255,0.08)"]) {
+    stroke: #e2e8f0 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="#1E1B4B"]) {
+    fill: #eef2ff !important;
+    stroke: #818cf8 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="#064E3B"]) {
+    fill: #ecfdf5 !important;
+    stroke: #10b981 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="#164E63"]) {
+    fill: #f0fdfa !important;
+    stroke: #06b6d4 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="#312E81"]) {
+    fill: #e0e7ff !important;
+    stroke: #818cf8 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#F3F4F6"]) {
+    fill: #0f172a !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#9CA3AF"]) {
+    fill: #475569 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#818CF8"]),
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#A5B4FC"]) {
+    fill: #4338ca !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#34D399"]) {
+    fill: #047857 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#67E8F9"]) {
+    fill: #0e7490 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#FBBF24"]),
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#F59E0B"]) {
+    fill: #b45309 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg text[fill="#EF4444"]) {
+    fill: #dc2626 !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="rgba(99,102,241,0.05)"]) {
+    fill: rgba(99, 102, 241, 0.08) !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="rgba(16,185,129,0.05)"]) {
+    fill: rgba(16, 185, 129, 0.08) !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="rgba(245,158,11,0.06)"]) {
+    fill: rgba(245, 158, 11, 0.09) !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="rgba(6,182,212,0.06)"]) {
+    fill: rgba(6, 182, 212, 0.09) !important;
+  }
+
+  :global([data-theme="light"] .astryx-svg-wrapper svg rect[fill="rgba(17,24,39,0.95)"]) {
+    fill: #ffffff !important;
+    stroke: #e2e8f0 !important;
+  }
+
+  .astryx-diagram-caption {
+    padding: 0.7rem 1.1rem;
+    font-size: 0.82rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    background: var(--forge-bg-surface, #171717);
+    border-top: 1px solid var(--forge-border, #282828);
+    text-align: center;
+  }
+
+  .astryx-diagram-caption p {
+    margin: 0;
+  }
+
+  .astryx-fallback-box {
+    padding: 2rem;
+    color: #ef4444;
+    text-align: center;
+  }
+</style>

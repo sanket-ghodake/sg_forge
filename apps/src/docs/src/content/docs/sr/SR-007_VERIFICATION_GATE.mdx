@@ -1,0 +1,29 @@
+---
+title: SR-GATE-001 Unified 29-Check Pre-Commit Verification Gate
+description: System Requirement defining the deterministic Tier 1 and semantic Tier 2 verification quality gates.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="SR-GATE-001" type="SR" status="verified" />
+</div>
+
+<ExecutiveCard 
+  title="Pre-Flight Launch Inspection Gate"
+  analogy="Before an orbital rocket can ignite its thrusters, mission control conducts an automated 29-point pre-flight sensor check. If a single sensor reports anomalous telemetry, the launch aborts immediately."
+  impact="Guarantees that no broken builds, unannotated code, secret leaks, or architectural violations can ever be staged or committed."
+/>
+
+## 1. Requirement Statement
+
+1. All code changes across SG Forge and submodules shall pass the unified **29 Tier 1 deterministic checks** and **8 Tier 2 AI semantic audits** prior to staging or committing (`rtk ./run.sh verify`).
+2. **Absolute Zero Auto-Commits**: AI agents are strictly blocked from running `git commit` unless the user explicitly commands it in the active prompt.
+3. Every source file must adhere to the **500-line soft cap** ($\le 300$ ideal, $\le 500$ max).
+4. Every conversation task completion must append strictly one entry to `logs/WORKLOGS.md`.
+
+## 2. Traceability Links
+
+* **Traced to High-Level Requirements**:
+  * <TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" /> Developer Quality Instrumentation

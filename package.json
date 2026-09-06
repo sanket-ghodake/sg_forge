@@ -1,0 +1,33 @@
+{
+  "name": "sg-forge-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/src/*",
+    "forge-apps/*"
+  ],
+  "scripts": {
+    "dev": "./run.sh dev",
+    "setup": "./run.sh setup",
+    "test": "./run.sh test",
+    "clean": "./run.sh clean",
+    "doctor": "./run.sh doctor",
+    "create-app": "./run.sh create-app"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@libsql/client": "^0.17.4",
+    "@lhci/cli": "^0.14.0",
+    "@stoplight/spectral-cli": "^6.14.0",
+    "@types/bun": "^1.4.0",
+    "@types/node": "^22.0.0",
+    "dependency-cruiser": "^16.10.0",
+    "drizzle-orm": "^0.45.2",
+    "madge": "^8.0.0",
+    "type-coverage": "^2.29.7",
+    "typescript": "^5.6.3"
+  },
+  "license": "Apache-2.0",
+  "author": "Sanket Ghodake <sanketghodke03@gmail.com>"
+}

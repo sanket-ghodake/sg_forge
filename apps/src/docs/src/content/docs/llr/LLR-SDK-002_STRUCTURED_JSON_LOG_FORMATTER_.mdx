@@ -1,0 +1,30 @@
+---
+title: LLR-SDK-002 - Structured JSON Log Formatter with RFC 3339 Timestamps
+description: Low-level requirement formatting log entries into standardized Enterprise SRE single-line JSON records.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SDK-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Assemble log payload: `{ timestamp, severity, service, traceId, message, context }`
+2. Format timestamp using RFC 3339 UTC representation: new Date().toISOString()
+3. Normalize log severity levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
+4. Pass context object through recursive PII redaction filter
+5. Output formatted single-line JSON string to process.stdout or process.stderr
+
+## 2. Safety & Verification Invariants
+
+* **Each log record must be emitted as strictly one single JSON line (zero multi-line breaks)**
+* **Timestamp must strictly conform to ISO 8601 / RFC 3339 format**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/sdk/src/logger.ts`
+* **Verified in Test Suite**: `apps/src/sdk/test/unit/logger.test.ts`

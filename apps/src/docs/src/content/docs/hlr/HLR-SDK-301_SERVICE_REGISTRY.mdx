@@ -1,0 +1,28 @@
+---
+title: HLR-SDK-301 Declarative Service Registry & Dynamic Ingress Parser
+description: High-Level Requirement defining single-location microservice registration from environment configuration.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-SDK-301" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Platform SDK (`@forge/sdk/registry`) shall parse all registered applications from `.env` via the standardized declarative ingress pattern:
+
+```bash
+APP_<ID>="<Display Name>|<Internal Port>|<Public Path>|<Category>|<Role>|[Upstream]"
+```
+
+1. Provides type-safe `loadServiceRegistry()` returning normalized `ServiceEntry` records.
+2. Synchronizes Caddy reverse proxy routing (`scripts/generate-proxy.ts`) without manual configuration editing.
+3. Automatically enables or disables micro-app routes based on SQLite registration state.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-SUB-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/sdk/src/registry.ts`
+* **Verified in Tests**: `apps/src/sdk/test/unit/registry.test.ts`

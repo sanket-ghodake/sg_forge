@@ -1,0 +1,25 @@
+---
+title: HLR-UI-403 Zero-FOUC Client State & Storage Engine
+description: High-Level Requirement defining versioned localStorage persistence, URL state synchronization, and theme hydration.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-UI-403" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Client State Engine (`@forge/ui/browser-state`) shall manage browser state without Flash of Unstyled Content (FOUC):
+
+1. Generates synchronous `<head>` script restoring active theme and sidebar collapse state before body rendering.
+2. Manages versioned local state stores (`createStateStore`) with automated migration callbacks.
+3. Synchronizes filter parameters with URL query parameters using `window.history.replaceState`.
+4. Gracefully falls back to memory storage in sandboxed or cookie-restricted browser contexts.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/ui/src/browser-state.ts`
+* **Verified in Tests**: `apps/src/ui/test/unit/browser-state.test.ts`

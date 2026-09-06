@@ -1,0 +1,53 @@
+---
+title: OpenAPI 3.1 Contract Explorer & API Ledger
+description: Offline-first interactive API specification and RFC 7807 problem details contracts.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="HLR-SDK-301" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-SDK-004" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="SR-GATE-001" type="SR" status="verified" />
+</div>
+
+## 1. OpenAPI 3.1 Platform Specification
+
+All platform HTTP endpoints strictly conform to OpenAPI 3.1 specifications located at `docs/api/openapi.yaml`. API contract parity is automatically validated on every pre-commit cycle via Spectral lint rules.
+
+### Operational Probes & Healthcheck Contracts
+
+The platform enforces dual-probe health endpoints across the gateway, auth engine, developer hub, and all autonomous Forge App submodules:
+
+* **Endpoint**: `GET /health`
+* **Response**: `200 OK`
+* **Schema**:
+```json
+{
+  "status": "ok",
+  "service": "portal",
+  "port": 3000,
+  "uptime": 142.5
+}
+```
+
+### RFC 7807 Problem Details Response Schema
+
+All error responses across SG Forge microservices return standardized RFC 7807 `application/problem+json` envelopes:
+
+```json
+{
+  "type": "https://sgforge.local/errors/unauthorized",
+  "title": "Unauthorized Access",
+  "status": 401,
+  "detail": "Invalid or expired session token presented.",
+  "instance": "/api/v1/portal/apps",
+  "traceId": "tr_89ab34cd-1234-5678-90ef"
+}
+```
+
+## 2. API Contract Governance Invariants
+
+1. **Deterministic Ports**: Ports are allocated exclusively via `.env` and declared in `@forge/sdk/registry`.
+2. **Zero PII Leaks**: Error responses are processed through `@forge/sdk` `createSafeHandler` to redact secrets and database stack traces.
+3. **Spectral Compliance**: Monorepo contracts must pass `rtk ./run.sh contracts` with zero errors.

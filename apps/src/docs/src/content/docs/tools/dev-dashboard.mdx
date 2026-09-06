@@ -1,0 +1,60 @@
+---
+title: Developer Operations Dashboard
+description: Complete architectural guide to the real-time SRE monitoring studio, live SSE log streaming, database studio, and secrets defense.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Mission-Critical Operations & Telemetry Studio"
+  analogy="The Developer Operations Dashboard serves as the central mission control room: streaming real-time heartbeat telemetry from every container, providing a secure database inspection workbench, and alerting SREs to anomalies with zero disk thrashing."
+  impact="Guarantees sub-second issue diagnosis, zero credentials leaked to browser consoles, and air-gapped system visibility."
+/>
+
+<TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" />
+<TraceabilityBadge reqId="SR-LOG-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-002" type="LLR" status="verified" />
+
+## 1. Architectural Role & Ingress
+
+The **Developer Operations Dashboard** (`@forge/dev-dashboard`) serves on internal port `:3002` and is exposed via the gateway at `/devcenter`. Built to Enterprise SRE and Astryx enterprise standards, it houses 13,576 SLOC across high-density studio controllers, live streamers, and database diagnostics.
+
+<DiagramEmbed 
+  diagram="dev-dashboard" 
+  title="Developer Operations Dashboard & Fleet Telemetry" 
+  caption="Visual architecture showing the Fleet Health Mesh, Real-Time SSE Log Streamer, and Unified Database Studio."
+/>
+
+## 2. Core Operational Capabilities
+
+### 1. Fleet Health Mesh & Vitals Probing
+- Continuous background prober monitoring all 8 platform microservices and autonomous Forge Apps.
+- Tracks dual-probe health endpoints (`/health/liveness` and `/health/readiness`).
+- Renders responsive status cards with latency metrics and auto-recovery triggers.
+
+### 2. Live SSE Log Streamer (`/api/logs/stream`)
+- Employs an in-memory circular ring buffer holding the most recent 1,000 structured JSON log events.
+- Streams live telemetry to the browser via Server-Sent Events (SSE) with **zero disk churn**.
+- Transparently applies recursive PII redaction: sensitive credentials, JWT tokens, and passwords are automatically scrubbed before transmission.
+
+### 3. Unified Database Studio & Remote Gateway
+- **Schema Inspector**: Visual tree browser inspecting SQLite tables, foreign keys, and column types.
+- **Fast Paginated Data Browser**: Safely paginates thousands of rows with sanitized table parameter filtering.
+- **Monospace SQL Editor**: Enforces a `READ_ONLY` transaction sandbox, preventing accidental `DROP` or `DELETE` mutations.
+- **Remote DB Gateway**: Connects securely to isolated microservice databases (`/api/db/connect`) for live debugging without leaving the browser.
+
+### 4. Secrets Defense & Environment Variable Masking
+- The `/api/env/safe` endpoint automatically detects sensitive keys (`PASSWORD`, `SECRET`, `KEY`, `TOKEN`).
+- Sensitive values are replaced with bullet masks (`••••••••`), preventing credential exposure during screenshares or browser inspection.
+
+## 3. Local Execution & Testing
+
+```bash
+# Launch Dev Dashboard standalone
+rtk bun apps/src/dev-dashboard/src/server.ts
+
+# Execute 113 unit, integration, and security tests
+rtk bun test apps/src/dev-dashboard/test
+```

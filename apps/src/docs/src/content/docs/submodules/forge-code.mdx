@@ -1,0 +1,17 @@
+---
+title: Forge Code Micro-App (forge-apps/code)
+description: Autonomous Git repository explorer, syntax highlighter, and code playground microservice.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+## 1. Micro-App Overview
+
+* **Repository**: `forge-apps/code` (Git Submodule)
+* **Port**: `3010` (Internal Ingress)
+* **Database**: Local Turso SQLite instance (`forge-apps/code/data/code.db`)
+
+## 2. Requirements & Verification
+
+* <TraceabilityBadge reqId="HLR-CODE-001" type="HLR" status="verified" /> Isolated Syntax Engine
+* <TraceabilityBadge reqId="LLR-CODE-001.1" type="LLR" status="verified" /> Sandboxed File Traversal Protection

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Bunx Wrapper (2026 LTS)
+# Cross-Platform Wrapper: Replaces fragile symlink for Windows, WSL, macOS & Linux
+# ==============================================================================
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# On Linux, execute portable ELF bun. On macOS or other OS, fall through to system bun.
+if [ "$(uname -s)" = "Linux" ] && [ -x "$SCRIPT_DIR/bun" ]; then
+    exec "$SCRIPT_DIR/bun" x "$@"
+elif command -v bun >/dev/null 2>&1; then
+    exec bun x "$@"
+else
+    echo "❌ [bunx] Bun runtime not found in portable toolchain or system PATH." >&2
+    exit 1
+fi

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SG Forge Living Engineering Bidirectional Traceability Chain</title>
+  <style>
+    :root {
+      --bg-root: #0b0f19;
+      --bg-surface: #111827;
+      --primary: #6366f1;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body { background: var(--bg-root); color: var(--text); font-family: var(--font); margin: 0; padding: 24px; display: flex; justify-content: center; }
+    .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 900px; width: 100%; }
+    svg { width: 100%; height: auto; display: block; }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-root: #f8fafc;
+        --bg-surface: #ffffff;
+        --primary: #059669;
+        --accent: #06b6d4;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+      }
+      .card {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      }
+      svg rect[fill="#111827"] { fill: #ffffff !important; stroke: #e2e8f0; }
+      svg rect[stroke="rgba(255,255,255,0.1)"], svg rect[stroke="rgba(255,255,255,0.08)"] { stroke: #e2e8f0 !important; }
+      svg text[fill="#F3F4F6"] { fill: #0f172a !important; }
+      svg text[fill="#9CA3AF"] { fill: #475569 !important; }
+      svg rect[fill="#1E1B4B"] { fill: #eef2ff !important; stroke: #818cf8 !important; }
+      svg rect[fill="#064E3B"] { fill: #ecfdf5 !important; stroke: #10b981 !important; }
+      svg rect[fill="#164E63"] { fill: #f0fdfa !important; stroke: #06b6d4 !important; }
+      svg rect[fill="#312E81"] { fill: #e0e7ff !important; stroke: #818cf8 !important; }
+      svg text[fill="#818CF8"], svg text[fill="#A5B4FC"] { fill: #4338ca !important; }
+      svg text[fill="#34D399"] { fill: #047857 !important; }
+      svg text[fill="#67E8F9"] { fill: #0e7490 !important; }
+      svg text[fill="#FBBF24"], svg text[fill="#F59E0B"] { fill: #b45309 !important; }
+      svg text[fill="#EF4444"] { fill: #dc2626 !important; }
+      svg rect[fill="rgba(17,24,39,0.95)"] { fill: #ffffff !important; stroke: #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <svg viewBox="0 0 800 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-12 desc-12">
+      <title id="title-12">SG Forge Bidirectional Traceability Architecture</title>
+      <desc id="desc-12">5-stage traceability chain linking System Requirements down to source code AST symbols and automated test assertions.</desc>
+      
+      <!-- SR Node -->
+      <rect x="50" y="30" width="700" height="50" rx="8" fill="#1E1B4B" stroke="#6366F1" stroke-width="1.5"/>
+      <text x="400" y="55" text-anchor="middle" fill="#818CF8" font-size="13" font-weight="700">1. SYSTEM REQUIREMENT (SR)</text>
+      <text x="400" y="70" text-anchor="middle" fill="#F3F4F6" font-size="11">[SR-SEC-001] "Multi-Tenant Zero-Trust Air-Gapped Isolation"</text>
+      
+      <path d="M400 80 V105" stroke="#6366F1" stroke-width="2"/>
+      <polygon points="396,105 404,105 400,113" fill="#6366F1"/>
+      
+      <!-- HLR Node -->
+      <rect x="50" y="115" width="700" height="50" rx="8" fill="#111827" stroke="#06B6D4" stroke-width="1.5"/>
+      <text x="400" y="140" text-anchor="middle" fill="#67E8F9" font-size="13" font-weight="700">2. HIGH-LEVEL REQUIREMENT (HLR)</text>
+      <text x="400" y="155" text-anchor="middle" fill="#F3F4F6" font-size="11">[HLR-AUTH-101] "Tenant Session Verification &amp; Org Header Injection"</text>
+      
+      <path d="M400 165 V190" stroke="#06B6D4" stroke-width="2"/>
+      <polygon points="396,190 404,190 400,198" fill="#06B6D4"/>
+      
+      <!-- LLR Node -->
+      <rect x="50" y="200" width="700" height="50" rx="8" fill="#111827" stroke="#10B981" stroke-width="1.5"/>
+      <text x="400" y="225" text-anchor="middle" fill="#34D399" font-size="13" font-weight="700">3. LOW-LEVEL REQUIREMENT (LLR)</text>
+      <text x="400" y="240" text-anchor="middle" fill="#F3F4F6" font-size="11">[LLR-AUTH-001] "Validate HMAC-SHA256 signature, clock skew &lt;= 60s"</text>
+      
+      <path d="M400 250 V275" stroke="#10B981" stroke-width="2"/>
+      <polygon points="396,275 404,275 400,283" fill="#10B981"/>
+      
+      <!-- Source Code Node -->
+      <rect x="50" y="285" width="700" height="50" rx="8" fill="#111827" stroke="#F59E0B" stroke-width="1.5"/>
+      <text x="400" y="310" text-anchor="middle" fill="#FBBF24" font-size="13" font-weight="700">4. SOURCE CODE SYMBOL (AST AUDITED)</text>
+      <text x="400" y="325" text-anchor="middle" fill="#F3F4F6" font-size="11">verifySessionToken() in apps/src/auth/src/session.ts [@requirements [LLR-AUTH-001]]</text>
+      
+      <path d="M400 335 V360" stroke="#F59E0B" stroke-width="2"/>
+      <polygon points="396,360 404,360 400,368" fill="#F59E0B"/>
+      
+      <!-- 5-Tier Verification Test Node -->
+      <rect x="50" y="370" width="700" height="45" rx="8" fill="#1E1B4B" stroke="#A855F7" stroke-width="1.5"/>
+      <text x="400" y="390" text-anchor="middle" fill="#C084FC" font-size="12" font-weight="700">5. 5-TIER AUTOMATED TEST VERIFICATION</text>
+      <text x="400" y="405" text-anchor="middle" fill="#F3F4F6" font-size="10">apps/src/auth/test/security/token-replay.test.ts (100% Branch Coverage on Auth Boundaries)</text>
+    </svg>
+  </div>
+</body>
+</html>

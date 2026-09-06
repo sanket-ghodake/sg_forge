@@ -1,0 +1,30 @@
+---
+title: LLR-UI-003 - Astryx Toast Notification Queue & Stacking Controller
+description: Low-level requirement managing ephemeral notification queue, auto-dismiss timers, and DOM cleanup.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-UI-003" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-UI-402" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Push incoming notification payload (`{ type, title, message, duration }`) to internal toast queue
+2. Enforce maximum 5 visible stacked toasts; queue excess notifications
+3. Render toast container with glassmorphic styling and aria-live='polite' attribute
+4. Start auto-dismiss timeout (default 4000ms); pause timer on mouse hover
+5. Execute slide-out CSS transition and remove DOM node on dismissal
+
+## 2. Safety & Verification Invariants
+
+* **Toast queue must gracefully handle rapid burst notifications without layout shifts**
+* **Screen readers must be notified via standard ARIA live region attributes**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-UI-402" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/ui/src/toast.ts`
+* **Verified in Test Suite**: `apps/src/ui/test/unit/toast.test.ts`

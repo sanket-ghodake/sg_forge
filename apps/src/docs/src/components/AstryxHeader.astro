@@ -1,0 +1,163 @@
+---
+/**
+ * @forge/docs - Astryx Navigation Header Bar (2026 LTS)
+ * 100% Astryx Token Compliant: Authentic Emerald Glow, Platform App Links,
+ * Zero OS Browser Defaults, and Dynamic Pagefind Search Modal Trigger.
+ */
+import config from 'virtual:starlight/user-config';
+import Search from 'virtual:starlight/components/Search';
+import AstryxThemeSelect from './AstryxThemeSelect.astro';
+
+const shouldRenderSearch =
+  config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+---
+
+<div class="astryx-header-container">
+  <!-- 1. Left: Astryx Brand, App Tag & Status Dot -->
+  <div class="astryx-brand-block">
+    <a href="/docs" class="astryx-brand-link">
+      <div class="astryx-logo-mark">
+        <svg viewBox="0 0 32 32" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="var(--forge-primary, #3ecf8e)" fill-opacity="0.15" />
+          <path d="M16 6L25 11.2V21.6L16 26.8L7 21.6V11.2L16 6Z" stroke="var(--forge-primary, #3ecf8e)" stroke-width="2" stroke-linejoin="round" />
+          <path d="M16 12L20.5 14.6V19.8L16 22.4L11.5 19.8V14.6L16 12Z" fill="var(--forge-primary, #3ecf8e)" />
+        </svg>
+      </div>
+      <div class="astryx-title-group">
+        <span class="astryx-brand-name">SG FORGE</span>
+        <span class="astryx-app-badge">DOCS</span>
+      </div>
+    </a>
+    <span class="astryx-status-indicator" data-astryx-tooltip="Platform Status: Operational (v2.0.0 LTS)">
+      <span class="astryx-status-dot"></span>
+      <span class="astryx-status-label">v2.0.0</span>
+    </span>
+  </div>
+
+  <!-- 2. Center: Search (Pagefind WASM Engine) -->
+  <div class="astryx-search-box print:hidden">
+    {shouldRenderSearch && <Search {...Astro.props} />}
+  </div>
+
+  <!-- 3. Right: Theme Select & Controls -->
+  <div class="astryx-right-group print:hidden">
+    <div class="astryx-controls">
+      <AstryxThemeSelect />
+    </div>
+  </div>
+</div>
+
+<style>
+  .astryx-header-container {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .astryx-brand-block {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .astryx-brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .astryx-logo-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+
+  .astryx-logo-mark:hover {
+    transform: scale(1.05);
+  }
+
+  .astryx-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .astryx-brand-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--forge-text-main, #ededed);
+  }
+
+  .astryx-app-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--forge-radius-sm, 5px);
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    color: var(--forge-primary, #3ecf8e);
+    border: 1px solid var(--forge-border-medium, #383838);
+  }
+
+  .astryx-status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--forge-radius-full, 9999px);
+    background: var(--forge-success-bg, rgba(62, 207, 142, 0.12));
+    border: 1px solid var(--forge-border, #282828);
+    cursor: default;
+  }
+
+  .astryx-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--forge-success, #3ecf8e);
+    box-shadow: 0 0 6px var(--forge-success, #3ecf8e);
+    animation: astryxPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes astryxPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .astryx-status-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--forge-primary, #3ecf8e);
+    font-family: var(--forge-font-mono, monospace);
+  }
+
+  .astryx-search-box {
+    flex: 1;
+    max-width: 36rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .astryx-right-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .astryx-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+</style>

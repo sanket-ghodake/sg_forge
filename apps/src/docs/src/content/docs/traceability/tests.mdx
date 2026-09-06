@@ -1,0 +1,33 @@
+---
+title: 5-Tier Test Architecture & Verification Standards
+description: Specification of Unit, Integration, Security, Contract, and E2E test governance.
+---
+
+## 1. 5-Tier Verification Hierarchy
+
+Following Enterprise engineering rigor, every microservice and Forge App implements five isolated test tiers:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Tier 5: E2E Lifecycle Tests (Playwright / Socket Integrity) │
+├─────────────────────────────────────────────────────────────┤
+│ Tier 4: Contract Tests (OpenAPI 3.1 & Spectral Invariants)  │
+├─────────────────────────────────────────────────────────────┤
+│ Tier 3: Security Tests (Negative Assertions & Pentesting)   │
+├─────────────────────────────────────────────────────────────┤
+│ Tier 2: Integration Tests (Cross-Module HTTP & Cookie Flows)│
+├─────────────────────────────────────────────────────────────┤
+│ Tier 1: Unit Tests (3A Pattern: Arrange, Act, Assert)       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 2. Test Execution Commands
+
+* Run full test suite:
+  ```bash
+  rtk bun test
+  ```
+* Run pre-commit quality gate (Tier 1 & Tier 2):
+  ```bash
+  rtk ./run.sh verify
+  ```

@@ -1,0 +1,126 @@
+---
+title: Visual Architecture Atlas & Executive Tour
+description: A guided, visual-first platform tour designed for non-technical leadership, founders, product managers, and compliance auditors.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import AudienceTabs from '../../../components/AudienceTabs.astro';
+
+<ExecutiveCard 
+  title="SG Forge at a Glance: Sovereign Enterprise Software"
+  analogy="SG Forge is engineered with compartmentalized resilience: critical controls and data are hermetically isolated so that a disruption in one compartment never compromises the entire platform."
+  impact="Empowers organizations to build, deploy, and scale internal applications with mathematical data isolation, zero cloud vendor lock-in, and military-grade air-gapped security."
+/>
+
+## 🧭 How to Use This Visual Atlas
+
+This guide is designed for **non-technical stakeholders**—founders, directors, product managers, and security auditors—who need to understand the architectural safeguards of SG Forge without parsing thousands of lines of code.
+
+Every system capability is illustrated with an interactive, responsive vector diagram and explained using everyday business analogies.
+
+---
+
+## 1. High-Altitude Platform Topology
+
+SG Forge organizes software into a centralized gateway with independent micro-applications. All traffic flows through a single entry point (the Reverse Proxy Gateway), which inspects requests before routing them to internal services.
+
+<DiagramEmbed 
+  diagram="topology" 
+  title="Platform Topology & Gateway Ingress" 
+  caption="All internal applications (Portal, Dev Dashboard, Code, Telemetry) are coordinated by a single dynamic gateway on ports 80 and 443."
+/>
+
+* **Business Value**: Employees remember only one corporate web address. IT teams control authentication and access rules in one central place.
+
+---
+
+## 2. Core Air-Gap Network: The Submarine Bulkhead
+
+In traditional web platforms, all servers can access the public internet, creating risk if a single component is compromised. SG Forge enforces an **Air-Gapped Core Network**: core services cannot send any outbound data to the external internet.
+
+<DiagramEmbed 
+  diagram="airgap" 
+  title="Core Air-Gap Network & Dual Isolation Model" 
+  caption="Core platform containers reside in an air-gapped network with zero outbound internet egress; autonomous Forge micro-apps manage their own isolated egress."
+/>
+
+* **Business Analogy**: Like watertight doors in a submarine bulkhead, if an unauthorized actor gains access to a web interface, they cannot exfiltrate corporate databases to the external internet.
+
+---
+
+## 3. The Enterprise User Journey
+
+How does an employee interact with SG Forge during a normal workday?
+
+<DiagramEmbed 
+  diagram="user-journey" 
+  title="End-to-End Enterprise User Journey" 
+  caption="From secure single sign-on to instantaneous workspace navigation and sandboxed micro-app interaction."
+/>
+
+1. **Secure Sign-In**: Employees log in once via the Central Identity system (`/auth`). Session tokens automatically refresh while the employee is working and automatically lock after 30 minutes of inactivity.
+2. **Instant Single-Page Workspace**: The Portal (`/portal`) loads instantly with zero full-page white flashes or reloading delays.
+3. **Multi-Tenant Organization Switching**: Team members working across multiple business units can switch organizations in one click; data from other organizations is strictly filtered out.
+4. **Sandboxed Tools**: Applications (like Code Editing and Telemetry) open inside protected frames that cannot tamper with the employee's main session.
+
+---
+
+## 4. 4-Pillar Observability: Zero Blind Spots
+
+How do engineering leaders verify system health in real-time?
+
+<DiagramEmbed 
+  diagram="observability-flow" 
+  title="4-Pillar Observability & Health Mesh" 
+  caption="Continuous health monitoring streaming across dual probes, browser console bridge, container stdout, and dedicated disk logs."
+/>
+
+* **Dual Health Probes**: Automated checks ping every service every 10 seconds to ensure it is alive and ready to serve requests.
+* **Automated Privacy Redaction**: Passwords, bank account details, and security tokens are automatically scrubbed (`[REDACTED]`) before logs are stored.
+* **Standardized Incident Reports**: Any system error generates a standardized trace ticket (RFC 7807) with an incident ID, allowing engineers to diagnose issues in minutes.
+
+---
+
+## 5. Continuous Data Protection & Disaster Recovery
+
+How is company data protected against hardware failure or accidental corruption?
+
+<DiagramEmbed 
+  diagram="disaster-recovery" 
+  title="Disaster Recovery & Encrypted Backup Pipeline" 
+  caption="Automated hourly atomic snapshots, hardware-accelerated AES-256 encryption, and verified restore procedures."
+/>
+
+* **Zero-Downtime Snapshots**: Backups take atomic pictures of the database in the background without locking tables or interrupting live users.
+* **Encrypted at Rest**: All backup files are encrypted with military-grade AES-256 keys, ensuring stolen backup drives cannot be read.
+* **7-Day Rolling Safety Net**: Backups are automatically archived for 7 days and verified with cryptographic checksums before any restore operation.
+
+---
+
+## 6. Developer Lifecycle: 1-Command Onboarding
+
+How quickly can a new software engineer become productive on SG Forge?
+
+<DiagramEmbed 
+  diagram="developer-toolchain" 
+  title="Developer Lifecycle & Scaffolding Toolchain" 
+  caption="Zero host modifications, instant micro-app generator, rapid hot-reloading, and automated 29-check quality gate."
+/>
+
+* **Zero Tooling Setup**: Engineers do not need to install complex local compilers or databases; all tools run portably out of the repository.
+* **Golden Scaffolding**: Creating a new enterprise micro-app requires only one command (`./run.sh create-app`).
+* **Automated Quality Guardrails**: Before any new code is committed, 29 automated checks verify security, test coverage, and documentation parity.
+
+---
+
+## 7. Plain-English Architecture Glossary
+
+| Technical Term | What It Means in Plain English | Business Impact |
+| :--- | :--- | :--- |
+| **Air-Gap Network** | An isolated digital room with no cables or wireless connections to the outside internet. | Guarantees company secrets cannot be stolen or leaked to external servers. |
+| **Dedicated Turso DB** | Each application gets its own private filing cabinet (database file) rather than sharing a giant communal warehouse. | A bug or breach in one tool cannot leak data from another application. |
+| **Sliding Window Session** | A security pass that stays active as long as you are working, but locks automatically if you leave your desk. | Prevents unauthorized access if an employee leaves their laptop unattended. |
+| **Single Page Application (SPA)** | A website that updates its screens instantly without reloading or showing white screens between clicks. | Provides a smooth, desktop-quality user experience on both computers and phones. |
+| **Bidirectional Traceability** | A digital ledger ensuring that every single button and feature traces back to a written business requirement and a test. | Guarantees 100% test verification and eliminates dead, untested code. |
+| **RFC 7807 Problem Details** | A standardized incident report format used whenever something goes wrong. | Reduces support ticket resolution time from hours to minutes. |

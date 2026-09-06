@@ -1,0 +1,30 @@
+---
+title: LLR-UI-002 - Smart Collision Detection & Auto-Flip Viewport Positioning
+description: Low-level requirement calculating dynamic 2D coordinates for tooltips and dropdown overlays.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-UI-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-UI-402" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Measure target element and floating tooltip bounding rects using getBoundingClientRect()
+2. Check bottom edge: if (target.bottom + tooltip.height + margin > window.innerHeight), flip to TOP
+3. Check top edge: if (target.top - tooltip.height - margin &lt; 0), flip to BOTTOM
+4. Check horizontal edges: clamp left position between margin and (window.innerWidth - tooltip.width - margin)
+5. Apply computed top, left, and transform coordinates to floating overlay element
+
+## 2. Safety & Verification Invariants
+
+* **Floating overlays must achieve 100% visibility inside active viewport (zero clipping)**
+* **Calculations must execute within requestAnimationFrame cycle (&lt; 16ms)**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-UI-402" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/ui/src/tooltip.ts`
+* **Verified in Test Suite**: `apps/src/ui/test/unit/tooltip.test.ts`

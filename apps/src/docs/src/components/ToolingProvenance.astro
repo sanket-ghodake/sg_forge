@@ -1,0 +1,353 @@
+---
+/**
+ * @forge/docs - ToolingProvenance.astro
+ * Prominently documents the specific tools used for SG Forge documentation & diagrams.
+ * Astryx compliant, dual-theme support, zero OS browser defaults.
+ * @requirements [SR-DOC-001] [HLR-HUB-601]
+ */
+---
+
+<div class="tooling-section-wrapper">
+  <div class="section-header">
+    <span class="section-eyebrow">Under The Hood</span>
+    <h2 class="section-title">Built With &amp; Engineered By</h2>
+    <p class="section-desc">
+      This documentation portal and its architecture diagrams are compiled 100% offline using open-source, reproducible toolchains with zero cloud SaaS dependencies.
+    </p>
+  </div>
+
+  <div class="tooling-grid">
+    <!-- Box 1: Documentation Engine -->
+    <div class="tooling-card">
+      <div class="card-header">
+        <div class="card-icon doc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="tooling-title">Documentation &amp; Search Engine</h3>
+          <span class="tooling-subtitle">Static generation, client-side WASM, and design tokens</span>
+        </div>
+      </div>
+
+      <div class="tool-list">
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">Astro Starlight</span>
+            <div class="tool-tags">
+              <span class="tool-badge">Core Engine</span>
+              <a href="https://github.com/withastro/starlight" target="_blank" rel="noopener noreferrer" class="tool-git-link" data-astryx-tooltip="View Astro Starlight source on GitHub">GitHub ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            Modern, responsive documentation framework with dual-theme cascade, MDX component hydration, and zero JavaScript runtime overhead on content pages.
+          </p>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">Pagefind WebAssembly (WASM)</span>
+            <div class="tool-tags">
+              <span class="tool-badge">Offline Search</span>
+              <a href="https://github.com/CloudCannon/pagefind" target="_blank" rel="noopener noreferrer" class="tool-git-link" data-astryx-tooltip="View Pagefind WASM search engine on GitHub">GitHub ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            100% offline, client-side WebAssembly search engine running inside Web Workers (<code class="inline-code">wasm.en.pagefind</code>), executing instant fuzzy queries with zero cloud SaaS calls.
+          </p>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">Astryx Design System (@forge/ui)</span>
+            <div class="tool-tags">
+              <span class="tool-badge">UI Tokens</span>
+              <a href="/docs/features/astryx-ui/" class="tool-git-link" data-astryx-tooltip="Inspect @forge/ui tokens and viewport standards">Spec ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            Canonical design tokens (<code class="inline-code">--forge-*</code>), slim Astryx scrollbars, toast notifications, and viewport collision-detecting tooltips with zero OS browser defaults.
+          </p>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">Graphify Knowledge Graph</span>
+            <div class="tool-tags">
+              <span class="tool-badge">AST Analysis</span>
+              <a href="https://github.com/safwansamsudeen/graphify" target="_blank" rel="noopener noreferrer" class="tool-git-link" data-astryx-tooltip="View Graphify on GitHub">GitHub ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            Automated semantic knowledge engine mapping codebase god nodes, communities, and dependency graphs across all platform microservices.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Box 2: Diagramming & Visualization Engine -->
+    <div class="tooling-card">
+      <div class="card-header">
+        <div class="card-icon diagram-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </div>
+        <div>
+          <h3 class="tooling-title">Architectural Diagrams &amp; Visuals</h3>
+          <span class="tooling-subtitle">Automated vector pipelines and interactive viewers</span>
+        </div>
+      </div>
+
+      <div class="tool-list">
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">Editorial Python Vector Pipeline</span>
+            <div class="tool-tags">
+              <span class="tool-badge">SVG Generator</span>
+              <a href="https://github.com/matplotlib/matplotlib" target="_blank" rel="noopener noreferrer" class="tool-git-link" data-astryx-tooltip="Powered by Python Matplotlib Vector Engine on GitHub">GitHub ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            Automated Python AST pipeline (<code class="inline-code">scripts/diagrams/</code>) compiling crystal-clear SVG vector schematics with zero fuzzy bitmap artifacting.
+          </p>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">draw.io &amp; Mermaid AST Extractors</span>
+            <div class="tool-tags">
+              <span class="tool-badge">AST Parser</span>
+              <a href="https://github.com/jgraph/drawio" target="_blank" rel="noopener noreferrer" class="tool-git-link" data-astryx-tooltip="View draw.io on GitHub">GitHub ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            Custom parsers (<code class="inline-code">drawio_extract.py</code>, <code class="inline-code">mermaid_extract.py</code>) injecting Astryx CSS variables directly into diagram nodes for seamless dark/light theme switching.
+          </p>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">Astryx Dual-Lens Viewer</span>
+            <div class="tool-tags">
+              <span class="tool-badge">Interactive UI</span>
+              <a href="/docs/features/astryx-ui/" class="tool-git-link" data-astryx-tooltip="Explore Astryx interactive diagram component">Component ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            Interactive component (<code class="inline-code">DiagramEmbed.astro</code>) featuring smooth pan, pinch-to-zoom, fullscreen inspection, and real-time theme synchronization via the <code class="inline-code">forge:v1:platform:theme</code> bus.
+          </p>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-head">
+            <span class="tool-name">diagram-design Skill Standards</span>
+            <div class="tool-tags">
+              <span class="tool-badge">Quality Gate</span>
+              <a href="/docs/standards/overview/" class="tool-git-link" data-astryx-tooltip="View diagram-design skill directives">Skill ↗</a>
+            </div>
+          </div>
+          <p class="tool-detail">
+            Strict architectural design directives enforcing 100% theme parity, proper visual hierarchy, and elimination of unstyled generic Mermaid templates.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tooling-section-wrapper {
+    margin: 3.5rem 0 2rem 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--forge-primary, #3ecf8e);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--forge-text-main, #ededed);
+    margin: 0 0 0.75rem 0;
+    border-bottom: none !important;
+  }
+
+  .section-desc {
+    font-size: 0.95rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  .tooling-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .tooling-card {
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    border-radius: var(--forge-radius, 8px);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--forge-shadow-card, 0 1px 2px rgba(0, 0, 0, 0.4));
+    transition: var(--forge-transition, all 0.15s ease);
+  }
+
+  .tooling-card:hover {
+    border-color: var(--forge-border-hover, #383838);
+    box-shadow: var(--forge-shadow-hover, 0 6px 20px -4px rgba(0, 0, 0, 0.5));
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--forge-border, #282828);
+  }
+
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--forge-radius, 8px);
+    flex-shrink: 0;
+  }
+
+  .doc-icon {
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    color: var(--forge-primary, #3ecf8e);
+  }
+
+  .diagram-icon {
+    background: rgba(112, 83, 255, 0.12);
+    color: var(--forge-accent, #7053ff);
+  }
+
+  .tooling-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--forge-text-main, #ededed);
+    margin: 0 0 0.2rem 0;
+  }
+
+  .tooling-subtitle {
+    font-size: 0.78rem;
+    color: var(--forge-text-muted, #8a8a8a);
+  }
+
+  .tool-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .tool-item {
+    background: var(--forge-bg-surface, #171717);
+    border: 1px solid var(--forge-border, #282828);
+    border-radius: var(--forge-radius, 8px);
+    padding: 0.85rem 1rem;
+    transition: var(--forge-transition, all 0.15s ease);
+  }
+
+  .tool-item:hover {
+    border-color: var(--forge-border-hover, #383838);
+    background: var(--forge-bg-card-hover, #232323);
+  }
+
+  .tool-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+  }
+
+  .tool-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--forge-text-main, #ededed);
+  }
+
+  .tool-tags {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .tool-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--forge-radius-full, 9999px);
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border-medium, #383838);
+    color: var(--forge-text-muted, #8a8a8a);
+  }
+
+  .tool-git-link {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--forge-radius-full, 9999px);
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    border: 1px solid var(--forge-primary, #3ecf8e);
+    color: var(--forge-primary, #3ecf8e) !important;
+    text-decoration: none !important;
+    transition: var(--forge-transition, all 0.15s ease);
+  }
+
+  .tool-git-link:hover {
+    background: var(--forge-primary, #3ecf8e);
+    color: var(--forge-primary-btn-text, #121212) !important;
+    transform: translateY(-1px);
+  }
+
+  .tool-detail {
+    font-size: 0.82rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .inline-code {
+    font-family: var(--forge-font-mono, monospace);
+    font-size: 0.76rem;
+    padding: 0.1rem 0.3rem;
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    border-radius: var(--forge-radius-sm, 4px);
+    color: var(--forge-primary, #3ecf8e);
+  }
+
+  @media (max-width: 480px) {
+    .tooling-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

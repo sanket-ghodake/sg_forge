@@ -1,0 +1,33 @@
+---
+title: SR-UI-001 Astryx UI & Viewport Containment Invariants
+description: System Requirement defining mandatory adoption of Astryx design tokens and zero OS/browser defaults.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+</div>
+
+<ExecutiveCard 
+  title="Pixel-Perfect Consistent Interface Controls"
+  analogy="Every button, card, and indicator follows exact design tokens and contrast standards so developers and users can operate any system seamlessly without guessing."
+  impact="Eliminates amateur browser defaults, prevents tooltip and menu clipping on mobile devices, and creates a unified, executive-ready platform aesthetic."
+/>
+
+## 1. Requirement Statement
+
+1. All frontend views across the SG Forge platform and Forge Apps shall strictly utilize modern **Astryx design tokens** (`@forge/ui`) and CSS custom properties (`--forge-*`).
+2. Operating system and browser default controls are **STRICTLY FORBIDDEN**:
+   * Scrollbars must use slim, themed Astryx tracks.
+   * Notifications must use Astryx Toast overlays.
+   * Tooltips and popovers must use custom floating tooltips (`data-astryx-tooltip`) with zero OS `title` attributes.
+   * Dialogs must use Astryx glassmorphic backdrop dialogs (zero native `alert()` or `confirm()`).
+3. All dropdowns, flyouts, and tooltips shall implement dynamic viewport collision detection (auto-flipping upwards, shifting horizontally, or clamping max-height) to guarantee 100% visibility inside the active viewport window down to 320px width.
+
+## 2. Traceability Links
+
+* **Traced to High-Level Requirements**:
+  * <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" /> Astryx Token Engine
+  * <TraceabilityBadge reqId="HLR-UI-402" type="HLR" status="verified" /> Viewport Collision Detection Engine

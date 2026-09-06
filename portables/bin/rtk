@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PORTABLE_RTK="$WORKSPACE_ROOT/portables/rtk/bin/rtk"
+HOST_RTK="$HOME/.local/bin/rtk"
+# On Linux, execute portable ELF binary. On macOS (Darwin) or others, fall through to host or pass-through.
+if [ "$(uname -s)" = "Linux" ] && [ -x "$PORTABLE_RTK" ]; then
+  exec "$PORTABLE_RTK" "$@"
+elif [ -x "$HOST_RTK" ]; then
+  exec "$HOST_RTK" "$@"
+elif command -v rtk &>/dev/null; then
+  exec rtk "$@"
+else
+  exec "$@"
+fi

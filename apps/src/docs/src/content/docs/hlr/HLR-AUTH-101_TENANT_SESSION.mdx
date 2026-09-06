@@ -1,0 +1,24 @@
+---
+title: HLR-AUTH-101 Tenant Session Verification & Org Scoping
+description: High-Level Requirement defining JWT tenant verification, sliding session renewals, and org_id extraction.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+</div>
+
+## 1. Specification
+
+The Identity & Auth Service (`apps/src/auth`) shall authenticate incoming requests, issue HMAC-SHA256 signed JWT session cookies, enforce sliding inactivity windows (clamped between 300s and 604,800s), and inject verified `X-Tenant-Org` and `X-User-Id` headers into upstream requests.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+* **Implemented by Low-Level Requirements**:
+  * <TraceabilityBadge reqId="LLR-AUTH-001" type="LLR" status="verified" /> Token Signature & Constant-Time Equality
+  * <TraceabilityBadge reqId="LLR-AUTH-002" type="LLR" status="verified" /> Sliding Inactivity Window Calculation
+  * <TraceabilityBadge reqId="LLR-AUTH-003" type="LLR" status="verified" /> Multi-Tenant Org ID Extraction
+  * <TraceabilityBadge reqId="LLR-AUTH-004" type="LLR" status="verified" /> Refresh Token Family Revocation
+  * <TraceabilityBadge reqId="LLR-AUTH-006" type="LLR" status="verified" /> Argon2id Password Hashing

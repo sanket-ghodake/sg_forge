@@ -1,0 +1,15 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "portable-astryx",
+      "dependencies": {
+        "astryx": "^0.0.0",
+      },
+    },
+  },
+  "packages": {
+    "astryx": ["astryx@0.0.0", "", {}, "sha512-+Mo+loWAzgsX/yue4KehubM25AlvtyZGzEcPo7XbmBHgeXFa2QXJ9BZitrEBGZXEY96qP8N+/3GCwHv5GmBWoQ=="],
+  }
+}

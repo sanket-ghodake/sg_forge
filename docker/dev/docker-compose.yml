@@ -1,0 +1,351 @@
+# ==============================================================================
+# AG Dashboard 2.0 - Optimized Development Docker Environment (Hot-Reload Enabled)
+# 100% Dynamically Driven by .env parameters (COMPOSE_PROJECT_NAME, CONTAINER_PREFIX, DOCKER_NETWORK)
+# ==============================================================================
+name: ${COMPOSE_PROJECT_NAME:-ag_dashboard}-dev
+
+networks:
+  # 1. Host Ingress Network (Proxy & Host Gateway)
+  ingress-net:
+    name: ${CONTAINER_PREFIX:-ag}_ingress_net
+    driver: bridge
+
+  # 2. Strict Air-Gapped Core Platform Network (internal: true -> ZERO outbound/egress)
+  core-airgap-net:
+    name: ${CONTAINER_PREFIX:-ag}_core_airgap_net
+    driver: bridge
+    internal: true
+
+  # 3. Forge Apps Network (Managed Egress / Autonomous Micro-Apps)
+  forge-apps-net:
+    name: ${CONTAINER_PREFIX:-ag}_forge_apps_net
+    driver: bridge
+
+volumes:
+  ag_bun_cache:
+  ag_caddy_data:
+  ag_caddy_config:
+  ag_dev_db_auth:
+  ag_dev_db_portal:
+  ag_dev_db_dev_dashboard:
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  # 🔀 Unified Reverse Proxy Gateway (Port 80 / 443)
+  proxy:
+    image: caddy:2-alpine
+    container_name: ${CONTAINER_PREFIX:-ag}-proxy-dev
+    profiles: ["core", "apps", "monitoring", "all"]
+    ports:
+      - "${HTTP_PORT:-8080}:${HTTP_PORT:-8080}"
+      - "${HTTPS_PORT:-8443}:${HTTPS_PORT:-8443}"
+    volumes:
+      - ../../proxy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../../proxy/errors:/etc/caddy/errors:ro
+      - ../../proxy/certs:/etc/caddy/certs:ro
+      - ../../public:/etc/caddy/public:ro
+      - ag_caddy_data:/data
+      - ag_caddy_config:/config
+    networks:
+      - ingress-net
+      - core-airgap-net
+      - forge-apps-net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:${HTTP_PORT:-8080}/ || wget --no-check-certificate --no-verbose --tries=1 --spider https://localhost:${HTTPS_PORT:-8443}/ || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.25'
+
+  # 🌐 1. Platform Landing & Discovery Hub (Port 3000) - Hot-Reload
+  landing:
+    image: oven/bun:1.3-alpine
+    container_name: ${CONTAINER_PREFIX:-ag}-landing-dev
+    profiles: ["landing", "all"]
+    working_dir: /app
+    env_file:
+      - ../../.env
+    environment:
+      - PORT=${LANDING_PORT:-3000}
+      - LANDING_PORT=${LANDING_PORT:-3000}
+      - AUTH_SERVICE_URL=http://auth:${AUTH_PORT:-3004}
+      - NODE_ENV=development
+    ports:
+      - "${LANDING_PORT:-3000}:${LANDING_PORT:-3000}"
+    volumes:
+      - ../../package.json:/app/package.json:ro
+      - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../.env:/app/.env:ro
+      - ../../apps/src/sdk:/app/apps/src/sdk:ro
+      - ../../apps/src/types:/app/apps/src/types:ro
+      - ../../apps/src/ui:/app/apps/src/ui:ro
+      - ../../apps/src/landing:/app/apps/src/landing:rw
+      - ../../public:/app/public:ro
+      - ag_bun_cache:/root/.bun/install/cache
+    command: ["bun", "--watch", "apps/src/landing/src/server.ts"]
+    networks:
+      - core-airgap-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.50'
+
+  # 🏢 2. Main Portal & Org Canvas (Port 3001) - Hot-Reload
+  portal:
+    image: oven/bun:1.3-alpine
+    container_name: ${CONTAINER_PREFIX:-ag}-portal-dev
+    profiles: ["core", "all"]
+    working_dir: /app
+    env_file:
+      - ../../.env
+    environment:
+      - PORT=${PORTAL_PORT:-3001}
+      - PORTAL_PORT=${PORTAL_PORT:-3001}
+      - AUTH_SERVICE_URL=http://auth:${AUTH_PORT:-3004}
+      - NODE_ENV=development
+    ports:
+      - "${PORTAL_PORT:-3001}:${PORTAL_PORT:-3001}"
+    volumes:
+      - ../../package.json:/app/package.json:ro
+      - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../.env:/app/.env:ro
+      - ../../apps/src/sdk:/app/apps/src/sdk:ro
+      - ../../apps/src/types:/app/apps/src/types:ro
+      - ../../apps/src/ui:/app/apps/src/ui:ro
+      - ../../apps/src/auth:/app/apps/src/auth:ro
+      - ../../apps/src/portal:/app/apps/src/portal:rw
+      - ../../public:/app/public:ro
+      - ../../apps/data:/app/data:rw
+      - ag_bun_cache:/root/.bun/install/cache
+    command: ["bun", "--watch", "apps/src/portal/src/server.ts"]
+    networks:
+      - core-airgap-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.50'
+
+  # 📊 3. Developer Monitoring Dashboard (Port 3002) - Hot-Reload
+  dev-dashboard:
+    image: oven/bun:1.3-alpine
+    container_name: ${CONTAINER_PREFIX:-ag}-dev-dashboard-dev
+    profiles: ["monitoring", "all"]
+    working_dir: /app
+    env_file:
+      - ../../.env
+    environment:
+      - PORT=${DEV_DASHBOARD_PORT:-3002}
+      - DEV_DASHBOARD_PORT=${DEV_DASHBOARD_PORT:-3002}
+      - AUTH_SERVICE_URL=http://auth:${AUTH_PORT:-3004}
+      - NODE_ENV=development
+    ports:
+      - "${DEV_DASHBOARD_PORT:-3002}:${DEV_DASHBOARD_PORT:-3002}"
+    volumes:
+      - ../../package.json:/app/package.json:ro
+      - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../.env:/app/.env:ro
+      - ../../apps/src/sdk:/app/apps/src/sdk:ro
+      - ../../apps/src/types:/app/apps/src/types:ro
+      - ../../apps/src/ui:/app/apps/src/ui:ro
+      - ../../apps/src/dev-dashboard:/app/apps/src/dev-dashboard:rw
+      - ../../public:/app/public:ro
+      - ../../apps/data:/app/data:rw
+      - ag_bun_cache:/root/.bun/install/cache
+    command: ["bun", "--watch", "apps/src/dev-dashboard/src/server.ts"]
+    networks:
+      - core-airgap-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3002/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.50'
+
+  # 📚 4. Developer Hub & SDK Playground (Port 3003) - Hot-Reload
+  dev-hub:
+    image: oven/bun:1.3-alpine
+    container_name: ${CONTAINER_PREFIX:-ag}-dev-hub-dev
+    profiles: ["monitoring", "all"]
+    working_dir: /app
+    env_file:
+      - ../../.env
+    environment:
+      - PORT=${DEV_HUB_PORT:-3003}
+      - DEV_HUB_PORT=${DEV_HUB_PORT:-3003}
+      - AUTH_SERVICE_URL=http://auth:${AUTH_PORT:-3004}
+      - NODE_ENV=development
+    ports:
+      - "${DEV_HUB_PORT:-3003}:${DEV_HUB_PORT:-3003}"
+    volumes:
+      - ../../package.json:/app/package.json:ro
+      - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../.env:/app/.env:ro
+      - ../../apps/src/sdk:/app/apps/src/sdk:ro
+      - ../../apps/src/types:/app/apps/src/types:ro
+      - ../../apps/src/ui:/app/apps/src/ui:ro
+      - ../../apps/src/dev-hub:/app/apps/src/dev-hub:rw
+      - ../../public:/app/public:ro
+      - ag_bun_cache:/root/.bun/install/cache
+    command: ["bun", "--watch", "apps/src/dev-hub/src/server.ts"]
+    networks:
+      - core-airgap-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3003/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.50'
+
+  # 🔐 5. Central Identity & Auth Service (Port 3004) - Hot-Reload
+  auth:
+    image: oven/bun:1.3-alpine
+    container_name: ${CONTAINER_PREFIX:-ag}-auth-dev
+    profiles: ["core", "all"]
+    working_dir: /app
+    env_file:
+      - ../../.env
+    environment:
+      - PORT=${AUTH_PORT:-3004}
+      - AUTH_PORT=${AUTH_PORT:-3004}
+      - NODE_ENV=development
+    ports:
+      - "${AUTH_PORT:-3004}:${AUTH_PORT:-3004}"
+    volumes:
+      - ../../package.json:/app/package.json:ro
+      - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../.env:/app/.env:ro
+      - ../../apps/src/sdk:/app/apps/src/sdk:ro
+      - ../../apps/src/types:/app/apps/src/types:ro
+      - ../../apps/src/ui:/app/apps/src/ui:ro
+      - ../../apps/src/auth:/app/apps/src/auth:rw
+      - ../../public:/app/public:ro
+      - ../../apps/data:/app/data:rw
+      - ag_bun_cache:/root/.bun/install/cache
+    command: ["bun", "--watch", "apps/src/auth/src/server.ts"]
+    networks:
+      - core-airgap-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3004/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.50'
+
+  # 📖 6. Living Documentation Core Service (Port 3005) - Hot-Reload
+  docs:
+    image: oven/bun:1.3-alpine
+    container_name: ${CONTAINER_PREFIX:-ag}-docs-dev
+    profiles: ["monitoring", "all"]
+    working_dir: /app
+    env_file:
+      - ../../.env
+    environment:
+      - PORT=${DOCS_PORT:-3005}
+      - DOCS_PORT=${DOCS_PORT:-3005}
+      - BASE_PATH=/docs
+      - NODE_ENV=development
+    ports:
+      - "${DOCS_PORT:-3005}:${DOCS_PORT:-3005}"
+    volumes:
+      - ../../package.json:/app/package.json:ro
+      - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../.env:/app/.env:ro
+      - ../../apps/src/sdk:/app/apps/src/sdk:ro
+      - ../../apps/src/types:/app/apps/src/types:ro
+      - ../../apps/src/ui:/app/apps/src/ui:ro
+      - ../../apps/src/docs:/app/apps/src/docs:rw
+      - ../../docs/site/dist:/app/docs/site/dist:ro
+      - ../../public:/app/public:ro
+      - ag_bun_cache:/root/.bun/install/cache
+    command: ["bun", "--watch", "apps/src/docs/src/server.ts"]
+    networks:
+      - core-airgap-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3005/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.50'
+
+  # 🩺 Automated Container Health Monitor (Autoheal Watchdog)
+  autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: ${CONTAINER_PREFIX:-ag}-autoheal-dev
+    profiles: ["monitoring", "all"]
+    restart: unless-stopped
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+      - AUTOHEAL_INTERVAL=10
+      - AUTOHEAL_START_PERIOD=30
+      - AUTOHEAL_DEFAULT_STOP_TIMEOUT=10
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - core-airgap-net
+    logging: *default-logging
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.25'
+

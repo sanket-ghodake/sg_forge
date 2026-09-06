@@ -1,0 +1,488 @@
+[
+  {
+    "display_name": "Elena Rostova",
+    "email": "elena.rostova@forge.internal",
+    "job_title": "Chief Revenue Officer (CRO)",
+    "employee_code": "CRO-001",
+    "department": "Revenue & Commercial Org",
+    "manager_email": "",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "Marcus Thorne",
+    "email": "marcus.thorne@forge.internal",
+    "job_title": "VP of Global Enterprise Sales",
+    "employee_code": "CRO-010",
+    "department": "Enterprise Sales",
+    "manager_email": "elena.rostova@forge.internal",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "Sophia Mercer",
+    "email": "sophia.mercer@forge.internal",
+    "job_title": "VP of Marketing & Brand Growth",
+    "employee_code": "CRO-020",
+    "department": "Marketing & Growth",
+    "manager_email": "elena.rostova@forge.internal",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "David Kalu",
+    "email": "david.kalu@forge.internal",
+    "job_title": "VP of Customer Success & Renewals",
+    "employee_code": "CRO-030",
+    "department": "Customer Success",
+    "manager_email": "elena.rostova@forge.internal",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "Aria Sterling",
+    "email": "aria.sterling@forge.internal",
+    "job_title": "VP of Revenue Operations & Strategy",
+    "employee_code": "CRO-040",
+    "department": "Revenue Operations",
+    "manager_email": "elena.rostova@forge.internal",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "Liam O'Connor",
+    "email": "liam.oconnor@forge.internal",
+    "job_title": "VP of Solutions Engineering & GTM",
+    "employee_code": "CRO-050",
+    "department": "Solutions Engineering",
+    "manager_email": "elena.rostova@forge.internal",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "Rachel Adams",
+    "email": "rachel.adams@forge.internal",
+    "job_title": "Director of Enterprise Sales (Americas)",
+    "employee_code": "CRO-101",
+    "department": "Sales - Americas",
+    "manager_email": "marcus.thorne@forge.internal",
+    "role": "roles/admin"
+  },
+  {
+    "display_name": "Vikram Patel",
+    "email": "vikram.patel@forge.internal",
+    "job_title": "Director of Enterprise Sales (EMEA)",
+    "employee_code": "CRO-102",
+    "department": "Sales - EMEA",
+    "manager_email": "marcus.thorne@forge.internal",
+    "role": "roles/admin"
+  },
+  {
+    "display_name": "Mei Ling",
+    "email": "mei.ling@forge.internal",
+    "job_title": "Director of Enterprise Sales (APAC)",
+    "employee_code": "CRO-103",
+    "department": "Sales - APAC",
+    "manager_email": "marcus.thorne@forge.internal",
+    "role": "roles/admin"
+  },
+  {
+    "display_name": "Carlos Mendez",
+    "email": "carlos.mendez@forge.internal",
+    "job_title": "Head of Commercial & Mid-Market Sales",
+    "employee_code": "CRO-104",
+    "department": "Commercial Sales",
+    "manager_email": "marcus.thorne@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "James Wilson",
+    "email": "james.wilson@forge.internal",
+    "job_title": "Senior Strategic Account Executive (US West)",
+    "employee_code": "CRO-111",
+    "department": "Sales - Americas",
+    "manager_email": "rachel.adams@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Maya Lin",
+    "email": "maya.lin@forge.internal",
+    "job_title": "Strategic Account Executive (US East)",
+    "employee_code": "CRO-112",
+    "department": "Sales - Americas",
+    "manager_email": "rachel.adams@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Lucas Silva",
+    "email": "lucas.silva@forge.internal",
+    "job_title": "Enterprise Account Executive (LATAM)",
+    "employee_code": "CRO-113",
+    "department": "Sales - Americas",
+    "manager_email": "rachel.adams@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Tyler Brooks",
+    "email": "tyler.brooks@forge.internal",
+    "job_title": "Account Executive (Midwest & Canada)",
+    "employee_code": "CRO-114",
+    "department": "Sales - Americas",
+    "manager_email": "rachel.adams@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Astrid Lund",
+    "email": "astrid.lund@forge.internal",
+    "job_title": "Senior Enterprise AE (Nordics & UK)",
+    "employee_code": "CRO-121",
+    "department": "Sales - EMEA",
+    "manager_email": "vikram.patel@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Julian Picard",
+    "email": "julian.picard@forge.internal",
+    "job_title": "Enterprise Account Executive (DACH & France)",
+    "employee_code": "CRO-122",
+    "department": "Sales - EMEA",
+    "manager_email": "vikram.patel@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Matteo Rossi",
+    "email": "matteo.rossi@forge.internal",
+    "job_title": "Account Executive (Southern Europe)",
+    "employee_code": "CRO-123",
+    "department": "Sales - EMEA",
+    "manager_email": "vikram.patel@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Hiroshi Tanaka",
+    "email": "hiroshi.tanaka@forge.internal",
+    "job_title": "Strategic Account Executive (Japan & Korea)",
+    "employee_code": "CRO-131",
+    "department": "Sales - APAC",
+    "manager_email": "mei.ling@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Ananya Sen",
+    "email": "ananya.sen@forge.internal",
+    "job_title": "Enterprise Account Executive (India & ASEAN)",
+    "employee_code": "CRO-132",
+    "department": "Sales - APAC",
+    "manager_email": "mei.ling@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Lachlan Shaw",
+    "email": "lachlan.shaw@forge.internal",
+    "job_title": "Enterprise Account Executive (ANZ)",
+    "employee_code": "CRO-133",
+    "department": "Sales - APAC",
+    "manager_email": "mei.ling@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Jessica Price",
+    "email": "jessica.price@forge.internal",
+    "job_title": "Senior Commercial Account Executive",
+    "employee_code": "CRO-141",
+    "department": "Commercial Sales",
+    "manager_email": "carlos.mendez@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Daniel Jenkins",
+    "email": "daniel.jenkins@forge.internal",
+    "job_title": "Mid-Market Account Executive",
+    "employee_code": "CRO-142",
+    "department": "Commercial Sales",
+    "manager_email": "carlos.mendez@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Chloe Bowman",
+    "email": "chloe.bowman@forge.internal",
+    "job_title": "Inbound SDR Team Lead",
+    "employee_code": "CRO-143",
+    "department": "Commercial Sales",
+    "manager_email": "carlos.mendez@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Milo Morris",
+    "email": "milo.morris@forge.internal",
+    "job_title": "Senior Business Development Rep (BDR)",
+    "employee_code": "CRO-151",
+    "department": "Commercial Sales",
+    "manager_email": "chloe.bowman@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Grace Stanley",
+    "email": "grace.stanley@forge.internal",
+    "job_title": "Outbound Sales Representative",
+    "employee_code": "CRO-152",
+    "department": "Commercial Sales",
+    "manager_email": "chloe.bowman@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Hannah Archer",
+    "email": "hannah.archer@forge.internal",
+    "job_title": "Director of Product Marketing",
+    "employee_code": "CRO-201",
+    "department": "Product Marketing",
+    "manager_email": "sophia.mercer@forge.internal",
+    "role": "roles/admin"
+  },
+  {
+    "display_name": "Tariq Mansoor",
+    "email": "tariq.mansoor@forge.internal",
+    "job_title": "Head of Demand Generation & Paid Media",
+    "employee_code": "CRO-202",
+    "department": "Demand Generation",
+    "manager_email": "sophia.mercer@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Clara Owens",
+    "email": "clara.owens@forge.internal",
+    "job_title": "Head of Brand",
+    "employee_code": "PR & Communications",
+    "department": "CRO-203",
+    "manager_email": "Brand & Communications",
+    "role": "sophia.mercer@forge.internal"
+  },
+  {
+    "display_name": "Owen Quinn",
+    "email": "owen.quinn@forge.internal",
+    "job_title": "Senior Technical Product Marketing Manager",
+    "employee_code": "CRO-211",
+    "department": "Product Marketing",
+    "manager_email": "hannah.archer@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Selena Cruz",
+    "email": "selena.cruz@forge.internal",
+    "job_title": "Competitive Intelligence & Market Analyst",
+    "employee_code": "CRO-212",
+    "department": "Product Marketing",
+    "manager_email": "hannah.archer@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Felix Vance",
+    "email": "felix.vance@forge.internal",
+    "job_title": "Senior Growth Marketing Specialist",
+    "employee_code": "CRO-221",
+    "department": "Demand Generation",
+    "manager_email": "tariq.mansoor@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Amara Diallo",
+    "email": "amara.diallo@forge.internal",
+    "job_title": "Marketing Automation & Paid Ads Engineer",
+    "employee_code": "CRO-222",
+    "department": "Demand Generation",
+    "manager_email": "tariq.mansoor@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Samira Khan",
+    "email": "samira.khan@forge.internal",
+    "job_title": "SEO & Content Campaign Strategist",
+    "employee_code": "CRO-223",
+    "department": "Demand Generation",
+    "manager_email": "tariq.mansoor@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Gabriel Reid",
+    "email": "gabriel.reid@forge.internal",
+    "job_title": "Senior Visual Designer & Brand Lead",
+    "employee_code": "CRO-231",
+    "department": "Brand & Communications",
+    "manager_email": "clara.owens@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Lydia Mitchell",
+    "email": "lydia.mitchell@forge.internal",
+    "job_title": "Corporate Communications Specialist",
+    "employee_code": "CRO-232",
+    "department": "Brand & Communications",
+    "manager_email": "clara.owens@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Siddharth Rao",
+    "email": "siddharth.rao@forge.internal",
+    "job_title": "Director of Global Enterprise Support",
+    "employee_code": "CRO-301",
+    "department": "Enterprise Support",
+    "manager_email": "david.kalu@forge.internal",
+    "role": "roles/admin"
+  },
+  {
+    "display_name": "Emma Bell",
+    "email": "emma.bell@forge.internal",
+    "job_title": "Head of Client Onboarding & Implementation",
+    "employee_code": "CRO-302",
+    "department": "Client Onboarding",
+    "manager_email": "david.kalu@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Nathan Blake",
+    "email": "nathan.blake@forge.internal",
+    "job_title": "Director of Renewals & Account Retention",
+    "employee_code": "CRO-303",
+    "department": "Renewals",
+    "manager_email": "david.kalu@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Peter Wright",
+    "email": "peter.wright@forge.internal",
+    "job_title": "Senior Tier-3 Enterprise Support Engineer",
+    "employee_code": "CRO-311",
+    "department": "Enterprise Support",
+    "manager_email": "siddharth.rao@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Wanda Morrison",
+    "email": "wanda.morrison@forge.internal",
+    "job_title": "Customer Escalation & Incident Manager",
+    "employee_code": "CRO-312",
+    "department": "Enterprise Support",
+    "manager_email": "siddharth.rao@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Bruce Miller",
+    "email": "bruce.miller@forge.internal",
+    "job_title": "Cloud Support Specialist (Data & API)",
+    "employee_code": "CRO-313",
+    "department": "Enterprise Support",
+    "manager_email": "siddharth.rao@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Arthur Daniels",
+    "email": "arthur.daniels@forge.internal",
+    "job_title": "Senior Implementation Specialist",
+    "employee_code": "CRO-321",
+    "department": "Client Onboarding",
+    "manager_email": "emma.bell@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Natalie Ross",
+    "email": "natalie.ross@forge.internal",
+    "job_title": "Customer Onboarding Project Manager",
+    "employee_code": "CRO-322",
+    "department": "Client Onboarding",
+    "manager_email": "emma.bell@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Diana Hayes",
+    "email": "diana.hayes@forge.internal",
+    "job_title": "Senior Enterprise Customer Success Manager",
+    "employee_code": "CRO-331",
+    "department": "Renewals",
+    "manager_email": "nathan.blake@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Barry Scott",
+    "email": "barry.scott@forge.internal",
+    "job_title": "Renewals & Expansion Specialist",
+    "employee_code": "CRO-332",
+    "department": "Renewals",
+    "manager_email": "nathan.blake@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Klaus Becker",
+    "email": "klaus.becker@forge.internal",
+    "job_title": "Principal Revenue Systems Architect",
+    "employee_code": "CRO-401",
+    "department": "RevOps Systems",
+    "manager_email": "aria.sterling@forge.internal",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "Nadia Ivanova",
+    "email": "nadia.ivanova@forge.internal",
+    "job_title": "Lead Sales Compensation Analyst",
+    "employee_code": "CRO-402",
+    "department": "Compensation",
+    "manager_email": "aria.sterling@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Kenji Sato",
+    "email": "kenji.sato@forge.internal",
+    "job_title": "Head of GTM Enablement & Sales Academy",
+    "employee_code": "CRO-403",
+    "department": "Enablement",
+    "manager_email": "aria.sterling@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Carlos Ramon",
+    "email": "carlos.ramon@forge.internal",
+    "job_title": "Senior Enterprise CRM Architect",
+    "employee_code": "CRO-411",
+    "department": "RevOps Systems",
+    "manager_email": "klaus.becker@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Fiona Smith",
+    "email": "fiona.smith@forge.internal",
+    "job_title": "Revenue Data Pipeline Engineer",
+    "employee_code": "CRO-412",
+    "department": "RevOps Systems",
+    "manager_email": "klaus.becker@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Zoe Warren",
+    "email": "zoe.warren@forge.internal",
+    "job_title": "Lead Enterprise Solutions Architect",
+    "employee_code": "CRO-501",
+    "department": "Solutions Architecture",
+    "manager_email": "liam.oconnor@forge.internal",
+    "role": "roles/super_admin"
+  },
+  {
+    "display_name": "Devon Hayes",
+    "email": "devon.hayes@forge.internal",
+    "job_title": "Principal Technical Pre-Sales Specialist",
+    "employee_code": "CRO-502",
+    "department": "Solutions Architecture",
+    "manager_email": "liam.oconnor@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Anthony Stone",
+    "email": "anthony.stone@forge.internal",
+    "job_title": "Senior Enterprise Solutions Architect",
+    "employee_code": "CRO-511",
+    "department": "Solutions Architecture",
+    "manager_email": "zoe.warren@forge.internal",
+    "role": "roles/employee"
+  },
+  {
+    "display_name": "Shari Davis",
+    "email": "shari.davis@forge.internal",
+    "job_title": "Cloud Integrations Solutions Engineer",
+    "employee_code": "CRO-512",
+    "department": "Solutions Architecture",
+    "manager_email": "zoe.warren@forge.internal",
+    "role": "roles/employee"
+  }
+]

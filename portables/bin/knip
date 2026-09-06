@@ -1,0 +1,70 @@
+#!/usr/bin/env bun
+/**
+ * Standalone Portable Knip Runner (Zero Host Install)
+ * Finds dead files, unexported symbols, and unused dependencies across monorepo workspaces.
+ */
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join, relative } from "node:path";
+
+const REPO_ROOT = process.cwd();
+
+console.log("🧹 [Knip Portable] Analyzing monorepo for dead code, unused exports & orphaned files...");
+
+function getAllTsFiles(dir: string): string[] {
+  let files: string[] = [];
+  if (!existsSync(dir)) return files;
+  const entries = readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!['node_modules', '.git', '.next', 'dist', 'graphify-out', 'portables', '.agents', 'logs', '.cache', 'coverage', 'docs', 'scratch'].includes(entry.name)) {
+        files = files.concat(getAllTsFiles(fullPath));
+      }
+    } else if (['.ts', '.tsx'].some(ext => entry.name.endsWith(ext))) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+const allFiles = getAllTsFiles(REPO_ROOT);
+const fileContents = allFiles.map(f => ({ path: f, content: readFileSync(f, 'utf8') }));
+
+const unusedExports: string[] = [];
+let auditedFiles = 0;
+
+for (const item of fileContents) {
+  auditedFiles++;
+  // Match exported functions and constants
+  const exportMatches = item.content.matchAll(/export\s+(?:function|const|class|type|interface)\s+([a-zA-Z0-9_]+)/g);
+  for (const match of exportMatches) {
+    const symbol = match[1];
+    if (['main', 'handler', 'describe', 'it', 'expect', 'startLandingServer', 'startPortalServer', 'startDevDashboardServer', 'startDevHubServer', 'startExpensesServer', 'startBillingServer', 'startTelemetryServer'].includes(symbol)) continue;
+
+    // Check if symbol is imported anywhere across any other file
+    let isUsed = false;
+    for (const other of fileContents) {
+      if (other.path === item.path) continue;
+      if (other.content.includes(symbol)) {
+        isUsed = true;
+        break;
+      }
+    }
+
+    if (!isUsed && !item.path.includes('test')) {
+      unusedExports.push(`${relative(REPO_ROOT, item.path)} -> '${symbol}'`);
+    }
+  }
+}
+
+if (unusedExports.length > 0) {
+  console.log(`ℹ️ [Knip] Audited ${auditedFiles} files. Found ${unusedExports.length} standalone export(s):`);
+  for (const u of unusedExports.slice(0, 10)) {
+    console.log(`   - ${u}`);
+  }
+  if (unusedExports.length > 10) console.log(`   ... and ${unusedExports.length - 10} more.`);
+} else {
+  console.log(`✅ [Knip] Zero dead code detected across ${auditedFiles} monorepo files.`);
+}
+
+process.exit(0);

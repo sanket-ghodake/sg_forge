@@ -1,0 +1,12 @@
+{
+  "name": "@forge/sdk",
+  "version": "2.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "type": "module",
+  "dependencies": {
+    "@forge/types": "workspace:*"
+  },
+  "license": "Apache-2.0",
+  "author": "Sanket Ghodake <sanketghodke03@gmail.com>"
+}

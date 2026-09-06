@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Wrapper for Syft (Software Bill of Materials - SBOM)
+# Zero Host Modification - Standalone Binary / Docker / Native Fallback
+# ==============================================================================
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+LOCAL_SYFT="$REPO_ROOT/portables/syft/syft"
+
+SYS_SYFT="$(which -a syft 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+if [ -x "$LOCAL_SYFT" ]; then
+    exec "$LOCAL_SYFT" "$@"
+elif [ -n "$SYS_SYFT" ] && [ -x "$SYS_SYFT" ]; then
+    exec "$SYS_SYFT" "$@"
+elif command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
+    exec docker run --rm -v "$REPO_ROOT:/src" -w /src anchore/syft:latest "$@"
+else
+    echo "📦 [Syft Portable] Generating repository SBOM manifest..."
+    if [ -f "$REPO_ROOT/scripts/generate-sbom.sh" ]; then
+        exec "$REPO_ROOT/scripts/generate-sbom.sh"
+    fi
+fi

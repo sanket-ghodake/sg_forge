@@ -1,0 +1,30 @@
+---
+title: LLR-AUTH-001 - HMAC-SHA256 Signature Verification & Constant-Time Equality
+description: Low-level requirement governing timing-safe cryptographic signature validation on session JWT tokens.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-001" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Extract JWT parts into header, payload, and signature components delimited by '.'
+2. Decode signature bytes using standard base64url decoding
+3. Compute HMAC-SHA256 over header.payload using server JWT secret key
+4. Execute crypto.timingSafeEqual or bitwise XOR accumulator comparison over signature buffers
+5. Reject tokens where signature buffer lengths differ or mismatch exists with HTTP 401 Unauthorized
+
+## 2. Safety & Verification Invariants
+
+* **Comparison execution time must be independent of mismatched byte position (O(1) timing invariant)**
+* **Zero allocation of raw secret keys to client-facing response contexts**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/auth/src/session.ts`
+* **Verified in Test Suite**: `apps/src/auth/test/security/token-replay.test.ts`

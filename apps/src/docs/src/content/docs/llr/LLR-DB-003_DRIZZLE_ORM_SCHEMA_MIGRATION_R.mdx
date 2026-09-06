@@ -1,0 +1,30 @@
+---
+title: LLR-DB-003 - Drizzle ORM Schema Migration Runner with Lock Guard
+description: Low-level requirement executing versioned Drizzle migrations with atomic advisory locks.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-DB-003" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Acquire migration lock via dedicated __drizzle_migrations lock table record
+2. Scan migrations folder for ordered SQL migration files (.sql)
+3. Compare file hashes against applied migrations in __drizzle_migrations
+4. Execute pending migration scripts inside an atomic database transaction
+5. Record applied timestamp and release migration lock
+
+## 2. Safety & Verification Invariants
+
+* **Migrations must execute in strictly ascending chronological order**
+* **Failed migrations must automatically rollback transaction and retain error trace**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/sdk/src/database.ts`
+* **Verified in Test Suite**: `apps/src/sdk/test/contracts/migration.test.ts`

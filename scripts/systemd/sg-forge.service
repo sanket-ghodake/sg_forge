@@ -1,0 +1,17 @@
+[Unit]
+Description=SG Forge Production Stack (24/7 Container System)
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/sg_forge
+ExecStart=/usr/bin/docker compose -f docker/prod/docker-compose.yml --profile all up -d
+ExecStop=/usr/bin/docker compose -f docker/prod/docker-compose.yml --profile all down
+ExecReload=/usr/bin/docker compose -f docker/prod/docker-compose.yml --profile all up -d --force-recreate
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

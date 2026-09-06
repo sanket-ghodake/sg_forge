@@ -1,0 +1,68 @@
+---
+/**
+ * TraceabilityBadge.astro
+ * Clickable requirement badge linking to system verification records.
+ */
+interface Props {
+  reqId: string;
+  type?: 'SR' | 'HLR' | 'LLR';
+  status?: 'verified' | 'draft' | 'pending';
+}
+
+const { reqId, type = 'LLR', status = 'verified' } = Astro.props;
+
+const statusColor = status === 'verified' ? '#10b981' : status === 'draft' ? '#f59e0b' : '#ef4444';
+const badgeLabel = status === 'verified' ? 'VERIFIED' : status === 'draft' ? 'DRAFT' : 'PENDING';
+---
+
+<a href={`/docs/traceability/matrix#${reqId}`} class="traceability-pill" data-astryx-tooltip={`Requirement ${reqId} (${badgeLabel})`}>
+  <span class="pill-dot" style={`background: ${statusColor}; box-shadow: 0 0 6px ${statusColor}80;`}></span>
+  <span class="pill-id">{reqId}</span>
+  <span class="pill-tag">{badgeLabel}</span>
+</a>
+
+<style>
+  .traceability-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    margin: 2px 4px 2px 0;
+    border-radius: var(--forge-radius-sm, 5px);
+    font-family: var(--forge-font-mono, monospace);
+    font-size: 0.78rem;
+    font-weight: 500;
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    color: var(--forge-text-main, #ededed);
+    text-decoration: none;
+    vertical-align: middle;
+    transition: var(--forge-transition);
+  }
+
+  .traceability-pill:hover {
+    border-color: var(--forge-primary, #3ecf8e);
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+
+  .pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .pill-id {
+    font-weight: 600;
+    color: var(--forge-text-main, #ededed);
+  }
+
+  .pill-tag {
+    font-size: 0.65rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+</style>

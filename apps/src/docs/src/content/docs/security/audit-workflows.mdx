@@ -1,0 +1,47 @@
+---
+title: Security & Strix Audit Workflows
+description: In-chat white-box source code review (Mode 1) and dynamic live endpoint penetration testing (Mode 2) adhering to the Strix standard.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Proactive Zero-API-Key In-Chat Security Auditing"
+  analogy="Rather than waiting for external quarterly penetration tests, SG Forge incorporates security scanning directly into every chat session: checking code AST for vulnerabilities before commit, and probing live servers with non-destructive HTTP checks."
+  impact="Guarantees immediate detection of SQL injection, cross-tenant leaks, missing CSRF flags, and RFC 7807 error violations."
+/>
+
+<TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="SR-AUTH-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="LLR-AUTH-007" type="LLR" status="verified" />
+
+<DiagramEmbed 
+  diagram="security-audit" 
+  title="In-Chat AI Security Auditor (Strix Standard)" 
+  caption="Zero-API-key local security workflow: Mode 1 white-box static AST code review vs. Mode 2 dynamic live non-destructive pentest."
+/>
+
+## 1. The Two-Mode Strix Security Model
+
+SG Forge implements the **Strix Security Standard** (`strix-code-audit` and `strix-live-pentest`) to verify security invariants without external API keys:
+
+### Mode 1: Static AST Code Review (`strix-code-audit` / `audit code`)
+- **Trigger**: Run whenever routes, auth handlers, or database queries are modified.
+- **Invariants Audited**:
+  - **Tenant Scoping**: All database queries must include explicit `eq(table.orgId, session.orgId)` filters.
+  - **Secret Leaks**: Scans for hardcoded tokens, API keys, or unredacted passwords.
+  - **RFC 7807 Error Boundaries**: Ensures endpoints do not return raw SQL exceptions or internal stack traces.
+  - **Cookie Security**: Verifies `HttpOnly`, `SameSite=Lax`, and `Secure` attributes on session cookies.
+
+### Mode 2: Dynamic Live Endpoint Pentest (`strix-live-pentest` / `test live dev`)
+- **Trigger**: Run whenever local dev or staging servers are up.
+- **Invariants Audited**:
+  - Probes endpoints using non-destructive `rtk curl -sI` calls.
+  - Verifies presence of security headers: `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, and strict offline Content-Security-Policy.
+  - Verifies that unauthorized requests cleanly redirect or return `401 Unauthorized` without leaking session identifiers.
+
+## 2. Automated Logging & Ledger Integrity
+
+Every security audit generates a timestamped report in `logs/security/` (e.g. `AUDIT_YYYYMMDD_HHMM_pre-commit.md`) and appends an immutable JSON record to `logs/security/audit.jsonl`.

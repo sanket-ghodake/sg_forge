@@ -1,0 +1,70 @@
+---
+title: Foundation SDK Architecture
+description: Comprehensive technical reference for the 14 core modules of @forge/sdk including structured logging, database lifecycle, auth guards, and crypto.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="The Architectural Backbone of SG Forge"
+  analogy="In mission-critical distributed platforms, core subsystems (storage, logging, authentication, telemetry) share a common engineering standard. The Foundation SDK is that standard for SG Forge: ensuring every service logs, stores, authenticates, and recovers identically."
+  impact="Guarantees 100% architectural uniformity, zero relative import sprawl, and automated compliance across all microservices."
+/>
+
+<TraceabilityBadge reqId="HLR-SDK-301" type="HLR" status="verified" />
+<TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+<TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+
+## 1. SDK Architectural Role
+
+The **SG Forge Foundation SDK** (`@forge/sdk`) is the universal shared library imported across all core services (`apps/src/*`) and independent Forge Apps (`forge-apps/*`). Imported cleanly via the `@forge/sdk` package alias, it eliminates relative path traversal (`../../..`) and enforces platform invariants.
+
+<DiagramEmbed 
+  diagram="sdk-storage" 
+  title="Foundation SDK Storage Pipeline & Atomic Backups" 
+  caption="Visual pipeline illustrating Turso database client factory, multi-tenant scoping, and atomic backup engine."
+/>
+
+## 2. The 14 Core SDK Modules
+
+### 1. Structured Logging & Telemetry (`logger.ts`)
+- `createLogger(serviceName)`: Enterprise SRE-standard JSON telemetry formatter with ISO timestamps, severity, and `traceId`.
+- `redactSensitiveData(data)`: Recursive PII and credential sanitizer (passwords, tokens, Bearer headers, API keys).
+- `logDbQuery(sql, durationMs, err?, traceId?)`: Microsecond database query timing with automatic slow-query warnings.
+
+### 2. Error Boundaries & RFC 7807 (`error-handler.ts`)
+- `createSafeHandler(serviceName, handler)`: Universal request wrapper translating unhandled errors into standard RFC 7807 `application/problem+json` responses with immutable `x-trace-id` propagation.
+
+### 3. Zero-Trust Auth Guard & RBAC (`auth-guard.ts`)
+- `authGuard(req, options)`: Zero-trust route middleware supporting direct-jump `return_url` preservation, public route bypasses, and granular role/permission evaluation.
+
+### 4. Canonical Database Manager (`database.ts`)
+- `resolveCanonicalDataDir()`: Multi-context path resolver mapping database files across local host, Docker containers, and test fixtures.
+- Turso (libSQL) client factory enforcing WAL concurrency mode and transaction timeouts.
+
+### 5. Atomic Backup Engine (`backup.ts`)
+- `createDatabaseBackup()`: Non-blocking SQLite `VACUUM INTO` backup engine generating timestamped tarball archives with SHA-256 integrity checksums.
+
+### 6. Dynamic Service Registry (`registry.ts`)
+- `loadServiceRegistry()`: Parses declarative `.env` app registrations (`APP_<NAME>`), deriving service ports, paths, categories, and container names dynamically.
+
+### 7. Asymmetric & Symmetric Cryptography (`crypto.ts`)
+- High-security cryptographic primitives: Argon2id password hashing with unique salts, HMAC-SHA256 signature verification, and AES-256-GCM authenticated encryption.
+
+### 8. Air-Gapped Security Headers (`security-headers.ts`)
+- `applySecurityHeaders(res)`: Enforces OWASP ASVS 5.0 security headers including strict offline Content-Security-Policy (CSP) blocking external script origins.
+
+### 9. Browser & Client Telemetry Bridges (`browser-bridge.ts` & `client-bridge.ts`)
+- `initBrowserLogBridge()`: Client-side uncaught error interception streaming sanitized telemetry to backend `/api/logs/browser`.
+- `ForgeClient.init()`: Handshake bridge for embedded micro-app iframes communicating with the parent Portal shell.
+
+### 10. Air-Gapped Service Worker (`service-worker.ts`)
+- Offline asset cache manager enabling complete client-side execution in hermetic environments.
+
+### 11. Directory & Scoped Hierarchy Client (`directory-client.ts`)
+- RPC client querying organizational nodes, reporting lines, and linear management chains upward to executive level.
+
+### 12. Dynamic White-Label Branding (`branding.ts`)
+- Adapts platform branding, logo SVGs, titles, and legal disclaimers dynamically from configuration.

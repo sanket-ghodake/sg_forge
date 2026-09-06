@@ -1,0 +1,29 @@
+---
+title: Security & Air-Gap Model
+description: Executive summary of zero-trust network topology and data boundaries.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+
+<ExecutiveCard 
+  title="Air-Gapped Perimeter with Zero Outbound Leaks"
+  analogy="Imagine an ultra-secure research lab behind thick bank vaults. Information only enters through a single monitored turnstile (Caddy Gateway). Inside, no network cable connects to the outside internet, eliminating the possibility of remote exfiltration."
+  impact="Guarantees absolute immunity against supply-chain phone-home attacks and outbound data leaks."
+/>
+
+## 1. Network Topology Specifications
+
+<TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+
+The platform partitions networks into two distinct security zones:
+
+* **Core Air-Gap Zone (`core-airgap-net`)**: Resides with `internal: true`. Central services (`portal`, `auth`, `dev-dashboard`) have zero internet gateway access.
+* **Submodule Zone (`forge-apps-net`)**: Autonomous micro-apps (`forge-apps/code`, etc.) communicate with external webhooks directly without bridging to the core air-gap network.
+
+<DiagramEmbed 
+  diagram="airgap" 
+  title="SG Forge Dual-Zone Network Air-Gap Model" 
+  caption="Zone A core air-gap isolation with zero egress vs Zone B autonomous Forge submodule network."
+/>

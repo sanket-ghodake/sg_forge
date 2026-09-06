@@ -1,0 +1,269 @@
+---
+/**
+ * @forge/docs - AudienceGuide.astro
+ * Dual-audience navigation guide: For Developers vs. For Non-Technical Stakeholders.
+ * Astryx compliant, dual-theme support, zero OS browser defaults.
+ * @requirements [SR-DOC-001] [HLR-UI-401]
+ */
+---
+
+<div class="audience-guide-wrapper">
+  <div class="section-header">
+    <span class="section-eyebrow">Tailored Exploration</span>
+    <h2 class="section-title">Designed for Engineers &amp; Decision Makers</h2>
+    <p class="section-desc">
+      Whether you are building micro-apps with our SDK or evaluating enterprise data governance and security compliance, navigate directly to what matters most.
+    </p>
+  </div>
+
+  <div class="audience-grid">
+    <!-- Card 1: Developers & Engineers -->
+    <div class="audience-card dev-card">
+      <div class="card-badge dev-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span>For Developers &amp; Engineers</span>
+      </div>
+      <h3 class="card-heading">Build Fast with Hermetic Toolchains</h3>
+      <p class="card-summary">
+        Explore typed SDKs, zero-drift portable runtimes, RFC 7807 problem details, and 5-tier testing suites.
+      </p>
+
+      <ul class="guide-links">
+        <li>
+          <a href="/docs/architecture/sdk-architecture/" class="guide-link-item">
+            <span class="link-title">Foundation SDK (@forge/sdk)</span>
+            <span class="link-hint">RFC 7807, PII redaction, logger &rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="/docs/tools/cli-toolchain/" class="guide-link-item">
+            <span class="link-title">Developer CLI &amp; RTK</span>
+            <span class="link-hint">Portable Bun, test runner, token optimizer &rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="/docs/features/portal-spa/" class="guide-link-item">
+            <span class="link-title">Portal SPA &amp; Sandboxed Canvas</span>
+            <span class="link-hint">Instant DOM hydration &amp; postMessage bridge &rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="/docs/submodules/architecture/" class="guide-link-item">
+            <span class="link-title">Autonomous Forge Apps</span>
+            <span class="link-hint">Decoupled submodules with dedicated DBs &rarr;</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 2: Non-Tech & Stakeholders -->
+    <div class="audience-card nontech-card">
+      <div class="card-badge nontech-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>For Leaders &amp; Stakeholders</span>
+      </div>
+      <h3 class="card-heading">Zero-Risk Enterprise Sovereignty</h3>
+      <p class="card-summary">
+        Understand how air-gapping, database-level tenant isolation, and deterministic quality gates safeguard operations.
+      </p>
+
+      <ul class="guide-links">
+        <li>
+          <a href="/docs/executive/visual-atlas/" class="guide-link-item">
+            <span class="link-title">🗺️ Visual Architecture Atlas & Tour</span>
+            <span class="link-hint">Plain-English guided walkthrough with interactive diagrams &rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="/docs/architecture/airgap/" class="guide-link-item">
+            <span class="link-title">100% Air-Gapped Network</span>
+            <span class="link-hint">Zero external CDNs or outbound telemetry &rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="/docs/architecture/database/" class="guide-link-item">
+            <span class="link-title">Multi-Tenant Database Isolation</span>
+            <span class="link-hint">Dedicated Turso libSQL per application &rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="/docs/standards/engineering-invariants/" class="guide-link-item">
+            <span class="link-title">29-Check Quality Gate</span>
+            <span class="link-hint">Pre-commit automated security &amp; AST audits &rarr;</span>
+          </a>
+        </li>
+        <li>
+          <a href="/docs/operations/backup-recovery/" class="guide-link-item">
+            <span class="link-title">Disaster Recovery &amp; Backups</span>
+            <span class="link-hint">AES-256-GCM encrypted snapshots &rarr;</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  .audience-guide-wrapper {
+    margin: 3.5rem 0 2.5rem 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--forge-primary, #3ecf8e);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--forge-text-main, #ededed);
+    margin: 0 0 0.75rem 0;
+    border-bottom: none !important;
+  }
+
+  .section-desc {
+    font-size: 0.95rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .audience-card {
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    border-radius: var(--forge-radius, 8px);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    transition: var(--forge-transition, all 0.15s ease);
+    box-shadow: var(--forge-shadow-card, 0 1px 2px rgba(0, 0, 0, 0.4));
+  }
+
+  .audience-card:hover {
+    border-color: var(--forge-border-hover, #383838);
+    box-shadow: var(--forge-shadow-hover, 0 6px 20px -4px rgba(0, 0, 0, 0.5));
+    transform: translateY(-2px);
+  }
+
+  .dev-card:hover {
+    border-color: var(--forge-primary, #3ecf8e);
+  }
+
+  .nontech-card:hover {
+    border-color: var(--forge-accent, #7053ff);
+  }
+
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--forge-radius-full, 9999px);
+    font-size: 0.75rem;
+    font-weight: 600;
+    width: fit-content;
+    margin-bottom: 1rem;
+  }
+
+  .dev-badge {
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    color: var(--forge-primary, #3ecf8e);
+    border: 1px solid rgba(62, 207, 142, 0.25);
+  }
+
+  .nontech-badge {
+    background: rgba(112, 83, 255, 0.12);
+    color: var(--forge-accent, #7053ff);
+    border: 1px solid rgba(112, 83, 255, 0.25);
+  }
+
+  .card-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--forge-text-main, #ededed);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.015em;
+  }
+
+  .card-summary {
+    font-size: 0.88rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .guide-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .guide-link-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.7rem 0.85rem;
+    background: var(--forge-bg-surface, #171717);
+    border: 1px solid var(--forge-border, #282828);
+    border-radius: var(--forge-radius, 8px);
+    text-decoration: none;
+    transition: var(--forge-transition, all 0.15s ease);
+  }
+
+  .guide-link-item:hover {
+    border-color: var(--forge-border-hover, #383838);
+    background: var(--forge-bg-card-hover, #232323);
+    padding-left: 1rem;
+  }
+
+  .dev-card .guide-link-item:hover {
+    border-left: 2px solid var(--forge-primary, #3ecf8e);
+  }
+
+  .nontech-card .guide-link-item:hover {
+    border-left: 2px solid var(--forge-accent, #7053ff);
+  }
+
+  .link-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--forge-text-main, #ededed);
+    margin-bottom: 0.2rem;
+  }
+
+  .link-hint {
+    font-size: 0.76rem;
+    color: var(--forge-text-muted, #8a8a8a);
+  }
+
+  @media (max-width: 480px) {
+    .audience-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

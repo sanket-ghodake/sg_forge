@@ -1,0 +1,138 @@
+---
+/**
+ * AudienceTabs.astro
+ * Interactive client-side view switcher toggling between:
+ * 1. Business & Leadership
+ * 2. Engineering & Architecture
+ * 3. Living Standards & Invariants
+ */
+---
+
+<div class="audience-container">
+  <div class="audience-tabs-bar" role="tablist">
+    <button class="audience-tab active" data-target="business" role="tab" aria-selected="true">
+      <span class="tab-indicator">●</span> Business Value
+    </button>
+    <button class="audience-tab" data-target="technical" role="tab" aria-selected="false">
+      <span class="tab-indicator">●</span> Technical Architecture
+    </button>
+    <button class="audience-tab" data-target="standards" role="tab" aria-selected="false">
+      <span class="tab-indicator">●</span> Standards & Invariants
+    </button>
+  </div>
+
+  <div class="audience-panels">
+    <div class="audience-panel active" data-panel="business" role="tabpanel">
+      <slot name="business" />
+    </div>
+    <div class="audience-panel" data-panel="technical" role="tabpanel">
+      <slot name="technical" />
+    </div>
+    <div class="audience-panel" data-panel="standards" role="tabpanel">
+      <slot name="standards" />
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupAudienceTabs() {
+    const containers = document.querySelectorAll('.audience-container');
+    containers.forEach((container) => {
+      const tabs = container.querySelectorAll('.audience-tab');
+      const panels = container.querySelectorAll('.audience-panel');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const target = tab.getAttribute('data-target');
+
+          tabs.forEach((t) => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          panels.forEach((p) => p.classList.remove('active'));
+
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          const activePanel = container.querySelector(`[data-panel="${target}"]`);
+          if (activePanel) {
+            activePanel.classList.add('active');
+          }
+        });
+      });
+    });
+  }
+
+  // Support Astro view transitions and initial load
+  setupAudienceTabs();
+  document.addEventListener('astro:page-load', setupAudienceTabs);
+</script>
+
+<style>
+  .audience-container {
+    margin: 1.5rem 0;
+    border: 1px solid var(--forge-border, #282828);
+    border-radius: var(--forge-radius, 8px);
+    background: var(--forge-bg-card, #1c1c1c);
+    overflow: hidden;
+  }
+
+  .audience-tabs-bar {
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    background: var(--forge-bg-surface, #171717);
+    border-bottom: 1px solid var(--forge-border, #282828);
+    overflow-x: auto;
+  }
+
+  .audience-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: var(--forge-radius-sm, 5px);
+    border: none;
+    background: transparent;
+    color: var(--forge-text-muted, #8a8a8a);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--forge-transition);
+    white-space: nowrap;
+  }
+
+  .audience-tab:hover {
+    color: var(--forge-text-main, #ededed);
+    background: var(--forge-bg-card-hover, #232323);
+  }
+
+  .audience-tab.active {
+    background: var(--forge-primary, #3ecf8e);
+    color: var(--forge-primary-btn-text, #121212);
+    font-weight: 600;
+    box-shadow: 0 2px 8px var(--forge-primary-bg, rgba(62, 207, 142, 0.35));
+  }
+
+  .tab-indicator {
+    font-size: 0.65rem;
+    opacity: 0.8;
+  }
+
+  .audience-panels {
+    padding: 1.25rem;
+  }
+
+  .audience-panel {
+    display: none;
+  }
+
+  .audience-panel.active {
+    display: block;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

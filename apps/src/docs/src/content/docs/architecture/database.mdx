@@ -1,0 +1,53 @@
+---
+title: Multi-Tenant Turso DB Isolation
+description: Complete architectural guide to dedicated Turso libSQL databases, tenant scoping invariants, and zero cross-app query leakage.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Hermetic Database Isolation per Micro-App"
+  analogy="Instead of housing every tenant and tool inside one giant shared warehouse with flimsy drywall partitions, SG Forge gives each micro-app its own dedicated steel vault (an isolated Turso libSQL database) with its own cryptographic lock."
+  impact="Mathematically eliminates cross-app data corruption, SQL injection blast radius, and multi-tenant leakage."
+/>
+
+<TraceabilityBadge reqId="SR-TURSO-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-SDK-302" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-DB-001" type="LLR" status="verified" />
+
+## 1. Database Architecture & Storage Partitioning
+
+In the SG Forge platform, microservices never share a centralized database schema or database connection string. Every core application and autonomous Forge app manages an isolated Turso (libSQL) SQLite database.
+
+<DiagramEmbed 
+  diagram="database" 
+  title="Dedicated Turso (libSQL) Database Isolation Model" 
+  caption="Every microservice executes exclusively against its dedicated Turso instance, with non-negotiable org_id and user_id scoping."
+/>
+
+## 2. Core Invariants & Query Scoping
+
+### Invariant 1: Dedicated Database per Application
+* Core apps (`apps/src/auth`, `apps/src/portal`, `apps/src/dev-dashboard`) each initialize their own standalone SQLite/libSQL connection.
+* Autonomous apps (`forge-apps/code`) have their own colocated database file or remote Turso instance.
+* Zero cross-app database queries: Microservice A is strictly forbidden from querying Microservice B's database. Inter-service interaction occurs strictly over verified API contracts or RPC.
+
+### Invariant 2: Tenant & User Scoping
+* Every state-persisting table includes `org_id` and `user_id` columns.
+* All queries and mutations use parameterized Drizzle ORM statements scoped to the active session tenant context:
+  ```typescript
+  // Canonical Drizzle Query Example
+  const records = await db.select()
+    .from(auditLogs)
+    .where(
+      and(
+        eq(auditLogs.orgId, session.orgId),
+        eq(auditLogs.userId, session.userId)
+      )
+    );
+  ```
+
+### Invariant 3: PII & Secret Redaction
+* Structured database logs pass through `@forge/sdk/createLogger` and `redactSensitiveData` before emission. Passwords, JWT secrets, and bearer tokens are never persisted in plaintext or logged to stdout.

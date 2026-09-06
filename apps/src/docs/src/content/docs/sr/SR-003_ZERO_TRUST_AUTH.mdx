@@ -1,0 +1,36 @@
+---
+title: SR-AUTH-001 Zero-Trust Session & Inactivity Governance
+description: System Requirement defining cryptographically enforced session tokens, sliding inactivity renewals, and tamper resistance.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="SR-AUTH-001" type="SR" status="verified" />
+</div>
+
+<ExecutiveCard 
+  title="Digital Keycard with Auto-Revocation on Inactivity"
+  analogy="Like an RFID security badge that deactivates automatically if you leave your desk for more than 15 minutes, ensuring that an abandoned terminal cannot be used by unauthorized personnel."
+  impact="Prevents session hijacking, credential theft, and persistent unauthorized access across internal tools and submodules."
+/>
+
+## 1. Requirement Statement
+
+1. All incoming requests to authenticated platform routes shall be secured by cryptographically signed HMAC-SHA256 session tokens stored inside HTTP-only, SameSite=Strict, Secure cookies (`__session`).
+2. Authentication middleware shall enforce a sliding inactivity expiration window, clamped strictly between 300 seconds (5-minute floor) and 604,800 seconds (7-day ceiling).
+3. Signature verification shall strictly utilize constant-time comparison to prevent timing side-channel analysis.
+4. Token replay or refresh family reuse shall trigger immediate invalidation of the entire session lineage.
+
+## 2. Verification Invariants
+
+* **Cryptographic Strength**: HMAC-SHA256 with minimum 256-bit entropy secret (`JWT_SECRET`).
+* **Maximum Clock Skew**: Tolerates $\le 60$ seconds clock discrepancy between distributed nodes.
+* **Negative Assertions**: Tested in `apps/src/auth/test/security/token-replay.test.ts` with 100% branch coverage.
+
+## 3. Traceability Links
+
+* **Traced to High-Level Requirements**:
+  * <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" /> Tenant Session Engine
+  * <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" /> Multi-Tenant RBAC Guards

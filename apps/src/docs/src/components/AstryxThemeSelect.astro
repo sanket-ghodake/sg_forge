@@ -1,0 +1,183 @@
+---
+/**
+ * @forge/docs - Astryx Sun/Moon Theme Select Component (2026 LTS)
+ * 100% Astryx Token Compliant: Replaces unstyled native selects and browser default tooltips.
+ * Synchronizes with forge:v1:platform:theme and BroadcastChannel across SG Forge micro-apps.
+ */
+---
+
+<div class="astryx-theme-select-wrap">
+  <button
+    id="theme-toggle-btn"
+    class="astryx-theme-toggle-btn"
+    aria-label="Toggle Theme"
+    data-astryx-tooltip="Toggle Light / Dark Theme"
+  >
+    <!-- Sun Icon (Active in dark mode) -->
+    <svg id="sun-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <!-- Moon Icon (Active in light mode) -->
+    <svg id="moon-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .astryx-theme-select-wrap {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .astryx-theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--forge-radius-sm, 5px);
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    color: var(--forge-text-muted, #8a8a8a);
+    cursor: pointer;
+    transition: var(--forge-transition);
+    outline: none;
+    padding: 0;
+  }
+
+  .astryx-theme-toggle-btn:hover {
+    background: var(--forge-bg-card-hover, #232323);
+    border-color: var(--forge-border-medium, #383838);
+    color: var(--forge-primary, #3ecf8e);
+  }
+
+  .astryx-theme-toggle-btn:focus-visible {
+    border-color: var(--forge-primary, #3ecf8e);
+    box-shadow: 0 0 0 2px var(--forge-primary-bg, rgba(62, 207, 142, 0.2));
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    var THEME_KEY = 'forge:v1:platform:theme';
+    var STARLIGHT_KEY = 'starlight-theme';
+    var LEGACY_KEY = 'sg-forge-theme';
+    var CHANNEL_NAME = 'sg_forge_state_sync_bus';
+
+    function readTheme() {
+      try {
+        var raw = localStorage.getItem(THEME_KEY) || localStorage.getItem(STARLIGHT_KEY) || localStorage.getItem(LEGACY_KEY);
+        if (!raw) {
+          // If no stored preference, check system color scheme
+          return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        try {
+          var env = JSON.parse(raw);
+          return (env && typeof env === 'object' && env.data) ? env.data : (env || 'dark');
+        } catch(e) {
+          return raw || 'dark';
+        }
+      } catch(e) {
+        return 'dark';
+      }
+    }
+
+    function applyTheme(theme) {
+      if (!theme || (theme !== 'light' && theme !== 'dark')) theme = 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.dataset.theme = theme;
+      updateThemeIcons(theme);
+    }
+
+    function updateThemeIcons(theme) {
+      var sun = document.getElementById('sun-icon');
+      var moon = document.getElementById('moon-icon');
+      if (!sun || !moon) return;
+      if (theme === 'light') {
+        sun.style.display = 'none';
+        moon.style.display = 'block';
+      } else {
+        sun.style.display = 'block';
+        moon.style.display = 'none';
+      }
+    }
+
+    function persistTheme(theme) {
+      try {
+        var env = { version: 1, updatedAt: new Date().toISOString(), data: theme };
+        localStorage.setItem(THEME_KEY, JSON.stringify(env));
+        localStorage.setItem(STARLIGHT_KEY, theme);
+        localStorage.setItem(LEGACY_KEY, theme);
+        if (typeof BroadcastChannel !== 'undefined') {
+          var bc = new BroadcastChannel(CHANNEL_NAME);
+          bc.postMessage({ key: THEME_KEY, data: theme, timestamp: Date.now() });
+          bc.close();
+        }
+      } catch(e) {}
+    }
+
+    // Interactive toggle handler
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('#theme-toggle-btn');
+      if (!btn) return;
+      var current = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      persistTheme(next);
+    });
+
+    // Cross-tab synchronization via BroadcastChannel
+    if (typeof BroadcastChannel !== 'undefined') {
+      try {
+        var bc = new BroadcastChannel(CHANNEL_NAME);
+        bc.onmessage = function(ev) {
+          if (ev.data && ev.data.key === THEME_KEY && ev.data.data) {
+            applyTheme(ev.data.data);
+          }
+        };
+      } catch(e) {}
+    }
+
+    // Cross-tab synchronization via storage event
+    window.addEventListener('storage', function(ev) {
+      if (ev.key === THEME_KEY || ev.key === STARLIGHT_KEY || ev.key === LEGACY_KEY) {
+        applyTheme(readTheme());
+      }
+    });
+
+    // Client-side navigation preservation for Astro View Transitions / Starlight SPA
+    document.addEventListener('astro:page-load', function() {
+      applyTheme(readTheme());
+    });
+    document.addEventListener('astro:after-swap', function() {
+      applyTheme(readTheme());
+    });
+
+    // Generic MutationObserver: Keep sun/moon icons in sync if external scripts alter data-theme
+    if (typeof MutationObserver !== 'undefined') {
+      try {
+        var observer = new MutationObserver(function(mutations) {
+          for (var i = 0; i < mutations.length; i++) {
+            if (mutations[i].attributeName === 'data-theme') {
+              var newTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+              updateThemeIcons(newTheme);
+            }
+          }
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      } catch(e) {}
+    }
+
+    // Initial activation
+    applyTheme(readTheme());
+  })();
+</script>

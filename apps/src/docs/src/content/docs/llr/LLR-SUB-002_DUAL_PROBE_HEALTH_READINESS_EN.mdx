@@ -1,0 +1,29 @@
+---
+title: LLR-SUB-002 - Dual-Probe Health & Readiness Endpoint Reporter
+description: Low-level requirement implementing /health and /ready endpoints across all microservices.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SUB-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-TEL-801" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Handle GET /health: verify process event loop is active and return HTTP 200 `{ status: 'healthy' }`
+2. Handle GET /ready: probe database connection and essential external dependencies
+3. If all dependencies respond in &lt; 500ms, return HTTP 200 `{ status: 'ready', checks: [...] }`
+4. If any dependency fails, return HTTP 503 Service Unavailable with failing component details
+
+## 2. Safety & Verification Invariants
+
+* **Liveness probe (/health) must respond in &lt; 50ms with zero deep database queries**
+* **Readiness probe (/ready) must reflect actual capability to serve user traffic**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-TEL-801" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/sdk/src/registry.ts`
+* **Verified in Test Suite**: `forge-apps/telemetry/test/integration/health-probe.test.ts`

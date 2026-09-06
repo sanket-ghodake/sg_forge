@@ -1,0 +1,58 @@
+---
+/**
+ * @forge/docs - TopologyShowcase.astro
+ * Showcase wrapper around DiagramEmbed for interactive topology inspection.
+ * Scoped styling, Astryx compliant, dual-theme support.
+ * @requirements [SR-DOC-001] [HLR-UI-401]
+ */
+import DiagramEmbed from './DiagramEmbed.astro';
+---
+
+<div class="topology-showcase-container">
+  <div class="showcase-header">
+    <span class="showcase-eyebrow">Interactive Schematic</span>
+    <h2 class="showcase-title">Air-Gapped Gateway &amp; Service Mesh Topology</h2>
+    <p class="showcase-desc">
+      Inspect real-time service boundaries, internal bridge networks, and proxy ingress routing with pan and zoom.
+    </p>
+  </div>
+  <DiagramEmbed 
+    diagram="topology" 
+    title="SG Forge High-Reliability Architecture Topology" 
+    caption="Visual topology showing Caddy Gateway routing requests across air-gapped core services and autonomous Forge submodules."
+  />
+</div>
+
+<style>
+  .topology-showcase-container {
+    margin: 3.5rem 0;
+  }
+  .showcase-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+  }
+  .showcase-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--forge-primary, #3ecf8e);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+  .showcase-title {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--forge-text-main, #ededed);
+    margin: 0 0 0.75rem 0;
+    border-bottom: none !important;
+  }
+  .showcase-desc {
+    font-size: 0.95rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+</style>

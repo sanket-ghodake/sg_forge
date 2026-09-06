@@ -1,0 +1,14 @@
+---
+/**
+ * @forge/docs - AstryxPageTitle.astro
+ * Starlight PageTitle component override with Astryx Design System integration.
+ * Suppresses redundant H1 header on splash landing pages where custom hero is mounted.
+ * @requirements [SR-DOC-001] [HLR-UI-401]
+ */
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+
+const { starlightRoute } = Astro.locals;
+const isSplash = starlightRoute?.entry?.data?.template === 'splash';
+---
+
+{!isSplash && <Default {...Astro.props} />}

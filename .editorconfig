@@ -1,0 +1,32 @@
+# ==============================================================================
+# EditorConfig Configuration - SG Forge Monorepo (2026 LTS)
+# http://editorconfig.org
+# ==============================================================================
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{ts,tsx,js,jsx,mjs,cjs,json,jsonc,json5,yaml,yml,html,css,scss}]
+indent_size = 2
+
+[*.py]
+indent_size = 4
+
+[*.{sh,bash,zsh}]
+indent_size = 2
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[Makefile]
+indent_style = tab
+
+[*.md]
+trim_trailing_whitespace = false

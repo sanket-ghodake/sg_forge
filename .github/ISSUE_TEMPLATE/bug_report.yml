@@ -1,0 +1,29 @@
+name: "🐛 Bug Report"
+description: "File a reproducible bug or unexpected platform behavior"
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for reporting an issue with SG Forge!"
+  - type: input
+    id: summary
+    attributes:
+      label: "Issue Summary"
+      description: "A clear, one-line summary of the bug"
+      placeholder: "e.g. Rate limiter in-memory fallback causes 429 on concurrent bursts"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Steps to Reproduce"
+      description: "Exact steps to reproduce the behavior"
+      placeholder: "1. Run './run.sh portable dev'\n2. Navigate to '/apps/expenses'\n3. See error..."
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Relevant Logs or Traces"
+      description: "Paste relevant output from 'logs/app.log' or browser devtools console"
+      render: shell

@@ -1,0 +1,62 @@
+---
+title: 4-Pillar Observability & RFC 7807 Boundaries
+description: Architectural specifications for Enterprise SRE-standard structured JSON telemetry, automated PII redaction, and RFC 7807 problem details.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Enterprise 4-Pillar Observability Standard"
+  analogy="In mission-critical distributed systems and enterprise cloud infrastructures, black-box systems are unacceptable. SG Forge continuously streams health telemetry across four isolated pillars, ensuring zero blind spots while keeping sensitive customer secrets protected."
+  impact="Guarantees immediate anomaly detection, cross-request trace correlation, and absolute compliance with data privacy standards."
+/>
+
+<TraceabilityBadge reqId="SR-LOG-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SDK-002" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SDK-004" type="LLR" status="verified" />
+
+<DiagramEmbed 
+  diagram="observability-flow" 
+  title="4-Pillar Observability & Telemetry Architecture" 
+  caption="Dual-probe health endpoints, browser log bridge, container stdout JSON, and colocated rotating log streams."
+/>
+
+## 1. The Four Pillars of Observability
+
+Every microservice across `apps/src/*` and `forge-apps/*` must maintain isolated logging and dual-probe telemetry adhering to the 4 pillars:
+
+1. **Dual-Probe Health Monitoring**:
+   - `/health/liveness`: Verifies that the container process and HTTP socket are responsive.
+   - `/health/readiness`: Verifies upstream database connections, filesystem access, and dependency availability.
+2. **Browser Console Observability**:
+   - Frontend console logs stream structured JSON via `initBrowserLogBridge`.
+   - Never exposes raw database query errors, passwords, tokens, or unhandled stack traces to browser dev tools.
+3. **Container & Docker Output**:
+   - Standard stdout/stderr streams single-line structured JSON logs with ISO-8601 timestamps, severity levels, service tags, and immutable `traceId` correlation.
+4. **Backend Persistent Logs**:
+   - Colocated `logs/` directory per microservice with independent `.gitignore` and `README.md`.
+
+## 2. RFC 7807 Standard Error Boundaries
+
+All API error responses must adhere strictly to the RFC 7807 Problem Details specification via `@forge/sdk/createSafeHandler`:
+
+```json
+{
+  "type": "https://docs.sgforge.local/errors/unauthorized",
+  "title": "Unauthorized Access",
+  "status": 401,
+  "detail": "Session token has expired due to 30 minutes of inactivity.",
+  "instance": "/api/users/profile",
+  "traceId": "tr-9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
+  "timestamp": "2026-09-06T21:45:00Z"
+}
+```
+
+## 3. Automated PII & Secret Redaction
+
+Before any log record is written to disk or sent to stdout, `@forge/sdk/redactSensitiveData` recursively scrubs keys matching sensitive patterns:
+* `password`, `token`, `secret`, `authorization`, `cookie`, `jwt`, `credit_card`, `ssn`.
+* Scrubbed values are replaced with `[REDACTED]`, preventing accidental credential leaks in production audits.

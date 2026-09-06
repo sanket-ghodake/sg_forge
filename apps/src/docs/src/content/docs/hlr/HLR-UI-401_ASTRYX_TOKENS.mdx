@@ -1,0 +1,25 @@
+---
+title: HLR-UI-401 Astryx Design Token Engine & Styling Hierarchy
+description: High-Level Requirement defining platform CSS variables, dark/light themes, and surface elevations.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Astryx UI System (`@forge/ui/tokens`) shall provide immutable design token definitions:
+
+1. Root CSS variables (`--forge-bg-root`, `--forge-bg-surface`, `--forge-bg-card`, `--forge-border`, `--forge-primary`, `--forge-accent`, `--forge-text-main`, `--forge-text-muted`).
+2. High-contrast, WCAG 2.1 AA accessible color palettes with minimum 4.5:1 contrast ratios.
+3. Glassmorphic surface elevations (`backdrop-filter: blur(16px)`).
+4. Custom slim Astryx scrollbars eliminating OS-native thick scrollbar gutters.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/ui/src/tokens.ts`
+* **Verified in Tests**: `apps/src/ui/test/contracts/theme-tokens-schema.test.ts`

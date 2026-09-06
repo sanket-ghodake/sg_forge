@@ -1,0 +1,21 @@
+[Unit]
+Description=SG Forge Continuous Database Backup Daemon (2026 LTS)
+After=network.target docker.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/sg-forge
+ExecStart=/opt/sg-forge/portables/bun/bin/bun run scripts/backup-databases.ts --daemon
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+
+# Security Hardening
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

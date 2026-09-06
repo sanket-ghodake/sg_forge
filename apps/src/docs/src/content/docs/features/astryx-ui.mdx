@@ -1,0 +1,77 @@
+---
+title: Astryx UI & Viewport Engine
+description: Comprehensive specifications for Astryx design tokens, zero OS browser defaults, and dynamic viewport collision detection.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Pixel-Perfect Astryx Design System"
+  analogy="Every gauge, button, and indicator in a luxury vehicle follows an exact design standard. In SG Forge, every button, modal, dropdown, scrollbar, and tooltip follows the Astryx design system — eliminating raw, clunky browser defaults."
+  impact="Guarantees visual cohesion, glassmorphic dark mode aesthetics, and zero clipping or overflow at any viewport boundary."
+/>
+
+<TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+<TraceabilityBadge reqId="HLR-UI-402" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-UI-001" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-UI-002" type="LLR" status="verified" />
+
+## 1. Astryx Design Token Hierarchy
+
+All user interfaces across core platform services and Forge submodules must strictly consume the modern Astryx token system (`@forge/ui`). Ad-hoc hex colors, inline margins, and random component libraries are strictly blocked by pre-commit verification.
+
+<DiagramEmbed 
+  diagram="astryx-tokens" 
+  title="Astryx Design Token Hierarchy" 
+  caption="Root color tokens, surface tokens, glassmorphism layers, and typography scaling."
+/>
+
+### Core Design Tokens
+* `--forge-bg-root`: `#0b0f19` (Deep obsidian platform base)
+* `--forge-bg-surface`: `#111827` (Card and modal background)
+* `--forge-border`: `rgba(255, 255, 255, 0.08)` (Subtle glassmorphic border)
+* `--forge-primary`: `#6366f1` (Indigo primary action)
+* `--forge-accent`: `#06b6d4` (Cyan accent highlight)
+* `--forge-text-main`: `#f3f4f6` (High-contrast typography)
+* `--forge-text-muted`: `#9ca3af` (Secondary metadata text)
+
+## 2. Dynamic Viewport Collision Detection Engine
+
+Native browser tooltips (e.g. `title="..."`) and unconstrained dropdown menus frequently clip against browser window edges. Architectural directive 4 mandates custom Astryx floating tooltips (`data-astryx-tooltip`) with smart collision detection.
+
+<DiagramEmbed 
+  diagram="tooltip-collision" 
+  title="Astryx Smart Viewport Collision Detection" 
+  caption="Dynamic auto-flip, horizontal shifting, and edge clamping guaranteeing 100% tooltip visibility inside the active viewport."
+/>
+
+### Collision Math & Positioning Algorithm
+```typescript
+export function computeTooltipPosition(
+  triggerRect: DOMRect,
+  tooltipRect: DOMRect,
+  viewportWidth: number,
+  viewportHeight: number
+): { top: number; left: number; placement: 'top' | 'bottom' } {
+  const GAP = 8;
+  let placement: 'top' | 'bottom' = 'top';
+  let top = triggerRect.top - tooltipRect.height - GAP;
+
+  // Auto-flip downward if clipping against the top edge
+  if (top < 0) {
+    top = triggerRect.bottom + GAP;
+    placement = 'bottom';
+  }
+
+  // Calculate centered horizontal coordinate
+  let left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
+
+  // Clamp horizontal coordinate inside viewport with 8px margin
+  left = Math.max(8, Math.min(left, viewportWidth - tooltipRect.width - 8));
+
+  return { top, left, placement };
+}
+```

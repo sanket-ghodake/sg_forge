@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Autonomous Submodule Governance &amp; Lifecycle</title>
+  <style>
+    :root {
+      --bg-root: #0b0f19;
+      --bg-surface: #111827;
+      --primary: #6366f1;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body { background: var(--bg-root); color: var(--text); font-family: var(--font); margin: 0; padding: 24px; display: flex; justify-content: center; }
+    .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; max-width: 900px; width: 100%; }
+    svg { width: 100%; height: auto; display: block; }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-root: #f8fafc;
+        --bg-surface: #ffffff;
+        --primary: #059669;
+        --accent: #06b6d4;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+      }
+      .card {
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      }
+      svg rect[fill="#111827"] { fill: #ffffff !important; stroke: #e2e8f0; }
+      svg rect[stroke="rgba(255,255,255,0.1)"], svg rect[stroke="rgba(255,255,255,0.08)"] { stroke: #e2e8f0 !important; }
+      svg text[fill="#F3F4F6"] { fill: #0f172a !important; }
+      svg text[fill="#9CA3AF"] { fill: #475569 !important; }
+      svg rect[fill="#1E1B4B"] { fill: #eef2ff !important; stroke: #818cf8 !important; }
+      svg rect[fill="#064E3B"] { fill: #ecfdf5 !important; stroke: #10b981 !important; }
+      svg rect[fill="#164E63"] { fill: #f0fdfa !important; stroke: #06b6d4 !important; }
+      svg rect[fill="#312E81"] { fill: #e0e7ff !important; stroke: #818cf8 !important; }
+      svg text[fill="#818CF8"], svg text[fill="#A5B4FC"] { fill: #4338ca !important; }
+      svg text[fill="#34D399"] { fill: #047857 !important; }
+      svg text[fill="#67E8F9"] { fill: #0e7490 !important; }
+      svg text[fill="#FBBF24"], svg text[fill="#F59E0B"] { fill: #b45309 !important; }
+      svg text[fill="#EF4444"] { fill: #dc2626 !important; }
+      svg rect[fill="rgba(17,24,39,0.95)"] { fill: #ffffff !important; stroke: #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <svg viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-11 desc-11">
+      <title id="title-11">Autonomous Forge Apps Submodule Boundary</title>
+      <desc id="desc-11">Architecture diagram demonstrating Git submodule autonomy, independent Dockerfiles, and zero imports from central platform directories.</desc>
+      
+      <!-- Central Monorepo Box -->
+      <rect x="50" y="40" width="320" height="320" rx="8" fill="#1E1B4B" stroke="#6366F1" stroke-width="2"/>
+      <text x="210" y="75" text-anchor="middle" fill="#818CF8" font-size="14" font-weight="700">CENTRAL PLATFORM (apps/src/*)</text>
+      
+      <rect x="75" y="100" width="270" height="50" rx="6" fill="#111827" stroke="rgba(255,255,255,0.1)"/>
+      <text x="210" y="130" text-anchor="middle" fill="#F3F4F6" font-size="12">Portal • Auth • Dev-Dashboard</text>
+      
+      <rect x="75" y="170" width="270" height="160" rx="6" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.08)"/>
+      <text x="95" y="200" fill="#9CA3AF" font-size="11">Invariants:</text>
+      <text x="95" y="225" fill="#9CA3AF" font-size="11">• core-airgap-net (zero egress)</text>
+      <text x="95" y="250" fill="#9CA3AF" font-size="11">• Shared @forge/sdk and @forge/ui</text>
+      <text x="95" y="275" fill="#EF4444" font-size="11">• NEVER imported into forge-apps/*</text>
+      <text x="95" y="300" fill="#10B981" font-size="11">• Ingress driven by .env</text>
+      
+      <!-- Air-Gap Boundary Wall -->
+      <line x1="400" y1="40" x2="400" y2="360" stroke="#EF4444" stroke-width="2" stroke-dasharray="6 6"/>
+      <text x="400" y="200" text-anchor="middle" fill="#EF4444" font-size="11" transform="rotate(-90 400 200)">ZERO MONOREPO BLEED</text>
+      
+      <!-- Autonomous Submodules Box -->
+      <rect x="430" y="40" width="320" height="320" rx="8" fill="#064E3B" stroke="#10B981" stroke-width="2"/>
+      <text x="590" y="75" text-anchor="middle" fill="#34D399" font-size="14" font-weight="700">FORGE APPS (forge-apps/*)</text>
+      
+      <rect x="455" y="100" width="270" height="50" rx="6" fill="#111827" stroke="#10B981"/>
+      <text x="590" y="130" text-anchor="middle" fill="#F3F4F6" font-size="12">code • telemetry • app-template</text>
+      
+      <rect x="455" y="170" width="270" height="160" rx="6" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.08)"/>
+      <text x="475" y="200" fill="#34D399" font-size="11">Submodule Autonomy:</text>
+      <text x="475" y="225" fill="#9CA3AF" font-size="11">• Independent Git repositories</text>
+      <text x="475" y="250" fill="#9CA3AF" font-size="11">• Standalone Dockerfiles &amp; configs</text>
+      <text x="475" y="275" fill="#9CA3AF" font-size="11">• Local 5-Tier test architectures</text>
+      <text x="475" y="300" fill="#10B981" font-size="11">• Colocated docs/ &amp; local quality gate</text>
+    </svg>
+  </div>
+</body>
+</html>

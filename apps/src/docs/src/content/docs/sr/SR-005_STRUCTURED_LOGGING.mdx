@@ -1,0 +1,30 @@
+---
+title: SR-LOG-001 Centralized Structured Logging & RFC 7807 Boundaries
+description: System Requirement defining Enterprise SRE JSON telemetry, recursive PII redaction, and standard problem details.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="SR-LOG-001" type="SR" status="verified" />
+</div>
+
+<ExecutiveCard 
+  title="Structured Telemetry with Privacy Filtering"
+  analogy="Like an immutable audit ledger: every event is stamped with millisecond precision and a trace ID, but confidential information is blacked out before storage."
+  impact="Empowers instant incident triage across microservices while guaranteeing zero leakage of credentials, tokens, or raw internal stack traces."
+/>
+
+## 1. Requirement Statement
+
+1. All platform services, API routes, and micro-apps shall utilize `@forge/sdk` (`createLogger`, `createSafeHandler`) for observability and error handling.
+2. Log outputs shall strictly format as single-line JSON objects complying with RFC 3339 UTC timestamps, severity level, service name, and immutable `traceId` correlation.
+3. The logging engine shall perform automated recursive redaction on sensitive fields (`password`, `token`, `secret`, `authorization`, `creditCard`, `apiKey`).
+4. HTTP error responses shall conform to RFC 7807 (`application/problem+json`) containing standard fields (`type`, `title`, `status`, `detail`, `instance`, `traceId`) with zero internal stack trace exposure.
+
+## 2. Traceability Links
+
+* **Traced to High-Level Requirements**:
+  * <TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" /> SRE Structured Logger
+  * <TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" /> Health Mesh Telemetry

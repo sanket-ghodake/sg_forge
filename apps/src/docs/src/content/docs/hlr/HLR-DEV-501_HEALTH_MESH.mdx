@@ -1,0 +1,25 @@
+---
+title: HLR-DEV-501 Health Mesh Telemetry & Process Probing
+description: High-Level Requirement defining dual-probe operational health monitoring and live process ping matrices.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem;">
+  <TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" />
+</div>
+
+## 1. Functional Specification
+
+The Developer Dashboard (`apps/src/dev-dashboard`) shall monitor all platform microservices in real time:
+
+1. Probes `/health` (liveness) and `/ready` (readiness) endpoints across all registered services.
+2. Displays an interactive live ping matrix with latency percentiles ($p_`{50}`, p_`{95}`, p_`{99}`$).
+3. Correlates Docker container status and SQLite file sizes.
+4. Alerts on service degradation using Astryx glassmorphic warning indicators.
+
+## 2. Traceability
+
+* **Traces to System Requirement**: <TraceabilityBadge reqId="SR-LOG-001" type="SR" status="verified" />
+* **Implemented in Code**: `apps/src/dev-dashboard/src/health.ts`
+* **Verified in Tests**: `apps/src/dev-dashboard/test/integration/health-mesh.test.ts`

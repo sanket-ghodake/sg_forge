@@ -1,0 +1,65 @@
+---
+title: Portal SPA Engine & Iframe Sandboxing
+description: Architectural specifications for client-side view routing, instantaneous DOM hydration, and sandboxed micro-app iframes.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Zero-Refresh Single Page Application Architecture"
+  analogy="The SG Forge Portal functions like a modern operations dashboard: switching between navigational views and launching sub-tools happens instantly without blinking or reloading the entire instrument cluster."
+  impact="Guarantees fluid responsiveness down to 320px mobile viewports, sub-16ms view transitions, and complete iframe security sandboxing."
+/>
+
+<TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+<TraceabilityBadge reqId="HLR-PORTAL-202" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-006" type="LLR" status="verified" />
+
+## 1. Portal Architecture & Navigation Lifecycle
+
+The SG Forge Portal (`@forge/portal`) strictly operates as a Single Page Application (SPA). Hard page refreshes during navigation are strictly forbidden by architectural directive 15.
+
+<DiagramEmbed 
+  diagram="portal-spa" 
+  title="Portal Single Page Application (SPA) View Routing Engine" 
+  caption="Client-side history navigation, instantaneous DOM hydration, and secure cross-origin postMessage bridging."
+/>
+
+## 2. Technical Specifications
+
+### Client-Side View Dispatcher
+* **History State Integration**: Navigation clicks intercept standard anchor events, pushing route states via `history.pushState(null, '', path)` and dispatching internal view hydration events.
+* **Instantaneous View Transitions**: Views are rendered client-side using lightweight DOM templates without round-trip HTML page reloads.
+* **Responsive Layout Engine**: Viewports adjust dynamically across Desktop (>1200px), Tablet (768px - 1199px), and Mobile (320px - 767px) with zero horizontal scrollbars.
+
+### Iframe Sandboxing & Security Boundaries
+When rendering autonomous Forge submodules inside the Portal:
+* Micro-apps are loaded inside isolated `<iframe>` elements configured with strict sandbox attributes:
+  ```html
+  <iframe 
+    src="/apps/code/" 
+    sandbox="allow-scripts allow-same-origin allow-forms"
+    referrerpolicy="strict-origin-when-cross-origin"
+    class="forge-submodule-frame">
+  </iframe>
+  ```
+* **PostMessage RPC Bridge**: Cross-origin communication between the Portal shell and embedded Forge apps uses cryptographically validated JSON payloads:
+  ```typescript
+  window.addEventListener('message', (event) => {
+    if (event.origin !== expectedOrigin) return;
+    handleSubmoduleEvent(event.data);
+  });
+  ```
+
+## 3. End-to-End Enterprise User Journey
+
+From initial authentication to multi-tenant workspace interactions, every interaction runs client-side with zero hard page refreshes:
+
+<DiagramEmbed 
+  diagram="user-journey" 
+  title="End-to-End Enterprise User Journey & Org Workspace" 
+  caption="Zero-trust identity authentication, single page application hydration, multi-tenant org switching, and sandboxed micro-apps."
+/>

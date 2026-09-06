@@ -1,0 +1,30 @@
+---
+title: LLR-SUB-003 - Sandboxed Filesystem Path Traversal Guard
+description: Low-level requirement validating that file access operations remain within assigned workspace jail.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SUB-003" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-CODE-701" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Receive target file path relative to workspace root
+2. Resolve absolute normalized canonical path using path.resolve() and fs.realpathSync()
+3. Assert resolved canonical path starts with canonical workspace jail directory path
+4. Verify path contains no null bytes (%00) or encoded traversal sequences
+5. Raise SecurityTraversalException if path attempts jail escape
+
+## 2. Safety & Verification Invariants
+
+* **Arbitrary filesystem read/write outside workspace boundary constitutes Severity 1 vulnerability**
+* **Symlinks pointing outside sandbox jail must be unconditionally rejected**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-CODE-701" type="HLR" status="verified" />
+* **Implemented in Source**: `forge-apps/code/src/server.ts`
+* **Verified in Test Suite**: `forge-apps/code/test/security/sandbox.test.ts`

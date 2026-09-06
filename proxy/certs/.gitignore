@@ -1,0 +1,7 @@
+# ==============================================================================
+# Air-Gapped & Local TLS Certificate Barrier - SG Forge (2026 LTS)
+# CRITICAL: ABSOLUTE ZERO LEAKAGE - Never commit private keys or certificates
+# ==============================================================================
+*
+!.gitignore
+!README.md

@@ -1,0 +1,30 @@
+---
+title: LLR-UI-006 - LocalStorage Versioned State Store with Migration Callbacks
+description: Low-level requirement governing schema versioning and safe migration of client-side storage keys.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-UI-006" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-UI-403" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Wrap localStorage access in createVersionedStore`<T>`(key, currentVersion, migrators)
+2. Read stored payload: `{ version: number, data: any }`
+3. If stored version &lt; currentVersion, iterate through migrator functions sequentially
+4. Persist updated data with latest version stamp back to localStorage
+5. Catch and handle QuotaExceededError gracefully without throwing uncaught exceptions
+
+## 2. Safety & Verification Invariants
+
+* **Client state schema changes must provide backward-compatible migration paths**
+* **Corrupted storage entries must automatically fall back to schema defaults**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-UI-403" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/ui/src/browser-state.ts`
+* **Verified in Test Suite**: `apps/src/ui/test/unit/browser-state.test.ts`

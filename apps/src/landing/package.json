@@ -1,0 +1,16 @@
+{
+  "name": "@forge/landing",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Landing service ready'",
+    "build": "echo 'Landing built'"
+  },
+  "dependencies": {
+    "@forge/types": "workspace:*",
+    "@forge/ui": "workspace:*"
+  },
+  "license": "Apache-2.0",
+  "author": "Sanket Ghodake <sanketghodke03@gmail.com>"
+}

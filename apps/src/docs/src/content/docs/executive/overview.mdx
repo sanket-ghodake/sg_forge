@@ -1,0 +1,42 @@
+---
+title: Platform Vision & Engineering Invariants
+description: Plain-English executive briefing on the SG Forge architectural philosophy and 12 non-negotiable invariants.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import AudienceTabs from '../../../components/AudienceTabs.astro';
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+
+<ExecutiveCard 
+  title="Enterprise Clean Architecture for Mission-Critical Operations"
+  analogy="Building a modern software platform is like constructing a high-speed maglev train: every car must be capable of independent emergency decoupling without derailing the passenger experience."
+  impact="Ensures zero single points of failure across internal tools, submodules, and microservices."
+/>
+
+## 1. The 12 Non-Negotiable Invariants
+
+The SG Forge architecture enforces twelve immutable principles of Enterprise SRE and Application Security standards:
+
+
+1. **Correctness & "No Guessing"**: Zero hallucinated APIs, schemas, or dependencies.
+2. **Strict File Size Governance**: Source files strictly capped at $\le 500$ lines.
+3. **Astryx UI System**: 100% compliant with `@forge/ui` tokens; zero OS or browser defaults.
+4. **Centralized Structured Logging**: RFC 7807 problem details with trace correlation and automated PII redaction.
+5. **Multi-Tenant Data Isolation**: Dedicated Turso libSQL database instance per micro-app.
+6. **Air-Gapped Core Platform**: `core-airgap-net` (`internal: true`) with zero outbound egress.
+7. **Clean Package Aliases**: `@forge/sdk`, `@forge/ui`, `@forge/types` with zero relative traversal.
+8. **5-Tier Test Architecture**: Unit, Integration, Security, Contract, and E2E tiers.
+9. **Single-Location Dynamic Ingress**: Driven exclusively from `.env` via Caddy reverse proxy.
+10. **Code Preservation & Worklog Ledger**: Standard header blocks and per-task worklog entries.
+11. **In-Chat AI Security Auditor**: Strix white-box AST review and non-destructive live pentesting.
+12. **Systems Traceability & Living Standards**: Bidirectional requirement tracking (`SR -> HLR -> LLR -> Code -> Test`) with 100% symbol coverage.
+
+## 2. Deterministic Pre-Commit Verification Gate
+
+Every git staging operation automatically runs through the 29-check verification gate to ensure zero drift across types, linters, licenses, and documentation parity.
+
+<DiagramEmbed 
+  diagram="precommit-gate" 
+  title="SG Forge 29-Check Pre-Commit Verification Gate" 
+  caption="Automated pipeline executing pre-flight checks, AST verification, and bidirectional traceability before code staging."
+/>

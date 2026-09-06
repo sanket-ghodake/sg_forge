@@ -1,0 +1,30 @@
+---
+title: LLR-AUTH-005 - Brute-Force Rate Limiting with IP Bucket Throttling
+description: Low-level requirement governing token bucket rate limiter preventing brute-force authentication attempts.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-005" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Construct rate limiter key from client IP address and target endpoint: rl:auth:`{ip}`
+2. Read current attempt count within rolling window of 60 seconds
+3. If attempts exceed MAX_LOGIN_ATTEMPTS (default 5), reject request with HTTP 429 Too Many Requests
+4. Return Retry-After header with remaining seconds until window reset
+5. Reset counter upon successful authentication completion
+
+## 2. Safety & Verification Invariants
+
+* **Maximum allowed failed login attempts before block: 5 attempts per 60 seconds**
+* **Retry-After header must accurately reflect remaining cooldown seconds**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/auth/src/rbac.ts`
+* **Verified in Test Suite**: `apps/src/auth/test/security/rate-limit.test.ts`

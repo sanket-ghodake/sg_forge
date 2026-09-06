@@ -1,0 +1,30 @@
+---
+title: LLR-SUB-007 - Automated CycloneDX 1.5 SBOM Component Scanner
+description: Low-level requirement auditing software bill-of-materials and dependency license compliance.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-SUB-007" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Scan package.json and lockfile dependencies across monorepo and submodules
+2. Generate CycloneDX 1.5 JSON formatted SBOM using syft or internal scanner
+3. Validate every component against permissible license whitelist (MIT, Apache-2.0, BSD-3-Clause, ISC)
+4. Flag viral copyleft licenses (GPL, AGPL) as critical compliance violations
+5. Archive SBOM artifact in dist/sbom.json
+
+## 2. Safety & Verification Invariants
+
+* **Zero viral copyleft (AGPL/GPL) dependencies permitted in core or micro-app services**
+* **SBOM must account for 100% of runtime and build dependencies**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" />
+* **Implemented in Source**: `scripts/run/quality.sh`
+* **Verified in Test Suite**: `apps/src/dev-dashboard/test/contracts/sbom.test.ts`

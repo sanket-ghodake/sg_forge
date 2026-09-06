@@ -1,0 +1,25 @@
+name: "✨ Feature Request"
+description: "Suggest a new feature, plugin enhancement, or capability"
+labels: ["enhancement", "proposal"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: "Feature Title"
+      description: "Concise summary of the proposed feature"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem or Use Case"
+      description: "What challenge does this proposal address?"
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution & Design"
+      description: "Describe the architectural or UX approach"
+    validations:
+      required: true

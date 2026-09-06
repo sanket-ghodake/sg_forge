@@ -1,0 +1,493 @@
+/**
+ * @forge/docs - Astryx Design System Theme for Astro Starlight (2026 LTS)
+ * 100% Astryx Token Compliant: Authentic Emerald Palette, Custom Slim Scrollbars,
+ * Glassmorphic Cards, Admonitions, Custom Tooltips, and Zero OS Browser Defaults.
+ */
+
+/* ── Dark Theme (Default) ── */
+:root, [data-theme="dark"] {
+  /* Foundational Astryx Tokens */
+  --forge-bg-root: #121212;
+  --forge-bg-surface: #171717;
+  --forge-bg-card: #1c1c1c;
+  --forge-bg-card-hover: #232323;
+  --forge-bg-elevated: #191919;
+  --forge-border: #282828;
+  --forge-border-subtle: #282828;
+  --forge-border-medium: #383838;
+  --forge-border-hover: #383838;
+  --forge-primary: #3ecf8e;
+  --forge-primary-hover: #34b27b;
+  --forge-primary-bg: rgba(62, 207, 142, 0.12);
+  --forge-primary-btn-text: #121212;
+  --forge-primary-gradient: linear-gradient(135deg, #3ecf8e 0%, #24b47e 100%);
+  --forge-accent: #7053ff;
+  --forge-text-main: #ededed;
+  --forge-text-muted: #8a8a8a;
+  --forge-text-subtle: #606060;
+  --forge-text-contrast: #ffffff;
+  --forge-success: #3ecf8e;
+  --forge-success-bg: rgba(62, 207, 142, 0.12);
+  --forge-warning: #f59e0b;
+  --forge-warning-bg: rgba(245, 158, 11, 0.12);
+  --forge-error: #ef4444;
+  --forge-error-bg: rgba(239, 68, 68, 0.12);
+  --forge-shadow-card: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --forge-shadow-hover: 0 6px 20px -4px rgba(0, 0, 0, 0.5);
+  --forge-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif;
+  --forge-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  --forge-radius: 8px;
+  --forge-radius-sm: 5px;
+  --forge-radius-full: 9999px;
+  --forge-transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Starlight Dynamic Variable Mappings */
+  --sl-color-accent: var(--forge-primary);
+  --sl-color-accent-high: #34b27b;
+  --sl-color-accent-low: rgba(62, 207, 142, 0.15);
+  --sl-color-text-accent: var(--forge-primary);
+  --sl-color-bg: var(--forge-bg-root);
+  --sl-color-bg-nav: var(--forge-bg-surface);
+  --sl-color-bg-sidebar: var(--forge-bg-surface);
+  --sl-color-hairline: var(--forge-border);
+  --sl-color-text: var(--forge-text-main);
+  --sl-color-gray-1: var(--forge-text-main);
+  --sl-color-gray-2: var(--forge-text-muted);
+  --sl-color-gray-3: var(--forge-text-subtle);
+  --sl-color-gray-4: var(--forge-border-medium);
+  --sl-color-gray-5: var(--forge-border-subtle);
+  --sl-color-gray-6: var(--forge-bg-card);
+  --sl-font-system: var(--forge-font-sans);
+  --sl-font-mono: var(--forge-font-mono);
+}
+
+/* ── Light Theme ── */
+[data-theme="light"] {
+  --forge-bg-root: #fafafa;
+  --forge-bg-surface: #ffffff;
+  --forge-bg-card: #ffffff;
+  --forge-bg-card-hover: #f5f5f5;
+  --forge-bg-elevated: #f7f7f8;
+  --forge-border: #eaeaea;
+  --forge-border-subtle: #eaeaea;
+  --forge-border-medium: #d8d8d8;
+  --forge-border-hover: #d8d8d8;
+  --forge-primary: #24b47e;
+  --forge-primary-hover: #1ea672;
+  --forge-primary-bg: rgba(36, 180, 126, 0.10);
+  --forge-primary-btn-text: #ffffff;
+  --forge-primary-gradient: linear-gradient(135deg, #24b47e 0%, #1ea672 100%);
+  --forge-accent: #6366f1;
+  --forge-text-main: #171717;
+  --forge-text-muted: #666666;
+  --forge-text-subtle: #8c8c8c;
+  --forge-text-contrast: #ffffff;
+  --forge-success: #1ea672;
+  --forge-success-bg: rgba(36, 180, 126, 0.10);
+  --forge-warning: #d97706;
+  --forge-warning-bg: rgba(217, 119, 6, 0.10);
+  --forge-error: #dc2626;
+  --forge-error-bg: rgba(220, 38, 38, 0.10);
+  --forge-shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  --forge-shadow-hover: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+
+  --sl-color-accent: var(--forge-primary);
+  --sl-color-accent-high: #1ea672;
+  --sl-color-accent-low: rgba(36, 180, 126, 0.12);
+  --sl-color-text-accent: #047857;
+  --sl-color-bg: var(--forge-bg-root);
+  --sl-color-bg-nav: var(--forge-bg-surface);
+  --sl-color-bg-sidebar: var(--forge-bg-surface);
+  --sl-color-hairline: var(--forge-border);
+  --sl-color-text: var(--forge-text-main);
+  --sl-color-gray-1: var(--forge-text-main);
+  --sl-color-gray-2: var(--forge-text-muted);
+  --sl-color-gray-3: var(--forge-text-subtle);
+  --sl-color-gray-4: var(--forge-border-medium);
+  --sl-color-gray-5: var(--forge-border-subtle);
+  --sl-color-gray-6: var(--forge-bg-card);
+}
+
+/* ── Custom Astryx Slim Scrollbars (Zero OS Defaults) ── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--forge-border-medium) transparent;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--forge-border-medium);
+  border-radius: var(--forge-radius-full);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.15s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--forge-primary);
+}
+
+/* ── Astryx Surface & Glassmorphism Overrides ── */
+header.header {
+  background: var(--forge-bg-surface) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--forge-border) !important;
+  height: 48px !important;
+  padding: 0 1.25rem !important;
+}
+
+nav.sidebar {
+  background: var(--forge-bg-surface) !important;
+  border-right: 1px solid var(--forge-border) !important;
+}
+
+.main-frame {
+  background: var(--forge-bg-root) !important;
+}
+
+/* ── Sidebar Navigation Tree (Astryx Styling) ── */
+.sidebar-content a[aria-current="page"] {
+  background: var(--forge-primary-bg) !important;
+  color: var(--forge-primary) !important;
+  font-weight: 600 !important;
+  border-left: 2px solid var(--forge-primary) !important;
+  border-radius: 0 var(--forge-radius-sm) var(--forge-radius-sm) 0 !important;
+}
+
+.sidebar-content a:hover:not([aria-current="page"]) {
+  background: var(--forge-bg-card-hover) !important;
+  color: var(--forge-text-main) !important;
+}
+
+/* ── Astryx Cards & Grids ── */
+.card, .starlight-card {
+  background: var(--forge-bg-card) !important;
+  border: 1px solid var(--forge-border) !important;
+  border-radius: var(--forge-radius) !important;
+  box-shadow: var(--forge-shadow-card) !important;
+  transition: var(--forge-transition);
+}
+
+.card:hover, .starlight-card:hover {
+  border-color: var(--forge-border-hover) !important;
+  background: var(--forge-bg-card-hover) !important;
+  box-shadow: var(--forge-shadow-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* ── Astryx Admonitions & Callouts (Asides) ── */
+.starlight-aside {
+  border-radius: var(--forge-radius) !important;
+  border: 1px solid var(--forge-border) !important;
+  border-left-width: 4px !important;
+  padding: 1rem 1.25rem !important;
+  margin: 1.5rem 0 !important;
+}
+.starlight-aside--note {
+  border-left-color: var(--forge-primary) !important;
+  background: var(--forge-primary-bg) !important;
+}
+.starlight-aside--tip {
+  border-left-color: var(--forge-success) !important;
+  background: var(--forge-success-bg) !important;
+}
+.starlight-aside--caution {
+  border-left-color: var(--forge-warning) !important;
+  background: var(--forge-warning-bg) !important;
+}
+.starlight-aside--danger {
+  border-left-color: var(--forge-error) !important;
+  background: var(--forge-error-bg) !important;
+}
+
+/* ── Code Blocks (Expressive Code) ── */
+.expressive-code pre {
+  border: 1px solid var(--forge-border) !important;
+  border-radius: var(--forge-radius) !important;
+  background: var(--forge-bg-surface) !important;
+  font-family: var(--forge-font-mono) !important;
+}
+
+/* ── Astryx Markdown Typography & Headings ── */
+.sl-markdown-content h1 {
+  font-family: var(--forge-font-sans);
+  color: var(--forge-text-main);
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+.sl-markdown-content h2 {
+  font-family: var(--forge-font-sans);
+  color: var(--forge-text-main);
+  border-bottom: 1px solid var(--forge-border);
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+  font-weight: 600;
+}
+
+/* ── Astryx Data Tables ── */
+.sl-markdown-content table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--forge-border);
+  border-radius: var(--forge-radius);
+  overflow: hidden;
+  background: var(--forge-bg-card);
+  margin: 1.5rem 0;
+}
+
+.sl-markdown-content th {
+  background: var(--forge-bg-surface);
+  color: var(--forge-text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--forge-border);
+  text-align: left;
+}
+
+.sl-markdown-content td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--forge-border-subtle);
+  color: var(--forge-text-main);
+  font-size: 0.88rem;
+}
+
+.sl-markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+.sl-markdown-content tr:hover td {
+  background: var(--forge-bg-card-hover);
+}
+
+/* ── Astryx Floating Tooltip Overlay ── */
+.astryx-floating-tooltip {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  max-width: 280px;
+  background: var(--forge-bg-surface);
+  border: 1px solid var(--forge-border-medium);
+  border-radius: var(--forge-radius-sm);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-family: var(--forge-font-sans);
+  color: var(--forge-text-main);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateY(2px);
+}
+
+.astryx-floating-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.astryx-tooltip-title {
+  font-weight: 600;
+  color: var(--forge-primary);
+  margin-bottom: 2px;
+}
+
+/* ── Astryx Toast Overlay ── */
+.astryx-toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.astryx-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 260px;
+  max-width: 420px;
+  background: var(--forge-bg-surface);
+  border: 1px solid var(--forge-border-medium);
+  border-radius: var(--forge-radius);
+  padding: 10px 14px;
+  box-shadow: var(--forge-shadow-hover);
+  color: var(--forge-text-main);
+  font-size: 0.82rem;
+  font-family: var(--forge-font-sans);
+  animation: astryxToastIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes astryxToastIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive Viewport Containment ── */
+@media (max-width: 768px) {
+  .sidebar-pane {
+    max-width: 85vw;
+  }
+}
+
+/* ── Global Light Theme SVG Architecture Diagram Engine ── */
+[data-theme="light"] .astryx-svg-wrapper svg,
+[data-theme="light"] .diagram-svg-inner svg,
+[data-theme="light"] .sl-markdown-content figure svg {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.06)) !important;
+}
+
+/* 1. Generic Dark Card Fills -> Crisp Light Surfaces */
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#111827"],
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#0b0f19"],
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#171717"],
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#1f2937"],
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#121212"],
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#1c1c1c"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#111827"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#0b0f19"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#171717"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#1f2937"],
+[data-theme="light"] .sl-markdown-content figure svg rect[fill="#111827"] {
+  fill: #ffffff !important;
+  stroke: #e2e8f0;
+}
+
+/* 2. Generic White/Light Strokes -> Crisp Light Borders */
+[data-theme="light"] .astryx-svg-wrapper svg rect[stroke="rgba(255,255,255,0.1)"],
+[data-theme="light"] .astryx-svg-wrapper svg rect[stroke="rgba(255,255,255,0.08)"],
+[data-theme="light"] .astryx-svg-wrapper svg rect[stroke="rgba(255,255,255,0.06)"],
+[data-theme="light"] .diagram-svg-inner svg rect[stroke="rgba(255,255,255,0.1)"],
+[data-theme="light"] .diagram-svg-inner svg rect[stroke="rgba(255,255,255,0.08)"],
+[data-theme="light"] .sl-markdown-content figure svg rect[stroke="rgba(255,255,255,0.1)"] {
+  stroke: #e2e8f0 !important;
+}
+
+/* 3. Generic Light Text -> High Contrast Dark Text */
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#F3F4F6"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#f3f4f6"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#ffffff"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#FFFFFF"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#ededed"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#e0e7ff"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#f9fafb"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#d1d5db"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#F3F4F6"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#f3f4f6"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#ffffff"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#ededed"],
+[data-theme="light"] .sl-markdown-content figure svg text[fill="#F3F4F6"] {
+  fill: #0f172a !important;
+}
+
+/* 4. Generic Muted Gray Text -> High Contrast Secondary Text */
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#9CA3AF"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#9ca3af"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#8a8a8a"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#a1a1aa"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#9CA3AF"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#9ca3af"],
+[data-theme="light"] .sl-markdown-content figure svg text[fill="#9CA3AF"] {
+  fill: #475569 !important;
+}
+
+/* 5. Container Rectangles & Accents */
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#1E1B4B"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#1E1B4B"] {
+  fill: #eef2ff !important;
+  stroke: #818cf8 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#064E3B"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#064E3B"] {
+  fill: #ecfdf5 !important;
+  stroke: #10b981 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#164E63"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#164E63"] {
+  fill: #f0fdfa !important;
+  stroke: #06b6d4 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="#312E81"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="#312E81"] {
+  fill: #e0e7ff !important;
+  stroke: #818cf8 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#818CF8"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#A5B4FC"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#818CF8"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#A5B4FC"] {
+  fill: #4338ca !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#34D399"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#34D399"] {
+  fill: #047857 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#67E8F9"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#67E8F9"] {
+  fill: #0e7490 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#FBBF24"],
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#F59E0B"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#FBBF24"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#F59E0B"] {
+  fill: #b45309 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg text[fill="#EF4444"],
+[data-theme="light"] .diagram-svg-inner svg text[fill="#EF4444"] {
+  fill: #dc2626 !important;
+}
+[data-theme="light"] .astryx-svg-wrapper svg rect[fill="rgba(17,24,39,0.95)"],
+[data-theme="light"] .diagram-svg-inner svg rect[fill="rgba(17,24,39,0.95)"] {
+  fill: #ffffff !important;
+  stroke: #e2e8f0 !important;
+}
+
+/* 6. Splash Landing Page: Suppress default Starlight title panel */
+main:has(.docs-hero-container) > .content-panel:first-child,
+.main-pane:has(.docs-hero-container) > main > .content-panel:first-child {
+  display: none !important;
+}
+
+/* 7. Astryx Global Button Anti-Drift: Neutralize browser default link/visited colors */
+.sl-markdown-content a.btn-primary,
+.sl-markdown-content a.btn-primary:link,
+.sl-markdown-content a.btn-primary:visited {
+  color: var(--forge-primary-btn-text, #121212) !important;
+  text-decoration: none !important;
+}
+.sl-markdown-content a.btn-primary:hover,
+.sl-markdown-content a.btn-primary:active {
+  color: var(--forge-primary-btn-text, #121212) !important;
+}
+.sl-markdown-content a.btn-secondary,
+.sl-markdown-content a.btn-secondary:link,
+.sl-markdown-content a.btn-secondary:visited {
+  color: var(--forge-text-main) !important;
+  text-decoration: none !important;
+}
+.sl-markdown-content a.btn-secondary:hover,
+.sl-markdown-content a.btn-secondary:active {
+  color: var(--forge-primary) !important;
+}
+.sl-markdown-content a.btn-outline,
+.sl-markdown-content a.btn-outline:link,
+.sl-markdown-content a.btn-outline:visited {
+  color: var(--forge-text-muted) !important;
+  text-decoration: none !important;
+}
+.sl-markdown-content a.btn-outline:hover,
+.sl-markdown-content a.btn-outline:active {
+  color: var(--forge-text-main) !important;
+}

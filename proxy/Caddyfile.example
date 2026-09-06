@@ -1,0 +1,141 @@
+# ==============================================================================
+# SG Forge - Unified Reverse Proxy Gateway (Reference Template / Baseline)
+# 100% Air-Gapped & Zero-Trust Compliant (Zero External ACME Lookups)
+# NOTE: Active configuration is auto-generated into 'proxy/Caddyfile' via:
+#       'rtk bun scripts/generate-proxy.ts' or './run.sh sync-proxy'
+# ==============================================================================
+
+(forge_gateway) {
+    # Structured Logging
+    log {
+        output stdout
+        format console
+    }
+
+    # Global Air-Gapped Security & CSP Headers
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        X-XSS-Protection "0"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), camera=(), microphone=(), payment=()"
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+        -Server
+    }
+
+    # Intercept Upstream Service Outages & System Downtime (Astryx Static Error Fallback)
+    handle_errors {
+        root * /etc/caddy/errors
+        @has_custom_error file /{err.status_code}.html
+        handle @has_custom_error {
+            rewrite * /{err.status_code}.html
+            file_server
+        }
+        handle {
+            rewrite * /502.html
+            file_server
+        }
+    }
+
+    # Static Brand Assets & Direct Public Delivery (Zero Upstream Bun Overhead)
+    # Checks for git-ignored custom logo overrides before falling back to default
+    handle_path /brand* {
+        root * /etc/caddy/public/brand
+        @hasCustomLogo {
+            path /logo.png
+            file /custom-logo.png
+        }
+        rewrite @hasCustomLogo /custom-logo.png
+        file_server
+    }
+
+    # Main Workspace & Org Canvas (portal) [Role: Employee / Admin]
+    handle_path /portal* {
+        reverse_proxy http://portal:3001 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Prefix /portal
+        }
+    }
+
+    # Developer Dashboard (devcenter) [Role: Developer]
+    handle_path /devcenter* {
+        reverse_proxy http://dev-dashboard:3002 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Prefix /devcenter
+        }
+    }
+
+    # Developer Hub & SDK Playground (gateway) [Role: Developer]
+    handle_path /gateway* {
+        reverse_proxy http://dev-hub:3003 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Prefix /gateway
+        }
+    }
+
+    # Central Identity & Auth (auth) [Role: Public / OAuth]
+    handle_path /auth* {
+        reverse_proxy http://auth:3004 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Prefix /auth
+        }
+    }
+
+    # Expense Approval Engine (expenses) [Role: Finance / Manager]
+    handle_path /apps/expenses* {
+        reverse_proxy http://app-expenses:8085 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Prefix /apps/expenses
+        }
+    }
+
+    # Invoicing & Billing Service (billing) [Role: Finance]
+    handle_path /apps/billing* {
+        reverse_proxy http://app-billing:8086 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Prefix /apps/billing
+        }
+    }
+
+    # Live Telemetry Dashboard (telemetry) [Role: Public / Engineering]
+    handle_path /apps/telemetry* {
+        reverse_proxy http://app-telemetry:8087 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up X-Forwarded-Prefix /apps/telemetry
+        }
+    }
+
+    # Platform Hub (Landing) (landing) [Root Ingress]
+    handle {
+        reverse_proxy http://landing:3000 {
+            header_up Host {host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+}
+
+http://:80, http://:8080 {
+    import forge_gateway
+}
+
+https://:443, https://:8443 {
+    # Air-Gapped Enterprise Custom CA Certificate
+    tls /etc/caddy/certs/cert.pem /etc/caddy/certs/key.pem
+    import forge_gateway
+}

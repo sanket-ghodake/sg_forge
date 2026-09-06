@@ -1,0 +1,259 @@
+---
+/**
+ * @forge/docs - PlatformBentoGrid.astro
+ * Modern Bento grid showcasing SG Forge's 6 core architectural pillars.
+ * Fully responsive, dual-theme Astryx tokens, zero browser defaults.
+ * @requirements [SR-DOC-001] [HLR-UI-401]
+ */
+
+interface BentoPillar {
+  id: string;
+  title: string;
+  badge: string;
+  description: string;
+  href: string;
+  tags: string[];
+  iconSvg: string;
+}
+
+const pillars: BentoPillar[] = [
+  {
+    id: 'airgap',
+    title: 'Zero-Egress Air-Gapped Network',
+    badge: 'Security Invariant',
+    description: 'Core platform containers operate on internal bridge networks with zero outbound egress. Hardened Caddy reverse proxy strictly filters ingress with ASVS 5.0 security headers.',
+    href: '/docs/architecture/airgap/',
+    tags: ['Caddy 2', 'Zero-Egress', 'ASVS 5.0', 'CSP WASM'],
+    iconSvg: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  },
+  {
+    id: 'database',
+    title: 'Multi-Tenant Dedicated Turso DB',
+    badge: 'Data Sovereignty',
+    description: 'Each micro-app maintains its own isolated libSQL SQLite database instance. Microservices never query another app’s tables, eliminating cross-tenant leakage by design.',
+    href: '/docs/architecture/database/',
+    tags: ['Turso libSQL', 'Drizzle ORM', 'Per-App Isolation', 'AES-256 Backups'],
+    iconSvg: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
+  },
+  {
+    id: 'auth',
+    title: 'Zero-Trust Identity & RBAC',
+    badge: 'Auth Engine',
+    description: 'Centralized authentication powered by Argon2id password hashing, constant-time HMAC-SHA256 signatures, sliding session renewal, and HTTP-only SameSite cookies.',
+    href: '/docs/features/auth-session/',
+    tags: ['Argon2id', 'HMAC-SHA256', 'Sliding Renewal', 'RBAC Guard'],
+    iconSvg: '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  },
+  {
+    id: 'ui',
+    title: 'Astryx Universal UI System',
+    badge: 'Design Standard',
+    description: 'Strict 100% dark/light theme parity with custom tokens. Zero browser defaults: slim scrollbars, toast notifications, and viewport collision-detecting tooltips and menus.',
+    href: '/docs/features/astryx-ui/',
+    tags: ['Astryx', '@forge/ui', 'Dual-Theme', 'Zero OS Defaults'],
+    iconSvg: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+  },
+  {
+    id: 'submodules',
+    title: 'Autonomous Forge Submodules',
+    badge: 'Micro-App Architecture',
+    description: 'Decoupled microservices (Cloud VS Code, Live Telemetry) operating as autonomous submodules with isolated Dockerfiles, local agent rules, and independent egress control.',
+    href: '/docs/submodules/architecture/',
+    tags: ['Git Submodules', 'Microservices', 'Cloud Code', 'Live Telemetry'],
+    iconSvg: '<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  },
+  {
+    id: 'traceability',
+    title: '100% Systems Traceability Engine',
+    badge: 'Living Documentation',
+    description: 'Continuous bidirectional linkage from business requirements (SR) through high-level (HLR) and low-level (LLR) specifications directly to verified code symbols and 5-tier tests.',
+    href: '/docs/traceability/matrix/',
+    tags: ['TypeScript AST', 'Bidirectional', 'SR -> HLR -> LLR', '5-Tier Tests'],
+    iconSvg: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/>',
+  },
+];
+---
+
+<div class="bento-section-wrapper">
+  <div class="section-header">
+    <span class="section-eyebrow">Platform Pillars</span>
+    <h2 class="section-title">Engineered for Extreme Reliability</h2>
+    <p class="section-desc">
+      Every component in SG Forge is built to strict Enterprise SRE and AppSec standards, guaranteeing resilience, isolation, and operational transparency.
+    </p>
+  </div>
+
+  <div class="bento-grid">
+    {pillars.map((p) => (
+      <a href={p.href} class={`bento-card card-${p.id}`} data-astryx-tooltip={`Read detailed specifications for ${p.title}`}>
+        <div class="card-top">
+          <div class="card-icon" set:html={`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.iconSvg}</svg>`} />
+          <span class="pillar-badge">{p.badge}</span>
+        </div>
+        <h3 class="pillar-title">{p.title}</h3>
+        <p class="pillar-desc">{p.description}</p>
+        <div class="card-footer">
+          <div class="pillar-tags">
+            {p.tags.map((t) => (
+              <span class="tag-pill">{t}</span>
+            ))}
+          </div>
+          <span class="explore-arrow">&rarr;</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .bento-section-wrapper {
+    margin: 3.5rem 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .section-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--forge-primary, #3ecf8e);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--forge-text-main, #ededed);
+    margin: 0 0 0.75rem 0;
+    border-bottom: none !important;
+  }
+
+  .section-desc {
+    font-size: 0.95rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .bento-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    border-radius: var(--forge-radius, 8px);
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: var(--forge-transition, all 0.15s ease);
+    box-shadow: var(--forge-shadow-card, 0 1px 2px rgba(0, 0, 0, 0.4));
+  }
+
+  .bento-card:hover {
+    border-color: var(--forge-primary, #3ecf8e);
+    background: var(--forge-bg-card-hover, #232323);
+    box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--forge-primary, #3ecf8e);
+    transform: translateY(-2px);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .card-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--forge-radius, 8px);
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    color: var(--forge-primary, #3ecf8e);
+  }
+
+  .pillar-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--forge-text-muted, #8a8a8a);
+    background: var(--forge-bg-surface, #171717);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--forge-radius-full, 9999px);
+    border: 1px solid var(--forge-border, #282828);
+  }
+
+  .pillar-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--forge-text-main, #ededed);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.015em;
+  }
+
+  .pillar-desc {
+    font-size: 0.85rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    line-height: 1.5;
+    flex-grow: 1;
+    margin: 0 0 1.25rem 0;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--forge-border, #282828);
+  }
+
+  .pillar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .tag-pill {
+    font-size: 0.68rem;
+    font-family: var(--forge-font-mono, monospace);
+    color: var(--forge-text-muted, #8a8a8a);
+    background: var(--forge-bg-surface, #171717);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--forge-radius-sm, 4px);
+    border: 1px solid var(--forge-border, #282828);
+  }
+
+  .explore-arrow {
+    color: var(--forge-primary, #3ecf8e);
+    font-size: 1.1rem;
+    transition: transform 0.15s ease;
+  }
+
+  .bento-card:hover .explore-arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 960px) {
+    .bento-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .bento-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

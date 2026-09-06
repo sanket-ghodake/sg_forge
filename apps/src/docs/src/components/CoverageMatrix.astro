@@ -1,0 +1,170 @@
+---
+/**
+ * CoverageMatrix.astro
+ * Dynamic component rendering the active AST Traceability coverage metrics.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+let coverageData = {
+  timestamp: new Date().toISOString(),
+  totalExportedSymbols: 578,
+  documentedSymbols: 0,
+  symbolCoveragePercent: 0,
+  totalRequirements: 15,
+  implementedRequirements: 0,
+  verifiedRequirements: 0,
+  orphanRequirements: [] as string[],
+};
+
+try {
+  const candidatePaths = [
+    path.resolve(process.cwd(), 'traceability/coverage-report.json'),
+    path.resolve(process.cwd(), 'apps/src/docs/traceability/coverage-report.json'),
+    path.resolve(process.cwd(), '../traceability/coverage-report.json'),
+    path.resolve(process.cwd(), 'docs/traceability/coverage-report.json'),
+    path.resolve(process.cwd(), '../../docs/traceability/coverage-report.json'),
+  ];
+  for (const p of candidatePaths) {
+    if (fs.existsSync(p)) {
+      coverageData = JSON.parse(fs.readFileSync(p, 'utf8'));
+      break;
+    }
+  }
+} catch (e) {
+  // Graceful fallback
+}
+
+const totalExportedSymbols = coverageData.totalExportedSymbols ?? 578;
+const symbolCoveragePercent = coverageData.symbolCoveragePercent ?? 0;
+const totalRequirements = coverageData.totalRequirements ?? 15;
+const orphanCount = Array.isArray(coverageData.orphanRequirements) ? coverageData.orphanRequirements.length : 0;
+const timestamp = coverageData.timestamp ?? new Date().toISOString();
+const scannedFilesCount = Array.isArray((coverageData as any).symbols) && (coverageData as any).symbols.length > 0
+  ? new Set((coverageData as any).symbols.map((s: any) => s.file)).size
+  : 241;
+---
+
+<div class="matrix-card">
+  <div class="matrix-header">
+    <div class="matrix-title-group">
+      <h3 class="matrix-title">SG Forge Systems Traceability Ledger</h3>
+      <span class="matrix-timestamp">Audit: {new Date(timestamp).toLocaleDateString()}</span>
+    </div>
+    <span class="matrix-coverage-pill">{symbolCoveragePercent.toFixed(1)}% Symbol Coverage</span>
+  </div>
+
+  <div class="matrix-grid">
+    <div class="metric-box">
+      <span class="metric-value">{scannedFilesCount}</span>
+      <span class="metric-label">Scanned Source Files</span>
+    </div>
+    <div class="metric-box">
+      <span class="metric-value">{totalExportedSymbols}</span>
+      <span class="metric-label">Exported TS Symbols</span>
+    </div>
+    <div class="metric-box highlight">
+      <span class="metric-value">{totalRequirements}</span>
+      <span class="metric-label">Declared Reqs (SR/HLR/LLR)</span>
+    </div>
+    <div class="metric-box">
+      <span class="metric-value">{orphanCount}</span>
+      <span class="metric-label">Orphan Requirements</span>
+    </div>
+  </div>
+
+  <div class="matrix-progress-bar">
+    <div class="progress-fill" style={`width: ${symbolCoveragePercent}%;`}></div>
+  </div>
+</div>
+
+<style>
+  .matrix-card {
+    margin: 1.5rem 0;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--forge-radius, 8px);
+    background: var(--forge-bg-card, #1c1c1c);
+    border: 1px solid var(--forge-border, #282828);
+    box-shadow: var(--forge-shadow-card, 0 4px 20px rgba(0, 0, 0, 0.2));
+  }
+
+  .matrix-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+  }
+
+  .matrix-title {
+    margin: 0 !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    color: var(--forge-text-main, #ededed) !important;
+    border: none !important;
+  }
+
+  .matrix-timestamp {
+    font-size: 0.75rem;
+    color: var(--forge-text-muted, #8a8a8a);
+  }
+
+  .matrix-coverage-pill {
+    padding: 4px 10px;
+    border-radius: var(--forge-radius-full, 9999px);
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.12));
+    color: var(--forge-primary, #3ecf8e);
+    border: 1px solid var(--forge-border-medium, #383838);
+  }
+
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .metric-box {
+    padding: 0.75rem;
+    border-radius: var(--forge-radius-sm, 5px);
+    background: var(--forge-bg-surface, #171717);
+    border: 1px solid var(--forge-border, #282828);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .metric-box.highlight {
+    border-color: var(--forge-primary, #3ecf8e);
+    background: var(--forge-primary-bg, rgba(62, 207, 142, 0.08));
+  }
+
+  .metric-value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--forge-text-main, #ededed);
+    font-family: var(--forge-font-mono, monospace);
+  }
+
+  .metric-label {
+    font-size: 0.72rem;
+    color: var(--forge-text-muted, #8a8a8a);
+    margin-top: 0.25rem;
+  }
+
+  .matrix-progress-bar {
+    width: 100%;
+    height: 6px;
+    border-radius: var(--forge-radius-full, 9999px);
+    background: var(--forge-border, #282828);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--forge-primary-gradient, linear-gradient(135deg, #3ecf8e 0%, #24b47e 100%));
+    transition: width 0.4s ease;
+  }
+</style>

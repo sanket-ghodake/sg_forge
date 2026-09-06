@@ -1,0 +1,50 @@
+---
+title: Portal Canvas, Command Palette & Inbox
+description: Detailed architectural breakdown of the 2D interactive Org Canvas, global command palette, real-time inbox notifications, and admin console.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="The Modern Enterprise Digital Workplace"
+  analogy="The SG Forge Portal serves as the primary command console for employees and administrators: bringing an interactive 2D map of the organization, instant keyboard navigation, and real-time alert triage into a single fluid workspace."
+  impact="Delivers sub-16ms view transitions, zero full-page reloads, and responsive desktop-to-mobile ergonomics down to 320px."
+/>
+
+<TraceabilityBadge reqId="SR-UI-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+<TraceabilityBadge reqId="HLR-PORTAL-202" type="HLR" status="verified" />
+
+## 1. Portal Workspace Architecture
+
+The **SG Forge Portal** (`@forge/portal`) operates on internal port `:3001` (proxied at `/portal`). It hosts 9 modular SPA views, the global keyboard navigation engine, and sandboxed micro-app iframes.
+
+<DiagramEmbed 
+  diagram="portal-canvas" 
+  title="Portal Canvas, Command Palette &amp; Inbox Architecture" 
+  caption="Visual architecture showing the Top Navigation Shell, 2D Org Canvas, Command Palette, and Universal Inbox."
+/>
+
+## 2. Key Subsystems & Ergonomics
+
+### 1. Global Command Palette (`⌘K` / `Ctrl+K`)
+- Omnipresent fuzzy-search modal accessible anywhere in the application.
+- Supports keyboard navigation (Arrow Up/Down, Enter, Escape) to jump instantaneously to views, search team members, launch micro-apps, or trigger administrative actions.
+- Automatically synchronizes with the active user's RBAC role to prevent unauthorized command execution.
+
+### 2. 2D Interactive Semantic Org Canvas (`ui-canvas-views.ts`)
+- High-performance vector canvas visualizing the organization's polymorphic hierarchy (Divisions, Departments, Squads, Employees).
+- Interactive drag-and-zoom controls with materialized path calculations.
+- Clicking any node opens the **Canvas Inspector** (`ui-canvas-inspector.ts`), displaying department metadata, direct reports, upward management chain, and assigned micro-apps.
+
+### 3. Universal Notification Inbox (`inbox-service.ts`)
+- Multi-channel notification center with unread count badges in the header bar.
+- Streams operational alerts, task assignments, security warnings, and automated backup confirmations.
+- Supports 1-click action drawers, item dismissal, and cross-tab state synchronization.
+
+### 4. Admin Console & Governance (`ui-admin-*.ts`)
+- **Member Management**: Role assignment (`super_admin`, `admin`, `manager`, `user`), status toggling, and department assignment.
+- **App Permissions**: Fine-grained per-role and per-organization micro-app access control.
+- **Audit Center**: Real-time event log with user IDs, timestamps, IP addresses, and RFC 7807 trace correlation.

@@ -1,0 +1,17 @@
+---
+title: Forge Telemetry Micro-App (forge-apps/telemetry)
+description: Autonomous performance monitoring, metrics aggregation, and health probe collector.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+## 1. Micro-App Overview
+
+* **Repository**: `forge-apps/telemetry` (Git Submodule)
+* **Port**: `3011` (Internal Ingress)
+* **Database**: Local Turso SQLite instance (`forge-apps/telemetry/data/telemetry.db`)
+
+## 2. Requirements & Verification
+
+* <TraceabilityBadge reqId="HLR-TEL-001" type="HLR" status="verified" /> Dual-Probe Health Aggregation
+* <TraceabilityBadge reqId="LLR-TEL-001.1" type="LLR" status="verified" /> Rolling Timeseries Metric Pruning

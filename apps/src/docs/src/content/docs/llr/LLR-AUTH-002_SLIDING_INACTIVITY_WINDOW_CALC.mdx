@@ -1,0 +1,30 @@
+---
+title: LLR-AUTH-002 - Sliding Inactivity Window Calculation & Renewal Bounds
+description: Low-level requirement defining session idle timeout and absolute lifetime ceiling calculation.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Read session claims: iat (issued-at), lastActive (epoch ms), and exp (expiration)
+2. Compute idle duration = current_time - lastActive
+3. Enforce idle limit: if idle duration > INACTIVITY_TIMEOUT (default 300s), terminate session
+4. Enforce hard ceiling: if current_time - iat > MAX_LIFETIME (default 604800s), reject renewal
+5. If within bounds and idle > renewal_threshold, issue refreshed JWT cookie with updated lastActive
+
+## 2. Safety & Verification Invariants
+
+* **INACTIVITY_TIMEOUT must be bounded within [300s, 3600s]**
+* **MAX_LIFETIME must not exceed 7 days (604800s)**
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/auth/src/session.ts`
+* **Verified in Test Suite**: `apps/src/auth/test/integration/session-lifecycle.test.ts`

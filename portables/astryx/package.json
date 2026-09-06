@@ -1,0 +1,10 @@
+{
+  "name": "portable-astryx",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone Portable Astryx Design System Tooling",
+  "type": "module",
+  "dependencies": {
+    "astryx": "^0.0.0"
+  }
+}
