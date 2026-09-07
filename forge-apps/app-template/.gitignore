@@ -1,0 +1,33 @@
+# Dependencies & Package Managers
+node_modules/
+dist/
+build/
+out/
+.cache/
+*.tsbuildinfo
+
+# Submodule Environment & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+
+# Submodule Local Database & Transients
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/*.sqlite
+data/*.sqlite3
+
+# Submodule Local Logs & Backups
+logs/*.log
+backups/
+
+# Operating System & IDE Transients
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

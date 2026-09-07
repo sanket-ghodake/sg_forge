@@ -1,0 +1,48 @@
+# ==============================================================================
+# Standalone Forge App Compose: Cloud VS Code (Managed Egress Exception)
+# Invariant: internal: false -> Outbound internet access permitted for GitHub & remotes.
+# Usage: docker compose up --build -d
+# ==============================================================================
+name: forge-app-code
+
+networks:
+  # 1. Managed Egress Network (Permits outbound HTTPS to GitHub API & package registries)
+  code-egress-net:
+    driver: bridge
+    internal: false
+
+  # 2. Reverse-Proxy Gateway Mesh (Inbound routing from Caddy proxy)
+  forge-gateway-net:
+    name: ${CONTAINER_PREFIX:-ag}_forge_apps_net
+    external: true
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: ${CONTAINER_PREFIX:-ag}-app-code-dev
+    ports:
+      - "8088:8088"
+    environment:
+      - PORT=8088
+      - NODE_ENV=development
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ${CODE_WORKSPACE_DIR:-/home}:/home:rw
+    networks:
+      code-egress-net:
+      forge-gateway-net:
+        aliases:
+          - app-code
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8088/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

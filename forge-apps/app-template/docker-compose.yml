@@ -1,0 +1,45 @@
+# ==============================================================================
+# Standalone Forge App Compose: App Template (Air-Gapped by Default)
+# Invariant: internal: true -> ZERO outbound internet egress. Inbound via proxy.
+# Usage: docker compose up --build -d
+# ==============================================================================
+name: forge-app-template
+
+networks:
+  # 1. Isolated Application Network (Strict Air-Gap: No default gateway to internet)
+  app-airgap-net:
+    driver: bridge
+    internal: true
+
+  # 2. Reverse-Proxy Gateway Mesh (Inbound routing from Caddy proxy only)
+  forge-gateway-net:
+    name: ${CONTAINER_PREFIX:-ag}_forge_apps_net
+    external: true
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: ${CONTAINER_PREFIX:-ag}-app-template-dev
+    ports:
+      - "8099:8099"
+    environment:
+      - PORT=8099
+      - NODE_ENV=development
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      app-airgap-net:
+      forge-gateway-net:
+        aliases:
+          - app-template
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8099/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

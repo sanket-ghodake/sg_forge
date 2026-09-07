@@ -1,0 +1,20 @@
+{
+  "name": "@forge-apps/telemetry",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/server.ts",
+    "start": "bun src/server.ts",
+    "test": "bun test",
+    "verify": "bun run scripts/verify-gate.ts",
+    "backup": "bun run scripts/backup-db.ts",
+    "build": "docker build -f docker/Dockerfile -t forge-app-telemetry ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "license": "Apache-2.0",
+  "author": "Sanket Ghodake <sanketghodke03@gmail.com>"
+}

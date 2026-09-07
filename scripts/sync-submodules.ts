@@ -30,12 +30,14 @@ function syncSubmodules(): void {
     const appPath = join(FORGE_APPS_DIR, app);
     const gitDir = join(appPath, '.git');
 
-    // 1. Ensure local git repository initialized
-    if (!existsSync(gitDir)) {
-      console.log(`📦 [${app}] Initializing local git repository...`);
-      execSync('git init', { cwd: appPath, stdio: 'pipe' });
-    } else {
-      console.log(`✅ [${app}] Git repository active.`);
+    // 1. Ensure local git repository initialized (only if standalone submodule mode requested)
+    if (process.argv.includes('--standalone-repos')) {
+      if (!existsSync(gitDir)) {
+        console.log(`📦 [${app}] Initializing local git repository...`);
+        execSync('git init', { cwd: appPath, stdio: 'pipe' });
+      } else {
+        console.log(`✅ [${app}] Git repository active.`);
+      }
     }
 
     // 2. Ensure executable permissions on run.sh and hooks

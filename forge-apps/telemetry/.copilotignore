@@ -1,0 +1,10 @@
+node_modules/
+dist/
+build/
+.cache/
+data/*.db
+data/*.db-*
+logs/*.log
+.env
+.env.*
+!.env.example
