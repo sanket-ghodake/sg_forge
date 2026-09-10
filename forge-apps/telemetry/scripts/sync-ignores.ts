@@ -7,7 +7,7 @@
 import { existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const APP_ROOT = process.cwd();
+const APP_ROOT = join(import.meta.dir, '..');
 
 const IGNORE_PATTERNS = `# Dependencies & Package Managers
 node_modules/
@@ -32,8 +32,18 @@ data/*.db-shm
 data/*.sqlite
 data/*.sqlite3
 
-# Submodule Local Logs
+# Submodule Local Logs (transient logs ignored; ledgers and worklogs tracked)
 logs/*.log
+logs/*.jsonl.bak
+logs/token-ledger-backup.jsonl
+
+# AI Context, Token & Compression Tooling
+.graftignore
+/graft/
+.codeburn/
+codeburn-*.json
+.headroom/
+headroom-*.json
 
 # Operating System & IDE Transients
 .DS_Store
@@ -53,12 +63,16 @@ data
 .env
 .env.*
 !.env.example
+/graft
+.codeburn
+.headroom
 `;
 
 const GIT_ATTRIBUTES_CONTENT = `* text=auto eol=lf
 *.ts text eol=lf
 *.js text eol=lf
 *.json text eol=lf
+*.jsonl text eol=lf
 *.md text eol=lf
 *.sh text eol=lf
 *.bat text eol=crlf

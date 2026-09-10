@@ -43,6 +43,15 @@ case "$CMD" in
             echo "🧩 [${BRAND_NAME}] Synchronizing autonomous Git submodules..."
             git submodule update --init --recursive 2>/dev/null || true
         fi
+        # Initialize Graft Tier 1 code context graph if not already built
+        if [ ! -d "$REPO_ROOT/graft" ]; then
+            echo "🌿 [${BRAND_NAME}] Initializing Graft Tier 1 code context graph..."
+            "$REPO_ROOT/portables/bin/graft" build 2>/dev/null || true
+        fi
+        # Initialize lifetime token ledger if missing
+        if [ ! -f "$REPO_ROOT/logs/token-ledger.jsonl" ]; then
+            touch "$REPO_ROOT/logs/token-ledger.jsonl"
+        fi
         echo "✨ Setup completed successfully! Run './run.sh dev' or './run.sh docker up' to start."
         ;;
 

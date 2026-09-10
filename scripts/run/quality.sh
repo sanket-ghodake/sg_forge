@@ -107,6 +107,31 @@ case "$CMD" in
         "$REPO_ROOT/portables/bin/repomix" "$@"
         ;;
 
+    graft)
+        "$REPO_ROOT/portables/bin/graft" "$@"
+        ;;
+
+    tokens|codeburn)
+        ACTION="${1:-}"
+        case "$ACTION" in
+            tui)
+                shift || true
+                "$REPO_ROOT/portables/bin/codeburn" "$@"
+                ;;
+            sync)
+                shift || true
+                $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-tokens.ts" "$@"
+                ;;
+            *)
+                $PORTABLE_BUN run "$REPO_ROOT/scripts/display-tokens.ts" "$@"
+                ;;
+        esac
+        ;;
+
+    headroom)
+        "$REPO_ROOT/portables/bin/headroom" "$@"
+        ;;
+
     diagram:lint|diagram-lint)
         python3 "$REPO_ROOT/scripts/diagrams/self_check.py" "$@"
         ;;

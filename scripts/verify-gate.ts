@@ -92,7 +92,7 @@ function getAllFiles(dir: string, extFilter: string[] = ['.ts', '.tsx', '.js', '
   for (const entry of entries) {
     const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (!['node_modules', '.git', '.next', '.astro', 'dist', 'graphify-out', 'portables', '.agents', 'logs', '.cache', 'diagrams', 'traceability'].includes(entry.name)) {
+      if (!['node_modules', '.git', '.next', '.astro', 'dist', 'graphify-out', 'graft', 'portables', '.agents', 'logs', '.cache', 'diagrams', 'traceability'].includes(entry.name)) {
         files = files.concat(getAllFiles(fullPath, extFilter));
       }
     } else if (extFilter.some((ext) => entry.name.endsWith(ext))) {

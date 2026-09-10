@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Wrapper for Headroom (Context & Prompt Compression Engine)
+# Zero Host Modification - Enterprise Clean Architecture (2026 LTS)
+# ==============================================================================
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+# Enterprise privacy & telemetry suppression
+export HEADROOM_TELEMETRY=0
+export DO_NOT_TRACK=1
+
+VENV_HEADROOM="$WORKSPACE_ROOT/.venv/bin/headroom"
+SYS_HEADROOM="$(which -a headroom 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+PORTABLE_BUN="$WORKSPACE_ROOT/portables/bun/bin/bun"
+HEADROOM_RUNNER="$WORKSPACE_ROOT/scripts/headroom-runner.ts"
+
+if [ -f "$VENV_HEADROOM" ] && [ -x "$VENV_HEADROOM" ]; then
+    exec "$VENV_HEADROOM" "$@"
+elif [ -n "$SYS_HEADROOM" ] && [ -x "$SYS_HEADROOM" ]; then
+    exec "$SYS_HEADROOM" "$@"
+elif [ -x "$WORKSPACE_ROOT/.venv/bin/python3" ] && "$WORKSPACE_ROOT/.venv/bin/python3" -c "import headroom" 2>/dev/null; then
+    exec "$WORKSPACE_ROOT/.venv/bin/python3" -m headroom "$@"
+elif command -v python3 >/dev/null 2>&1 && python3 -c "import headroom" 2>/dev/null; then
+    exec python3 -m headroom "$@"
+elif [ -f "$HEADROOM_RUNNER" ]; then
+    if [ -x "$PORTABLE_BUN" ]; then
+        exec "$PORTABLE_BUN" run "$HEADROOM_RUNNER" "$@"
+    elif command -v bun >/dev/null 2>&1; then
+        exec bun run "$HEADROOM_RUNNER" "$@"
+    fi
+else
+    echo "❌ [headroom] Neither local headroom, python headroom module, nor headroom runner was found." >&2
+    exit 1
+fi

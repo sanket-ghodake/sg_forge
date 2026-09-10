@@ -1,23 +1,18 @@
-# ==============================================================================
-# SG Forge Submodule - Git Attributes & Cross-Platform Line Endings (2026 LTS)
-# ==============================================================================
-
-# Auto-detect text files and normalize line endings to LF
 * text=auto eol=lf
-
-# Force LF on shell scripts and containers (prevents \r\n interpreter crashes)
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.md text eol=lf
 *.sh text eol=lf
-*.bash text eol=lf
-Dockerfile* text eol=lf
-docker-compose*.yml text eol=lf
-
-# Force CRLF on Windows batch files
 *.bat text eol=crlf
-*.cmd text eol=crlf
-
-# Binary assets
-*.db binary
-*.sqlite binary
+*.yml text eol=lf
+*.yaml text eol=lf
 *.png binary
 *.jpg binary
+*.jpeg binary
 *.ico binary
+*.svg text eol=lf
+*.db binary
+*.db-shm binary
+*.db-wal binary

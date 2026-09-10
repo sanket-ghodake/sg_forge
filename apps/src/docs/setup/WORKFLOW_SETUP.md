@@ -86,13 +86,17 @@ All code analysis, benchmarking, design system, and token optimization tools are
 
 | Tool | Purpose | Executable Path | Execution Example |
 | :--- | :--- | :--- | :--- |
-| **`scc`** | Code Statistics & Language Breakdown | `./portables/bin/scc` | `./portables/bin/scc .` |
-| **`lizard`** | Cyclomatic Complexity Analyzer (CCN ≤ 10) | `./portables/bin/lizard` | `./portables/bin/lizard -C 10 core/ packages/` |
-| **`tree`** | Project Hierarchy Visualizer | `./portables/bin/tree` | `./portables/bin/tree -L 3` |
-| **`hyperfine`** | Build & Test Benchmarker | `./portables/bin/hyperfine` | `./portables/bin/hyperfine 'bun test test/unit'` |
-| **`ctop`** | Real-Time Container Resource Telemetry | `./portables/bin/ctop` | `./run.sh top` |
-| **`astryx`** | Meta Design System CLI | `./portables/bin/astryx` | `./portables/bin/astryx status` |
-| **`caveman`** | Token Compression CLI | `./portables/bin/caveman` | `./portables/bin/caveman status` |
+| [**`scc`**](https://github.com/boyter/scc) | Code Statistics & Language Breakdown | `./portables/bin/scc` | `./portables/bin/scc .` |
+| [**`lizard`**](https://github.com/terryyin/lizard) | Cyclomatic Complexity Analyzer (CCN ≤ 10) | `./portables/bin/lizard` | `./portables/bin/lizard -C 10 core/ packages/` |
+| [**`tree`**](https://github.com/Old-Man-Programmer/tree) | Project Hierarchy Visualizer | `./portables/bin/tree` | `./portables/bin/tree -L 3` |
+| [**`hyperfine`**](https://github.com/sharkdp/hyperfine) | Build & Test Benchmarker | `./portables/bin/hyperfine` | `./portables/bin/hyperfine 'bun test test/unit'` |
+| [**`ctop`**](https://github.com/bcicen/ctop) | Real-Time Container Resource Telemetry | `./portables/bin/ctop` | `./run.sh top` |
+| [**`astryx`**](../../ui) | Meta Design System CLI | `./portables/bin/astryx` | `./portables/bin/astryx status` |
+| [**`caveman`**](../../../../portables/caveman) | Token Compression CLI | `./portables/bin/caveman` | `./portables/bin/caveman status` |
+| [**`graphify`**](https://github.com/safishamsi/graphify) | Architecture & Knowledge Graph Engine | `./portables/bin/graphify` | `./run.sh graphify` |
+| [**`graft`**](https://github.com/trailhq/Graft) | Code Context & Symbol Dependency Graph | `./portables/bin/graft` | `./run.sh graft map` |
+| [**`codeburn`**](https://github.com/getagentseal/codeburn) | Lifetime AI Token & Spend Tracker | `./portables/bin/codeburn` | `./run.sh tokens` |
+| [**`headroom`**](https://github.com/headroomlabs-ai/headroom) | Context & Prompt Compression Engine | `./portables/bin/headroom` | `./run.sh headroom status` |
 
 ### Tooling Execution Examples:
 
@@ -108,6 +112,10 @@ All code analysis, benchmarking, design system, and token optimization tools are
 
 # 4. Command Benchmark
 ./portables/bin/hyperfine --runs 3 './portables/bin/scc .'
+
+# 5. Symbol Callers & API Skeletons (Graft)
+./run.sh graft callers <symbol>
+./run.sh graft skeleton <path/to/file.ts>
 ```
 
 

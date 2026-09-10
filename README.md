@@ -49,11 +49,11 @@ run.bat dev
 * **[Living Documentation Portal (`@forge/docs`)](apps/src/docs/README.md)**: Unified living documentation portal powered by Astro Starlight and Pagefind.
 * **[Visual Architecture Atlas (Non-Technical)](apps/src/docs/src/content/docs/executive/visual-atlas.mdx)**: Intuitive visual architecture guide designed for executives, product managers, and non-technical stakeholders.
 * **[Organization Deployment & Quickstart Guide](apps/src/docs/src/content/docs/operations/deployment-quickstart.mdx)**: Production deployment instructions, `.env` configuration, port mapping, and operational commands.
-* **[Portable Open-Source Toolchain Manual](apps/src/docs/tools/PORTABLE_TOOLCHAIN.md)**: Complete guide to Gitleaks, Biome, Knip, Autocannon, Repomix, SCC, RTK, and Astryx CLI.
+* **[Portable Open-Source Toolchain Manual](apps/src/docs/tools/PORTABLE_TOOLCHAIN.md)**: Complete guide to Gitleaks, Biome, Knip, Autocannon, Repomix, SCC, RTK, Graft, and Astryx CLI.
 * **[Developer Workflow & Testing Guide](apps/src/docs/setup/WORKFLOW_SETUP.md)**: Daily developer workflows, 5-tier testing pyramid, and engineering standards.
 * **[Security & Zero-Trust Architecture](apps/src/docs/security/README.md)**: Zero-trust iframe sandboxing, scoped JWT tokens, supply chain defense, and ASVS 5.0 invariants.
 * **[API Contracts & SDK Specifications](apps/src/docs/api/README.md)**: OpenAPI 3.1 specifications, SDK bridge, and multi-app integration contracts.
-* **[Zero-Host Portable Setup Guide](apps/src/docs/setup/PORTABLE_SETUP.md)**: Cross-platform portable runtimes (`bun`, `rtk`, `astryx`, `caveman`).
+* **[Zero-Host Portable Setup Guide](apps/src/docs/setup/PORTABLE_SETUP.md)**: Cross-platform portable runtimes (`bun`, `rtk`, `astryx`, `graft`, `caveman`).
 
 ---
 
@@ -87,7 +87,7 @@ run.bat dev
 │   └── Caddyfile
 │
 ├── portables/                     # 🧰 Standalone FOSS Runtimes (Zero Host Modification)
-│   ├── bin/                       # gitleaks, biome, knip, hadolint, autocannon, repomix, scc, rtk, astryx
+│   ├── bin/                       # gitleaks, biome, knip, hadolint, autocannon, repomix, scc, rtk, astryx, graft, codeburn, headroom
 │   └── bun/                       # Portable Bun v1.3.14 (LTS 2026)
 │
 ├── run.sh                         # ⚡ Linux / macOS / WSL2 Orchestration CLI

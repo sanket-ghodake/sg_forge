@@ -21,9 +21,18 @@ data/*.db-shm
 data/*.sqlite
 data/*.sqlite3
 
-# Submodule Local Logs & Backups
+# Submodule Local Logs (transient logs ignored; ledgers and worklogs tracked)
 logs/*.log
-backups/
+logs/*.jsonl.bak
+logs/token-ledger-backup.jsonl
+
+# AI Context, Token & Compression Tooling
+.graftignore
+/graft/
+.codeburn/
+codeburn-*.json
+.headroom/
+headroom-*.json
 
 # Operating System & IDE Transients
 .DS_Store

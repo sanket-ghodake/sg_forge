@@ -70,6 +70,31 @@ case "$CMD" in
     echo "🐳 Running standalone Docker Compose (${*:-up -d})..."
     exec docker compose "${@:-up -d}"
     ;;
+  graft)
+    echo "🧠 Running Graft Code Context Graph..."
+    exec "$DIR/portables/bin/graft" "$@"
+    ;;
+  tokens)
+    SUB_CMD="${1:-dashboard}"
+    shift || true
+    case "$SUB_CMD" in
+      sync)
+        exec "$BUN_BIN" run scripts/sync-tokens.ts "$@"
+        ;;
+      tui)
+        exec "$DIR/portables/bin/codeburn" "$@"
+        ;;
+      dashboard|*)
+        exec "$BUN_BIN" run scripts/display-tokens.ts "$@"
+        ;;
+    esac
+    ;;
+  headroom)
+    exec "$DIR/portables/bin/headroom" "$@"
+    ;;
+  worklog)
+    exec "$BUN_BIN" run scripts/append-worklog.ts "$@"
+    ;;
   setup-hooks)
     echo "⚓ Configuring Git hooks (.githooks)..."
     git config core.hooksPath .githooks
@@ -81,15 +106,19 @@ case "$CMD" in
 SG Forge Autonomous Micro-App Submodule CLI
 
 Usage:
-  ./run.sh dev           Start local server in hot-reload watch mode
-  ./run.sh start         Start server in production mode
-  ./run.sh test          Execute local 5-tier test suites
-  ./run.sh verify        Run quality verification gate (18 checks)
-  ./run.sh backup        Run isolated database snapshot (VACUUM INTO)
-  ./run.sh compose [cmd] Run standalone docker compose (e.g. up -d, down)
-  ./run.sh build         Build standalone Docker container image
-  ./run.sh setup-hooks   Activate git hooks (.githooks)
-  ./run.sh help          Show this banner
+  ./run.sh dev            Start local server in hot-reload watch mode
+  ./run.sh start          Start server in production mode
+  ./run.sh test           Execute local 5-tier test suites
+  ./run.sh verify         Run quality verification gate (18 checks)
+  ./run.sh backup         Run isolated database snapshot (VACUUM INTO)
+  ./run.sh compose [cmd]  Run standalone docker compose (e.g. up -d, down)
+  ./run.sh build          Build standalone Docker container image
+  ./run.sh graft [cmd]    Run Graft code context graph (skeleton, callers, blast)
+  ./run.sh tokens [cmd]   Display lifetime spend, sync ledger, or launch TUI
+  ./run.sh headroom [cmd] Run Headroom context compression engine (status, compress)
+  ./run.sh worklog <msg>  Append task completion to logs/WORKLOGS.md
+  ./run.sh setup-hooks    Activate git hooks (.githooks)
+  ./run.sh help           Show this banner
 "
     ;;
 esac

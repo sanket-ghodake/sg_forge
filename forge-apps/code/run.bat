@@ -50,6 +50,37 @@ if "%CMD%"=="build" (
     goto :eof
 )
 
+if "%CMD%"=="graft" (
+    echo 🧠 Running Graft Code Context Graph...
+    shift
+    "%BUN_BIN%" run portables\bin\graft %*
+    goto :eof
+)
+
+if "%CMD%"=="tokens" (
+    set "SUB_CMD=%~2"
+    if "!SUB_CMD!"=="sync" (
+        "%BUN_BIN%" run scripts\sync-tokens.ts
+    ) else if "!SUB_CMD!"=="tui" (
+        bun x --bun codeburn
+    ) else (
+        "%BUN_BIN%" run scripts\display-tokens.ts
+    )
+    goto :eof
+)
+
+if "%CMD%"=="headroom" (
+    shift
+    "%BUN_BIN%" run scripts\headroom-runner.ts %*
+    goto :eof
+)
+
+if "%CMD%"=="worklog" (
+    shift
+    "%BUN_BIN%" run scripts\append-worklog.ts %*
+    goto :eof
+)
+
 if "%CMD%"=="setup-hooks" (
     echo ⚓ Configuring Git hooks (.githooks)...
     git config core.hooksPath .githooks
@@ -61,11 +92,15 @@ echo.
 echo SG Forge Autonomous Micro-App Submodule Windows CLI
 echo.
 echo Usage:
-echo   run.bat dev           Start local server in hot-reload watch mode
-echo   run.bat start         Start server in production mode
-echo   run.bat test          Execute local 5-tier test suites
-echo   run.bat verify        Run quality verification gate (5 checks)
-echo   run.bat build         Build standalone Docker container
-echo   run.bat setup-hooks   Activate git hooks (.githooks)
-echo   run.bat help          Show this banner
+echo   run.bat dev            Start local server in hot-reload watch mode
+echo   run.bat start          Start server in production mode
+echo   run.bat test           Execute local 5-tier test suites
+echo   run.bat verify         Run quality verification gate (18 checks)
+echo   run.bat build          Build standalone Docker container
+echo   run.bat graft [cmd]    Run Graft code context graph
+echo   run.bat tokens [cmd]   Display lifetime spend, sync ledger, or launch TUI
+echo   run.bat headroom [cmd] Run Headroom context compression engine
+echo   run.bat worklog [msg]  Append task completion to logs\WORKLOGS.md
+echo   run.bat setup-hooks    Activate git hooks (.githooks)
+echo   run.bat help           Show this banner
 echo.

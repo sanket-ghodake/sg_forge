@@ -47,6 +47,9 @@ const tools: ToolTest[] = [
   { name: 'ctop Container Top', command: ['./portables/bin/ctop', '-v'], category: 'Monitoring' },
   { name: 'Caveman Compressor', command: ['bun', './portables/bin/caveman', 'status'], category: 'AI Token Compression' },
   { name: 'Graphify Knowledge Graph', command: ['bun', './portables/bin/graphify', 'status'], category: 'Knowledge Graph' },
+  { name: 'Graft Context Graph', command: ['./portables/bin/graft', '--version'], category: 'Code Context Graph' },
+  { name: 'CodeBurn Token Tracker', command: ['./portables/bin/codeburn', '--version'], category: 'AI Spend & Tokens' },
+  { name: 'Headroom Compressor', command: ['./portables/bin/headroom', '--version'], category: 'Context Compression' },
   { name: 'LHCI Lighthouse CI', command: ['./portables/bin/lhci', '--version'], category: 'Web Vitals & SEO' },
 ];
 

@@ -1,11 +1,19 @@
-# 📜 Cloud VS Code Micro-App Logs (`forge-apps/code/logs/`)
+# 📜 Isolated Microservice Logs & Ledgers
 
-Isolated runtime, browser, and database logs for Cloud VS Code Microservice (Port 8088).
+This directory contains the local, isolated runtime logs, task worklogs, and persistent lifetime token ledgers for this microservice.
 
-## Files & Retention
-- **`app.log`**: Session claim, takeover dispatch, and API route executions.
-- **`network.log`**: Detailed ingress & outbound browser network audits (JSONL Enterprise SRE format).
-- **`browser.log`**: Client UI interaction, heartbeat telemetry, and workbench errors.
-- **`db.log`**: Dedicated Turso database (`code.db`) query execution and session table logs.
-- **`docker.log`**: Container lifecycle logs (`ag-app-code-dev`).
-- **Policy**: 5MB rolling rotation, max 3 backup files.
+## Files & Roles
+- **`app.log`**: Backend server execution logs, HTTP routes, latencies, and RFC 7807 error problem details.
+- **`browser.log`**: Client-side browser console errors, warnings, and unhandled window rejections.
+- **`db.log`**: Turso libSQL/SQLite query executions, transaction commits, and slow query warnings ($>10\text{ms}$).
+- **`docker.log`**: Container stdout/stderr lifecycle and crash records.
+- **`network.log`**: Browser and gateway network telemetry logs.
+- **`WORKLOGS.md`**: Single-line per-task conversation worklog (`YYYY-MM-DD HH:mm | <summary>`).
+- **`commits.jsonl`**: Ground-truth commit metadata ledger populated by Git hooks.
+- **`token-ledger.jsonl`**: Permanent Git-tracked AI token and spend ledger (persisted across machine migrations).
+
+## Rotation & Retention Policy
+- Max file size: 5 MB per log file (`*.log`).
+- Rolling backups: Maximum 3 files (`*.log`, `*.log.1`, `*.log.2`).
+- Total directory cap: $\le 25\text{ MB}$.
+- Ledgers (`*.jsonl`, `WORKLOGS.md`) are permanent Git artifacts and are never automatically purged.

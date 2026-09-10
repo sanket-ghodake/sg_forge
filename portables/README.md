@@ -12,9 +12,12 @@ Zero-host portable binaries, runtime engines, and cross-platform CLI toolchains.
   * **Security & Supply Chain**: `gitleaks`, `semgrep`, `osv-scanner`, `trivy`, `syft`, `hadolint`
   * **Frontend & Accessibility**: `astryx`, `axe`, `lhci`
   * **Benchmarking & Telemetry**: `autocannon`, `hyperfine`, `k6`, `ctop`
-  * **AI Context & Engineering**: `rtk`, `repomix`, `graphify`, `caveman`
-* **[`bun/`](portables/bun/)**: Portable Bun v1.3.14 (LTS 2026) runtime and portable `bunx` runner.
-* **[`ctop/`](portables/ctop/)**: Portable standalone `ctop` (v0.7.7) container top terminal metrics dashboard.
+  * **AI Context & Engineering**: `rtk`, `repomix`, `graphify`, `graft`, `codeburn`, `headroom`, `caveman`
+* **[`bun/`](bun/)**: Portable Bun v1.3.14 (LTS 2026) runtime and portable `bunx` runner.
+* **[`graft/`](graft/)**: Portable Graft code context and symbol dependency graph engine.
+* **[`codeburn/`](codeburn/)**: Portable CodeBurn AI token & spend tracker with persistent Git ledgering.
+* **[`headroom/`](headroom/)**: Portable Headroom context & prompt compression engine.
+* **[`ctop/`](ctop/)**: Portable standalone `ctop` (v0.7.7) container top terminal metrics dashboard.
 * **[`rtk/`](portables/rtk/)**: Portable RTK Token Optimizer.
 * **[`scc/`](portables/scc/)**: Portable Sloc, Cloc & Complexity Analyzer.
 * **[`hyperfine/`](portables/hyperfine/)**: Portable CLI benchmarking engine.

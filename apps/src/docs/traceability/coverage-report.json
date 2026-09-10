@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-09-06T21:45:00.000Z",
-  "totalExportedSymbols": 623,
+  "totalExportedSymbols": 638,
   "documentedSymbols": 591,
-  "symbolCoveragePercent": 94.9,
+  "symbolCoveragePercent": 92.6,
   "totalRequirements": 71,
   "implementedRequirements": 71,
   "verifiedRequirements": 71,
@@ -5672,6 +5672,15 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "appendWorklog",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/append-worklog.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "MicroAppBackupResult",
       "kind": "interface",
       "file": "forge-apps/app-template/scripts/backup-db.ts",
@@ -5693,6 +5702,33 @@
         "HLR-SDK-301",
         "LLR-SUB-001"
       ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TokenLedgerEntry",
+      "kind": "interface",
+      "file": "forge-apps/app-template/scripts/sync-tokens.ts",
+      "line": 11,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "readLedger",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/sync-tokens.ts",
+      "line": 26,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "syncCurrentSession",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/sync-tokens.ts",
+      "line": 42,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
@@ -5960,6 +5996,15 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "appendWorklog",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/append-worklog.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "MicroAppBackupResult",
       "kind": "interface",
       "file": "forge-apps/telemetry/scripts/backup-db.ts",
@@ -5985,6 +6030,33 @@
       "missingRequirementFiles": [
         "HLR-TEL-003"
       ]
+    },
+    {
+      "name": "TokenLedgerEntry",
+      "kind": "interface",
+      "file": "forge-apps/telemetry/scripts/sync-tokens.ts",
+      "line": 11,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "readLedger",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/sync-tokens.ts",
+      "line": 26,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "syncCurrentSession",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/sync-tokens.ts",
+      "line": 42,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
     },
     {
       "name": "getVsCodeTargetUrl",
@@ -6726,6 +6798,15 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "appendWorklog",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/append-worklog.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "MicroAppBackupResult",
       "kind": "interface",
       "file": "forge-apps/code/scripts/backup-db.ts",
@@ -6751,6 +6832,33 @@
       "missingRequirementFiles": [
         "HLR-CODE-003"
       ]
+    },
+    {
+      "name": "TokenLedgerEntry",
+      "kind": "interface",
+      "file": "forge-apps/code/scripts/sync-tokens.ts",
+      "line": 11,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "readLedger",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/sync-tokens.ts",
+      "line": 26,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "syncCurrentSession",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/sync-tokens.ts",
+      "line": 42,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
     },
     {
       "name": "linkTestRequirements",
@@ -7591,7 +7699,7 @@
       "name": "ROOT_IGNORE_FILES",
       "kind": "variable",
       "file": "scripts/sync-ignores.ts",
-      "line": 67,
+      "line": 74,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7605,7 +7713,7 @@
       "name": "MANDATORY_ATTRIBUTES",
       "kind": "variable",
       "file": "scripts/sync-ignores.ts",
-      "line": 79,
+      "line": 87,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7619,7 +7727,7 @@
       "name": "ValidationResult",
       "kind": "interface",
       "file": "scripts/sync-ignores.ts",
-      "line": 125,
+      "line": 133,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7633,7 +7741,7 @@
       "name": "validateIgnores",
       "kind": "function",
       "file": "scripts/sync-ignores.ts",
-      "line": 138,
+      "line": 146,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7647,7 +7755,7 @@
       "name": "syncAllIgnores",
       "kind": "function",
       "file": "scripts/sync-ignores.ts",
-      "line": 235,
+      "line": 243,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7656,6 +7764,33 @@
       "missingRequirementFiles": [
         "SR-GATE-001"
       ]
+    },
+    {
+      "name": "TokenLedgerEntry",
+      "kind": "interface",
+      "file": "scripts/sync-tokens.ts",
+      "line": 11,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "readLedger",
+      "kind": "function",
+      "file": "scripts/sync-tokens.ts",
+      "line": 26,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "syncCurrentSession",
+      "kind": "function",
+      "file": "scripts/sync-tokens.ts",
+      "line": 42,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
     }
   ],
   "requirements": {
@@ -8887,11 +9022,11 @@
         "scripts/ast-complexity.ts:61#analyzeFileComplexity",
         "scripts/ast-complexity.ts:121#runComplexityAudit",
         "scripts/sync-ignores.ts:18#MANDATORY_EXCLUSIONS",
-        "scripts/sync-ignores.ts:67#ROOT_IGNORE_FILES",
-        "scripts/sync-ignores.ts:79#MANDATORY_ATTRIBUTES",
-        "scripts/sync-ignores.ts:125#ValidationResult",
-        "scripts/sync-ignores.ts:138#validateIgnores",
-        "scripts/sync-ignores.ts:235#syncAllIgnores"
+        "scripts/sync-ignores.ts:74#ROOT_IGNORE_FILES",
+        "scripts/sync-ignores.ts:87#MANDATORY_ATTRIBUTES",
+        "scripts/sync-ignores.ts:133#ValidationResult",
+        "scripts/sync-ignores.ts:146#validateIgnores",
+        "scripts/sync-ignores.ts:243#syncAllIgnores"
       ],
       "verifiedIn": [
         "scripts/test/run-sh.test.ts"
@@ -8955,13 +9090,14 @@
         "scripts/ast-complexity.ts:61#analyzeFileComplexity",
         "scripts/ast-complexity.ts:121#runComplexityAudit",
         "scripts/sync-ignores.ts:18#MANDATORY_EXCLUSIONS",
-        "scripts/sync-ignores.ts:67#ROOT_IGNORE_FILES",
-        "scripts/sync-ignores.ts:79#MANDATORY_ATTRIBUTES",
-        "scripts/sync-ignores.ts:125#ValidationResult",
-        "scripts/sync-ignores.ts:138#validateIgnores",
-        "scripts/sync-ignores.ts:235#syncAllIgnores"
+        "scripts/sync-ignores.ts:74#ROOT_IGNORE_FILES",
+        "scripts/sync-ignores.ts:87#MANDATORY_ATTRIBUTES",
+        "scripts/sync-ignores.ts:133#ValidationResult",
+        "scripts/sync-ignores.ts:146#validateIgnores",
+        "scripts/sync-ignores.ts:243#syncAllIgnores"
       ],
       "verifiedIn": [
+        "apps/src/docs/test/unit/token-ledger.test.ts",
         "scripts/test/run-sh.test.ts"
       ]
     },

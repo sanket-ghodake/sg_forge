@@ -37,7 +37,7 @@ Before writing code, running commands, or staging/committing changes, verify:
 
 ### 1. Correctness, Grounding & "No Guessing"
 - **NEVER** hallucinate, assume, or invent APIs, database columns, schemas, external packages, or behaviors.
-- **ALWAYS** inspect callers, schemas, types, and existing tests using Graphify (`.agents/rules/graphify.md`) and ripgrep before editing. Validate any new dependency via `./run.sh check-pkg <pkg>`.
+- **ALWAYS** inspect callers, schemas, types, and existing tests using Graft (`.agents/rules/graft.md`), Graphify (`.agents/rules/graphify.md`), and ripgrep before editing. Validate any new dependency via `./run.sh check-pkg <pkg>`.
 
 ### 2. Strict File Size Governance & 500-Line Soft Cap
 - **$\le 300$ lines**: Healthy modular standard.
@@ -122,7 +122,10 @@ Before writing code, running commands, or staging/committing changes, verify:
 - **In-Chat AI Security & Pentest Auditor**: [`.agents/rules/security-audit.md`](file:///.agents/rules/security-audit.md)
 - **Testing Standards (5-Tier)**: [`.agents/rules/testing.md`](file:///.agents/rules/testing.md)
 - **Graphify Knowledge Graph**: [`.agents/rules/graphify.md`](file:///.agents/rules/graphify.md)
+- **Graft Code Context Graph**: [`.agents/rules/graft.md`](file:///.agents/rules/graft.md)
 - **RTK Token Optimization**: [`.agents/rules/rtk.md`](file:///.agents/rules/rtk.md)
+- **CodeBurn Lifetime Token Ledger**: [`.agents/rules/codeburn.md`](file:///.agents/rules/codeburn.md)
+- **Headroom Context Compression**: [`.agents/rules/headroom.md`](file:///.agents/rules/headroom.md)
 - **Microservice Observability & Logs**: [`.agents/rules/observability.md`](file:///.agents/rules/observability.md)
 - **Living Engineering Standards & Traceability**: [`.agents/rules/documentation.md`](file:///.agents/rules/documentation.md)
 

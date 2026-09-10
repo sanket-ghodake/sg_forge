@@ -16,20 +16,23 @@ This repository is engineered with a **Zero-Host-Modification Policy**. All deve
 
 | Component | Active Version | Upstream Latest | Path / Binary | Host Install Needed? |
 | :--- | :---: | :---: | :--- | :---: |
-| **Bun Runtime** | `v1.3.14` | `v1.3.14` | `portables/bun/bin/bun` | ❌ No |
-| **RTK Token Optimizer** | `v0.42.3` | `v0.42.3` | `portables/bin/rtk` | ❌ No |
-| **Astryx CLI** | `v2.0.0` | `v2.0.0` | `portables/bin/astryx` | ❌ No |
-| **Gitleaks Secret Scanner** | `v8.30.1` | `v8.30.1` | `portables/bin/gitleaks` | ❌ No |
-| **Biome Fast Linter** | `v2.2.0` | `v2.2.0` | `portables/bin/biome` | ❌ No |
-| **Knip Dead Code Auditor** | `v6.32.2` | `v6.32.2` | `portables/bin/knip` | ❌ No |
-| **Hadolint Docker Linter** | `v2.12.0` | `v2.12.0` | `portables/bin/hadolint` | ❌ No |
-| **Autocannon Benchmark** | `v7.15.0` | `v7.15.0` | `portables/bin/autocannon` | ❌ No |
-| **Repomix Context Packager** | `v1.10.2` | `v1.10.2` | `portables/bin/repomix` | ❌ No |
-| **SCC Complexity Counter** | `v3.4.0` | `v3.4.0` | `portables/bin/scc` | ❌ No |
-| **Hyperfine Benchmarker** | `v1.18.0` | `v1.18.0` | `portables/bin/hyperfine` | ❌ No |
-| **ctop Container Top** | `v0.7.7` | `v0.7.7` | `portables/bin/ctop` | ❌ No |
-| **Caveman CLI** | `v1.0.0` | `v1.0.0` | `portables/bin/caveman` | ❌ No |
-| **Graphify Knowledge Graph** | `v0.5.0` | `v0.5.0` | `portables/bin/graphify` | ❌ No |
+| [**Bun Runtime**](https://github.com/oven-sh/bun) | `v1.3.14` | `v1.3.14` | `portables/bun/bin/bun` | ❌ No |
+| [**RTK Token Optimizer**](https://github.com/rtk-ai/rtk) | `v0.42.3` | `v0.42.3` | `portables/bin/rtk` | ❌ No |
+| [**Astryx CLI**](../../ui) | `v2.0.0` | `v2.0.0` | `portables/bin/astryx` | ❌ No |
+| [**Gitleaks Secret Scanner**](https://github.com/gitleaks/gitleaks) | `v8.30.1` | `v8.30.1` | `portables/bin/gitleaks` | ❌ No |
+| [**Biome Fast Linter**](https://github.com/biomejs/biome) | `v2.2.0` | `v2.2.0` | `portables/bin/biome` | ❌ No |
+| [**Knip Dead Code Auditor**](https://github.com/webpro-nl/knip) | `v6.32.2` | `v6.32.2` | `portables/bin/knip` | ❌ No |
+| [**Hadolint Docker Linter**](https://github.com/hadolint/hadolint) | `v2.12.0` | `v2.12.0` | `portables/bin/hadolint` | ❌ No |
+| [**Autocannon Benchmark**](https://github.com/mcollina/autocannon) | `v7.15.0` | `v7.15.0` | `portables/bin/autocannon` | ❌ No |
+| [**Repomix Context Packager**](https://github.com/yamadashy/repomix) | `v1.10.2` | `v1.10.2` | `portables/bin/repomix` | ❌ No |
+| [**SCC Complexity Counter**](https://github.com/boyter/scc) | `v3.4.0` | `v3.4.0` | `portables/bin/scc` | ❌ No |
+| [**Hyperfine Benchmarker**](https://github.com/sharkdp/hyperfine) | `v1.18.0` | `v1.18.0` | `portables/bin/hyperfine` | ❌ No |
+| [**ctop Container Top**](https://github.com/bcicen/ctop) | `v0.7.7` | `v0.7.7` | `portables/bin/ctop` | ❌ No |
+| [**Caveman CLI**](../../../../portables/caveman) | `v1.0.0` | `v1.0.0` | `portables/bin/caveman` | ❌ No |
+| [**Graphify Knowledge Graph**](https://github.com/safishamsi/graphify) | `v0.5.0` | `v0.5.0` | `portables/bin/graphify` | ❌ No |
+| [**Graft Context Graph**](https://github.com/trailhq/Graft) | `v0.1.0` | `v0.1.0` | `portables/bin/graft` | ❌ No |
+| [**CodeBurn Token Tracker**](https://github.com/getagentseal/codeburn) | `v0.9.24` | `v0.9.24` | `portables/bin/codeburn` | ❌ No |
+| [**Headroom Compression**](https://github.com/headroomlabs-ai/headroom) | `v0.2.1` | `v0.2.1` | `portables/bin/headroom` | ❌ No |
 
 ---
 

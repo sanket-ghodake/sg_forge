@@ -8,33 +8,36 @@
 
 | Tool | Version | License | Category | Purpose | CLI Command | Speed |
 | :--- | :---: | :---: | :--- | :--- | :--- | :---: |
-| **Bun** | `v1.3.14` | MIT | Runtime | Ultra-fast TypeScript/JavaScript runtime | `./portables/bun/bin/bun` | `< 10ms` |
-| **RTK** | `v0.42.3` | MIT | AI Optimizer | Terminal output token compression engine | `rtk <command>` | `< 2ms` |
-| **Astryx** | `v2.0.0` | Apache-2.0 | Design System | Enterprise UI design tokens & theme engine | `astryx status` | `< 5ms` |
-| **Gitleaks** | `v8.30.1` | MIT | Security | 160+ API key & secret scanner | `./run.sh secrets` | `< 10ms` |
-| **Biome** | `v2.2.0` | MIT / Apache-2.0 | Code Quality | Ultra-fast Rust AST linter & code formatter | `./run.sh lint` | `< 15ms` |
-| **Knip** | `v6.32.2` | MIT | Architecture | Monorepo dead code & unexported symbol auditor | `./run.sh deadcode` | `< 40ms` |
-| **OSV-Scanner** | `v2.5.1` | Apache-2.0 | Supply Chain | Google Open Source Vulnerability database scanner | `./run.sh vuln` | `< 60ms` |
-| **Trivy** | `v0.74.0` | Apache-2.0 | Security | Container, config & workspace vulnerability auditor | `./run.sh trivy` | `< 100ms` |
-| **Spectral** | `v6.16.3` | Apache-2.0 | API Contracts | OpenAPI 3.1 & AsyncAPI specification linter | `./run.sh contracts` | `< 20ms` |
-| **Schemathesis**| `v3.39.0` | MIT | API Contracts | Property-based API contract fuzzer | `portables/bin/schemathesis`| `< 200ms` |
-| **Syft** | `v1.51.1` | Apache-2.0 | SBOM | CycloneDX 1.5 Software Bill of Materials engine | `./run.sh sbom` | `< 50ms` |
-| **Lizard** | `v1.17.10`| MIT | Metrics | Cyclomatic complexity (CCN <= 10) & function cap | `./run.sh complexity` | `< 30ms` |
-| **Dependency-Cruiser** | `v16.10.0` | MIT | Architecture | Monorepo layer & domain isolation boundaries | `./run.sh arch` | `< 40ms` |
-| **Madge** | `v8.0.0` | MIT | Architecture | Module dependency graph & circular loop detector | `portables/bin/madge` | `< 30ms` |
-| **Type-Coverage** | `v2.29.7` | MIT | Type Safety | TypeScript strictness gate (>= 90% type coverage) | `portables/bin/type-coverage` | `< 80ms` |
-| **ShellCheck** | `v0.10.0` | GPL-3.0 | Shell Safety | POSIX compliance & bash error bubbling linter | `./run.sh shellcheck` | `< 15ms` |
-| **Hadolint** | `v2.12.0` | GPL-3.0 | Containers | Dockerfile & OCI container standards validator | `portables/bin/hadolint` | `< 10ms` |
-| **Axe-core** | `v4.10.1` | MPL-2.0 | Accessibility | WCAG 2.1 AA automated accessibility engine | `./run.sh a11y` | `< 40ms` |
-| **Autocannon** | `v7.15.0` | MIT | Performance | HTTP reverse proxy latency benchmark (< 10ms) | `./run.sh benchmark [url]` | `< 500ms` |
-| **Repomix** | `v1.10.2` | MIT | AI Tooling | Token-compressed AI context packager | `./run.sh pack` | `< 50ms` |
-| **SCC** | `v3.4.0` | MIT | Metrics | Lines of code & 500-line soft cap counter | `portables/bin/scc apps/` | `< 5ms` |
-| **Hyperfine** | `v1.18.0` | MIT / Apache-2.0 | Benchmarking | Statistical execution time benchmark engine | `hyperfine --warmup 3` | `< 100ms` |
-| **ctop** | `v0.7.7` | MIT | Monitoring | Real-time container top resource telemetry | `./run.sh top` | `< 10ms` |
-| **Caveman** | `v1.0.0` | MIT | AI Communication | Agent token compression CLI (Ultra mode) | `caveman status` | `< 2ms` |
-| **Graphify** | `v0.5.0` | MIT / Apache-2.0 | Knowledge Graph | AST knowledge graph & dependency visualizer | `graphify update .` | `< 30ms` |
-| **Caddy Server**| `v2.11.4` | Apache-2.0 | Ingress | Zero-downtime reverse proxy on Ports 80 & 443 | Docker Container | `< 1ms` |
-| **Strix Agent**| `v1.0.0` | Apache-2.0 | AI Pentest | In-chat whitebox code review & live endpoint pentesting | In-Chat / `.agents/skills/strix-*` | `Native` |
+| [**Bun**](https://github.com/oven-sh/bun) | `v1.3.14` | MIT | Runtime | Ultra-fast TypeScript/JavaScript runtime | `./portables/bun/bin/bun` | `< 10ms` |
+| [**RTK**](https://github.com/rtk-ai/rtk) | `v0.42.3` | MIT | AI Optimizer | Terminal output token compression engine | `rtk <command>` | `< 2ms` |
+| [**Astryx**](../../ui) | `v2.0.0` | Apache-2.0 | Design System | Enterprise UI design tokens & theme engine | `astryx status` | `< 5ms` |
+| [**Gitleaks**](https://github.com/gitleaks/gitleaks) | `v8.30.1` | MIT | Security | 160+ API key & secret scanner | `./run.sh secrets` | `< 10ms` |
+| [**Biome**](https://github.com/biomejs/biome) | `v2.2.0` | MIT / Apache-2.0 | Code Quality | Ultra-fast Rust AST linter & code formatter | `./run.sh lint` | `< 15ms` |
+| [**Knip**](https://github.com/webpro-nl/knip) | `v6.32.2` | MIT | Architecture | Monorepo dead code & unexported symbol auditor | `./run.sh deadcode` | `< 40ms` |
+| [**OSV-Scanner**](https://github.com/google/osv-scanner) | `v2.5.1` | Apache-2.0 | Supply Chain | Google Open Source Vulnerability database scanner | `./run.sh vuln` | `< 60ms` |
+| [**Trivy**](https://github.com/aquasecurity/trivy) | `v0.74.0` | Apache-2.0 | Security | Container, config & workspace vulnerability auditor | `./run.sh trivy` | `< 100ms` |
+| [**Spectral**](https://github.com/stoplightio/spectral) | `v6.16.3` | Apache-2.0 | API Contracts | OpenAPI 3.1 & AsyncAPI specification linter | `./run.sh contracts` | `< 20ms` |
+| [**Schemathesis**](https://github.com/schemathesis/schemathesis)| `v3.39.0` | MIT | API Contracts | Property-based API contract fuzzer | `portables/bin/schemathesis`| `< 200ms` |
+| [**Syft**](https://github.com/anchore/syft) | `v1.51.1` | Apache-2.0 | SBOM | CycloneDX 1.5 Software Bill of Materials engine | `./run.sh sbom` | `< 50ms` |
+| [**Lizard**](https://github.com/terryyin/lizard) | `v1.17.10`| MIT | Metrics | Cyclomatic complexity (CCN <= 10) & function cap | `./run.sh complexity` | `< 30ms` |
+| [**Dependency-Cruiser**](https://github.com/sverweij/dependency-cruiser) | `v16.10.0` | MIT | Architecture | Monorepo layer & domain isolation boundaries | `./run.sh arch` | `< 40ms` |
+| [**Madge**](https://github.com/pahen/madge) | `v8.0.0` | MIT | Architecture | Module dependency graph & circular loop detector | `portables/bin/madge` | `< 30ms` |
+| [**Type-Coverage**](https://github.com/plantain-00/type-coverage) | `v2.29.7` | MIT | Type Safety | TypeScript strictness gate (>= 90% type coverage) | `portables/bin/type-coverage` | `< 80ms` |
+| [**ShellCheck**](https://github.com/koalaman/shellcheck) | `v0.10.0` | GPL-3.0 | Shell Safety | POSIX compliance & bash error bubbling linter | `./run.sh shellcheck` | `< 15ms` |
+| [**Hadolint**](https://github.com/hadolint/hadolint) | `v2.12.0` | GPL-3.0 | Containers | Dockerfile & OCI container standards validator | `portables/bin/hadolint` | `< 10ms` |
+| [**Axe-core**](https://github.com/dequelabs/axe-core) | `v4.10.1` | MPL-2.0 | Accessibility | WCAG 2.1 AA automated accessibility engine | `./run.sh a11y` | `< 40ms` |
+| [**Autocannon**](https://github.com/mcollina/autocannon) | `v7.15.0` | MIT | Performance | HTTP reverse proxy latency benchmark (< 10ms) | `./run.sh benchmark [url]` | `< 500ms` |
+| [**Repomix**](https://github.com/yamadashy/repomix) | `v1.10.2` | MIT | AI Tooling | Token-compressed AI context packager | `./run.sh pack` | `< 50ms` |
+| [**SCC**](https://github.com/boyter/scc) | `v3.4.0` | MIT | Metrics | Lines of code & 500-line soft cap counter | `portables/bin/scc apps/` | `< 5ms` |
+| [**Hyperfine**](https://github.com/sharkdp/hyperfine) | `v1.18.0` | MIT / Apache-2.0 | Benchmarking | Statistical execution time benchmark engine | `hyperfine --warmup 3` | `< 100ms` |
+| [**ctop**](https://github.com/bcicen/ctop) | `v0.7.7` | MIT | Monitoring | Real-time container top resource telemetry | `./run.sh top` | `< 10ms` |
+| [**Caveman**](../../../../portables/caveman) | `v1.0.0` | MIT | AI Communication | Agent token compression CLI (Ultra mode) | `caveman status` | `< 2ms` |
+| [**Graphify**](https://github.com/safishamsi/graphify) | `v0.5.0` | MIT / Apache-2.0 | Knowledge Graph | AST knowledge graph & dependency visualizer | `graphify update .` | `< 30ms` |
+| [**Graft**](https://github.com/trailhq/Graft) | `v0.1.0` | MIT | Code Context Graph | AST symbol call trees, skeletons & blast radius | `./run.sh graft map` | `< 5ms` |
+| [**CodeBurn**](https://github.com/getagentseal/codeburn) | `v0.9.24` | Apache-2.0 | AI Spend & Tokens | Lifetime AI token & cost tracker across 41 agents | `./run.sh tokens` | `< 10ms` |
+| [**Headroom**](https://github.com/headroomlabs-ai/headroom) | `v0.2.1` | Apache-2.0 | Context Compression | AST & JSON context compressor (21%-57% reduction) | `./run.sh headroom status` | `< 5ms` |
+| [**Caddy Server**](https://github.com/caddyserver/caddy)| `v2.11.4` | Apache-2.0 | Ingress | Zero-downtime reverse proxy on Ports 80 & 443 | Docker Container | `< 1ms` |
+| [**Strix Agent**](https://github.com/usestrix/strix)| `v1.0.0` | Apache-2.0 | AI Pentest | In-chat whitebox code review & live endpoint pentesting | In-Chat / `.agents/skills/strix-*` | `Native` |
 
 ---
 
@@ -111,3 +114,4 @@ The Strix Security Agent is an embedded, zero-API-key AI penetration testing and
 | **Branching Spaghetti** | Lizard AST Engine | `./run.sh complexity` | Rejects functions with CCN $> 10$ or length $> 60$ lines. |
 | **License Contamination**| License Auditor | `./run.sh licenses` | Rejects non-permissive or copyleft (AGPL/GPL) dependencies. |
 | **Supply Chain SBOM** | Syft / CycloneDX | `./run.sh sbom` | Automatically generates CycloneDX 1.5 SBOM with SHA hashes. |
+| **Token Exploration Waste** | Graft Context Engine | `./run.sh graft skeleton <file>` | Eliminates blind file reads with instant type skeletons & call hierarchies. |

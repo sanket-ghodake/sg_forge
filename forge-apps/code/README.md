@@ -41,9 +41,40 @@ High-performance, single-seat cloud workstation microservice running on port `:8
 
 ---
 
+## 🛠️ Autonomous CLI & Toolchain
+
+Operates with 100% autonomy through `./run.sh` (or `run.bat` on Windows):
+
+```bash
+# Development & Testing
+./run.sh dev                 # Start local server in hot-reload watch mode
+./run.sh test                # Run 5-tier test suites (unit, integration, security, contracts, e2e)
+./run.sh verify              # Run 18-check pre-commit quality gate
+
+# Code Context & AST Intelligence (Graft)
+./run.sh graft skeleton <file>   # Inspect type interfaces and export signatures
+./run.sh graft callers <symbol>  # Trace call hierarchies within submodule
+./run.sh graft blast             # Audit working tree blast radius
+
+# Lifetime AI Spend & Token Tracking (CodeBurn)
+./run.sh tokens              # Display submodule lifetime token and spend dashboard
+./run.sh tokens sync         # Ingest current session tokens into logs/token-ledger.jsonl
+./run.sh tokens tui          # Launch interactive terminal TUI dashboard
+
+# Context & Payload Compression (Headroom)
+./run.sh headroom status     # Check compression engine health
+./run.sh headroom compress <path> # Benchmark token reduction on logs/payloads
+./run.sh headroom stats      # Historical compression savings report
+
+# Submodule Worklog
+./run.sh worklog "<summary>" # Atomically append task to logs/WORKLOGS.md
+```
+
+---
+
 ## 🧪 Testing Suite
 
 Run the isolated 5-tier test suite:
 ```bash
-rtk bun test forge-apps/code/test
+rtk ./run.sh test
 ```

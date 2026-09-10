@@ -59,6 +59,13 @@ export const MANDATORY_EXCLUSIONS = [
   'graphify-out/.graphify_*',
   'graphify-out/20*/',
   'graphify-out/manifest.json',
+  '/graft/',
+  '**/.graft',
+  '.codeburn/',
+  'codeburn-*.json',
+  'codeburn-*.csv',
+  '.headroom/',
+  'headroom-*.json',
 ];
 
 
@@ -71,6 +78,7 @@ export const ROOT_IGNORE_FILES = [
   '.cursorignore',
   '.copilotignore',
   '.graphifyignore',
+  '.graftignore',
   '.repomixignore',
 ];
 
@@ -323,11 +331,18 @@ scratch/
 .DS_Store
 Thumbs.db
 
-# 7. Graphify Transient Backups & Analysis Caches
+# 7. Graphify, Graft, CodeBurn & Headroom Transient Backups & Context Caches
 graphify-out/cache/
 graphify-out/.graphify_*
 graphify-out/20*/
 graphify-out/manifest.json
+/graft/
+**/.graft
+.codeburn/
+codeburn-*.json
+codeburn-*.csv
+.headroom/
+headroom-*.json
 
 
 # 8. Enterprise Custom Brand Overrides (Never track org-specific custom branding)
