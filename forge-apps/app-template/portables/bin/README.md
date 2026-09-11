@@ -10,6 +10,7 @@ This directory contains standalone, self-resolving POSIX executable wrappers for
 | `graft` | Code context and symbol dependency graph engine | [@nanonets/graft](https://github.com/trailhq/Graft) |
 | `codeburn` | AI token and lifetime spend tracker | [getagentseal/codeburn](https://github.com/getagentseal/codeburn) |
 | `headroom` | Context and prompt compression engine | [headroomlabs-ai/headroom](https://github.com/headroomlabs-ai/headroom) |
+| `council` | Council of AI multi-agent decision framework | [Marius Silo / Silotech.xyz](https://medium.com/@Silotech.xyz/the-council-of-ai-a-multi-agent-prompting-framework-for-better-decision-making-8e7569c10584) |
 
 ## Self-Resolving Execution Strategy
 

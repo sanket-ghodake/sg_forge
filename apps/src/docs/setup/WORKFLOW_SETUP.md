@@ -97,6 +97,7 @@ All code analysis, benchmarking, design system, and token optimization tools are
 | [**`graft`**](https://github.com/trailhq/Graft) | Code Context & Symbol Dependency Graph | `./portables/bin/graft` | `./run.sh graft map` |
 | [**`codeburn`**](https://github.com/getagentseal/codeburn) | Lifetime AI Token & Spend Tracker | `./portables/bin/codeburn` | `./run.sh tokens` |
 | [**`headroom`**](https://github.com/headroomlabs-ai/headroom) | Context & Prompt Compression Engine | `./portables/bin/headroom` | `./run.sh headroom status` |
+| [**`council`**](https://medium.com/@Silotech.xyz/the-council-of-ai-a-multi-agent-prompting-framework-for-better-decision-making-8e7569c10584) | Council of AI Multi-Agent Decision Framework | `./portables/bin/council` | `./run.sh council "<topic>"` |
 
 ### Tooling Execution Examples:
 

@@ -11,3 +11,4 @@
 2026-09-10 23:03 | Integrate Headroom and CodeBurn standalone toolchains with persistent repo lifetime token ledger
 2026-09-10 23:31 | Implement Graft, CodeBurn, and Headroom toolchains, runners, and directives across all Forge App submodules and template
 2026-09-10 23:50 | Reverify all submodule test suites and quality gates, synchronize ignores, and commit toolchain propagation
+2026-09-11 00:11 | Integrate Council of AI multi-agent decision framework with CLI runners, workflows, and upstream attribution across monorepo and submodules

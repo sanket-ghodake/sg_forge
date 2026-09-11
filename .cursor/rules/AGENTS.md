@@ -126,6 +126,7 @@ Before writing code, running commands, or staging/committing changes, verify:
 - **RTK Token Optimization**: [`.agents/rules/rtk.md`](file:///.agents/rules/rtk.md)
 - **CodeBurn Lifetime Token Ledger**: [`.agents/rules/codeburn.md`](file:///.agents/rules/codeburn.md)
 - **Headroom Context Compression**: [`.agents/rules/headroom.md`](file:///.agents/rules/headroom.md)
+- **Council of AI Decision Framework**: [`.agents/rules/council.md`](file:///.agents/rules/council.md)
 - **Microservice Observability & Logs**: [`.agents/rules/observability.md`](file:///.agents/rules/observability.md)
 - **Living Engineering Standards & Traceability**: [`.agents/rules/documentation.md`](file:///.agents/rules/documentation.md)
 

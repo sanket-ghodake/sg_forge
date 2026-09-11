@@ -36,6 +36,7 @@
 | [**Graft**](https://github.com/trailhq/Graft) | `v0.1.0` | MIT | Code Context Graph | AST symbol call trees, skeletons & blast radius | `./run.sh graft map` | `< 5ms` |
 | [**CodeBurn**](https://github.com/getagentseal/codeburn) | `v0.9.24` | Apache-2.0 | AI Spend & Tokens | Lifetime AI token & cost tracker across 41 agents | `./run.sh tokens` | `< 10ms` |
 | [**Headroom**](https://github.com/headroomlabs-ai/headroom) | `v0.2.1` | Apache-2.0 | Context Compression | AST & JSON context compressor (21%-57% reduction) | `./run.sh headroom status` | `< 5ms` |
+| [**Council of AI**](https://medium.com/@Silotech.xyz/the-council-of-ai-a-multi-agent-prompting-framework-for-better-decision-making-8e7569c10584) | `v1.0.0` | Apache-2.0 | Decision Framework | Multi-agent RFC & idea stress-testing (Marius Silo) | `./run.sh council "<topic>"` | `< 5ms` |
 | [**Caddy Server**](https://github.com/caddyserver/caddy)| `v2.11.4` | Apache-2.0 | Ingress | Zero-downtime reverse proxy on Ports 80 & 443 | Docker Container | `< 1ms` |
 | [**Strix Agent**](https://github.com/usestrix/strix)| `v1.0.0` | Apache-2.0 | AI Pentest | In-chat whitebox code review & live endpoint pentesting | In-Chat / `.agents/skills/strix-*` | `Native` |
 

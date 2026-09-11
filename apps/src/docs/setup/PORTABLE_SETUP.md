@@ -33,6 +33,7 @@ This repository is engineered with a **Zero-Host-Modification Policy**. All deve
 | [**Graft Context Graph**](https://github.com/trailhq/Graft) | `v0.1.0` | `v0.1.0` | `portables/bin/graft` | ❌ No |
 | [**CodeBurn Token Tracker**](https://github.com/getagentseal/codeburn) | `v0.9.24` | `v0.9.24` | `portables/bin/codeburn` | ❌ No |
 | [**Headroom Compression**](https://github.com/headroomlabs-ai/headroom) | `v0.2.1` | `v0.2.1` | `portables/bin/headroom` | ❌ No |
+| [**Council of AI Decision CLI**](https://medium.com/@Silotech.xyz/the-council-of-ai-a-multi-agent-prompting-framework-for-better-decision-making-8e7569c10584) | `v1.0.0` | `v1.0.0` | `portables/bin/council` | ❌ No |
 
 ---
 

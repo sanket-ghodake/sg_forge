@@ -46,6 +46,17 @@ Specifically:
 - SQLite is dedicated to the public domain.
 
 ================================================================================
+THIRD-PARTY FRAMEWORKS & METHODOLOGY ATTRIBUTIONS
+================================================================================
+This repository incorporates and adapts concepts and prompting architectures from
+independent AI engineering researchers, specifically:
+
+- The Council of AI (Multi-Agent Decision-Making Framework):
+  Conceived and published by Marius Silo (Silotech.xyz).
+  Reference: "The Council of AI: A Multi-Agent Prompting Framework for Better Decision-Making"
+  URL: https://medium.com/@Silotech.xyz/the-council-of-ai-a-multi-agent-prompting-framework-for-better-decision-making-8e7569c10584
+
+================================================================================
 NON-COMMERCIAL & INDEPENDENT STATUS
 ================================================================================
 SG Forge is an autonomous, open-source project published under the Apache License,

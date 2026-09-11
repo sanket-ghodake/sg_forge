@@ -35,7 +35,7 @@ case "$CMD" in
         ;;
 
     # Quality Gates, Linters, SAST & Security Toolchain
-    verify|lint|deadcode|secrets|arch|typecheck|shellcheck|semgrep|a11y|spectral|contracts|complexity|check-pkg|licenses|vuln|trivy|sbom|lhci|fuzz|schemathesis|loadtest|k6|benchmark|pack|graft|tokens|codeburn|headroom|diagram:lint|diagram-lint|diagram:convert-mermaid|mermaid-extract|diagram:convert-drawio|drawio-extract|docs:coverage|doc-coverage|docs:dev|docs:build)
+    verify|lint|deadcode|secrets|arch|typecheck|shellcheck|semgrep|a11y|spectral|contracts|complexity|check-pkg|licenses|vuln|trivy|sbom|lhci|fuzz|schemathesis|loadtest|k6|benchmark|pack|graft|tokens|codeburn|headroom|council|diagram:lint|diagram-lint|diagram:convert-mermaid|mermaid-extract|diagram:convert-drawio|drawio-extract|docs:coverage|doc-coverage|docs:dev|docs:build)
         "$REPO_ROOT/scripts/run/quality.sh" "$@"
         ;;
 

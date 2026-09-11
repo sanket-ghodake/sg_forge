@@ -64,6 +64,7 @@ Before writing code, running commands, or staging changes in this microservice:
 │   ├── sync-tokens.ts          # Token ledger synchronizer
 │   ├── display-tokens.ts       # Token dashboard renderer
 │   ├── headroom-runner.ts      # Context compression runner
+│   ├── council-runner.ts       # Council of AI decision runner
 │   └── append-worklog.ts       # Atomic worklog appender
 ├── src/
 │   ├── db/                     # Isolated Turso libSQL database instance
@@ -84,3 +85,4 @@ Before writing code, running commands, or staging changes in this microservice:
 - **Code Context Graph (Graft)**: [`.agents/rules/graft.md`](file:///.agents/rules/graft.md)
 - **Lifetime Token Ledger (CodeBurn)**: [`.agents/rules/codeburn.md`](file:///.agents/rules/codeburn.md)
 - **Context Compression (Headroom)**: [`.agents/rules/headroom.md`](file:///.agents/rules/headroom.md)
+- **Council of AI Decision Framework**: [`.agents/rules/council.md`](file:///.agents/rules/council.md)

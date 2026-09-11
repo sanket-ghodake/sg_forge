@@ -54,6 +54,7 @@ function show_help() {
     echo "  graft [cmd]           Run Graft code context graph (build, ask, callers, skeleton, map)"
     echo "  tokens [tui|sync]     Inspect lifetime repo AI token spend & cost ledger (CodeBurn)"
     echo "  headroom [cmd]        Run Headroom context compression engine (status, compress, proxy, stats)"
+    echo "  council [topic]       Run Council of AI multi-agent decision & review framework"
     echo ""
     echo "Docker Lifecycle & Modular Profiles (Big Tech Orchestration):"
     echo "  docker up / dev [opt] Start Docker Dev Stack (Profiles: core, apps, monitoring, all)"

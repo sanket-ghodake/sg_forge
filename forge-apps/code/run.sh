@@ -92,6 +92,9 @@ case "$CMD" in
   headroom)
     exec "$DIR/portables/bin/headroom" "$@"
     ;;
+  council)
+    exec "$DIR/portables/bin/council" "$@"
+    ;;
   worklog)
     exec "$BUN_BIN" run scripts/append-worklog.ts "$@"
     ;;
@@ -116,6 +119,7 @@ Usage:
   ./run.sh graft [cmd]    Run Graft code context graph (skeleton, callers, blast)
   ./run.sh tokens [cmd]   Display lifetime spend, sync ledger, or launch TUI
   ./run.sh headroom [cmd] Run Headroom context compression engine (status, compress)
+  ./run.sh council [idea] Run Council of AI multi-agent decision framework
   ./run.sh worklog <msg>  Append task completion to logs/WORKLOGS.md
   ./run.sh setup-hooks    Activate git hooks (.githooks)
   ./run.sh help           Show this banner

@@ -132,6 +132,10 @@ case "$CMD" in
         "$REPO_ROOT/portables/bin/headroom" "$@"
         ;;
 
+    council)
+        "$REPO_ROOT/portables/bin/council" "$@"
+        ;;
+
     diagram:lint|diagram-lint)
         python3 "$REPO_ROOT/scripts/diagrams/self_check.py" "$@"
         ;;
