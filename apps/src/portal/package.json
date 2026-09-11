@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "echo 'Portal service ready'",
-    "build": "echo 'Portal built'"
+    "build": "bun build src/server.ts --target=bun --minify --sourcemap=none --outdir dist"
   },
   "dependencies": {
     "@forge/types": "workspace:*",

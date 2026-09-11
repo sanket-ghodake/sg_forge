@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "echo 'Landing service ready'",
-    "build": "echo 'Landing built'"
+    "build": "bun build src/server.ts --target=bun --minify --sourcemap=none --outdir dist"
   },
   "dependencies": {
     "@forge/types": "workspace:*",

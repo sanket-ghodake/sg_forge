@@ -1,7 +1,26 @@
 # ==============================================================================
 # Custom Landing Service - Production Dockerfile (2026 LTS Baseline)
-# Multi-Stage Alpine-Based Portable Image (<90MB Footprint)
+# Multi-Stage Alpine-Based Portable Image with AOT Minification & Obfuscation
 # ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Stage 1: Build, Compile & Minify
+# ------------------------------------------------------------------------------
+FROM oven/bun:1.3-alpine AS builder
+
+WORKDIR /build
+
+COPY package.json bun.lock* tsconfig.json ./
+RUN if [ -f bun.lock ] || [ -f bun.lockb ]; then bun install --frozen-lockfile 2>/dev/null || true; fi
+
+COPY apps/src/landing-custom/ apps/src/landing-custom/
+
+# AOT bundle & minify into /build/dist
+RUN bun build apps/src/landing-custom/src/server.ts --target=bun --minify --sourcemap=none --outdir /build/dist
+
+# ------------------------------------------------------------------------------
+# Stage 2: Minimal Hardened Runtime Runner (Zero Source Code Leak)
+# ------------------------------------------------------------------------------
 FROM oven/bun:1.3-alpine AS runner
 
 WORKDIR /app
@@ -10,21 +29,18 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV LANDING_PORT=3000
 
-# 1. Monorepo manifests & TypeScript path resolution
-COPY package.json bun.lock* tsconfig.json ./
+# Copy ONLY compiled minified bundle and static assets (Zero .ts files)
+COPY --from=builder /build/dist/server.js /app/dist/server.js
+COPY public/ public/
 
-# 2. Custom Landing Service Source Code
-COPY apps/src/landing-custom/ apps/src/landing-custom/
-
-# 3. Create writable runtime directories and enforce non-root user
-RUN mkdir -p /app/apps/src/landing-custom/logs && chown -R bun:bun /app
+# Create runtime directories & enforce non-root user
+RUN mkdir -p /app/apps/src/landing-custom/logs /app/dist && chown -R bun:bun /app
 
 USER bun
 
 EXPOSE 3000
 
-# Non-destructive operational healthcheck
 HEALTHCHECK --interval=10s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
 
-CMD ["bun", "apps/src/landing-custom/src/server.ts"]
+CMD ["bun", "dist/server.js"]

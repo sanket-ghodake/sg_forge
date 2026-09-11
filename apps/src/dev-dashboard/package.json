@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "echo 'Dev Dashboard service ready'",
-    "build": "echo 'Dev Dashboard built'"
+    "build": "bun build src/server.ts --target=bun --minify --sourcemap=none --outdir dist"
   },
   "dependencies": {
     "@forge/types": "workspace:*",

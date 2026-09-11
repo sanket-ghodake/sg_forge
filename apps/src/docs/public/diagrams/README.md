@@ -27,3 +27,4 @@ This directory houses the authoritative, self-contained, accessible Astryx vecto
 | **19** | [`19-developer-onboarding-toolchain.html`](./19-developer-onboarding-toolchain.html) | Developer Journey | Portable Toolchain, App Generator & 29-Check Gate |
 | **20** | [`20-disaster-recovery-backup.html`](./20-disaster-recovery-backup.html) | Disaster Recovery | AES-256-GCM Backup, Rolling Retention & Restore |
 | **21** | [`21-security-strix-audit.html`](./21-security-strix-audit.html) | Security Audit | In-Chat AI Code Review & Live Endpoint Pentest |
+| **22** | [`22-docker-orchestration-dev-prod.html`](./22-docker-orchestration-dev-prod.html) | Docker Lifecycle | Dev Bind-Mount Hot Reload vs Multi-Stage Prod AOT Compilation & Obfuscation |

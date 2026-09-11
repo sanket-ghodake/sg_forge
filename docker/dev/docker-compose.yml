@@ -89,6 +89,7 @@ services:
     volumes:
       - ../../package.json:/app/package.json:ro
       - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../node_modules:/app/node_modules:ro
       - ../../.env:/app/.env:ro
       - ../../apps/src/sdk:/app/apps/src/sdk:ro
       - ../../apps/src/types:/app/apps/src/types:ro
@@ -131,6 +132,7 @@ services:
     volumes:
       - ../../package.json:/app/package.json:ro
       - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../node_modules:/app/node_modules:ro
       - ../../.env:/app/.env:ro
       - ../../apps/src/sdk:/app/apps/src/sdk:ro
       - ../../apps/src/types:/app/apps/src/types:ro
@@ -175,6 +177,7 @@ services:
     volumes:
       - ../../package.json:/app/package.json:ro
       - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../node_modules:/app/node_modules:ro
       - ../../.env:/app/.env:ro
       - ../../apps/src/sdk:/app/apps/src/sdk:ro
       - ../../apps/src/types:/app/apps/src/types:ro
@@ -218,6 +221,7 @@ services:
     volumes:
       - ../../package.json:/app/package.json:ro
       - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../node_modules:/app/node_modules:ro
       - ../../.env:/app/.env:ro
       - ../../apps/src/sdk:/app/apps/src/sdk:ro
       - ../../apps/src/types:/app/apps/src/types:ro
@@ -259,6 +263,7 @@ services:
     volumes:
       - ../../package.json:/app/package.json:ro
       - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../node_modules:/app/node_modules:ro
       - ../../.env:/app/.env:ro
       - ../../apps/src/sdk:/app/apps/src/sdk:ro
       - ../../apps/src/types:/app/apps/src/types:ro
@@ -302,6 +307,7 @@ services:
     volumes:
       - ../../package.json:/app/package.json:ro
       - ../../tsconfig.json:/app/tsconfig.json:ro
+      - ../../node_modules:/app/node_modules:ro
       - ../../.env:/app/.env:ro
       - ../../apps/src/sdk:/app/apps/src/sdk:ro
       - ../../apps/src/types:/app/apps/src/types:ro

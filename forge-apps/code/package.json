@@ -9,6 +9,7 @@
     "test": "bun test",
     "verify": "bun run scripts/verify-gate.ts",
     "backup": "bun run scripts/backup-db.ts",
+    "compile": "bun build src/server.ts --target=bun --minify --sourcemap=none --outdir dist",
     "build": "docker build -f docker/Dockerfile -t forge-app-code ."
   },
   "dependencies": {},
