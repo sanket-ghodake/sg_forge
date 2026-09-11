@@ -1,5 +1,6 @@
 import { defineConfig, passthroughImageService } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { fileURLToPath } from 'node:url';
 import { getHeadStateScript, getAstryxTooltipScript, getAstryxToastScript, getAstryxStyles } from '@forge/ui';
 
 export default defineConfig({
@@ -8,9 +9,20 @@ export default defineConfig({
   image: {
     service: passthroughImageService(),
   },
+  vite: {
+    resolve: {
+      alias: {
+        '@forge/ui': fileURLToPath(new URL('../ui/src/index.ts', import.meta.url)),
+        '@forge/sdk': fileURLToPath(new URL('../sdk/src/index.ts', import.meta.url)),
+        '@forge/types': fileURLToPath(new URL('../types/src/index.ts', import.meta.url)),
+      },
+    },
+  },
   integrations: [
     starlight({
-      title: 'SG Forge Engineering Portal',
+      title: process.env.NEXT_PUBLIC_BRAND_NAME
+        ? `${process.env.NEXT_PUBLIC_BRAND_NAME} Engineering Portal`
+        : 'SG Forge Engineering Portal',
       logo: { src: './public/favicon.svg' },
       customCss: ['./src/styles/custom.css'],
       components: {
@@ -66,6 +78,7 @@ export default defineConfig({
             { label: 'Security & Strix Audit Workflows', slug: 'security/audit-workflows' },
             { label: 'Disaster Recovery & Backups', slug: 'operations/backup-recovery' },
             { label: 'Deployment & Quickstart Guide', slug: 'operations/deployment-quickstart' },
+            { label: 'Branding, Logos & White-Labeling', slug: 'operations/branding-and-logos' },
           ],
         },
         {

@@ -111,7 +111,7 @@ CMD ["bun", "dist/server.js"]
 ```
 
 ### Protection Capabilities:
-* **Tree-Shaking & Dead-Code Elimination**: Unreferenced functions and modules are purged at build time, shrinking multi-megabyte source trees into compact bundles (<400KB).
+* **Tree-Shaking & Dead-Code Elimination**: Unreferenced functions and modules are purged at build time, shrinking multi-megabyte source trees into compact bundles (&lt; 400KB).
 * **Identifier Mangling & Minification**: Function names, internal variables, and logic branches are compressed into single-character tokens.
 * **Hermetic Source Isolation**: Stage 2 contains only the single obfuscated JavaScript bundle. Proprietary `.ts` algorithms are completely absent from the final shipping image.
 * **Non-Root Execution**: Runs under the unprivileged `bun` user (UID 1000) with write permissions restricted to isolated `/app/data` and `/app/logs`.

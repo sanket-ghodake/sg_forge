@@ -122,8 +122,58 @@ describe('Tier 1 Unit: Brand Configuration Resolver Engine', () => {
       expect(res?.status).toBe(200);
       const text = await res?.text();
       expect(text).toBe('CUSTOM_LOGO_PNG_DATA');
+      expect(res?.headers.get('Content-Type')).toBe('image/png');
     } finally {
       unlinkSync(customPath);
+    }
+  });
+
+  it('Arrange, Act, Assert: handleBrandAssetRequest serves custom SVG override with image/svg+xml when requesting logo.png', async () => {
+    // Arrange: Create a temporary custom-logo.svg in public/brand/
+    const { writeFileSync, unlinkSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const customSvgPath = join(process.cwd(), 'public', 'brand', 'custom-logo.svg');
+    writeFileSync(customSvgPath, Buffer.from('<svg>CUSTOM_SVG_DATA</svg>'));
+
+    try {
+      // Act: Request default /brand/logo.png (standard .env default)
+      const req = new Request('http://localhost:3000/brand/logo.png');
+      const res = handleBrandAssetRequest(req);
+
+      // Assert: Custom SVG is served with correct SVG Content-Type header despite .png URL
+      expect(res).not.toBeNull();
+      expect(res?.status).toBe(200);
+      expect(res?.headers.get('Content-Type')).toBe('image/svg+xml');
+      const text = await res?.text();
+      expect(text).toBe('<svg>CUSTOM_SVG_DATA</svg>');
+    } finally {
+      unlinkSync(customSvgPath);
+    }
+  });
+
+  it('Arrange, Act, Assert: handleBrandAssetRequest serves custom folder logo override (public/brand/custom/logo.svg)', async () => {
+    // Arrange: Create public/brand/custom/logo.svg
+    const { writeFileSync, unlinkSync, mkdirSync, rmdirSync, existsSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const customDir = join(process.cwd(), 'public', 'brand', 'custom');
+    if (!existsSync(customDir)) mkdirSync(customDir, { recursive: true });
+    const customFilePath = join(customDir, 'logo.svg');
+    writeFileSync(customFilePath, Buffer.from('<svg>FOLDER_CUSTOM_SVG</svg>'));
+
+    try {
+      // Act: Request /brand/logo.png
+      const req = new Request('http://localhost:3000/brand/logo.png');
+      const res = handleBrandAssetRequest(req);
+
+      // Assert
+      expect(res).not.toBeNull();
+      expect(res?.status).toBe(200);
+      expect(res?.headers.get('Content-Type')).toBe('image/svg+xml');
+      const text = await res?.text();
+      expect(text).toBe('<svg>FOLDER_CUSTOM_SVG</svg>');
+    } finally {
+      unlinkSync(customFilePath);
+      try { rmdirSync(customDir); } catch {}
     }
   });
 

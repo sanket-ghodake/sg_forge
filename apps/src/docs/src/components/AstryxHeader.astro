@@ -7,9 +7,12 @@
 import config from 'virtual:starlight/user-config';
 import Search from 'virtual:starlight/components/Search';
 import AstryxThemeSelect from './AstryxThemeSelect.astro';
+import { loadBrandConfig } from '@forge/sdk';
 
 const shouldRenderSearch =
   config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
+
+const brand = loadBrandConfig();
 ---
 
 <div class="astryx-header-container">
@@ -17,14 +20,23 @@ const shouldRenderSearch =
   <div class="astryx-brand-block">
     <a href="/docs" class="astryx-brand-link">
       <div class="astryx-logo-mark">
-        <svg viewBox="0 0 32 32" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {brand.logoUrl ? (
+          <img
+            src={brand.logoUrl}
+            alt={brand.name}
+            class="astryx-brand-logo-img"
+            style="height: 28px; max-height: 28px; width: auto; max-width: 140px; object-fit: contain; vertical-align: middle;"
+            onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.style.display='inline-flex';"
+          />
+        ) : null}
+        <svg style={brand.logoUrl ? 'display: none;' : ''} viewBox="0 0 32 32" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="32" height="32" rx="8" fill="var(--forge-primary, #3ecf8e)" fill-opacity="0.15" />
           <path d="M16 6L25 11.2V21.6L16 26.8L7 21.6V11.2L16 6Z" stroke="var(--forge-primary, #3ecf8e)" stroke-width="2" stroke-linejoin="round" />
           <path d="M16 12L20.5 14.6V19.8L16 22.4L11.5 19.8V14.6L16 12Z" fill="var(--forge-primary, #3ecf8e)" />
         </svg>
       </div>
       <div class="astryx-title-group">
-        <span class="astryx-brand-name">SG FORGE</span>
+        <span class="astryx-brand-name">{brand.name}</span>
         <span class="astryx-app-badge">DOCS</span>
       </div>
     </a>

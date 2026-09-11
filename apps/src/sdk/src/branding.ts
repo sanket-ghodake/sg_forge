@@ -40,18 +40,18 @@ function findEnvPath(explicitPath?: string): string | null {
 function findBrandAssetPath(filename: string): string | null {
   let curr = process.cwd();
   for (let i = 0; i < 4; i++) {
-    // 1. Check for git-ignored organization custom logo overrides first
+    // 1. Check for git-ignored organization custom logo overrides first (SVG, PNG, WebP, AVIF)
     if (filename === 'logo.png' || filename === 'logo.svg') {
-      const ext = extname(filename);
-      const customCandidates = [
-        join(curr, 'public', 'brand', `custom-logo${ext}`),
-        join(curr, 'public', 'brand', 'custom', filename),
-        join(curr, 'public', 'brand', `logo.custom${ext}`),
-        join(curr, 'public', 'brand', 'custom-logo.png'),
-        join(curr, 'public', 'brand', 'custom', 'logo.png'),
-      ];
-      for (const customPath of customCandidates) {
-        if (existsSync(customPath)) return customPath;
+      const supportedExtensions = ['.svg', '.png', '.webp', '.avif', '.jpg', '.jpeg'];
+      for (const ext of supportedExtensions) {
+        const customCandidates = [
+          join(curr, 'public', 'brand', `custom-logo${ext}`),
+          join(curr, 'public', 'brand', 'custom', `logo${ext}`),
+          join(curr, 'public', 'brand', `logo.custom${ext}`),
+        ];
+        for (const customPath of customCandidates) {
+          if (existsSync(customPath)) return customPath;
+        }
       }
     }
 
@@ -72,6 +72,7 @@ const MIME_TYPES: Record<string, string> = {
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
+  '.avif': 'image/avif',
   '.gif': 'image/gif',
   '.ico': 'image/x-icon',
 };
@@ -205,7 +206,7 @@ export function handleBrandAssetRequest(req: Request): Response | null {
 
     if (assetPath && existsSync(assetPath)) {
       try {
-        const ext = extname(safeFilename).toLowerCase();
+        const ext = extname(assetPath).toLowerCase();
         const contentType = MIME_TYPES[ext] || 'application/octet-stream';
         const file = (globalThis as any).Bun?.file ? (globalThis as any).Bun.file(assetPath) : readFileSync(assetPath);
         return new Response(file, {

@@ -94,14 +94,40 @@ export function generateCaddyfile(): string {
     }
 
     # Static Brand Assets & Direct Public Delivery (Zero Upstream Bun Overhead)
-    # Checks for git-ignored custom logo overrides before falling back to default
+    # Checks for git-ignored custom logo overrides (SVG, PNG, WebP, AVIF) before falling back to default
     handle_path /brand* {
         root * /etc/caddy/public/brand
-        @hasCustomLogo {
-            path /logo.png
+
+        @customSvg {
+            path /logo.png /logo.svg
+            file /custom-logo.svg
+        }
+        rewrite @customSvg /custom-logo.svg
+
+        @customDirSvg {
+            path /logo.png /logo.svg
+            file /custom/logo.svg
+        }
+        rewrite @customDirSvg /custom/logo.svg
+
+        @customPng {
+            path /logo.png /logo.svg
             file /custom-logo.png
         }
-        rewrite @hasCustomLogo /custom-logo.png
+        rewrite @customPng /custom-logo.png
+
+        @customDirPng {
+            path /logo.png /logo.svg
+            file /custom/logo.png
+        }
+        rewrite @customDirPng /custom/logo.png
+
+        @customWebp {
+            path /logo.png /logo.svg
+            file /custom-logo.webp
+        }
+        rewrite @customWebp /custom-logo.webp
+
         file_server
     }
 `;

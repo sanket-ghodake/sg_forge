@@ -34,11 +34,13 @@ cp .env.example .env
 Open `.env` and configure your organization's identity and security keys:
 
 ```bash
-# 🏢 Organization Identity & White-Labeling
+# 🏢 Organization Identity & White-Labeling (SVG/PNG/WebP, Zero Git Drift)
 NEXT_PUBLIC_BRAND_NAME="Acme Corporation"
 NEXT_PUBLIC_ORG_NAME="Acme Corp"
 NEXT_PUBLIC_BRAND_SHORT="ACME"
 NEXT_PUBLIC_BRAND_TAGLINE="Internal Enterprise Workspace & App Hub"
+NEXT_PUBLIC_BRAND_LOGO_URL="/brand/logo.png"
+NEXT_PUBLIC_BRAND_FAVICON_URL="/favicon.ico"
 AUTH_ORG_DOMAIN="acme.internal"
 PUBLIC_DOMAIN="portal.acme.com"
 SUPPORT_EMAIL="it-support@acme.com"

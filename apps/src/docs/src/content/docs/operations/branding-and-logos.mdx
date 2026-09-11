@@ -1,0 +1,146 @@
+---
+title: Dynamic White-Label Branding & Logos
+description: Enterprise guide for dynamic white-label branding, multi-format logo assets (SVG, PNG, WebP, AVIF, ICO), and Zero Git Dirty customization workflows.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Instant Enterprise White-Labeling with Zero Git Drift"
+  analogy="Customizing your company name, brand emblem, and logo across all microservices and docs requires zero code modifications and never dirties your Git working tree."
+  impact="Upstream platform updates can be pulled cleanly at any time without merge conflicts or asset overwrites."
+/>
+
+<TraceabilityBadge reqId="SR-GATE-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-UI-001" type="LLR" status="verified" />
+
+## 1. Dynamic White-Labeling Architecture
+
+SG Forge centralizes identity and brand resolution in `@forge/sdk` (`branding.ts`). The platform resolves branding tokens in strict priority order:
+
+1. **Runtime Process Overrides**: `process.env.NEXT_PUBLIC_BRAND_*`
+2. **Disk Environment File**: `.env` (canonical single source of truth)
+3. **Platform Defaults**: Fallback tokens (`AG Dashboard`, `AG`)
+
+```
+   ┌─────────────────────────────────────────────────────────────┐
+   │                         .env File                           │
+   │  NEXT_PUBLIC_BRAND_NAME / NEXT_PUBLIC_BRAND_LOGO_URL       │
+   └──────────────────────────────┬──────────────────────────────┘
+                                  │
+                  ┌───────────────┴───────────────┐
+                  ▼                               ▼
+       ┌────────────────────┐           ┌───────────────────┐
+       │   Caddy Gateway    │           │    @forge/sdk     │
+       │   (/brand/* route) │           │ (loadBrandConfig) │
+       └──────────┬─────────┘           └─────────┬─────────┘
+                  │                               │
+                  ▼                               ▼
+       ┌────────────────────┐           ┌───────────────────┐
+       │ Static File Cache  │           │ Astryx UI Headers │
+       │ (Zero Bun Overhead)│           │ (Portal/Docs/Auth)│
+       └────────────────────┘           └───────────────────┘
+```
+
+All microservices—including Portal, Documentation, Developer Dashboard, Developer Hub, and Auth IAM—consume these tokens dynamically to render consistent typography, headers, page titles, and footers.
+
+---
+
+## 2. Supported Brand Logo Formats & Recommendations
+
+The platform natively supports all web-standard image formats for brand emblems and wordmarks:
+
+| Format | Extension | Recommended Use Case | Dual-Theme Behavior |
+| :--- | :--- | :--- | :--- |
+| **SVG** *(Recommended)* | `.svg` | Corporate emblems, vector typography, responsive icons | Scalable vector fidelity; respects CSS theme colors |
+| **PNG** | `.png` | Raster logos with transparent background | Fixed pixel dimensions; transparent backdrop |
+| **WebP** | `.webp` | High-compression photographic or gradient logos | Modern compressed raster |
+| **AVIF** | `.avif` | Next-generation ultra-compact raster format | High dynamic range compression |
+| **ICO / SVG** | `.ico`, `.svg` | Browser tab favicons and bookmark icons | Dual 16x16 / 32x32 raster or vector |
+
+### Dimension & Layout Guidelines
+- **Header Height**: Logo images are rendered with `height: 32px` (`max-height: 80%`, `max-width: 180px`, `object-fit: contain`).
+- **Aspect Ratio**: Both square emblems (`1:1`) and horizontal wordmarks (`3:1` to `5:1`) fit comfortably.
+- **Dual-Theme Parity**: Assets must render cleanly against both dark surface (`#0f172a`) and light surface (`#ffffff`). Transparent backgrounds are strongly recommended.
+- **Resilient Fallback**: If an image fails to load or the path is unavailable, Astryx UI automatically falls back to an accessible text badge (`brand.short`).
+
+---
+
+## 3. The 3 Zero Git Dirty Workflows
+
+When deploying or forking SG Forge, organizations can customize their branding using any of three zero-drift approaches:
+
+### Approach 1: Drop-In File Override (Zero Config Change, Zero Git Drift)
+The fastest method. Simply drop your organization's custom logo into `public/brand/`:
+- `public/brand/custom-logo.svg` *(or `.png`, `.webp`, `.avif`)*
+- OR inside a dedicated folder: `public/brand/custom/logo.svg` *(or `.png`, `.webp`)*
+
+**Why it works:**
+- All `custom-*`, `*.custom.*`, and `custom/` paths under `public/brand/` are globally ignored in `.gitignore` and `.dockerignore`.
+- The Caddy reverse proxy and `@forge/sdk` automatically prioritize custom overrides before falling back to the default `logo.png`.
+- Running `git status` remains completely clean (`clean — nothing to commit`).
+
+### Approach 2: Git-Ignored Environment Pointer (`.env`)
+Configure your active `.env` file to point directly to your asset:
+
+```bash
+# 🏢 Branding, Identity & Dynamic White-Labeling (Public)
+NEXT_PUBLIC_BRAND_NAME="Acme Corporation"
+NEXT_PUBLIC_ORG_NAME="Acme Corp"
+NEXT_PUBLIC_BRAND_SHORT="ACME"
+NEXT_PUBLIC_BRAND_TAGLINE="Internal Enterprise Workspace & App Hub"
+
+# Point to local static asset, custom file, or external CDN URL:
+NEXT_PUBLIC_BRAND_LOGO_URL="/brand/custom-logo.svg"
+NEXT_PUBLIC_BRAND_FAVICON_URL="/favicon.ico"
+```
+
+**Supported URL Types:**
+- Relative path to local asset: `"/brand/custom-logo.svg"`, `"/brand/custom/logo.png"`
+- External CDN URL: `"https://cdn.acme.corp/assets/logo.svg"`
+- Base64 data URI: `"data:image/svg+xml;base64,..."`
+
+Because `.env` is listed in `.gitignore`, modifying it never dirties your Git tree.
+
+### Approach 3: In-Place Editing with Git Skip-Worktree
+If your pipeline requires replacing `public/brand/logo.png` or `public/brand/logo.svg` directly in place:
+
+1. **Lock tracking before modifying**:
+   ```bash
+   rtk ./run.sh lock-logo
+   ```
+2. **Replace the files** with your company's assets.
+3. **Verify Git status**:
+   ```bash
+   rtk git status
+   # Output: working tree clean (nothing to commit)
+   ```
+4. **Inspect or unlock at any time**:
+   ```bash
+   rtk ./run.sh logo-status   # View lock status
+   rtk ./run.sh unlock-logo   # Resume upstream tracking
+   ```
+
+---
+
+## 4. Verification & Diagnostics
+
+Use the following CLI commands to test your branding configuration:
+
+```bash
+# 1. Verify Git tracking status of brand assets
+rtk ./run.sh logo-status
+
+# 2. Synchronize proxy configuration from .env
+rtk bun scripts/generate-proxy.ts
+
+# 3. Test HTTP asset delivery and MIME type via Caddy
+rtk curl -sI http://localhost/brand/logo.png
+
+# 4. Run SDK unit tests to verify asset resolution
+rtk bun test apps/src/sdk/test/unit/branding.test.ts
+```
+
+All requests to `/brand/*` are served directly by Caddy with HTTP 200, immutable caching (`Cache-Control: public, max-age=86400`), and zero upstream application runtime overhead.

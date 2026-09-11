@@ -5,7 +5,8 @@
   "types": "src/index.ts",
   "type": "module",
   "dependencies": {
-    "@forge/types": "workspace:*"
+    "@forge/types": "workspace:*",
+    "@forge/ui": "workspace:*"
   },
   "license": "Apache-2.0",
   "author": "Sanket Ghodake <sanketghodke03@gmail.com>"
