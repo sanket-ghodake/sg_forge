@@ -42,6 +42,11 @@ run.bat setup
 run.bat dev
 ```
 
+### 💡 Shell & VS Code Environment Activation
+* **VS Code / Cursor / Windsurf**: The workspace configuration at [`.vscode/settings.json`](.vscode/settings.json) automatically injects `portables/bin` and `portables/bun/bin` into all integrated terminals.
+* **External Shells**: Run `source env.sh` (or `. env.sh`) to activate `rtk`, `bun`, `caveman`, `astryx`, and `graft` directly on your current terminal's `$PATH`.
+* **Direct Execution Fallback**: If `rtk` is not in an external subshell's PATH, you can always invoke `./portables/bin/rtk <command>` directly.
+
 ---
 
 ## 🧭 Master Documentation & Architecture

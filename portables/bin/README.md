@@ -8,6 +8,10 @@ Zero-host portable executable binaries and self-resolving POSIX shell wrappers (
 
 All binaries and scripts in this directory are self-resolving POSIX wrappers that guarantee cross-platform execution (Linux, macOS, Windows WSL/Git Bash) with zero host modifications.
 
+### 0. Core Runtimes & Runners
+- **[`bun`](https://github.com/oven-sh/bun)**: Standalone wrapper to portable Bun v1.3.14 (LTS 2026).
+- **[`bunx`](https://github.com/oven-sh/bun)**: Standalone wrapper for executing local packages and tools via portable Bun.
+
 ### 1. Architecture, Code Quality & Linters
 - **[`biome`](https://github.com/biomejs/biome)**: Fast AST linter and code formatter.
 - **[`depcruise`](https://github.com/sverweij/dependency-cruiser)**: Monorepo dependency boundary and rule enforcer.

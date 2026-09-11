@@ -24,7 +24,6 @@ const REPO_ROOT = process.cwd();
 const LOGS_DIR = join(REPO_ROOT, 'logs');
 const LOGS_REPORTS_DIR = join(LOGS_DIR, 'reports');
 const COMMITS_JSONL_PATH = join(LOGS_DIR, 'commits.jsonl');
-const WORKLOGS_PATH = join(LOGS_DIR, 'WORKLOGS.md');
 const VERIFICATION_REPORT_PATH = join(REPO_ROOT, '.agents', 'reports', 'VERIFICATION_REPORT.md');
 const SECURITY_AUDIT_JSONL_PATH = join(LOGS_DIR, 'security', 'audit.jsonl');
 
@@ -290,20 +289,8 @@ export function recordLatestCommit(): void {
     writeFileSync(COMMITS_JSONL_PATH, `${newJsonl}\n`, 'utf8');
   }
 
-  // 2. Format and append ground-truth line to WORKLOGS.md
-  if (!existsSync(WORKLOGS_PATH)) {
-    writeFileSync(WORKLOGS_PATH, '# WORKLOGS\n\n', 'utf8');
-  }
-
-  let worklogs = readFileSync(WORKLOGS_PATH, 'utf8').trim();
-  const worklogEntry = `${dateStr} | [${shortHash}] ${subject} (+${stats.insertions}, -${stats.deletions})`;
-
-  if (!worklogs.includes(`[${shortHash}]`)) {
-    worklogs = worklogs ? `${worklogs}\n${worklogEntry}` : `# WORKLOGS\n\n${worklogEntry}`;
-    writeFileSync(WORKLOGS_PATH, `${worklogs}\n`, 'utf8');
-  }
-
-  console.log(`\n📜 [Git Post-Commit] Recorded Ground-Truth Commit Log:`);
+  // Ground-truth commit record stored in logs/commits.jsonl
+  console.log(`\n📜 [Git Commit] Recorded Ground-Truth Commit Log:`);
   console.log(`   └─ [${shortHash}] ${subject}`);
   console.log(`   └─ JSONL: logs/commits.jsonl (+${stats.insertions}/-${stats.deletions}, ${stats.filesChanged} files)`);
 
@@ -377,16 +364,8 @@ export function recordPreCommit(): void {
     mkdirSync(LOGS_DIR, { recursive: true });
   }
 
-  if (!existsSync(WORKLOGS_PATH)) {
-    writeFileSync(WORKLOGS_PATH, '# WORKLOGS\n\n', 'utf8');
-  }
-
-  const worklogs = readFileSync(WORKLOGS_PATH, 'utf8').trim();
-  const worklogPrefix = `${dateStr} |`;
-  if (!worklogs.includes(worklogPrefix)) {
-    const entry = `${dateStr} | pre-commit: verified ${nonLogChanges.length} staged files (+${stats.insertions}, -${stats.deletions})\n`;
-    writeFileSync(WORKLOGS_PATH, `${worklogs}\n${entry}`, 'utf8');
-  }
+  // Verification of staged changes completed cleanly
+  console.log(`📜 [Git Pre-Commit] Staged ${nonLogChanges.length} files verified (+${stats.insertions}, -${stats.deletions}).`);
 
   console.log(`📜 [Git Pre-Commit] Staged ${nonLogChanges.length} files verified and pre-commit log recorded.`);
 }

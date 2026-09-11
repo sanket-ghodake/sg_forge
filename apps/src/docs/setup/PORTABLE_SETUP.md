@@ -51,6 +51,24 @@ run.bat setup
 run.bat dev
 ```
 
+### 💡 Activating Portable Tools on Terminal PATH
+
+If your IDE or shell reports `rtk: command not found` or `rtk is not recognized`:
+
+1. **Visual Studio Code / Cursor / Windsurf**:
+   The workspace includes [`.vscode/settings.json`](.vscode/settings.json), which automatically injects `${workspaceFolder}/portables/bin` and `${workspaceFolder}/portables/bun/bin` into all integrated terminals on Linux, macOS, and Windows. Simply open a new terminal tab in VS Code.
+2. **External Shells (Bash / Zsh)**:
+   Source the environment directly in your current shell:
+   ```bash
+   source env.sh
+   ```
+   *(Or: `export PATH="$PWD/portables/bin:$PWD/portables/bun/bin:$PATH"`)*
+3. **AI Coding Agents (Claude Code, Cursor, Antigravity, Copilot)**:
+   If an AI agent subshell does not inherit the VS Code PATH, it can prefix commands with the repo path:
+   ```bash
+   ./portables/bin/rtk <command>
+   ```
+
 ---
 
 ## 🌐 Cross-Platform & Zero-Drift Git Standards (WSL, Windows, macOS, Linux)

@@ -4,6 +4,12 @@ REM SG Forge - Windows Command Prompt & PowerShell Shim for RTK Utility
 REM Allows native Windows execution of 'rtk' commands without Git Bash or WSL
 REM ==============================================================================
 
+set "PORTABLE_RTK=%~dp0..\rtk\bin\rtk.exe"
+if exist "%PORTABLE_RTK%" (
+    "%PORTABLE_RTK%" %*
+    exit /b %ERRORLEVEL%
+)
+
 set "LOCAL_RTK=%USERPROFILE%\.local\bin\rtk.exe"
 if exist "%LOCAL_RTK%" (
     "%LOCAL_RTK%" %*

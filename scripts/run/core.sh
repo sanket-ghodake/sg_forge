@@ -21,11 +21,17 @@ case "$CMD" in
             echo "❌ Portable Bun runtime not found at $PORTABLE_BUN"
             exit 1
         fi
+        # Ensure .env is provisioned from .env.example if missing
+        if [ ! -f "$REPO_ROOT/.env" ] && [ -f "$REPO_ROOT/.env.example" ]; then
+            echo "📄 [${BRAND_NAME}] Provisioning initial .env from .env.example..."
+            cp "$REPO_ROOT/.env.example" "$REPO_ROOT/.env"
+        fi
         # Cross-platform permission & git attribute hardening (Windows/WSL/macOS/Linux)
-        chmod +x "$REPO_ROOT"/portables/bin/* "$REPO_ROOT"/portables/bun/bin/* "$REPO_ROOT"/run.sh "$REPO_ROOT"/scripts/run/*.sh 2>/dev/null || true
+        chmod +x "$REPO_ROOT"/portables/bin/* "$REPO_ROOT"/portables/bun/bin/* "$REPO_ROOT"/portables/rtk/bin/* "$REPO_ROOT"/portables/scc/* "$REPO_ROOT"/portables/hyperfine/* "$REPO_ROOT"/portables/ctop/* "$REPO_ROOT"/run.sh "$REPO_ROOT"/scripts/run/*.sh "$REPO_ROOT"/.githooks/* "$REPO_ROOT"/env.sh 2>/dev/null || true
         if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
             git config core.filemode false
             git config core.autocrlf false
+            git config core.hooksPath .githooks
         fi
         echo "✅ Using Bun Runtime: $($PORTABLE_BUN --version)"
         echo "✅ Using Portable RTK: $($RTK --version 2>/dev/null || echo 'Ready')"
@@ -43,6 +49,11 @@ case "$CMD" in
             echo "🧩 [${BRAND_NAME}] Synchronizing autonomous Git submodules..."
             git submodule update --init --recursive 2>/dev/null || true
         fi
+        # Initialize databases if not yet provisioned
+        if [ ! -f "$REPO_ROOT/apps/data/auth.db" ]; then
+            echo "🌱 [${BRAND_NAME}] Initializing initial development databases..."
+            $PORTABLE_BUN run "$REPO_ROOT/scripts/init-all-databases.ts" 2>/dev/null || true
+        fi
         # Initialize Graft Tier 1 code context graph if not already built
         if [ ! -d "$REPO_ROOT/graft" ]; then
             echo "🌿 [${BRAND_NAME}] Initializing Graft Tier 1 code context graph..."
@@ -52,6 +63,10 @@ case "$CMD" in
         if [ ! -f "$REPO_ROOT/logs/token-ledger.jsonl" ]; then
             touch "$REPO_ROOT/logs/token-ledger.jsonl"
         fi
+        echo "💡 Tip for IDE & Terminal PATH:"
+        echo "   ├─ VS Code / Cursor: Terminal PATH is pre-configured via .vscode/settings.json"
+        echo "   ├─ External Shells:  run 'source env.sh' (or: export PATH=\"\$PWD/portables/bin:\$PWD/portables/bun/bin:\$PATH\")"
+        echo "   └─ Direct Fallback:  run './portables/bin/rtk <command>'"
         echo "✨ Setup completed successfully! Run './run.sh dev' or './run.sh docker up' to start."
         ;;
 

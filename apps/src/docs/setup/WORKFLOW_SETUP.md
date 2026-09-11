@@ -9,74 +9,48 @@
 
 | Component | Framework / Technology | Version (2026 Baseline) | Standalone Location |
 | :--- | :--- | :--- | :--- |
-| **JS / TS Engine** | Portable Bun / Node.js | **Node 24 LTS** / Bun 1.x | `portables/bun`, `.node_env/` |
-| **Frontend Framework** | Next.js | **v16.2.9** | `node_modules/next` |
-| **UI Library** | React | **v19.2.4** | `node_modules/react` |
-| **ORM & Database** | Drizzle ORM + PostgreSQL 17 | **v0.45.2** | `node_modules/drizzle-orm` |
-| **Doc Generator** | MkDocs | Python 3.12+ | `.venv/bin/mkdocs` |
-| **Type Checker** | TypeScript | **v5.x** | `node_modules/typescript` |
+| **JS / TS Engine** | Portable Bun Runtime | **v1.3.14 LTS** | `portables/bun/bin/bun` |
+| **Frontend Framework** | Next.js App Router | **v16.2.9** | `node_modules/next` |
+| **UI Library** | React 19 / Astryx UI | **v19.2.4** | `@forge/ui` |
+| **ORM & Database** | Drizzle ORM + Turso / libSQL | **v0.45.2** | Dedicated Turso DB per app |
+| **Doc Generator** | Astro Starlight + Pagefind | **v0.32+** | `apps/src/docs` |
+| **Type Checker** | TypeScript Strict | **v5.6.3** | `node_modules/typescript` |
 
 ---
 
 ## 2. Portable Runtimes & Zero-Host-Pollution Strategy
 
-To ensure reproducible builds across different development environments without host OS package conflicts, `org_website` utilizes standalone portable runtimes:
+To ensure reproducible builds across different development environments without host OS package conflicts, SG Forge utilizes standalone portable runtimes:
 
 - **Bun Runtime (`bun`)**: Portable JavaScript / TypeScript execution engine and package manager stored in `portables/bun/bin/bun`.
-- **Node.js 24 LTS (`.node_env/`)**: Portable Node.js standalone runtime stored in `.node_env/bin/node`.
-- **Python Virtualenv (`./.venv/`)**: Isolated Python environment for MkDocs documentation (`./.venv/bin/mkdocs`).
-- **Portable Executables (`portables/`)**: Standalone binary distributions isolated inside repository folders.
-
-All setup and run commands automatically target these repository-local environments.
+- **Portable Executables & Wrappers (`portables/bin/`)**: 34 standalone binary distributions isolated inside repository folders (RTK, Caveman, Graft, CodeBurn, Headroom, Lizard, SCC, Biome, Knip, Gitleaks, etc.).
+- **Zero Host Pollution**: All setup and run commands automatically target these repository-local environments without requiring `apt`, `brew`, `npm -g`, or `pip install`.
 
 ---
 
-## 3. Standalone Runtime Setup Commands
+## 3. Standalone 1-Command Setup
 
-### Step 1 — Setup Portable Bun Runtime (`portables/bun`)
-
+### Linux, macOS & WSL2
 ```bash
-bash scripts/portable/development/setup.sh
+./run.sh setup
+./run.sh dev
 ```
 
-Or manually via curl:
-```bash
-mkdir -p portables/bun
-curl -fsSL https://bun.sh/install | BUN_INSTALL=$(pwd)/portables/bun bash
-export PATH="$(pwd)/portables/bun/bin:$PATH"
-bun install
+### Windows Native (CMD & PowerShell)
+```cmd
+run.bat setup
+run.bat dev
 ```
 
----
-
-### Step 2 — Setup Standalone Node.js 24 LTS (`.node_env/`)
-
-```bash
-# Linux (x64)
-python3 -c '
-import urllib.request
-url = "https://nodejs.org/dist/v24.0.0/node-v24.0.0-linux-x64.tar.xz"
-req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-with urllib.request.urlopen(req) as resp, open("/tmp/node.tar.xz", "wb") as f:
-    f.write(resp.read())
-' && rm -rf .node_env && mkdir -p .node_env && tar -xJf /tmp/node.tar.xz -C .node_env --strip-components=1 && rm /tmp/node.tar.xz
-```
-
-```bash
-# macOS (Apple Silicon arm64)
-curl -fsSL https://nodejs.org/dist/v26.0.0/node-v26.0.0-darwin-arm64.tar.gz -o node.tar.gz
-rm -rf .node_env && mkdir -p .node_env
-tar -xzf node.tar.gz -C .node_env --strip-components=1 && rm node.tar.gz
-```
-
----
-
-### Step 3 — Setup Portable Python 3.12 Virtualenv (`.venv/`)
-
-```bash
-python3 -m venv .venv
-./.venv/bin/pip install -r requirements.txt || ./.venv/bin/pip install mkdocs mkdocs-material
-```
+The `setup` command automatically:
+1. Hardens execution permissions on all portable binaries (`chmod +x`).
+2. Configures Git to prevent cross-platform CRLF drift (`core.autocrlf false`) and filemode permission drift (`core.filemode false`).
+3. Installs monorepo workspace dependencies via `$PORTABLE_BUN install`.
+4. Synchronizes canonical ignore files and `.gitattributes` across the monorepo (`scripts/sync-ignores.ts`).
+5. Generates local development TLS certificates and Caddy ingress reverse proxy mappings.
+6. Synchronizes autonomous Git submodules in `forge-apps/`.
+7. Seeds initial SQLite / Turso databases (`apps/data/auth.db`) if not already provisioned.
+8. Builds the Graft Tier 1 code context graph and initializes the lifetime token ledger.
 
 ---
 

@@ -55,10 +55,17 @@ goto help
 
 :setup
 echo ⚡ Bootstrapping portable environment on Windows...
+if not exist "%REPO_ROOT%.env" (
+    if exist "%REPO_ROOT%.env.example" (
+        echo 📄 Provisioning initial .env from .env.example...
+        copy "%REPO_ROOT%.env.example" "%REPO_ROOT%.env" >nul
+    )
+)
 git rev-parse --is-inside-work-tree >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     git config core.filemode false
     git config core.autocrlf false
+    git config core.hooksPath .githooks
 )
 bun install
 bun run "%REPO_ROOT%scripts\sync-ignores.ts"

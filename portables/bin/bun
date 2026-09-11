@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Bun Wrapper (Zero Host Install - 2026 LTS)
+# Self-resolving wrapper to portables/bun/bin/bun
+# ==============================================================================
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+if [ "$(uname -s)" = "Linux" ] && [ "$(uname -m)" = "x86_64" ] && [ -x "$WORKSPACE_ROOT/portables/bun/bin/bun" ]; then
+    exec "$WORKSPACE_ROOT/portables/bun/bin/bun" "$@"
+elif [ -x "$WORKSPACE_ROOT/portables/bun/bin/bun.exe" ]; then
+    exec "$WORKSPACE_ROOT/portables/bun/bin/bun.exe" "$@"
+elif command -v bun >/dev/null 2>&1; then
+    exec bun "$@"
+else
+    echo "❌ [SG Forge] Portable Bun runtime not detected at $WORKSPACE_ROOT/portables/bun/bin/bun" >&2
+    exit 1
+fi

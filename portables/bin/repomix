@@ -8,6 +8,11 @@ import { join, relative } from "node:path";
 
 const REPO_ROOT = process.cwd();
 
+if (process.argv.includes('--version') || process.argv.includes('-v')) {
+  console.log("repomix v1.10.2 (portable)");
+  process.exit(0);
+}
+
 if (process.argv.includes('--help') || process.argv.includes('-h')) {
   console.log("📦 [Repomix Portable] AI Context Codebase Packager (2026 LTS)");
   console.log("Usage: repomix [output_file]");

@@ -17,3 +17,7 @@
 2026-09-11 08:59 | Verify live Docker Dev stack (10/10 containers healthy, 0 errors, sub-5ms hot-reload confirmed) and Prod multi-stage builds
 2026-09-11 21:40 | Audit white-label branding, .env.example, docs linking, and Zero Git Dirty logo policy
 2026-09-11 21:51 | Audit and implement multi-format logo support (SVG/PNG/WebP/AVIF), Zero Git Dirty policy, and docs linking
+2026-09-11 22:16 | Verify and harden portable setup script and toolchain configuration
+2026-09-11 22:23 | Harden AI agent directives and configure VS Code terminal PATH for portable toolchain
+2026-09-11 22:29 | Add bun wrappers to portables/bin, configure core.hooksPath and .env auto-provisioning
+2026-09-11 22:33 | Remove git hook mutations of WORKLOGS.md and undo last commit as requested

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Bunx Wrapper (Zero Host Install - 2026 LTS)
+# Self-resolving wrapper to portables/bun/bin/bunx
+# ==============================================================================
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+if [ -x "$WORKSPACE_ROOT/portables/bun/bin/bunx" ]; then
+    exec "$WORKSPACE_ROOT/portables/bun/bin/bunx" "$@"
+else
+    exec "$SCRIPT_DIR/bun" x "$@"
+fi

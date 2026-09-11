@@ -18,3 +18,4 @@ Rules:
   - Runs/tests: use `rtk test` or `rtk err <command>` to show only errors
 - Never output raw commands if there is a matching `rtk` subcommand.
 - Use `rtk smart` to generate short summaries.
+- **Portable PATH & Fallback**: The standalone RTK binary resides at `portables/bin/rtk`. If `rtk` is not globally recognized in the current subshell PATH, invoke it directly via `./portables/bin/rtk <command>` (e.g. `./portables/bin/rtk git status`) or source `./env.sh` (or `export PATH="$PWD/portables/bin:$PWD/portables/bun/bin:$PATH"`). Never fail execution due to missing host rtk.
