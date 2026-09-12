@@ -97,7 +97,7 @@ export function loadServiceRegistry(options?: string | LoadRegistryOptions): Ser
   const envPath = typeof options === 'string' ? options : options?.envPath;
   const includeDisabled = typeof options === 'object' ? options.includeDisabled ?? true : true;
   const resolvedEnvPath = findEnvPath(envPath);
-  const envMap: Record<string, string> = { ...(process.env as Record<string, string>) };
+  const envMap: Record<string, string> = {};
 
   if (resolvedEnvPath && isRegularFile(resolvedEnvPath)) {
     const rawContent = readFileSync(resolvedEnvPath, 'utf8');
@@ -119,6 +119,15 @@ export function loadServiceRegistry(options?: string | LoadRegistryOptions): Ser
     }
   }
 
+  // Shell & process environment overrides file defaults when not loading an explicit envPath
+  if (!envPath) {
+    for (const [k, v] of Object.entries(process.env)) {
+      if (v !== undefined) {
+        envMap[k] = v;
+      }
+    }
+  }
+
   const services: ServiceEntry[] = [];
 
   for (const [key, value] of Object.entries(envMap)) {
@@ -134,6 +143,10 @@ export function loadServiceRegistry(options?: string | LoadRegistryOptions): Ser
         const role = parts[4] || 'General';
         const isPublic = role.toLowerCase().includes('public');
         const status = getAppStatus(appId);
+
+        if (appId === 'landing' && envMap.DISABLE_LANDING === 'true') {
+          continue;
+        }
 
         if (!includeDisabled && status === 'disabled') {
           continue;
@@ -206,4 +219,19 @@ export function loadServiceRegistry(options?: string | LoadRegistryOptions): Ser
   }
 
   return services;
+}
+
+/**
+ * Evaluates whether the built-in landing service container is currently active.
+ * Returns false if landing is disabled, hosted externally, or served by a custom container.
+ * @requirements [HLR-SDK-301] [LLR-SDK-001] [LLR-SDK-005]
+ */
+export function isBuiltinLandingActive(options?: string | LoadRegistryOptions): boolean {
+  const services = loadServiceRegistry(options);
+  const root = services.find((s) => s.path === '/');
+  return Boolean(
+    root &&
+    (root.containerName === 'landing' || root.containerName === 'ag-landing') &&
+    !root.isExternal
+  );
 }

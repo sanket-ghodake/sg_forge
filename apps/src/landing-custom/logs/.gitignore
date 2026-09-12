@@ -1,5 +1,0 @@
-# Isolated microservice logs retention
-*.log
-*.log.*
-!.gitignore
-!README.md

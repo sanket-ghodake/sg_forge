@@ -13,7 +13,7 @@ const REPO_ROOT = process.cwd();
 
 const TARGET_GROUPS: Record<string, string[]> = {
   logo: ['public/brand/logo.png', 'public/brand/logo.svg'],
-  landing: ['apps/src/landing-custom/src/template.html.ts'],
+  landing: ['apps/src/landing/src/server.ts'],
 };
 
 function runGit(args: string): string {

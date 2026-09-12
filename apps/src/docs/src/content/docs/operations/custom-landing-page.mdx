@@ -22,58 +22,58 @@ Downstream organizations deploying SG Forge typically replace the default root l
 
 In standard repositories, modifying internal template files creates local Git diffs. When the upstream repository publishes updates, `git pull` fails or produces complex merge conflicts.
 
-SG Forge enforces a **Zero Git Dirty Policy** by providing four decoupled ingress customization workflows:
+SG Forge enforces a **Zero Git Dirty Policy** by providing three decoupled ingress customization workflows:
 
 ```
-                           Root Request (GET /)
-                                    │
-                                    ▼
-                     ┌─────────────────────────────┐
-                     │     Caddy Ingress Gateway   │
-                     │       (proxy/Caddyfile)     │
-                     └──────────────┬──────────────┘
-                                    │
-               ┌────────────────────┼────────────────────┐
-               ▼                    ▼                    ▼
-   [Option 1: In-Repo Slot]  [Option 2: .env Route] [Option 3: Submodule]
-   apps/src/landing-custom   APP_LANDING in .env    custom-landing/
-   (Auto-detects custom/)    (Proxy to CMS/Container) (Private Git Repo)
-               │
-               ▼
-   ┌───────────────────────┐
-   │  Resolution Priority: │
-   │  1. custom/index.html │
-   │  2. custom/template.ts│
-   │  3. Default Astryx UI │
-   └───────────────────────┘
+                            Root Request (GET /)
+                                     │
+                                     ▼
+                      ┌─────────────────────────────┐
+                      │     Caddy Ingress Gateway   │
+                      │       (proxy/Caddyfile)     │
+                      └──────────────┬──────────────┘
+                                     │
+                ┌────────────────────┼────────────────────┐
+                ▼                    ▼                    ▼
+    [Option 1: In-Repo Slot]  [Option 2: .env Route] [Option 3: Submodule]
+    apps/src/landing/custom/  APP_LANDING in .env    custom-landing/
+    (Auto-detects custom/)    (External URL/Proxy)   (Private Git Repo)
+                │             (Zero Docker Container)
+                ▼
+    ┌───────────────────────┐
+    │  Resolution Priority: │
+    │  1. custom/index.html │
+    │  2. custom/template.ts│
+    │  3. Default Astryx UI │
+    └───────────────────────┘
 ```
 
 ---
 
-## 2. The 4 Zero-Drift Customization Options
+## 2. The 3 Zero-Drift Customization Options
 
-### Option 1: Drop-In Override Folder (`custom/`) — In-Repo Simplicity
+### Option 1: Drop-In Override Folder (`apps/src/landing/custom/`) — In-Repo Simplicity
 
 The simplest method for teams wanting to store code directly inside the SG Forge repository without Git tracking:
 
 1. **Create the Git-Ignored Directory**:
    ```bash
-   mkdir -p apps/src/landing-custom/custom
+   mkdir -p apps/src/landing/custom
    ```
-   *Note: `apps/src/landing-custom/custom/` is registered in `.gitignore` and all editor ignore definitions.*
+   *Note: `apps/src/landing/custom/` is registered in `.gitignore` and all editor ignore definitions.*
 
 2. **Static Site Export (HTML/CSS/JS)**:
    Drop an exported static site (from Webflow, Astro, Tailwind, Vite, or manual HTML) into `custom/`:
    ```text
-   apps/src/landing-custom/custom/
+   apps/src/landing/custom/
    ├── index.html        # Main landing page HTML (Auto-served at '/')
    ├── styles.css        # Static asset (Auto-served at '/custom/styles.css')
    └── logo.png          # Image asset (Auto-served at '/custom/logo.png')
    ```
-   The `@forge/landing-custom` server automatically detects `custom/index.html` and serves it with built-in path traversal protection.
+   The `@forge/landing` server automatically detects `custom/index.html` and serves it with built-in path traversal protection.
 
 3. **Dynamic TypeScript Template**:
-   Alternatively, create `apps/src/landing-custom/custom/template.ts` exporting `renderCustomLandingHtml()`:
+   Alternatively, create `apps/src/landing/custom/template.ts` exporting `renderCustomLandingHtml()`:
    ```typescript
    export function renderCustomLandingHtml(): string {
      return `<!DOCTYPE html>
@@ -95,9 +95,12 @@ The simplest method for teams wanting to store code directly inside the SG Forge
 
 ---
 
-### Option 2: Declarative Ingress via `.env` (Zero Monorepo Footprint)
+### Option 2: Declarative Ingress via `.env` (Zero Monorepo Footprint & Docker Bypass)
 
-Because `.env` is never committed to Git, you can point root ingress to external sites, marketing CMS platforms, or standalone Docker containers:
+Because `.env` is never committed to Git, you can point root ingress to external sites, marketing CMS platforms, or standalone Docker containers.
+
+> [!TIP]
+> **Automated Docker Optimization**: When `APP_LANDING` specifies an external website URL (e.g., `https://...`) or `DISABLE_LANDING="true"` is set, Caddy handles reverse proxying or redirecting directly. The SG Forge Docker lifecycle manager automatically detects this and **bypasses spinning up the internal landing container**, conserving system RAM and CPU.
 
 1. **External Corporate Website (Reverse Proxy)**:
    ```bash
@@ -117,9 +120,10 @@ Because `.env` is never committed to Git, you can point root ingress to external
    DISABLE_LANDING="true"
    ```
 
-4. **Regenerate Proxy**:
+4. **Regenerate Proxy & Start Stack**:
    ```bash
    rtk ./run.sh sync-proxy
+   rtk ./run.sh up
    ```
 
 ---
@@ -143,9 +147,9 @@ For enterprises maintaining their marketing code in an independent, private repo
 
 ---
 
-### Option 4: In-Place Editing with Git Skip-Worktree Tooling
+### In-Place Editing with Git Skip-Worktree Tooling
 
-For developers who prefer editing `apps/src/landing-custom/src/template.html.ts` directly in place:
+For developers who prefer editing tracked landing files directly:
 
 1. **Lock the file before editing**:
    ```bash

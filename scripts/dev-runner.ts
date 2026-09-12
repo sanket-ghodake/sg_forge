@@ -37,11 +37,8 @@ function resolveEntrypoint(service: ServiceEntry): string | null {
 
   if (service.id === 'landing') {
     candidates.length = 0;
-    if (service.containerName === 'landing') {
-      candidates.push(join(REPO_ROOT, 'apps', 'src', 'landing', 'src', 'server.ts'));
-    } else if (service.containerName === 'landing-custom') {
-      candidates.push(join(REPO_ROOT, 'apps', 'src', 'landing-custom', 'src', 'server.ts'));
-    } else {
+    candidates.push(join(REPO_ROOT, 'apps', 'src', 'landing', 'src', 'server.ts'));
+    if (service.containerName !== 'landing' && service.containerName !== 'ag-landing') {
       candidates.push(join(REPO_ROOT, service.containerName, 'src', 'server.ts'));
     }
   }

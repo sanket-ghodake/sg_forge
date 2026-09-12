@@ -63,14 +63,6 @@
         "@forge/ui": "workspace:*",
       },
     },
-    "apps/src/landing-custom": {
-      "name": "@forge/landing-custom",
-      "version": "1.0.0",
-      "dependencies": {
-        "@forge/types": "workspace:*",
-        "@forge/ui": "workspace:*",
-      },
-    },
     "apps/src/portal": {
       "name": "@forge/portal",
       "version": "2.0.0",
@@ -234,8 +226,6 @@
     "@forge/docs": ["@forge/docs@workspace:apps/src/docs"],
 
     "@forge/landing": ["@forge/landing@workspace:apps/src/landing"],
-
-    "@forge/landing-custom": ["@forge/landing-custom@workspace:apps/src/landing-custom"],
 
     "@forge/portal": ["@forge/portal@workspace:apps/src/portal"],
 

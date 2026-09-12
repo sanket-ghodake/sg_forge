@@ -1,7 +1,7 @@
 {
   "timestamp": "2026-09-06T21:45:00.000Z",
-  "totalExportedSymbols": 645,
-  "documentedSymbols": 594,
+  "totalExportedSymbols": 643,
+  "documentedSymbols": 592,
   "symbolCoveragePercent": 92.1,
   "totalRequirements": 71,
   "implementedRequirements": 71,
@@ -1017,10 +1017,82 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "CUSTOM_DIR",
+      "kind": "variable",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 31,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "CUSTOM_INDEX_HTML",
+      "kind": "variable",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 32,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "CUSTOM_TEMPLATE_TS",
+      "kind": "variable",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 33,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "LandingMode",
+      "kind": "type",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 35,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "resolveLandingMode",
+      "kind": "function",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 42,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "renderLandingHtml",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 26,
+      "line": 53,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "resolveLandingHtml",
+      "kind": "function",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 142,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "resolveCustomAsset",
+      "kind": "function",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 167,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1032,7 +1104,19 @@
       "name": "renderHtml",
       "kind": "variable",
       "file": "apps/src/landing/src/server.ts",
-      "line": 114,
+      "line": 208,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "createLandingHandler",
+      "kind": "function",
+      "file": "apps/src/landing/src/server.ts",
+      "line": 215,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1044,7 +1128,7 @@
       "name": "startLandingServer",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 120,
+      "line": 276,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1057,126 +1141,6 @@
       "kind": "variable",
       "file": "apps/src/landing/src/index.ts",
       "line": 6,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "CUSTOM_DIR",
-      "kind": "variable",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 19,
-      "hasDoc": false,
-      "requirements": [],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "CUSTOM_INDEX_HTML",
-      "kind": "variable",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 20,
-      "hasDoc": false,
-      "requirements": [],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "CUSTOM_TEMPLATE_TS",
-      "kind": "variable",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 21,
-      "hasDoc": false,
-      "requirements": [],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "LandingMode",
-      "kind": "type",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 23,
-      "hasDoc": false,
-      "requirements": [],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "resolveLandingMode",
-      "kind": "function",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 30,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "resolveLandingHtml",
-      "kind": "function",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 41,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "resolveCustomAsset",
-      "kind": "function",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 66,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "createLandingHandler",
-      "kind": "function",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 107,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "startServer",
-      "kind": "function",
-      "file": "apps/src/landing-custom/src/server.ts",
-      "line": 177,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "LandingConfig",
-      "kind": "interface",
-      "file": "apps/src/landing-custom/src/template.html.ts",
-      "line": 13,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "renderCustomLandingHtml",
-      "kind": "function",
-      "file": "apps/src/landing-custom/src/template.html.ts",
-      "line": 27,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -4076,6 +4040,19 @@
       "kind": "function",
       "file": "apps/src/sdk/src/registry.ts",
       "line": 96,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-301",
+        "LLR-SDK-001",
+        "LLR-SDK-005"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "isBuiltinLandingActive",
+      "kind": "function",
+      "file": "apps/src/sdk/src/registry.ts",
+      "line": 229,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -7905,6 +7882,7 @@
         "apps/src/docs/src/server.ts:142#startDocsServer",
         "apps/src/docs/src/index.ts:14#docsService",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
+        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
         "scripts/generate-proxy.ts:20#generateCaddyfile"
       ],
       "verifiedIn": [
@@ -7989,17 +7967,14 @@
       "docFile": "apps/src/docs/src/content/docs/operations/branding-and-logos.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:79#BrandConfig",
-        "apps/src/landing/src/server.ts:26#renderLandingHtml",
-        "apps/src/landing/src/server.ts:114#renderHtml",
-        "apps/src/landing/src/server.ts:120#startLandingServer",
+        "apps/src/landing/src/server.ts:42#resolveLandingMode",
+        "apps/src/landing/src/server.ts:53#renderLandingHtml",
+        "apps/src/landing/src/server.ts:142#resolveLandingHtml",
+        "apps/src/landing/src/server.ts:167#resolveCustomAsset",
+        "apps/src/landing/src/server.ts:208#renderHtml",
+        "apps/src/landing/src/server.ts:215#createLandingHandler",
+        "apps/src/landing/src/server.ts:276#startLandingServer",
         "apps/src/landing/src/index.ts:6#landingService",
-        "apps/src/landing-custom/src/server.ts:30#resolveLandingMode",
-        "apps/src/landing-custom/src/server.ts:41#resolveLandingHtml",
-        "apps/src/landing-custom/src/server.ts:66#resolveCustomAsset",
-        "apps/src/landing-custom/src/server.ts:107#createLandingHandler",
-        "apps/src/landing-custom/src/server.ts:177#startServer",
-        "apps/src/landing-custom/src/template.html.ts:13#LandingConfig",
-        "apps/src/landing-custom/src/template.html.ts:27#renderCustomLandingHtml",
         "apps/src/auth/src/frontend/set-password-view.ts:14#renderSetPasswordHtml",
         "apps/src/auth/src/frontend/auth-styles.ts:12#getAuthViewStyles",
         "apps/src/auth/src/frontend/branding.ts:12#BrandConfig",
@@ -8106,17 +8081,14 @@
         "apps/src/portal/src/frontend/ui-admin-audit.ts:32#renderAdminAuditView",
         "apps/src/portal/src/frontend/ui-admin-settings.ts:13#renderAdminSettingsView",
         "apps/src/portal/src/frontend/ui-renderer-profile.ts:39#renderProfileView",
-        "apps/src/landing/src/server.ts:26#renderLandingHtml",
-        "apps/src/landing/src/server.ts:114#renderHtml",
-        "apps/src/landing/src/server.ts:120#startLandingServer",
+        "apps/src/landing/src/server.ts:42#resolveLandingMode",
+        "apps/src/landing/src/server.ts:53#renderLandingHtml",
+        "apps/src/landing/src/server.ts:142#resolveLandingHtml",
+        "apps/src/landing/src/server.ts:167#resolveCustomAsset",
+        "apps/src/landing/src/server.ts:208#renderHtml",
+        "apps/src/landing/src/server.ts:215#createLandingHandler",
+        "apps/src/landing/src/server.ts:276#startLandingServer",
         "apps/src/landing/src/index.ts:6#landingService",
-        "apps/src/landing-custom/src/server.ts:30#resolveLandingMode",
-        "apps/src/landing-custom/src/server.ts:41#resolveLandingHtml",
-        "apps/src/landing-custom/src/server.ts:66#resolveCustomAsset",
-        "apps/src/landing-custom/src/server.ts:107#createLandingHandler",
-        "apps/src/landing-custom/src/server.ts:177#startServer",
-        "apps/src/landing-custom/src/template.html.ts:13#LandingConfig",
-        "apps/src/landing-custom/src/template.html.ts:27#renderCustomLandingHtml",
         "apps/src/auth/src/frontend/set-password-view.ts:14#renderSetPasswordHtml",
         "apps/src/auth/src/frontend/auth-styles.ts:12#getAuthViewStyles",
         "apps/src/auth/src/frontend/branding.ts:12#BrandConfig",
@@ -8858,6 +8830,7 @@
         "apps/src/sdk/src/registry.ts:45#getAppStatus",
         "apps/src/sdk/src/registry.ts:62#isAppDisabled",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
+        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
         "forge-apps/app-template/src/server.ts:86#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
         "forge-apps/app-template/src/lib/ui.ts:8#getHeadStateScript",
@@ -9489,7 +9462,8 @@
         "apps/src/sdk/src/registry.ts:33#LoadRegistryOptions",
         "apps/src/sdk/src/registry.ts:45#getAppStatus",
         "apps/src/sdk/src/registry.ts:62#isAppDisabled",
-        "apps/src/sdk/src/registry.ts:96#loadServiceRegistry"
+        "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
+        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive"
       ],
       "verifiedIn": [
         "apps/src/sdk/test/unit/registry.test.ts"

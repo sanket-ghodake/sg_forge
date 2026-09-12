@@ -30,6 +30,10 @@ ensure_forge_network() {
     fi
 }
 
+is_builtin_landing_active() {
+    $PORTABLE_BUN -e 'import { isBuiltinLandingActive } from "./apps/src/sdk/src"; process.exit(isBuiltinLandingActive() ? 0 : 1);' 2>/dev/null
+}
+
 start_forge_apps() {
     local env_mode="$1" # "dev" or "prod"
     local specific_app="${2:-}"
@@ -129,9 +133,17 @@ case "$ACTION" in
                 exit 0
             fi
         fi
+        if [ "$PROFILE_ARG" = "--profile all" ]; then
+            if is_builtin_landing_active; then
+                PROFILE_ARG="$PROFILE_ARG --profile landing"
+            else
+                echo "🌐 [${BRAND_NAME}] External or disabled landing detected in .env; skipping built-in landing container."
+                docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" stop landing 2>/dev/null || true
+            fi
+        fi
         echo "🐳 [${BRAND_NAME}] Starting Docker Dev Stack ($PROFILE_ARG, Hot Reload with bun --watch)..."
         docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" $PROFILE_ARG up -d
-        if [ "$PROFILE_ARG" = "--profile all" ] || [ "$PROFILE_ARG" = "--profile apps" ]; then
+        if [ "$PROFILE_ARG" = "--profile all" ] || [ "$PROFILE_ARG" = "--profile apps" ] || [[ "$PROFILE_ARG" == *"profile all"* ]]; then
             start_forge_apps dev
         fi
         echo "✨ Stack running! Access Platform Hub at http://localhost:${HTTP_PORT}/ (Portal: /portal, DevCenter: /devcenter)"
@@ -162,9 +174,17 @@ case "$ACTION" in
                 exit 0
             fi
         fi
+        if [ "$PROFILE_ARG" = "--profile all" ]; then
+            if is_builtin_landing_active; then
+                PROFILE_ARG="$PROFILE_ARG --profile landing"
+            else
+                echo "🌐 [${BRAND_NAME}] External or disabled landing detected in .env; skipping built-in landing container."
+                docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" stop landing 2>/dev/null || true
+            fi
+        fi
         echo "🚀 [${BRAND_NAME}] Starting Production Docker Stack ($PROFILE_ARG)..."
         docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" $PROFILE_ARG up -d --build
-        if [ "$PROFILE_ARG" = "--profile all" ] || [ "$PROFILE_ARG" = "--profile apps" ]; then
+        if [ "$PROFILE_ARG" = "--profile all" ] || [ "$PROFILE_ARG" = "--profile apps" ] || [[ "$PROFILE_ARG" == *"profile all"* ]]; then
             start_forge_apps prod
         fi
         echo "✨ Production stack active at http://localhost:${PROD_HTTP_PORT}/"
@@ -189,7 +209,11 @@ case "$ACTION" in
             fi
         else
             echo "🔨 Building all production images via docker/prod/docker-compose.yml..."
-            docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" --profile all build
+            BUILD_PROFILES="--profile all"
+            if is_builtin_landing_active; then
+                BUILD_PROFILES="$BUILD_PROFILES --profile landing"
+            fi
+            docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" $BUILD_PROFILES build
             for app_dir in "$REPO_ROOT/forge-apps"/*; do
                 if [ -d "$app_dir" ] && [ -f "$app_dir/docker-compose.yml" ]; then
                     app_name="$(basename "$app_dir")"
@@ -203,9 +227,9 @@ case "$ACTION" in
 
     down)
         echo "🛑 [${BRAND_NAME}] Gracefully stopping Docker containers..."
-        docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" --profile all down --remove-orphans 2>/dev/null || true
-        docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" --profile all down --remove-orphans 2>/dev/null || true
-        docker compose -p "$COMPOSE_PROJECT_NAME" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" --profile all down --remove-orphans 2>/dev/null || true
+        docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" --profile all --profile landing down --remove-orphans 2>/dev/null || true
+        docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" --profile all --profile landing down --remove-orphans 2>/dev/null || true
+        docker compose -p "$COMPOSE_PROJECT_NAME" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" --profile all --profile landing down --remove-orphans 2>/dev/null || true
         stop_forge_apps
         echo "✨ Containers stopped."
         ;;
@@ -227,11 +251,15 @@ case "$ACTION" in
                 docker compose -p "${CONTAINER_PREFIX:-ag}-app-$CLEAN_SVC-dev" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$CLEAN_SVC/docker-compose.yml" restart
             else
                 echo "🔄 [${BRAND_NAME}] Restarting service: $SVC..."
-                docker compose -p "$TARGET_PROJECT" --env-file "$REPO_ROOT/.env" -f "$TARGET_COMPOSE" --profile all restart "$SVC"
+                docker compose -p "$TARGET_PROJECT" --env-file "$REPO_ROOT/.env" -f "$TARGET_COMPOSE" --profile all --profile landing restart "$SVC"
             fi
         else
+            RESTART_PROFILES="--profile all"
+            if is_builtin_landing_active; then
+                RESTART_PROFILES="$RESTART_PROFILES --profile landing"
+            fi
             echo "🔄 [${BRAND_NAME}] Restarting stack ($TARGET_COMPOSE)..."
-            docker compose -p "$TARGET_PROJECT" --env-file "$REPO_ROOT/.env" -f "$TARGET_COMPOSE" --profile all restart
+            docker compose -p "$TARGET_PROJECT" --env-file "$REPO_ROOT/.env" -f "$TARGET_COMPOSE" $RESTART_PROFILES restart
             for app_dir in "$REPO_ROOT/forge-apps"/*; do
                 if [ -d "$app_dir" ] && [ -f "$app_dir/docker-compose.yml" ]; then
                     app_name="$(basename "$app_dir")"

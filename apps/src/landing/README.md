@@ -24,6 +24,7 @@ Public ingress portal serving on Port `:3000` (proxied at root `/` on Ports 80 &
 
 ## 🚀 Features
 * **Dynamic Service Registry**: Loads registered services dynamically from `@forge/sdk/registry` (`.env`).
+* **Zero-Drift In-Repo Custom Landing**: Auto-detects git-ignored `custom/index.html` or `custom/template.ts` for instant custom branding with zero Git pull conflicts.
 * **Astryx UI**: Consumes `@forge/ui` with high-contrast tokens, responsive grid cards, and animated SVG theme toggler.
 * **Tab Isolation**: Distinct apps open in a new tab (`target="_blank" rel="noopener noreferrer"`).
 * **Live Health Checks**: Probes internal micro-services and micro-apps in real-time.

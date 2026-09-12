@@ -10,8 +10,7 @@ This directory contains all runnable platform micro-services and monorepo shared
 
 | Directory | Package Name | Port | Ingress Route | Type | Files | Lines (SLOC) | Complexity | 5-Tier Tests | Database | Purpose & Role |
 | :--- | :--- | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :--- | :--- |
-| **[`landing/`](apps/src/landing/)** | `@forge/landing` | `:3000` | `/` | Service | 14 | 332 | 32 | 7 | Stateless | Public Ingress Discovery Hub & Route Directory |
-| **[`landing-custom/`](apps/src/landing-custom/)** | `@forge/landing-custom` | `:3000` | `/` | Service | 14 | 480 | 38 | 8 | Stateless | Customizable Marketing Landing Starter Base |
+| **[`landing/`](apps/src/landing/)** | `@forge/landing` | `:3000` | `/` | Service | 15 | 450 | 45 | 10 | Stateless | Public Ingress Discovery Hub & In-Repo Custom Landing |
 | **[`portal/`](apps/src/portal/)** | `@forge/portal` | `:3001` | `/portal` | Service (SPA) | 49 | 5,324 | 952 | 25 | `portal.db` | Main Workspace, 2D Org Canvas & Micro-App Host |
 | **[`dev-dashboard/`](apps/src/dev-dashboard/)** | `@forge/dev-dashboard`| `:3002` | `/devcenter` | Service | 98 | 13,576 | 2,821 | 113 | `dev_dashboard.db` | Live Streaming Telemetry, Org Studio & DB Inspector |
 | **[`dev-hub/`](apps/src/dev-hub/)** | `@forge/dev-hub` | `:3003` | `/gateway` | Service | 30 | 1,908 | 181 | 17 | Stateless (SDK Mesh) | Developer SDK Playground & Scaffolding Guides |

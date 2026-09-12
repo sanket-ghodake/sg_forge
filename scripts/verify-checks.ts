@@ -330,7 +330,7 @@ export function checkDependencyLicenses(): CheckResult {
   const manifests = [
     join(REPO_ROOT, 'package.json'),
     ...submodules.map((s) => join(REPO_ROOT, 'forge-apps', s, 'package.json')),
-    ...['types', 'portal', 'landing', 'landing-custom', 'docs', 'auth', 'dev-dashboard', 'sdk', 'ui', 'dev-hub'].map((p) =>
+    ...['types', 'portal', 'landing', 'docs', 'auth', 'dev-dashboard', 'sdk', 'ui', 'dev-hub'].map((p) =>
       join(REPO_ROOT, 'apps', 'src', p, 'package.json')
     ),
   ];
