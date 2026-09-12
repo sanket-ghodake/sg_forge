@@ -342,4 +342,13 @@ describe('Tier 1: run.sh Modular CLI Orchestrator & Command Dispatcher [SR-GATE-
     expect(res.code).not.toBe(0);
     expect(res.stdout).toContain('BLOCKED: APP_ENV is set to \'production\'');
   });
+
+  it('Arrange, Act, Assert: run.sh docker dev blocks targeted startup for undeclared apps', () => {
+    // Act
+    const res = runCli(['docker', 'dev', 'app-template']);
+
+    // Assert: Must block unconfigured apps and advise user
+    expect(res.code).not.toBe(0);
+    expect(res.stderr).toContain("Targeted service or app 'app-template' is not declared or active in .env");
+  });
 });

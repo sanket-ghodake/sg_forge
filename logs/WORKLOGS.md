@@ -25,3 +25,4 @@
 2026-09-12 10:46 | Unified landing architecture, removed apps/src/landing-custom, and added dynamic Docker container bypass for external/disabled landing
 2026-09-12 11:16 | Audit and synchronize forge-apps template, micro-apps, env files, multi-agent rules, and toolchain syncing
 2026-09-12 11:33 | Audit and align Forge micro-app environment specifications, remove dead JWT secrets, enforce Invariant #8 folder docs, synchronize toolchain rules, and document auth boundaries
+2026-09-12 12:33 | Fix docker dev/prod endpoint reporting and enforce dynamic container lifecycle based on .env

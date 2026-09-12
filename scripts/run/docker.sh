@@ -39,29 +39,30 @@ start_forge_apps() {
     local specific_app="${2:-}"
     ensure_forge_network
 
-    for app_dir in "$REPO_ROOT/forge-apps"/*; do
+    local active_apps
+    active_apps="$($PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" get-forge-active "$specific_app" 2>/dev/null || true)"
+
+    for app_name in $active_apps; do
+        local app_dir="$REPO_ROOT/forge-apps/$app_name"
         if [ -d "$app_dir" ] && [ -f "$app_dir/docker-compose.yml" ]; then
-            local app_name
-            app_name="$(basename "$app_dir")"
-            [ "$app_name" = "app-template" ] && [ -z "$specific_app" ] && continue
-
-            if [ -n "$specific_app" ]; then
-                local clean_target="${specific_app#app-}"
-                [ "$app_name" != "$specific_app" ] && [ "$app_name" != "$clean_target" ] && continue
-            else
-                local app_upper
-                app_upper="$(echo "$app_name" | tr '[:lower:]-' '[:upper:]_')"
-                if ! grep -q "^APP_${app_upper}=" "$REPO_ROOT/.env" 2>/dev/null; then
-                    continue
-                fi
-            fi
-
             echo "📦 [${BRAND_NAME}] Starting standalone Forge App: $app_name ($env_mode)..."
             local build_flag=""
             [ "$env_mode" = "prod" ] && build_flag="--build"
             docker compose -p "${CONTAINER_PREFIX:-ag}-app-${app_name}-${env_mode}" \
                 --env-file "$REPO_ROOT/.env" \
                 -f "$app_dir/docker-compose.yml" up -d $build_flag
+        fi
+    done
+
+    # Stop inactive forge apps that should not be running
+    local inactive_apps
+    inactive_apps="$($PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" get-forge-inactive "$specific_app" 2>/dev/null || true)"
+    for app_name in $inactive_apps; do
+        local app_dir="$REPO_ROOT/forge-apps/$app_name"
+        if [ -d "$app_dir" ] && [ -f "$app_dir/docker-compose.yml" ]; then
+            docker compose -p "${CONTAINER_PREFIX:-ag}-app-${app_name}-${env_mode}" \
+                --env-file "$REPO_ROOT/.env" \
+                -f "$app_dir/docker-compose.yml" stop 2>/dev/null || true
         fi
     done
 }
@@ -112,82 +113,106 @@ case "$ACTION" in
         echo "🔀 [${BRAND_NAME}] Synchronizing dynamic reverse proxy routes from .env..."
         $PORTABLE_BUN run "$REPO_ROOT/scripts/generate-proxy.ts"
         ensure_forge_network
-        PROFILE_ARG="--profile all"
+        PROFILE_ARG="all"
         TARGET_PARAM="${1:-}"
         if [ "$TARGET_PARAM" = "--profile" ] && [ -n "${2:-}" ]; then
-            PROFILE_ARG="--profile $2"
+            PROFILE_ARG="$2"
+            TARGET_PARAM=""
         elif [ "$TARGET_PARAM" = "core" ] || [ "$TARGET_PARAM" = "apps" ] || [ "$TARGET_PARAM" = "monitoring" ] || [ "$TARGET_PARAM" = "all" ]; then
-            PROFILE_ARG="--profile $TARGET_PARAM"
-        elif [ -n "$TARGET_PARAM" ]; then
+            PROFILE_ARG="$TARGET_PARAM"
+            TARGET_PARAM=""
+        fi
+
+        if [ -n "$TARGET_PARAM" ]; then
+            if ! $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" validate-target "$TARGET_PARAM" >/dev/null 2>&1; then
+                echo "❌ [${BRAND_NAME}] Targeted service or app '$TARGET_PARAM' is not declared or active in .env." >&2
+                echo "   Configure it in .env or run './run.sh docker dev' to start the configured stack." >&2
+                exit 1
+            fi
+
             CLEAN_TARGET="${TARGET_PARAM#app-}"
             if [ -d "$REPO_ROOT/forge-apps/$CLEAN_TARGET" ] && [ -f "$REPO_ROOT/forge-apps/$CLEAN_TARGET/docker-compose.yml" ]; then
                 echo "🐳 [${BRAND_NAME}] Starting standalone Forge App '$CLEAN_TARGET' in Docker Dev..."
                 docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" up -d proxy
                 start_forge_apps dev "$CLEAN_TARGET"
-                echo "✨ App '$CLEAN_TARGET' running! Access Gateway at http://localhost:${HTTP_PORT}/apps/${CLEAN_TARGET}"
+                $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" banner dev "$CLEAN_TARGET"
                 exit 0
             else
                 echo "🐳 [${BRAND_NAME}] Starting targeted service '$TARGET_PARAM' in Docker Dev..."
                 docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" up -d proxy "$TARGET_PARAM"
-                echo "✨ Service '$TARGET_PARAM' running! Access Gateway at http://localhost:${HTTP_PORT}/"
+                $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" banner dev "$TARGET_PARAM"
                 exit 0
             fi
         fi
-        if [ "$PROFILE_ARG" = "--profile all" ]; then
-            if is_builtin_landing_active; then
-                PROFILE_ARG="$PROFILE_ARG --profile landing"
-            else
-                echo "🌐 [${BRAND_NAME}] External or disabled landing detected in .env; skipping built-in landing container."
-                docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" stop landing 2>/dev/null || true
-            fi
+
+        ACTIVE_CORE="$($PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" get-core-active dev "$PROFILE_ARG")"
+        INACTIVE_CORE="$($PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" get-core-inactive dev "$PROFILE_ARG")"
+
+        echo "🐳 [${BRAND_NAME}] Starting Docker Dev Stack (Hot Reload with bun --watch)..."
+        docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" up -d $ACTIVE_CORE
+
+        if [ -n "$INACTIVE_CORE" ]; then
+            docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" stop $INACTIVE_CORE 2>/dev/null || true
         fi
-        echo "🐳 [${BRAND_NAME}] Starting Docker Dev Stack ($PROFILE_ARG, Hot Reload with bun --watch)..."
-        docker compose -p "$DEV_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/dev/docker-compose.yml" $PROFILE_ARG up -d
-        if [ "$PROFILE_ARG" = "--profile all" ] || [ "$PROFILE_ARG" = "--profile apps" ] || [[ "$PROFILE_ARG" == *"profile all"* ]]; then
+
+        if [ "$PROFILE_ARG" = "all" ] || [ "$PROFILE_ARG" = "apps" ]; then
             start_forge_apps dev
         fi
-        echo "✨ Stack running! Access Platform Hub at http://localhost:${HTTP_PORT}/ (Portal: /portal, DevCenter: /devcenter)"
+
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" banner dev
         ;;
 
     prod)
         echo "🔀 [${BRAND_NAME}] Synchronizing dynamic reverse proxy routes from .env..."
         $PORTABLE_BUN run "$REPO_ROOT/scripts/generate-proxy.ts"
         ensure_forge_network
-        PROFILE_ARG="--profile all"
+        PROFILE_ARG="all"
         TARGET_PARAM="${1:-}"
         if [ "$TARGET_PARAM" = "--profile" ] && [ -n "${2:-}" ]; then
-            PROFILE_ARG="--profile $2"
+            PROFILE_ARG="$2"
+            TARGET_PARAM=""
         elif [ "$TARGET_PARAM" = "core" ] || [ "$TARGET_PARAM" = "apps" ] || [ "$TARGET_PARAM" = "monitoring" ] || [ "$TARGET_PARAM" = "all" ]; then
-            PROFILE_ARG="--profile $TARGET_PARAM"
-        elif [ -n "$TARGET_PARAM" ]; then
+            PROFILE_ARG="$TARGET_PARAM"
+            TARGET_PARAM=""
+        fi
+
+        if [ -n "$TARGET_PARAM" ]; then
+            if ! $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" validate-target "$TARGET_PARAM" >/dev/null 2>&1; then
+                echo "❌ [${BRAND_NAME}] Targeted service or app '$TARGET_PARAM' is not declared or active in .env." >&2
+                echo "   Configure it in .env or run './run.sh docker prod' to start the configured stack." >&2
+                exit 1
+            fi
+
             CLEAN_TARGET="${TARGET_PARAM#app-}"
             if [ -d "$REPO_ROOT/forge-apps/$CLEAN_TARGET" ] && [ -f "$REPO_ROOT/forge-apps/$CLEAN_TARGET/docker-compose.yml" ]; then
                 echo "🚀 [${BRAND_NAME}] Starting standalone Forge App '$CLEAN_TARGET' in Docker Prod..."
                 docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" up -d --build proxy
                 start_forge_apps prod "$CLEAN_TARGET"
-                echo "✨ App '$CLEAN_TARGET' active at http://localhost:${PROD_HTTP_PORT}/apps/${CLEAN_TARGET}"
+                $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" banner prod "$CLEAN_TARGET"
                 exit 0
             else
                 echo "🚀 [${BRAND_NAME}] Starting targeted service '$TARGET_PARAM' in Docker Prod..."
                 docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" up -d --build proxy "$TARGET_PARAM"
-                echo "✨ Service '$TARGET_PARAM' active at http://localhost:${PROD_HTTP_PORT}/"
+                $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" banner prod "$TARGET_PARAM"
                 exit 0
             fi
         fi
-        if [ "$PROFILE_ARG" = "--profile all" ]; then
-            if is_builtin_landing_active; then
-                PROFILE_ARG="$PROFILE_ARG --profile landing"
-            else
-                echo "🌐 [${BRAND_NAME}] External or disabled landing detected in .env; skipping built-in landing container."
-                docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" stop landing 2>/dev/null || true
-            fi
+
+        ACTIVE_CORE="$($PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" get-core-active prod "$PROFILE_ARG")"
+        INACTIVE_CORE="$($PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" get-core-inactive prod "$PROFILE_ARG")"
+
+        echo "🚀 [${BRAND_NAME}] Starting Production Docker Stack..."
+        docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" up -d --build $ACTIVE_CORE
+
+        if [ -n "$INACTIVE_CORE" ]; then
+            docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" stop $INACTIVE_CORE 2>/dev/null || true
         fi
-        echo "🚀 [${BRAND_NAME}] Starting Production Docker Stack ($PROFILE_ARG)..."
-        docker compose -p "$PROD_PROJECT" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/docker/prod/docker-compose.yml" $PROFILE_ARG up -d --build
-        if [ "$PROFILE_ARG" = "--profile all" ] || [ "$PROFILE_ARG" = "--profile apps" ] || [[ "$PROFILE_ARG" == *"profile all"* ]]; then
+
+        if [ "$PROFILE_ARG" = "all" ] || [ "$PROFILE_ARG" = "apps" ]; then
             start_forge_apps prod
         fi
-        echo "✨ Production stack active at http://localhost:${PROD_HTTP_PORT}/"
+
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/docker-resolver.ts" banner prod
         ;;
 
     build)
