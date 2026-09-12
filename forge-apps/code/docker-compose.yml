@@ -24,6 +24,9 @@ services:
     container_name: ${CONTAINER_PREFIX:-ag}-app-code-dev
     ports:
       - "8088:8088"
+    env_file:
+      - path: .env
+        required: false
     environment:
       - PORT=8088
       - NODE_ENV=development

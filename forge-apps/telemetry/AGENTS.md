@@ -1,7 +1,7 @@
-# AI AGENT DIRECTIVES - FORGE MICRO-APP SUBMODULE (2026 CLEAN ARCHITECTURE)
+# AI AGENT DIRECTIVES - TELEMETRY DASHBOARD SUBMODULE (2026 CLEAN ARCHITECTURE)
 
 > ⚠️ **CRITICAL SUBMODULE GOVERNANCE NOTICE FOR ALL AI SESSIONS & LLMs**
-> This repository is an INDEPENDENT, STANDALONE FORGE MICRO-APP SUBMODULE.
+> This repository is an INDEPENDENT, STANDALONE TELEMETRY DASHBOARD SUBMODULE.
 > It can operate, build, test, and be deployed completely autonomously without the main SG Forge monorepo.
 > Every session agent MUST adhere to these inherited rules without exception.
 
@@ -86,3 +86,4 @@ Before writing code, running commands, or staging changes in this microservice:
 - **Lifetime Token Ledger (CodeBurn)**: [`.agents/rules/codeburn.md`](file:///.agents/rules/codeburn.md)
 - **Context Compression (Headroom)**: [`.agents/rules/headroom.md`](file:///.agents/rules/headroom.md)
 - **Council of AI Decision Framework**: [`.agents/rules/council.md`](file:///.agents/rules/council.md)
+- **RTK Token Optimization**: [`.agents/rules/rtk.md`](file:///.agents/rules/rtk.md)

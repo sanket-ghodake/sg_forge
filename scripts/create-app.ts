@@ -172,10 +172,21 @@ export function createApp(options: CreateAppOptions): {
     '8099': `${allocatedPort}`,
   });
 
-  // AGENTS.md
-  replaceInFile('AGENTS.md', {
-    'FORGE MICRO-APP SUBMODULE': `${displayName.toUpperCase()} SUBMODULE`,
-  });
+  // .env & .env.example
+  for (const envFile of ['.env', '.env.example']) {
+    replaceInFile(envFile, {
+      'PORT=8099': `PORT=${allocatedPort}`,
+      'APP_NAME=template': `APP_NAME=${appName}`,
+    });
+  }
+
+  // Multi-Agent Directives Parity
+  for (const docFile of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md', join('.agents', 'AGENTS.md')]) {
+    replaceInFile(docFile, {
+      'FORGE MICRO-APP SUBMODULE': `${displayName.toUpperCase()} SUBMODULE`,
+      'MICRO-APP SUBMODULE': `${displayName.toUpperCase()} SUBMODULE`,
+    });
+  }
 
   // README.md
   writeFileSync(

@@ -189,7 +189,9 @@ export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGua
   }
 
   const cookieHeader = req.headers.get('cookie') || '';
-  const tokenMatch = cookieHeader.match(/(?:^|;\s*)(?:auth_token|forge_session)=([^;]+)/);
+  const sessionCookieName = process.env.SESSION_COOKIE_NAME || 'forge_session';
+  const cookieRegex = new RegExp(`(?:^|;\\s*)(?:auth_token|${sessionCookieName}|forge_session)=([^;]+)`);
+  const tokenMatch = cookieHeader.match(cookieRegex);
   const token = tokenMatch ? decodeURIComponent(tokenMatch[1]) : null;
 
   // Header fallback
@@ -197,7 +199,8 @@ export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGua
   const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
   const effectiveToken = token || bearerToken;
 
-  const defaultRedirect = options.redirectTo || '/auth/login';
+  const authBase = process.env.AUTH_SERVICE_URL?.trim().replace(/\/+$/, '') || '';
+  const defaultRedirect = options.redirectTo || (authBase ? `${authBase}/login` : '/auth/login');
 
   if (!effectiveToken) {
     return {

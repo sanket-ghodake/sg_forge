@@ -27,6 +27,33 @@
 
 ---
 
+## 🔐 Submodule Environment & Auth Architecture
+
+### Why `JWT_SECRET` is Not Used in Forge Micro-Apps
+- **Asymmetric Token Delegation**: In SG Forge, the central Auth microservice (`apps/src/auth`) issues tokens signed asymmetrically. 
+- **Trust-at-Ingress Boundary**: The Caddy API gateway terminates TLS, routes authenticated traffic, and protects internal networks (`forge-apps-net`). Submodules parse and decode claims from the session cookie (`forge_session`) without needing symmetric signing secrets (`JWT_SECRET`).
+- **Zero Secret Sprawl**: Eliminating `JWT_SECRET` from submodules prevents secret leaks and ensures credential compromise cannot forge central auth tokens.
+
+### Standalone vs Gateway Auth Redirection (`AUTH_SERVICE_URL`)
+- **Production / Behind Gateway**: In production behind Caddy, micro-apps leave `AUTH_SERVICE_URL` empty (defaulting to relative `/auth/login`), providing seamless single-origin cookie routing.
+- **Standalone Development**: When developing a Forge App independently without Caddy running, set `AUTH_SERVICE_URL=http://localhost:3000` to redirect unauthorized requests to the local central auth service.
+
+### Canonical Submodule Environment Variables
+| Variable | Required | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `PORT` | Yes | `3010` | Standalone HTTP listen port |
+| `NODE_ENV` | Yes | `development` | Runtime environment (`development` \| `production`) |
+| `CONTAINER_PREFIX` | Yes | `forge-app-template` | Docker container and volume name prefix |
+| `APP_NAME` | Yes | `app-template` | Unique micro-app identifier |
+| `AUTH_SERVICE_URL` | No | `""` | Auth service redirection base URL (empty behind Caddy) |
+| `DATA_DIR` | No | `./data` | Local Turso SQLite data directory |
+| `LOG_DIR` | No | `./logs` | Structured JSON log directory |
+| `SESSION_COOKIE_NAME` | No | `forge_session` | Session authentication cookie name |
+| `BRAND_NAME` | No | `SG Forge` | Display brand name in UI templates |
+| `BRAND_DOMAIN` | No | `sgforge.local` | Platform host domain |
+
+---
+
 ## 🛠️ Developer Workflow
 
 ### 1. Cloning Repository with Submodules

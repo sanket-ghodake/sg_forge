@@ -24,6 +24,9 @@ services:
     container_name: ${CONTAINER_PREFIX:-ag}-app-telemetry-dev
     ports:
       - "8087:8087"
+    env_file:
+      - path: .env
+        required: false
     environment:
       - PORT=8087
       - NODE_ENV=development

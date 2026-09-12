@@ -41,7 +41,29 @@ Forge Apps reside in `forge-apps/*` as autonomous Git submodules. They possess c
 * Each submodule maintains its own local `AGENTS.md` and `GEMINI.md` with localized instructions and domain invariants.
 * Changes to submodule applications do not invalidate or require rebuilding core platform containers.
 
-## 3. Developer Workflow & Submodule Operations
+## 3. Submodule Environment & Auth Architecture
+
+### Asymmetric Token Trust & Ingress Boundaries
+Central authentication (`apps/src/auth`) signs session tokens. Forge micro-apps sit behind Caddy on `forge-apps-net`, parsing session claims from cookies without storing symmetric signing secrets (`JWT_SECRET`). This strictly eliminates secret sprawl across submodule repositories.
+
+### Standalone vs Gateway Redirection (`AUTH_SERVICE_URL`)
+When running behind Caddy, `AUTH_SERVICE_URL` is empty, defaulting to relative `/auth/login`. When running standalone without the gateway, developers specify `AUTH_SERVICE_URL=http://localhost:3000` to redirect unauthorized users to the host auth service.
+
+### Canonical Submodule Environment Variables
+| Variable | Required | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `PORT` | Yes | `3010` | Micro-app HTTP service port |
+| `NODE_ENV` | Yes | `development` | Node runtime environment mode |
+| `CONTAINER_PREFIX` | Yes | `forge-app-template` | Docker container prefix name |
+| `APP_NAME` | Yes | `app-template` | Microservice identifier |
+| `AUTH_SERVICE_URL` | No | `""` | Standalone auth redirect URL (empty behind gateway) |
+| `DATA_DIR` | No | `./data` | Local Turso SQLite data path |
+| `LOG_DIR` | No | `./logs` | Structured JSON logs directory |
+| `SESSION_COOKIE_NAME` | No | `forge_session` | Session cookie identifier |
+| `BRAND_NAME` | No | `SG Forge` | Display platform name in Astryx UI |
+| `BRAND_DOMAIN` | No | `sgforge.local` | Platform host domain |
+
+## 4. Developer Workflow & Submodule Operations
 
 ### Cloning with Submodules
 ```bash

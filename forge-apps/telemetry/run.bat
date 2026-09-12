@@ -8,6 +8,14 @@ setlocal enabledelayedexpansion
 set "DIR=%~dp0"
 cd /d "%DIR%"
 
+rem Auto-copy .env.example to .env if missing
+if not exist "%DIR%.env" (
+    if exist "%DIR%.env.example" (
+        echo ℹ️ Auto-generating .env from .env.example...
+        copy "%DIR%.env.example" "%DIR%.env" >nul
+    )
+)
+
 rem Resolve Bun Runtime
 set "BUN_BIN=bun"
 if exist "%DIR%portables\bun\bin\bun.exe" (
@@ -43,12 +51,30 @@ if "%CMD%"=="verify" (
     goto :eof
 )
 
+if "%CMD%"=="backup" (
+    echo 💾 Running autonomous database backup...
+    "%BUN_BIN%" run scripts\backup-db.ts
+    goto :eof
+)
+
 if "%CMD%"=="build" (
     echo 🐳 Building standalone Docker image...
     for %%I in ("%CD%") do set "CURRENT_DIR=%%~nxI"
     docker build -f docker\Dockerfile -t !CURRENT_DIR! .
     goto :eof
 )
+
+if "%CMD%"=="compose" goto :do_compose
+if "%CMD%"=="docker" goto :do_compose
+goto :not_compose
+
+:do_compose
+echo 🐳 Running standalone Docker Compose...
+shift
+docker compose %*
+goto :eof
+
+:not_compose
 
 if "%CMD%"=="graft" (
     echo 🧠 Running Graft Code Context Graph...
@@ -75,6 +101,12 @@ if "%CMD%"=="headroom" (
     goto :eof
 )
 
+if "%CMD%"=="council" (
+    shift
+    "%BUN_BIN%" run scripts\council-runner.ts %*
+    goto :eof
+)
+
 if "%CMD%"=="worklog" (
     shift
     "%BUN_BIN%" run scripts\append-worklog.ts %*
@@ -96,10 +128,13 @@ echo   run.bat dev            Start local server in hot-reload watch mode
 echo   run.bat start          Start server in production mode
 echo   run.bat test           Execute local 5-tier test suites
 echo   run.bat verify         Run quality verification gate (18 checks)
+echo   run.bat backup         Run isolated database snapshot (VACUUM INTO)
+echo   run.bat compose [cmd]  Run standalone docker compose (e.g. up -d, down)
 echo   run.bat build          Build standalone Docker container
 echo   run.bat graft [cmd]    Run Graft code context graph
 echo   run.bat tokens [cmd]   Display lifetime spend, sync ledger, or launch TUI
 echo   run.bat headroom [cmd] Run Headroom context compression engine
+echo   run.bat council [idea] Run Council of AI multi-agent decision framework
 echo   run.bat worklog [msg]  Append task completion to logs\WORKLOGS.md
 echo   run.bat setup-hooks    Activate git hooks (.githooks)
 echo   run.bat help           Show this banner

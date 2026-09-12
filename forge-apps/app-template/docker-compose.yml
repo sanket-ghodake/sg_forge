@@ -24,6 +24,9 @@ services:
     container_name: ${CONTAINER_PREFIX:-ag}-app-template-dev
     ports:
       - "8099:8099"
+    env_file:
+      - path: .env
+        required: false
     environment:
       - PORT=8099
       - NODE_ENV=development

@@ -86,3 +86,4 @@ Before writing code, running commands, or staging changes in this microservice:
 - **Lifetime Token Ledger (CodeBurn)**: [`.agents/rules/codeburn.md`](file:///.agents/rules/codeburn.md)
 - **Context Compression (Headroom)**: [`.agents/rules/headroom.md`](file:///.agents/rules/headroom.md)
 - **Council of AI Decision Framework**: [`.agents/rules/council.md`](file:///.agents/rules/council.md)
+- **RTK Token Optimization**: [`.agents/rules/rtk.md`](file:///.agents/rules/rtk.md)
