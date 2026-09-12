@@ -53,6 +53,8 @@ export const MANDATORY_EXCLUSIONS = [
   'public/brand/custom-*',
   'public/brand/*.custom.*',
   'public/brand/custom-logo.*',
+  'apps/src/landing-custom/custom/',
+  'custom-landing/',
   'proxy/Caddyfile',
   'proxy/errors/*.html',
   'graphify-out/cache/',
@@ -351,7 +353,11 @@ public/brand/custom-*
 public/brand/*.custom.*
 public/brand/custom-logo.*
 
-# 9. Dynamic Ingress Proxy & Pre-Rendered Error Fallbacks (Auto-generated from .env)
+# 9. Enterprise Custom Landing UI Overrides (Never track org-specific landing pages)
+apps/src/landing-custom/custom/
+custom-landing/
+
+# 10. Dynamic Ingress Proxy & Pre-Rendered Error Fallbacks (Auto-generated from .env)
 proxy/Caddyfile
 !proxy/Caddyfile.example
 proxy/errors/*.html

@@ -79,6 +79,7 @@ export default defineConfig({
             { label: 'Disaster Recovery & Backups', slug: 'operations/backup-recovery' },
             { label: 'Deployment & Quickstart Guide', slug: 'operations/deployment-quickstart' },
             { label: 'Branding, Logos & White-Labeling', slug: 'operations/branding-and-logos' },
+            { label: 'Custom Landing UI & Zero-Drift', slug: 'operations/custom-landing-page' },
           ],
         },
         {

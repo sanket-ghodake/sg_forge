@@ -21,7 +21,7 @@ case "$CMD" in
         ;;
 
     # Core Development, Scaffolding & Testing
-    setup|sync-submodules|dev|sync-proxy|certs|trust-cert|fallback|sync-ignores|test|reset-db|doctor|clean|create-app|lock-logo|unlock-logo|logo-status)
+    setup|sync-submodules|dev|sync-proxy|certs|trust-cert|fallback|sync-ignores|test|reset-db|doctor|clean|create-app|lock-logo|unlock-logo|logo-status|lock-landing|unlock-landing|landing-status)
         "$REPO_ROOT/scripts/run/core.sh" "$@"
         ;;
 

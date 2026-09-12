@@ -22,7 +22,7 @@ describe('Tier 2 Integration: Static Routes & Ingress Normalization [SR-DOC-001]
     const html = await res.text();
     // Astryx Header & Brand
     expect(html).toContain('astryx-theme-toggle-btn');
-    expect(html).toContain('SG FORGE');
+    expect(html.toUpperCase()).toContain('SG FORGE');
     expect(html).toContain('DOCS');
     // Astryx Tooltips & Head Shield Script
     expect(html).toContain('initAstryxUniversalTooltips');

@@ -21,3 +21,4 @@
 2026-09-11 22:23 | Harden AI agent directives and configure VS Code terminal PATH for portable toolchain
 2026-09-11 22:29 | Add bun wrappers to portables/bin, configure core.hooksPath and .env auto-provisioning
 2026-09-11 22:33 | Remove git hook mutations of WORKLOGS.md and undo last commit as requested
+2026-09-12 08:56 | feat(landing): establish zero git dirty custom landing architecture, ignore governance, and operations docs

@@ -1,0 +1,188 @@
+---
+title: Custom Landing UI & Zero-Drift Ingress
+description: Enterprise guide for deploying custom marketing and landing pages with Zero Git Dirty Policy and frictionless upstream platform updates.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Custom Marketing UI with Zero Git Pull Friction"
+  analogy="Building a tailored landing page for your company within SG Forge should never compromise your ability to pull new features and security fixes from upstream."
+  impact="Maintain completely customized marketing frontends while keeping your Git working tree 100% clean and immune to merge conflicts during 'git pull upstream main'."
+/>
+
+<TraceabilityBadge reqId="SR-GATE-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-UI-001" type="LLR" status="verified" />
+
+## 1. The Zero Git Dirty Architecture
+
+Downstream organizations deploying SG Forge typically replace the default root landing page (`/`) with their corporate marketing experience.
+
+In standard repositories, modifying internal template files creates local Git diffs. When the upstream repository publishes updates, `git pull` fails or produces complex merge conflicts.
+
+SG Forge enforces a **Zero Git Dirty Policy** by providing four decoupled ingress customization workflows:
+
+```
+                           Root Request (GET /)
+                                    │
+                                    ▼
+                     ┌─────────────────────────────┐
+                     │     Caddy Ingress Gateway   │
+                     │       (proxy/Caddyfile)     │
+                     └──────────────┬──────────────┘
+                                    │
+               ┌────────────────────┼────────────────────┐
+               ▼                    ▼                    ▼
+   [Option 1: In-Repo Slot]  [Option 2: .env Route] [Option 3: Submodule]
+   apps/src/landing-custom   APP_LANDING in .env    custom-landing/
+   (Auto-detects custom/)    (Proxy to CMS/Container) (Private Git Repo)
+               │
+               ▼
+   ┌───────────────────────┐
+   │  Resolution Priority: │
+   │  1. custom/index.html │
+   │  2. custom/template.ts│
+   │  3. Default Astryx UI │
+   └───────────────────────┘
+```
+
+---
+
+## 2. The 4 Zero-Drift Customization Options
+
+### Option 1: Drop-In Override Folder (`custom/`) — In-Repo Simplicity
+
+The simplest method for teams wanting to store code directly inside the SG Forge repository without Git tracking:
+
+1. **Create the Git-Ignored Directory**:
+   ```bash
+   mkdir -p apps/src/landing-custom/custom
+   ```
+   *Note: `apps/src/landing-custom/custom/` is registered in `.gitignore` and all editor ignore definitions.*
+
+2. **Static Site Export (HTML/CSS/JS)**:
+   Drop an exported static site (from Webflow, Astro, Tailwind, Vite, or manual HTML) into `custom/`:
+   ```text
+   apps/src/landing-custom/custom/
+   ├── index.html        # Main landing page HTML (Auto-served at '/')
+   ├── styles.css        # Static asset (Auto-served at '/custom/styles.css')
+   └── logo.png          # Image asset (Auto-served at '/custom/logo.png')
+   ```
+   The `@forge/landing-custom` server automatically detects `custom/index.html` and serves it with built-in path traversal protection.
+
+3. **Dynamic TypeScript Template**:
+   Alternatively, create `apps/src/landing-custom/custom/template.ts` exporting `renderCustomLandingHtml()`:
+   ```typescript
+   export function renderCustomLandingHtml(): string {
+     return `<!DOCTYPE html>
+     <html lang="en">
+       <head><title>Acme Corporation</title></head>
+       <body>
+         <h1>Welcome to Acme Enterprise Canvas</h1>
+         <a href="/portal">Launch Workspaces &rarr;</a>
+       </body>
+     </html>`;
+   }
+   ```
+
+4. **Verify Clean Git Tree**:
+   ```bash
+   rtk git status
+   # Output: working tree clean (nothing to commit)
+   ```
+
+---
+
+### Option 2: Declarative Ingress via `.env` (Zero Monorepo Footprint)
+
+Because `.env` is never committed to Git, you can point root ingress to external sites, marketing CMS platforms, or standalone Docker containers:
+
+1. **External Corporate Website (Reverse Proxy)**:
+   ```bash
+   # In .env: Caddy reverse-proxies root '/' directly to your marketing CMS
+   APP_LANDING="Corporate Site|443|/|Marketing|Public Ingress|https://marketing.acme.corp"
+   ```
+
+2. **Standalone Custom Container**:
+   ```bash
+   # In .env: Routes root '/' to an independent container on port 8080
+   APP_LANDING="Custom Landing|8080|/|Marketing|Public Ingress|acme-landing-container"
+   ```
+
+3. **Direct Redirect to Portal (Bypass Landing)**:
+   ```bash
+   # In .env: Automatically redirects '/' permanently to '/portal'
+   DISABLE_LANDING="true"
+   ```
+
+4. **Regenerate Proxy**:
+   ```bash
+   rtk ./run.sh sync-proxy
+   ```
+
+---
+
+### Option 3: Autonomous Git Submodule (`custom-landing/`)
+
+For enterprises maintaining their marketing code in an independent, private repository:
+
+1. **Clone into the Git-Ignored Root Directory**:
+   ```bash
+   git clone https://github.com/acme-org/landing-site.git custom-landing
+   ```
+   *Note: `custom-landing/` is registered in `.gitignore`.*
+
+2. **Or Add as a Submodule with `ignore = all`**:
+   ```bash
+   git submodule add https://github.com/acme-org/landing-site.git custom-landing
+   git config submodule.custom-landing.ignore all
+   ```
+   The `ignore = all` flag instructs Git to ignore all local working-tree modifications and commits within the submodule, guaranteeing zero merge conflicts during platform pulls.
+
+---
+
+### Option 4: In-Place Editing with Git Skip-Worktree Tooling
+
+For developers who prefer editing `apps/src/landing-custom/src/template.html.ts` directly in place:
+
+1. **Lock the file before editing**:
+   ```bash
+   rtk ./run.sh lock-landing
+   # Output: 🔒 [Asset Lock] Successfully locked landing files (skip-worktree)
+   ```
+2. **Make your modifications**.
+3. **Check Git Status**:
+   ```bash
+   rtk git status
+   # Output: working tree clean (nothing to commit)
+   ```
+4. **Before pulling upstream updates**:
+   ```bash
+   rtk ./run.sh unlock-landing
+   rtk git pull upstream main
+   rtk ./run.sh lock-landing
+   ```
+
+---
+
+## 3. Pulling Upstream Updates Safely
+
+To update SG Forge without friction:
+
+1. **Check Status**:
+   ```bash
+   rtk git status
+   # Verify working tree is clean
+   ```
+2. **Fetch and Fast-Forward**:
+   ```bash
+   rtk git pull upstream main
+   ```
+3. **Regenerate Ingress & Verify Gates**:
+   ```bash
+   rtk ./run.sh sync-proxy
+   rtk ./run.sh test
+   ```
+   All custom landing pages, brand assets, and configuration remain intact with zero merge conflicts.

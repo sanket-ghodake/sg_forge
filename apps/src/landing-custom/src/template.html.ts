@@ -283,15 +283,15 @@ export function renderCustomLandingHtml(config: LandingConfig = {}): string {
 
       <div class="card">
         <div class="card-icon">&#x1F4E6;</div>
-        <h3 class="card-title">Zero Main Repo Drift</h3>
-        <p class="card-desc">Maintained in an independent Git submodule with ignore flags, guaranteeing zero merge conflicts during platform pulls.</p>
+        <h3 class="card-title">Zero Git Dirty &amp; Zero Drift</h3>
+        <p class="card-desc">Custom landing code in <code>custom/</code> or <code>custom-landing/</code> is fully Git-ignored, ensuring zero merge conflicts during platform pulls.</p>
       </div>
     </section>
 
     <div class="callout-box">
       <div class="callout-content">
         <h2>Ready to customize this landing page?</h2>
-        <p>Edit <code>landing-custom/src/template.html.ts</code> or replace with your own framework container.</p>
+        <p>Drop your static HTML or template into <code>apps/src/landing-custom/custom/</code> for zero Git pull friction, or point <code>APP_LANDING</code> in <code>.env</code>.</p>
       </div>
       <a href="${portalUrl}" class="btn btn-primary">Get Started Now &rarr;</a>
     </div>

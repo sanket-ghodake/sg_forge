@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-09-06T21:45:00.000Z",
-  "totalExportedSymbols": 638,
-  "documentedSymbols": 591,
-  "symbolCoveragePercent": 92.6,
+  "totalExportedSymbols": 645,
+  "documentedSymbols": 594,
+  "symbolCoveragePercent": 92.1,
   "totalRequirements": 71,
   "implementedRequirements": 71,
   "verifiedRequirements": 71,
@@ -1065,10 +1065,82 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "CUSTOM_DIR",
+      "kind": "variable",
+      "file": "apps/src/landing-custom/src/server.ts",
+      "line": 19,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "CUSTOM_INDEX_HTML",
+      "kind": "variable",
+      "file": "apps/src/landing-custom/src/server.ts",
+      "line": 20,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "CUSTOM_TEMPLATE_TS",
+      "kind": "variable",
+      "file": "apps/src/landing-custom/src/server.ts",
+      "line": 21,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "LandingMode",
+      "kind": "type",
+      "file": "apps/src/landing-custom/src/server.ts",
+      "line": 23,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "resolveLandingMode",
+      "kind": "function",
+      "file": "apps/src/landing-custom/src/server.ts",
+      "line": 30,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "resolveLandingHtml",
+      "kind": "function",
+      "file": "apps/src/landing-custom/src/server.ts",
+      "line": 41,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "resolveCustomAsset",
+      "kind": "function",
+      "file": "apps/src/landing-custom/src/server.ts",
+      "line": 66,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "createLandingHandler",
       "kind": "function",
       "file": "apps/src/landing-custom/src/server.ts",
-      "line": 19,
+      "line": 107,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1080,7 +1152,7 @@
       "name": "startServer",
       "kind": "function",
       "file": "apps/src/landing-custom/src/server.ts",
-      "line": 75,
+      "line": 177,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -7289,7 +7361,7 @@
       "name": "getLockStatus",
       "kind": "function",
       "file": "scripts/brand-lock.ts",
-      "line": 27,
+      "line": 31,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7303,7 +7375,7 @@
       "name": "setLock",
       "kind": "function",
       "file": "scripts/brand-lock.ts",
-      "line": 41,
+      "line": 46,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7699,7 +7771,7 @@
       "name": "ROOT_IGNORE_FILES",
       "kind": "variable",
       "file": "scripts/sync-ignores.ts",
-      "line": 74,
+      "line": 76,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7713,7 +7785,7 @@
       "name": "MANDATORY_ATTRIBUTES",
       "kind": "variable",
       "file": "scripts/sync-ignores.ts",
-      "line": 87,
+      "line": 89,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7727,7 +7799,7 @@
       "name": "ValidationResult",
       "kind": "interface",
       "file": "scripts/sync-ignores.ts",
-      "line": 133,
+      "line": 135,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7741,7 +7813,7 @@
       "name": "validateIgnores",
       "kind": "function",
       "file": "scripts/sync-ignores.ts",
-      "line": 146,
+      "line": 148,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7755,7 +7827,7 @@
       "name": "syncAllIgnores",
       "kind": "function",
       "file": "scripts/sync-ignores.ts",
-      "line": 243,
+      "line": 245,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -7877,8 +7949,8 @@
         "scripts/verify-checks.ts:382#checkForgeAppSubmoduleCompliance",
         "scripts/verify-checks.ts:484#checkSystemTraceability",
         "scripts/sync-submodule-docs.ts:19#syncSubmoduleDocs",
-        "scripts/brand-lock.ts:27#getLockStatus",
-        "scripts/brand-lock.ts:41#setLock",
+        "scripts/brand-lock.ts:31#getLockStatus",
+        "scripts/brand-lock.ts:46#setLock",
         "scripts/verify-doc-coverage.ts:344#runTraceabilityAudit",
         "scripts/annotate-app-symbols.ts:66#resolveRequirementTag",
         "scripts/annotate-app-symbols.ts:79#annotateFile",
@@ -7901,11 +7973,11 @@
         "scripts/ast-complexity.ts:61#analyzeFileComplexity",
         "scripts/ast-complexity.ts:121#runComplexityAudit",
         "scripts/sync-ignores.ts:18#MANDATORY_EXCLUSIONS",
-        "scripts/sync-ignores.ts:74#ROOT_IGNORE_FILES",
-        "scripts/sync-ignores.ts:87#MANDATORY_ATTRIBUTES",
-        "scripts/sync-ignores.ts:133#ValidationResult",
-        "scripts/sync-ignores.ts:146#validateIgnores",
-        "scripts/sync-ignores.ts:243#syncAllIgnores"
+        "scripts/sync-ignores.ts:76#ROOT_IGNORE_FILES",
+        "scripts/sync-ignores.ts:89#MANDATORY_ATTRIBUTES",
+        "scripts/sync-ignores.ts:135#ValidationResult",
+        "scripts/sync-ignores.ts:148#validateIgnores",
+        "scripts/sync-ignores.ts:245#syncAllIgnores"
       ],
       "verifiedIn": [
         "scripts/test/run-sh.test.ts"
@@ -7921,8 +7993,11 @@
         "apps/src/landing/src/server.ts:114#renderHtml",
         "apps/src/landing/src/server.ts:120#startLandingServer",
         "apps/src/landing/src/index.ts:6#landingService",
-        "apps/src/landing-custom/src/server.ts:19#createLandingHandler",
-        "apps/src/landing-custom/src/server.ts:75#startServer",
+        "apps/src/landing-custom/src/server.ts:30#resolveLandingMode",
+        "apps/src/landing-custom/src/server.ts:41#resolveLandingHtml",
+        "apps/src/landing-custom/src/server.ts:66#resolveCustomAsset",
+        "apps/src/landing-custom/src/server.ts:107#createLandingHandler",
+        "apps/src/landing-custom/src/server.ts:177#startServer",
         "apps/src/landing-custom/src/template.html.ts:13#LandingConfig",
         "apps/src/landing-custom/src/template.html.ts:27#renderCustomLandingHtml",
         "apps/src/auth/src/frontend/set-password-view.ts:14#renderSetPasswordHtml",
@@ -8035,8 +8110,11 @@
         "apps/src/landing/src/server.ts:114#renderHtml",
         "apps/src/landing/src/server.ts:120#startLandingServer",
         "apps/src/landing/src/index.ts:6#landingService",
-        "apps/src/landing-custom/src/server.ts:19#createLandingHandler",
-        "apps/src/landing-custom/src/server.ts:75#startServer",
+        "apps/src/landing-custom/src/server.ts:30#resolveLandingMode",
+        "apps/src/landing-custom/src/server.ts:41#resolveLandingHtml",
+        "apps/src/landing-custom/src/server.ts:66#resolveCustomAsset",
+        "apps/src/landing-custom/src/server.ts:107#createLandingHandler",
+        "apps/src/landing-custom/src/server.ts:177#startServer",
         "apps/src/landing-custom/src/template.html.ts:13#LandingConfig",
         "apps/src/landing-custom/src/template.html.ts:27#renderCustomLandingHtml",
         "apps/src/auth/src/frontend/set-password-view.ts:14#renderSetPasswordHtml",
@@ -8130,8 +8208,8 @@
         "scripts/verify-checks.ts:382#checkForgeAppSubmoduleCompliance",
         "scripts/verify-checks.ts:484#checkSystemTraceability",
         "scripts/sync-submodule-docs.ts:19#syncSubmoduleDocs",
-        "scripts/brand-lock.ts:27#getLockStatus",
-        "scripts/brand-lock.ts:41#setLock",
+        "scripts/brand-lock.ts:31#getLockStatus",
+        "scripts/brand-lock.ts:46#setLock",
         "scripts/verify-doc-coverage.ts:344#runTraceabilityAudit",
         "scripts/annotate-app-symbols.ts:66#resolveRequirementTag",
         "scripts/annotate-app-symbols.ts:79#annotateFile",
@@ -8154,11 +8232,11 @@
         "scripts/ast-complexity.ts:61#analyzeFileComplexity",
         "scripts/ast-complexity.ts:121#runComplexityAudit",
         "scripts/sync-ignores.ts:18#MANDATORY_EXCLUSIONS",
-        "scripts/sync-ignores.ts:74#ROOT_IGNORE_FILES",
-        "scripts/sync-ignores.ts:87#MANDATORY_ATTRIBUTES",
-        "scripts/sync-ignores.ts:133#ValidationResult",
-        "scripts/sync-ignores.ts:146#validateIgnores",
-        "scripts/sync-ignores.ts:243#syncAllIgnores"
+        "scripts/sync-ignores.ts:76#ROOT_IGNORE_FILES",
+        "scripts/sync-ignores.ts:89#MANDATORY_ATTRIBUTES",
+        "scripts/sync-ignores.ts:135#ValidationResult",
+        "scripts/sync-ignores.ts:148#validateIgnores",
+        "scripts/sync-ignores.ts:245#syncAllIgnores"
       ],
       "verifiedIn": [
         "apps/src/docs/test/unit/token-ledger.test.ts",

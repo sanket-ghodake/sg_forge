@@ -186,15 +186,27 @@ case "$CMD" in
         ;;
 
     lock-logo)
-        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" lock
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" lock logo
         ;;
 
     unlock-logo)
-        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" unlock
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" unlock logo
         ;;
 
     logo-status)
-        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" status
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" status logo
+        ;;
+
+    lock-landing)
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" lock landing
+        ;;
+
+    unlock-landing)
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" unlock landing
+        ;;
+
+    landing-status)
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/brand-lock.ts" status landing
         ;;
 
     *)
