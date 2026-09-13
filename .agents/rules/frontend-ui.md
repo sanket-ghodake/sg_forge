@@ -122,5 +122,19 @@
   - Accent colors (emerald, indigo, cyan, amber) must maintain calibrated contrast in both themes.
 - **Theme Synchronization Engine**: All micro-apps and documentation portals MUST synchronize theme state across `forge:v1:platform:theme`, `starlight-theme`, and `BroadcastChannel('sg_forge_state_sync_bus')` with zero-FOUC inline head restoration and live MutationObserver listeners.
 
-
-
+### 16. Autonomous Submodule Modern UI Stack (shadcn + Magic UI + Aceternity + Luxe)
+- **Architecture & Portability**: While central platform core views (`apps/src/*`) utilize `@forge/ui` tokens, autonomous Forge micro-apps (`forge-apps/*`) utilize the self-contained, zero-dependency 4-library portable engine implemented in `src/lib/ui.ts` and `src/lib/icons.ts`.
+- **4-Library Division of Responsibilities**:
+  1. **shadcn UI**: Foundation design tokens (calibrated HSL slate/zinc), forms, toggle switches, custom styled selectors, glass dialogs, high-density data tables (`.sb-table`), and navigation tabs.
+  2. **Magic UI**: Polished micro-interactions, border beams (`.magic-border-beam`), live telemetry pulse beacons (`.magic-pulse-beacon`, `.live-pulse-dot`), architectural dot grid backdrops (`.magic-dot-grid`), and spring scale physics (`:active { transform: scale(0.98); }`).
+  3. **Aceternity UI**: Cinematic hero sections, ambient dark-mode cards (`.glass-card`, `.aceternity-glass-card`), subtle background grids (`.arch-grid`, `.aceternity-hero-grid`), radial spotlight glows (`.aceternity-spotlight`), and gradient sparklines.
+  4. **Luxe**: Minimalist high-craft developer typography (`-apple-system, Inter, JetBrains Mono`, `-0.02em` tracking, `tabular-nums`), HUD metric cards (`.hud-card`, `.luxe-hud-card`), shimmering gradient text (`.luxe-shimmer-text`, `.luxe-gradient-text`), and frosted glass highlights.
+- **Universal Zero-Emojis Standard**:
+  - UI code across both central platform and autonomous Forge submodules is strictly forbidden from using raw OS emojis (`📦`, `📡`, `🚀`, `⚠️`, `✅`, `🚪`, `🚫`).
+  - All icons MUST strictly be rendered as 100% crisp, lightweight vector SVGs adhering to Lucide 1.75px stroke standards (via `src/lib/icons.ts` or `@forge/ui`).
+- **Zero OS/Browser Defaults**:
+  - OS-default scrollbars must be replaced with themed slim tracks (`::-webkit-scrollbar`).
+  - Unstyled native `<select>` dropdowns and browser `alert()`/`confirm()` dialogs are strictly forbidden.
+  - Floating tooltips MUST use collision-detecting custom tooltips (`getAstryxTooltipScript()` / `getModernTooltipScript()`).
+- **Universal Dual-Theme Parity**:
+  - All components must map to HSL CSS variables with complete dark and light mode parity (`:root` and `[data-theme="light"]`).

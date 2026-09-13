@@ -5,7 +5,8 @@
 
 import { join } from 'node:path';
 import { authGuard, createLogger, createSafeHandler, loadBrandConfig } from './lib/sdk';
-import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript } from './lib/ui';
+import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript, getAstryxToastScript, getAstryxTooltipScript } from './lib/ui';
+import { icons } from './lib/icons';
 import { telemetryDb } from './db';
 
 const LOG_DIR = join(import.meta.dir, '..', 'logs');
@@ -24,81 +25,62 @@ function renderAppHtml(): string {
   ${getHeadStateScript({ defaultTheme: 'dark' })}
   <style>
     ${getAstryxStyles()}
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .metric-box {
-      background: var(--forge-bg-root);
-      padding: 1.25rem;
-      border-radius: var(--forge-radius);
-      border: 1px solid var(--forge-border);
-    }
-    .metric-val {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--forge-primary);
-      margin-top: 0.25rem;
-    }
-    .live-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--forge-primary);
-      box-shadow: 0 0 8px var(--forge-primary);
-      margin-right: 0.5rem;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 0.5; }
-      50% { opacity: 1; }
-      100% { opacity: 0.5; }
-    }
   </style>
 </head>
-<body>
+<body class="aceternity-hero-grid">
   ${getAstryxHeaderHtml('TELEMETRY', 'PUBLIC DASHBOARD')}
   <main class="astryx-container">
-    <div class="astryx-card" style="margin-bottom: 1.5rem;">
+    <div class="shadcn-card" style="margin-bottom: 1.5rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-        <h1 style="font-size: 1.5rem; color: var(--forge-text-main); margin: 0; display: flex; align-items: center;">
-          <span class="live-dot"></span> 📡 Live Telemetry Dashboard
-        </h1>
-        <span style="font-size: 0.8rem; background: var(--forge-success-bg); color: var(--forge-primary); border: 1px solid var(--forge-primary); border-radius: 9999px; padding: 0.25rem 0.6rem; font-weight: 600;">🌐 PUBLIC ACCESS</span>
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="color: var(--forge-primary); display: flex;">${icons.activity}</span>
+          <h1 style="font-size: 1.5rem; color: var(--forge-text-main); margin: 0; font-weight: 700; letter-spacing: -0.02em;">Live Telemetry Dashboard</h1>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span class="magic-pulse-beacon">LIVE STREAMING</span>
+          <span style="font-size: 0.75rem; background: var(--forge-success-bg); color: var(--forge-success); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 9999px; padding: 0.2rem 0.65rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+            ${icons.radio} PUBLIC ACCESS
+          </span>
+        </div>
       </div>
-      <p style="color: var(--forge-text-muted); margin-bottom: 1.25rem;">
-        Public observability micro-app. Streaming real-time telemetry metrics via Server-Sent Events (SSE) from dedicated Turso DB.
+      <p style="color: var(--forge-text-muted); margin-bottom: 1.5rem; font-size: 0.875rem;">
+        Public observability micro-app streaming real-time telemetry metrics via Server-Sent Events (SSE) from dedicated Turso libSQL database.
       </p>
 
       <!-- Metric Cards Grid -->
-      <div class="metric-grid">
-        <div class="metric-box">
-          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Process RSS Memory</span>
-          <div class="metric-val" id="val-mem">-- MB</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="luxe-hud-card">
+          <div class="luxe-metric-label">${icons.sliders} Process RSS Memory</div>
+          <div class="luxe-metric-val" id="val-mem">-- MB</div>
+          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Real-time memory allocation</span>
         </div>
-        <div class="metric-box">
-          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Platform Uptime</span>
-          <div class="metric-val" id="val-uptime" style="color: var(--forge-text-main);">-- s</div>
+
+        <div class="luxe-hud-card">
+          <div class="luxe-metric-label">${icons.zap} Platform Uptime</div>
+          <div class="luxe-metric-val" id="val-uptime">-- s</div>
+          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Service active elapsed time</span>
         </div>
-        <div class="metric-box">
-          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Gateway Target Route</span>
-          <div class="metric-val" style="font-size: 1.15rem; color: var(--forge-primary);">/apps/telemetry</div>
+
+        <div class="luxe-hud-card">
+          <div class="luxe-metric-label">${icons.monitor} Gateway Target Route</div>
+          <div class="luxe-metric-val" style="font-size: 1.25rem; color: var(--forge-primary);">/apps/telemetry</div>
+          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Caddy dynamic proxy routing</span>
         </div>
       </div>
 
-      <div style="background: var(--forge-bg-root); padding: 0.75rem 1rem; border-radius: var(--forge-radius); border: 1px solid var(--forge-border); margin-bottom: 1.5rem;">
-        <span style="font-size: 0.82rem; color: var(--forge-primary);">Database: <code>telemetry_turso.db</code> (Isolated libSQL Instance)</span>
+      <div style="background: var(--forge-bg-surface); padding: 0.75rem 1rem; border-radius: var(--forge-radius); border: 1px solid var(--forge-border); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="color: var(--forge-primary); display: flex;">${icons.database}</span>
+        <span style="font-size: 0.82rem; color: var(--forge-text-muted);">Database: <code style="color: var(--forge-primary);">telemetry_turso.db</code> (Isolated libSQL Instance)</span>
       </div>
 
-      <div style="display: flex; gap: 0.75rem;">
-        <a href="/" class="astryx-btn btn-outline">&larr; Return to Platform Hub</a>
-        <a href="/portal" class="astryx-btn btn-outline">Workspace Portal &rarr;</a>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="/" class="shadcn-btn">${icons.arrowLeft} Return to Platform Hub</a>
+        <a href="/portal" class="shadcn-btn">Workspace Portal ${icons.arrowRight}</a>
       </div>
     </div>
   </main>
+  ${getAstryxToastScript()}
+  ${getAstryxTooltipScript()}
   <script>
     const apiBase = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
     function updateVitals() {

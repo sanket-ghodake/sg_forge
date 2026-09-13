@@ -141,6 +141,10 @@ Core platform runs on `192.168.1.10`, Forge App runs on `192.168.1.50`:
 APP_TELEMETRY="Telemetry App|8087|/apps/telemetry|Operations|Public|http://192.168.1.50:8087"
 ```
 
+:::tip[Comprehensive Declarative Ingress Guide]
+For exhaustive specifications of all 8 deployment topologies, field-by-field breakdowns, external decoupled micro-app routing, and zero-downtime gateway synchronization, see the dedicated **[Declarative .env Service Registry Guide](/docs/submodules/env-app-registry/)**.
+:::
+
 ## 7. Reverse Proxy Subpath Asset Routing & Image Protection Rules
 
 When micro-apps are exposed under a subpath (e.g. `/apps/telemetry/`), asset routing must follow strict reverse proxy standards:

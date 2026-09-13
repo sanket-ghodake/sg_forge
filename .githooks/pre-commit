@@ -16,6 +16,9 @@ if [ -f "$REPO_ROOT/portables/bun/bin/bun" ]; then
     BUN_BIN="$REPO_ROOT/portables/bun/bin/bun"
 fi
 
+# Automatically synchronize multi-agent directives across root and submodules
+"$BUN_BIN" run "$REPO_ROOT/scripts/sync-directives.ts" 2>/dev/null || true
+
 # Run pre-commit quality gate. Exit with non-zero on failure to strictly block git commit.
 if ! "$BUN_BIN" run "$REPO_ROOT/scripts/verify-gate.ts"; then
     echo "❌ [PRE-COMMIT GATE FAILED] Git commit aborted. Fix all errors above before committing."
@@ -32,7 +35,13 @@ if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
                   "$REPO_ROOT/apps/src/docs/security/sbom" \
                   "$REPO_ROOT/apps/src/docs/traceability" \
                   "$REPO_ROOT/graphify-out" \
-                  "$REPO_ROOT/.agents/reports"; do
+                  "$REPO_ROOT/.agents/reports" \
+                  "$REPO_ROOT/CLAUDE.md" \
+                  "$REPO_ROOT/GEMINI.md" \
+                  "$REPO_ROOT/.cursorrules" \
+                  "$REPO_ROOT/.cursor" \
+                  "$REPO_ROOT/.github/copilot-instructions.md" \
+                  "$REPO_ROOT/.agents/AGENTS.md"; do
         if [ -e "$target" ]; then
             git add "$target" 2>/dev/null || true
         fi

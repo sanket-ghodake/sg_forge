@@ -86,6 +86,7 @@ export default defineConfig({
           label: 'Autonomous Submodules',
           items: [
             { label: 'Submodule Governance', slug: 'submodules/architecture' },
+            { label: 'Declarative .env Ingress Registry', slug: 'submodules/env-app-registry' },
             { label: 'Ingress & Troubleshooting', slug: 'submodules/troubleshooting' },
             { label: 'Code Microservice', slug: 'submodules/forge-code' },
             { label: 'Telemetry Microservice', slug: 'submodules/forge-telemetry' },

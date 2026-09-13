@@ -38,6 +38,7 @@ case "$CMD" in
         echo "📦 Installing workspace packages with Bun..."
         $PORTABLE_BUN install
         $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-ignores.ts"
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-directives.ts"
         if [ ! -f "$REPO_ROOT/proxy/certs/cert.pem" ]; then
             echo "🔒 [${BRAND_NAME}] Generating local development TLS certificates..."
             $PORTABLE_BUN run "$REPO_ROOT/scripts/setup-certs.ts"
@@ -48,6 +49,8 @@ case "$CMD" in
         if [ -f "$REPO_ROOT/.gitmodules" ] && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
             echo "🧩 [${BRAND_NAME}] Synchronizing autonomous Git submodules..."
             git submodule update --init --recursive 2>/dev/null || true
+            $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-submodules.ts" 2>/dev/null || true
+            $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-directives.ts" 2>/dev/null || true
         fi
         # Initialize databases if not yet provisioned
         if [ ! -f "$REPO_ROOT/apps/data/auth.db" ]; then
@@ -73,7 +76,14 @@ case "$CMD" in
     sync-submodules)
         echo "🧩 [${BRAND_NAME}] Updating all Git submodules to latest upstream..."
         git submodule update --init --recursive --remote --merge
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-submodules.ts"
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-directives.ts"
         echo "✅ Submodules synchronized successfully."
+        ;;
+
+    sync-directives)
+        echo "🤖 [${BRAND_NAME}] Synchronizing multi-agent directives across monorepo and submodules..."
+        $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-directives.ts" "$@"
         ;;
 
     dev)

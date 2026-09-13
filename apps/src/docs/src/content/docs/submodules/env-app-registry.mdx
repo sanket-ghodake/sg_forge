@@ -1,0 +1,167 @@
+---
+title: Declarative .env Service Registry & Ingress Topologies
+description: Comprehensive enterprise guide for declaring, networking, and proxying micro-apps, host processes, and external cloud services via SG Forge .env.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="HLR-SDK-301" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-SDK-001" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-SDK-005" type="LLR" status="verified" />
+</div>
+
+SG Forge implements a single-location declarative service registry inspired by modern API gateways (Spotify Backstage, Traefik, Caddy Ingress). Instead of manually hardcoding reverse proxy blocks across Caddyfiles, Nginx configs, and Portal navigation arrays, **all services and micro-apps are declared in strictly one place: `.env`**.
+
+Whenever you update `.env`, the system automatically syncs:
+1. **Reverse Proxy Gateway (`proxy/Caddyfile`)**: Instant routing, subpath prefixing, WebSocket support, and 308 canonical redirection.
+2. **Main Workspace Portal (`/portal`)**: Dynamic application cards, category filters, and permission gates.
+3. **Developer Dashboard (`/devcenter`)**: Dual-probe health monitoring and service status.
+4. **Developer Hub (`/gateway`)**: API playground and service registry matrix.
+
+---
+
+## 1. Syntax Specification & Field Breakdown
+
+Every application entry follows the standardized pipe-delimited format:
+
+```env
+APP_<SLUG>="<Name>|<Port>|<Path>|<Category>|<Role>|[Upstream Target Override]"
+```
+
+| Field Index | Field Name | Required? | Default Fallback | Description & Examples |
+| :--- | :--- | :---: | :--- | :--- |
+| **Prefix** | `APP_<SLUG>` | **Yes** | — | Variable key must start with `APP_`. The slug/ID is automatically normalized (e.g. `APP_FLEET_MANAGER` becomes `fleet-manager`). |
+| **Field 1** | Display Name | **Yes** | — | Human-readable title displayed in navigation menus, portal cards, and catalog drawers (e.g. `"Fleet Manager Hub"`, `"Live Telemetry"`). |
+| **Field 2** | Internal Port | **Yes** | `80` | TCP port on which the service process listens (e.g. `8087`, `8089`, `3000`, `443`). |
+| **Field 3** | Ingress Path | **Yes** | — | Public URL path intercepted by Caddy (e.g. `/`, `/portal`, `/apps/telemetry`, `/apps/fleet-manager`). |
+| **Field 4** | Catalog Category | No | `Micro-Apps` | Workspace categorization tab (e.g. `Developer Tools`, `Isolated Polyglot Forge Micro-Apps`, `Core Enterprise Services`, `Analytics`). |
+| **Field 5** | Access Role & Clearance | No | `General` | RBAC clearance tier. If it includes `Public` (case-insensitive), authentication is bypassed. Examples: `Public / Engineering`, `Employee / Admin`, `Developer`, `Super Admin`. |
+| **Field 6** | Upstream Target Override | No | Auto-derived | Upstream destination host, container alias, or full URL (see all 8 scenarios below). |
+
+---
+
+## 2. All 8 Ingress Scenarios & Topologies
+
+### Scenario 1: Standard In-Repo Forge Submodule (Docker Mesh)
+The microservice lives inside `forge-apps/<slug>` and runs in a Docker container connected to the internal bridge network (`ag_forge_apps_net`).
+
+```env
+APP_TELEMETRY="Live Telemetry Dashboard|8087|/apps/telemetry|Isolated Polyglot Forge Micro-Apps|Public / Engineering|app-telemetry"
+```
+* **How it resolves**: Caddy proxies `/apps/telemetry*` to `http://app-telemetry:8087`.
+* **Container Alias**: `app-telemetry` (defined in `forge-apps/telemetry/docker-compose.yml`).
+* **Auto-Default**: If Field 6 is omitted and `forge-apps/telemetry` exists on disk, `@forge/sdk` automatically defaults Field 6 to `app-telemetry`.
+
+---
+
+### Scenario 2: External Standalone App (Decoupled from `forge-apps/`)
+You moved the app completely out of the repository (e.g. into `~/Desktop/external-services/fleet-manager`), but still want the central SG Forge Caddy gateway to proxy to it.
+
+#### Option 2A: Standalone App Running in Docker
+The standalone app runs in Docker and connects to the shared Docker network (`ag_forge_apps_net`):
+```env
+APP_FLEET_MANAGER="Fleet Manager Hub|8089|/apps/fleet-manager|Developer Tools|Employee / Admin|app-fleet-manager"
+```
+* **Routing**: Caddy proxies `/apps/fleet-manager*` to `http://app-fleet-manager:8089`.
+
+#### Option 2B: Standalone App Running on Host Machine (Bare-Metal)
+The standalone app runs directly on the host machine using native Bun, Node, Go, or Python without Docker:
+```env
+APP_FLEET_MANAGER="Fleet Manager Hub|8089|/apps/fleet-manager|Developer Tools|Employee / Admin|host.docker.internal"
+```
+* **Routing**: Caddy inside Docker connects to your host OS loopback at port `8089` via `host.docker.internal`.
+
+---
+
+### Scenario 3: Native Host Machine Process (Local Developer Workflow)
+Useful when developing a backend service (e.g. Python FastAPI, Node, Go, Rust, or Elixir) on your laptop without wanting to build or restart Docker containers on every file change.
+
+```env
+APP_ML_ENGINE="Python Inference Service|8000|/apps/ml-engine|AI Engine|Developer|host.docker.internal"
+```
+* **Developer Command**: `uvicorn main:app --host 0.0.0.0 --port 8000`
+* **Public Gateway Access**: `http://localhost:8080/apps/ml-engine`
+* **How it resolves**: Caddy translates public requests on port `8080` and proxies them directly into your host machine's port `8000`.
+
+---
+
+### Scenario 4: External Cloud SaaS or Enterprise Intranet Service
+Proxy an existing internal corporate application (e.g. internal Wiki, Jira, Grafana, or CRM) through the SG Forge portal with unified branding, path mapping, and authentication headers.
+
+```env
+APP_CRM="Corporate CRM|443|/apps/crm|Enterprise Systems|Employee / Admin|https://crm.corp.internal"
+```
+* **How it resolves**: When Field 6 begins with `http://` or `https://`, the SDK treats it as an explicit upstream URL. Caddy establishes an upstream TLS session to `https://crm.corp.internal`.
+
+---
+
+### Scenario 5: Multi-Machine Cluster / LAN Deployment
+Core SG Forge runs on **Server A** (`192.168.1.10`), while a high-compute or GPU worker runs on **Server B** (`192.168.1.50`).
+
+```env
+APP_CLUSTER_NODE="GPU Processing Node|9090|/apps/gpu-worker|Compute Grid|Public / Engineering|http://192.168.1.50:9090"
+```
+* **How it resolves**: Caddy forwards incoming traffic over the local network to `http://192.168.1.50:9090`.
+
+---
+
+### Scenario 6: Custom Corporate Website at Root `/` (Plug & Play Ingress)
+SG Forge allows you to choose what is served at the domain root (`/`):
+
+#### 6A. Built-in Platform Hub
+```env
+APP_LANDING="Platform Hub (Landing)|3000|/|Platform Services|Public Ingress|landing"
+```
+
+#### 6B. External Corporate Website
+```env
+APP_LANDING="Corporate Site|443|/|Corporate|Public Ingress|https://marketing.acme.corp"
+```
+* Caddy reverse-proxies `/` directly to the marketing website.
+* The local landing container is automatically bypassed.
+
+#### 6C. Direct Ingress to Portal (No Landing Page)
+Comment out `APP_LANDING` or configure:
+```env
+DISABLE_LANDING="true"
+```
+* Caddy and Portal automatically redirect `/` directly to `/portal`.
+
+---
+
+### Scenario 7: WebSockets & Direct Stream Tunnels (e.g. Cloud IDE / Terminal)
+Applications that require persistent bidirectional WebSockets, such as cloud IDEs or terminal daemons:
+
+```env
+APP_CODE="Cloud VS Code|8088|/apps/code|Developer Tools|Employee / Admin|app-code"
+```
+* `scripts/generate-proxy.ts` detects the code application and automatically configures zero-latency WebSocket stream handlers and tailored Content Security Policy (CSP) rules for session multiplexing.
+
+---
+
+### Scenario 8: Administrative Disable Without Deleting Configuration
+Temporarily disable an application without removing its configuration from `.env`:
+
+* **Option A (Comment Out)**: Add `#` at the beginning of the line:
+  ```env
+  # APP_BETA_TEST="Beta Experiment|8095|/apps/beta|Labs|Developer|app-beta"
+  ```
+* **Option B (Platform DB Flag)**: Set `status = 'disabled'` in the `apps_registry` table of `platform_core.db`. The SDK will hide the app from the Portal UI and Caddy will route it to maintenance pages.
+
+---
+
+## 3. Applying Changes (Sync Workflow)
+
+Whenever you add, modify, or remove an `APP_*` entry in `.env`:
+
+```bash
+# 1. Regenerate Caddyfile and Static Error Pages from .env
+rtk ./run.sh sync-proxy
+
+# 2. Reload Caddy Gateway (Zero-Downtime Hot Reload)
+rtk ./run.sh proxy:reload
+# (Or if running standalone Caddy: caddy reload --config proxy/Caddyfile)
+```
+
+The gateway immediately applies new routes, updates access logs, and renders the newly registered application in the Portal Canvas at `/portal` without restarting any Docker containers.

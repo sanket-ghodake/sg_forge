@@ -54,10 +54,16 @@ Independent, polyglot, sandboxed micro-frontends running in Docker containers wi
 * **Symptom**: Browser blocks canvas exports, blob previews, or external avatars.
 * **Fix**: SG Forge permits `img-src 'self' data: blob:`. If your micro-app requires an external CDN (e.g. GitHub avatars), define a scoped CSP rule in `scripts/generate-proxy.ts`.
 
-### 4. Diverse Ingress Topologies Beyond Local Docker Containers
-* **Host Process (Bare Metal Bun/Node)**: `APP_TOOL="Tool|5000|/apps/tool|Dev|Dev|host.docker.internal"`
-* **Remote Cloud Endpoint**: `APP_CRM="CRM|443|/apps/crm|Sales|Admin|https://crm.corp.internal"`
-* **Multi-Machine Cluster**: `APP_TEL="Telemetry|8087|/apps/tel|Ops|Public|http://192.168.1.50:8087"`
+### 4. Diverse Ingress Topologies Beyond Local Containers
+Forge micro-apps support 8 network deployment scenarios via `.env`:
+* **In-Repo Docker Submodule**: `APP_TELEMETRY="Live Telemetry|8087|/apps/telemetry|Micro-Apps|Public|app-telemetry"`
+* **Decoupled Standalone App (Docker)**: `APP_EXTERNAL="External Service|8089|/apps/external|Dev Tools|Employee / Admin|app-external"`
+* **Host Process (Bare Metal Bun/Node/Python)**: `APP_TOOL="Native Tool|5000|/apps/tool|Developer|Developer|host.docker.internal"`
+* **Remote Cloud HTTPS SaaS**: `APP_CRM="CRM|443|/apps/crm|Sales|Employee / Admin|https://crm.corp.internal"`
+* **Multi-Machine Cluster Node**: `APP_TEL="Telemetry|8087|/apps/tel|Ops|Public|http://192.168.1.50:8087"`
+* **Custom Root Website Ingress**: `APP_LANDING="Corporate Site|443|/|Corporate|Public Ingress|https://marketing.acme.corp"`
+* **Direct Portal (No Landing)**: Omit `APP_LANDING` or set `DISABLE_LANDING="true"`.
 
-*Detailed documentation: [`docs/submodules/troubleshooting.mdx`](../apps/src/docs/src/content/docs/submodules/troubleshooting.mdx)*
+*Comprehensive Guide: [`apps/src/docs/src/content/docs/submodules/env-app-registry.mdx`](../apps/src/docs/src/content/docs/submodules/env-app-registry.mdx) (or `/docs/submodules/env-app-registry/` in the Engineering Portal).*
+
 

@@ -5,6 +5,7 @@
 
 import { loadBrandConfig } from '../lib/sdk';
 import { getAstryxHeaderHtml, getAstryxStyles, getAstryxToastScript, getAstryxTooltipScript, getHeadStateScript } from '../lib/ui';
+import { icons } from '../lib/icons';
 import type { AuthUser } from '../lib/types';
 import type { ProjectRecord, ActiveSessionRecord } from '../db/schema';
 
@@ -112,19 +113,19 @@ export function renderCatalogHtml(
     }
   </style>
 </head>
-<body>
+<body class="aceternity-hero-grid">
   ${getAstryxHeaderHtml('CODE', 'DEVELOPER WORKSPACES')}
 
   <main class="astryx-container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
     <!-- Top Action Bar -->
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
       <div>
-        <h1 style="font-size: 1.6rem; color: var(--forge-text-main); margin: 0 0 0.25rem 0;">
-          💻 VS Code Cloud Workspaces
+        <h1 style="font-size: 1.6rem; color: var(--forge-text-main); margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;">
+          <span style="color: var(--forge-primary); display: flex;">${icons.code}</span> VS Code Cloud Workspaces
         </h1>
         <p style="color: var(--forge-text-muted); font-size: 0.9rem; margin: 0;">
           Authenticated as <strong>${userName}</strong> &bull;
-          <span style="color: var(--forge-primary); font-weight: 600;">${isSuperAdmin ? '🛡️ Super Administrator' : '👨‍💻 Employee Developer'}</span>
+          <span style="color: var(--forge-primary); font-weight: 600;">${isSuperAdmin ? 'Super Administrator' : 'Employee Developer'}</span>
         </p>
       </div>
       <div style="display: flex; gap: 0.75rem;">
@@ -135,7 +136,7 @@ export function renderCatalogHtml(
 
     <!-- Security & Concurrency Notice -->
     <div style="background: var(--forge-bg-surface); border: 1px solid var(--forge-border); border-radius: var(--forge-radius); padding: 0.85rem 1.15rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-      <span style="font-size: 1.25rem;">🔒</span>
+      <span style="color: var(--forge-primary); display: flex;">${icons.shieldAlert}</span>
       <div style="font-size: 0.85rem; color: var(--forge-text-muted); line-height: 1.4;">
         <strong style="color: var(--forge-text-main);">Single-Seat Remote Desktop Lock & Discard-on-Exit:</strong>
         Each repository allows 1 active session at a time. All file modifications and builds are strictly discarded upon session exit, leaving the server disk completely pristine.
@@ -156,19 +157,19 @@ export function renderCatalogHtml(
         const isCurrentUser = Boolean(session && session.active_user_id === user.id);
         const canManage = isSuperAdmin || p.userRole === 'PROJECT_ADMIN';
 
-        let badgeHtml = `<span class="status-badge status-available">● Available</span>`;
+        let badgeHtml = `<span class="status-badge status-available"><span class="magic-pulse-beacon" style="font-size:0.7rem;">AVAILABLE</span></span>`;
         if (isPending) {
-          badgeHtml = `<span class="status-badge status-pending">⏳ Takeover Pending</span>`;
+          badgeHtml = `<span class="status-badge status-pending" style="display:inline-flex;align-items:center;gap:0.3rem;">${icons.radio} Takeover Pending</span>`;
         } else if (isLocked) {
-          badgeHtml = `<span class="status-badge status-locked">🔒 In Use (${session!.active_user_email})</span>`;
+          badgeHtml = `<span class="status-badge status-locked" style="display:inline-flex;align-items:center;gap:0.3rem;">${icons.shieldAlert} In Use (${session!.active_user_email})</span>`;
         }
 
         return `
         <div class="code-card" id="card-${p.id}">
           <div>
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-              <h3 style="margin: 0; font-size: 1.1rem; color: var(--forge-text-main); font-weight: 600;">
-                📦 ${p.name}
+              <h3 style="margin: 0; font-size: 1.1rem; color: var(--forge-text-main); font-weight: 600; display: flex; align-items: center; gap: 0.4rem;">
+                <span style="color: var(--forge-primary); display: flex;">${icons.layers}</span> ${p.name}
               </h3>
               ${badgeHtml}
             </div>
@@ -189,17 +190,17 @@ export function renderCatalogHtml(
             <div style="display: flex; gap: 0.5rem;">
               ${isLocked && !isCurrentUser ? `
                 <button class="astryx-btn btn-primary" style="flex: 1; background: var(--forge-warning); border-color: var(--forge-warning); color: var(--forge-bg-root); font-weight: 600;" onclick="handleTakeover('${p.id}', '${session!.active_user_email}')">
-                  ⚡ Takeover (60s)
+                  ${icons.zap} Takeover (60s)
                 </button>
               ` : `
                 <a href="/apps/code/ide/${p.id}" class="astryx-btn btn-primary" style="flex: 1; text-align: center; text-decoration: none;">
-                  🚀 Open VS Code
+                  ${icons.code} Open VS Code
                 </a>
               `}
 
               ${canManage ? `
                 <button class="astryx-btn btn-outline" style="padding: 0.5rem 0.75rem;" data-astryx-tooltip="Manage Access" onclick="openAccessModal('${p.id}', '${p.name}')">
-                  ⚙️
+                  ${icons.sliders}
                 </button>
               ` : ''}
             </div>

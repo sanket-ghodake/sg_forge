@@ -11,7 +11,8 @@ import {
   getScopedHierarchy,
   loadBrandConfig,
 } from './lib/sdk';
-import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript } from './lib/ui';
+import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript, getAstryxToastScript, getAstryxTooltipScript } from './lib/ui';
+import { icons } from './lib/icons';
 import type { AuthUser, ScopedHierarchyResponse } from './lib/types';
 
 const LOG_DIR = join(import.meta.dir, '..', 'logs');
@@ -38,35 +39,55 @@ function renderAppHtml(user?: AuthUser, hierarchy?: ScopedHierarchyResponse | nu
     ${getAstryxStyles()}
   </style>
 </head>
-<body>
+<body class="aceternity-hero-grid">
   ${getAstryxHeaderHtml('TEMPLATE', 'FORGE MICRO-APP')}
   <main class="astryx-container">
-    <div class="astryx-card" style="margin-bottom: 1.5rem;">
+    <div class="shadcn-card" style="margin-bottom: 1.5rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-        <h1 style="font-size: 1.5rem; color: var(--forge-text-main); margin: 0;">🚀 Forge App Template</h1>
-        <span style="font-size: 0.8rem; background: var(--forge-success-bg); color: var(--forge-primary); border: 1px solid var(--forge-primary); border-radius: 9999px; padding: 0.25rem 0.6rem; font-weight: 600;">🛡️ ${userRole}</span>
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="color: var(--forge-primary); display: flex;">${icons.layers}</span>
+          <h1 style="font-size: 1.5rem; color: var(--forge-text-main); margin: 0; font-weight: 700; letter-spacing: -0.02em;">Forge App Template</h1>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span class="magic-pulse-beacon">ACTIVE SESSION</span>
+          <span style="font-size: 0.75rem; background: var(--forge-success-bg); color: var(--forge-success); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 9999px; padding: 0.2rem 0.65rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+            ${icons.shieldAlert} ${userRole}
+          </span>
+        </div>
       </div>
-      <p style="color: var(--forge-text-muted); margin-bottom: 1.25rem;">
-        Verified session for <strong>${userName}</strong> (<code>${userEmail}</code>) &bull; Department: <strong style="color: var(--forge-text-main);">${dept}</strong>
+
+      <p style="color: var(--forge-text-muted); margin-bottom: 1.5rem; font-size: 0.875rem;">
+        Verified session for <strong style="color: var(--forge-text-main);">${userName}</strong> (<code>${userEmail}</code>) &bull; Department: <strong style="color: var(--forge-text-main);">${dept}</strong>
       </p>
 
-      <div style="background: var(--forge-bg-root); padding: 1.25rem; border-radius: var(--forge-radius); border: 1px solid var(--forge-border); margin-bottom: 1.5rem;">
-        <h3 style="font-size: 0.95rem; color: var(--forge-text-main); margin: 0 0 0.5rem 0;">🏢 Organization Hierarchy</h3>
-        <p style="font-size: 0.85rem; color: var(--forge-text-muted); margin: 0;">
-          Direct Manager / Approver: <strong style="color: var(--forge-primary);">${approver?.displayName || 'Executive'}</strong>
-        </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="luxe-hud-card">
+          <div class="luxe-metric-label">${icons.monitor} Organization Unit</div>
+          <div class="luxe-metric-val" style="font-size: 1.15rem;">${dept}</div>
+          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Assigned functional team</span>
+        </div>
+
+        <div class="luxe-hud-card">
+          <div class="luxe-metric-label">${icons.sliders} Direct Approver</div>
+          <div class="luxe-metric-val" style="font-size: 1.15rem;">${approver?.displayName || 'Executive'}</div>
+          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Management chain tier 1</span>
+        </div>
+
+        <div class="luxe-hud-card">
+          <div class="luxe-metric-label">${icons.database} Database State</div>
+          <div class="luxe-metric-val" style="font-size: 1.15rem; color: var(--forge-primary);">template.db</div>
+          <span style="font-size: 0.75rem; color: var(--forge-text-muted);">Isolated libSQL instance</span>
+        </div>
       </div>
 
-      <div style="background: var(--forge-bg-root); padding: 0.75rem 1rem; border-radius: var(--forge-radius); border: 1px solid var(--forge-border); margin-bottom: 1.5rem;">
-        <span style="font-size: 0.82rem; color: var(--forge-primary);">Database: <code>template.db</code> (Isolated libSQL Instance)</span>
-      </div>
-
-      <div style="display: flex; gap: 0.75rem;">
-        <a href="/portal" class="astryx-btn btn-outline">&larr; Return to Workspace Portal</a>
-        <a href="/" class="astryx-btn btn-outline">Platform Hub &rarr;</a>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="/portal" class="shadcn-btn">${icons.arrowLeft} Return to Workspace Portal</a>
+        <a href="/" class="shadcn-btn">Platform Hub ${icons.arrowRight}</a>
       </div>
     </div>
   </main>
+  ${getAstryxToastScript()}
+  ${getAstryxTooltipScript()}
   <script>
     const apiBase = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
     window.onerror = function(msg, src, lineno, colno, err) {

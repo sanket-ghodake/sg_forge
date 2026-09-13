@@ -5,6 +5,7 @@
 
 import { loadBrandConfig } from '../lib/sdk';
 import { getAstryxStyles, getAstryxToastScript, getHeadStateScript } from '../lib/ui';
+import { icons } from '../lib/icons';
 import type { AuthUser } from '../lib/types';
 import type { ProjectRecord } from '../db/schema';
 
@@ -111,14 +112,14 @@ export function renderWorkbenchHtml(
   <div id="topBar">
     <div style="display: flex; align-items: center; gap: 0.85rem;">
       <a href="/apps/code">&larr; Repositories</a>
-      <span style="font-weight: 600; color: var(--forge-text-main);">📦 ${project.name}</span>
+      <span style="font-weight: 600; color: var(--forge-text-main); display: inline-flex; align-items: center; gap: 0.35rem;">${icons.box} ${project.name}</span>
       <span style="color: var(--forge-border);">|</span>
       <span style="color: var(--forge-text-muted);">Branch: <strong style="color: var(--forge-primary);">${project.default_branch}</strong></span>
     </div>
 
     <div style="display: flex; align-items: center; gap: 1rem;">
-      <span style="color: var(--forge-warning); font-size: 0.75rem;">⚠️ Ephemeral: Changes discarded on exit</span>
-      <button id="btnLeave" onclick="openLeaveModal()">🚪 Exit & Discard</button>
+      <span style="color: var(--forge-warning); font-size: 0.75rem; display: inline-flex; align-items: center; gap: 0.35rem;">${icons.alertTriangle} Ephemeral: Changes discarded on exit</span>
+      <button id="btnLeave" onclick="openLeaveModal()" style="display: inline-flex; align-items: center; gap: 0.35rem;">${icons.logOut} Exit & Discard</button>
     </div>
   </div>
 
@@ -127,7 +128,7 @@ export function renderWorkbenchHtml(
   <!-- 60s Takeover Alert Modal -->
   <div id="takeoverModal">
     <div class="takeover-box">
-      <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚠️</div>
+      <div style="display: flex; justify-content: center; margin-bottom: 0.75rem; color: var(--forge-warning);">${icons.alertTriangle}</div>
       <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--forge-text-main);">Incoming Takeover Request</h2>
       <p style="font-size: 0.88rem; color: var(--forge-text-muted);" id="takeoverMsg">
         Another developer wants to connect to this repository.
@@ -137,11 +138,11 @@ export function renderWorkbenchHtml(
         If you don't respond, this session will disconnect and all uncommitted changes will be discarded.
       </p>
       <div style="display: flex; gap: 1rem; justify-content: center;">
-        <button class="astryx-btn btn-danger" onclick="respondTakeover('DENY')">
-          🚫 Deny (Keep Working)
+        <button class="astryx-btn btn-danger" onclick="respondTakeover('DENY')" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+          ${icons.close} Deny (Keep Working)
         </button>
-        <button class="astryx-btn btn-success" onclick="respondTakeover('ALLOW')">
-          ✅ Hand Over Now
+        <button class="astryx-btn btn-success" onclick="respondTakeover('ALLOW')" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+          ${icons.check} Hand Over Now
         </button>
       </div>
     </div>
@@ -150,7 +151,7 @@ export function renderWorkbenchHtml(
   <!-- Astryx Leave Confirmation Modal -->
   <div id="leaveModal">
     <div class="takeover-box" style="border-color: var(--forge-accent);">
-      <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚪</div>
+      <div style="display: flex; justify-content: center; margin-bottom: 0.75rem; color: var(--forge-accent);">${icons.logOut}</div>
       <h2 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--forge-text-main);">Exit Session & Discard Changes?</h2>
       <p style="font-size: 0.88rem; color: var(--forge-text-muted); margin-bottom: 1.5rem;">
         All uncommitted edits, temporary builds, and scratch files will be permanently erased. The server repository will return to its pristine commit state.
@@ -159,8 +160,8 @@ export function renderWorkbenchHtml(
         <button class="astryx-btn btn-outline" onclick="closeLeaveModal()">
           Cancel
         </button>
-        <button class="astryx-btn btn-danger" onclick="confirmLeave()">
-          Discard & Exit
+        <button class="astryx-btn btn-danger" onclick="confirmLeave()" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+          ${icons.logOut} Discard & Exit
         </button>
       </div>
     </div>
@@ -256,7 +257,7 @@ export function renderWorkbenchHtml(
       navigator.sendBeacon('/apps/code/api/session/leave', JSON.stringify({ projectId: PROJECT_ID }));
     });
 
-    // 📡 Outbound Network Telemetry Interceptor & Resource Observer
+    // Outbound Network Telemetry Interceptor & Resource Observer
     (function initNetworkAuditor() {
       const pendingEvents = [];
       function flushEvents() {

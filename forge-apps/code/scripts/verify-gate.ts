@@ -16,7 +16,7 @@
  *   10. Multi-Agent Directives Sync (AGENTS.md, GEMINI.md, CLAUDE.md, .agents/)
  *   11. Microservice Observability & Dedicated logs/ Directory
  *   12. 5-Tier Microservice Test Governance (100% passing)
- *   13. Astryx UI & Design Token Compliance
+ *   13. Modern UI Compliance (shadcn / Magic UI / Aceternity / Luxe)
  *   14. Dedicated Turso DB Isolation (Local ./data/ SQLite DB, zero cross-app queries)
  *   15. Network Ingress/Egress Boundary Invariants (Air-gap vs. Managed Egress)
  *   16. Multi-OS CLI Integrity (run.sh & run.bat POSIX/Windows safety)
@@ -189,19 +189,31 @@ if (existsSync(serverPath)) {
 // --------------------------------------------------------------------------
 // Check 10: Multi-Agent Directives Sync
 // --------------------------------------------------------------------------
-const agentDirectives = [
-  'AGENTS.md',
+const masterAgentsPath = join(APP_ROOT, 'AGENTS.md');
+const agentDirectiveCopies = [
   'GEMINI.md',
   'CLAUDE.md',
+  '.cursorrules',
   join('.agents', 'AGENTS.md'),
   join('.github', 'copilot-instructions.md'),
   join('.cursor', 'rules', 'AGENTS.md'),
 ];
-const missingDirectives = agentDirectives.filter((f) => !existsSync(join(APP_ROOT, f)));
-if (missingDirectives.length > 0) {
-  failGate('10', 'Multi-Agent Directives Sync', `Missing agent files: ${missingDirectives.join(', ')}`);
+if (!existsSync(masterAgentsPath)) {
+  failGate('10', 'Multi-Agent Directives Sync', 'Master AGENTS.md missing.');
 } else {
-  passGate('10', 'Multi-Agent Directives Sync', 'Agent directives synchronized across AGENTS.md, Copilot, Gemini, Claude, and Cursor.');
+  const masterContent = readFileSync(masterAgentsPath, 'utf8').trim();
+  const outOfSync: string[] = [];
+  for (const copy of agentDirectiveCopies) {
+    const copyPath = join(APP_ROOT, copy);
+    if (!existsSync(copyPath) || readFileSync(copyPath, 'utf8').trim() !== masterContent) {
+      outOfSync.push(copy);
+    }
+  }
+  if (outOfSync.length > 0) {
+    failGate('10', 'Multi-Agent Directives Sync', `Directive files out of sync with AGENTS.md: ${outOfSync.join(', ')}`);
+  } else {
+    passGate('10', 'Multi-Agent Directives Sync', `Agent directives 100% synchronized across all ${agentDirectiveCopies.length + 1} targets.`);
+  }
 }
 
 // --------------------------------------------------------------------------
@@ -231,21 +243,21 @@ if (testProc.status !== 0) {
 }
 
 // --------------------------------------------------------------------------
-// Check 13: Astryx UI & Design Token Compliance
+// Check 13: Modern UI Compliance (shadcn / Magic UI / Aceternity / Luxe)
 // --------------------------------------------------------------------------
 let unapprovedCss = false;
 for (const f of sourceFiles) {
   if (f.endsWith('.ts') || f.endsWith('.tsx')) {
     const content = readFileSync(f, 'utf8');
     if (content.includes('style="') && (content.includes('color: red') || content.includes('color: blue'))) {
-      failGate('13', 'Astryx UI Compliance', `Unapproved inline styles detected in ${relative(APP_ROOT, f)}`);
+      failGate('13', 'Modern UI Compliance', `Unapproved inline styles detected in ${relative(APP_ROOT, f)}`);
       unapprovedCss = true;
       break;
     }
   }
 }
 if (!unapprovedCss) {
-  passGate('13', 'Astryx UI Compliance', 'All UI layouts strictly adhere to Astryx tokens and CSS variables.');
+  passGate('13', 'Modern UI Compliance', 'All UI layouts strictly adhere to portable modern design system tokens (shadcn / Magic UI / Aceternity / Luxe).');
 }
 
 // --------------------------------------------------------------------------

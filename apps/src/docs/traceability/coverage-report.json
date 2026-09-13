@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-09-06T21:45:00.000Z",
-  "totalExportedSymbols": 678,
-  "documentedSymbols": 606,
-  "symbolCoveragePercent": 89.4,
+  "totalExportedSymbols": 697,
+  "documentedSymbols": 594,
+  "symbolCoveragePercent": 85.2,
   "totalRequirements": 72,
   "implementedRequirements": 72,
   "verifiedRequirements": 72,
@@ -5749,7 +5749,7 @@
       "name": "startTemplateServer",
       "kind": "function",
       "file": "forge-apps/app-template/src/server.ts",
-      "line": 88,
+      "line": 109,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -5773,60 +5773,81 @@
       "name": "getHeadStateScript",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/ui.ts",
-      "line": 8,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-SDK-301",
-        "LLR-SUB-001"
-      ],
+      "line": 10,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernUiStyles",
+      "kind": "function",
+      "file": "forge-apps/app-template/src/lib/ui.ts",
+      "line": 22,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxStyles",
-      "kind": "function",
+      "kind": "variable",
       "file": "forge-apps/app-template/src/lib/ui.ts",
-      "line": 24,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-SDK-301",
-        "LLR-SUB-001"
-      ],
+      "line": 337,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
-      "name": "getAstryxHeaderHtml",
+      "name": "getModernToastScript",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/ui.ts",
-      "line": 159,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-SDK-301",
-        "LLR-SUB-001"
-      ],
+      "line": 339,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxToastScript",
+      "kind": "variable",
+      "file": "forge-apps/app-template/src/lib/ui.ts",
+      "line": 370,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernTooltipScript",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/ui.ts",
-      "line": 177,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-SDK-301",
-        "LLR-SUB-001"
-      ],
+      "line": 372,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxTooltipScript",
+      "kind": "variable",
+      "file": "forge-apps/app-template/src/lib/ui.ts",
+      "line": 408,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernHeaderHtml",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/ui.ts",
-      "line": 207,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-SDK-301",
-        "LLR-SUB-001"
-      ],
+      "line": 410,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getAstryxHeaderHtml",
+      "kind": "variable",
+      "file": "forge-apps/app-template/src/lib/ui.ts",
+      "line": 434,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
@@ -5996,6 +6017,20 @@
         "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
+    },
+    {
+      "name": "icons",
+      "kind": "variable",
+      "file": "forge-apps/app-template/src/lib/icons.ts",
+      "line": 8,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-201",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": [
+        "HLR-UI-201"
+      ]
     },
     {
       "name": "appendWorklog",
@@ -6061,7 +6096,7 @@
       "name": "startTelemetryServer",
       "kind": "function",
       "file": "forge-apps/telemetry/src/server.ts",
-      "line": 132,
+      "line": 114,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -6097,60 +6132,81 @@
       "name": "getHeadStateScript",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/ui.ts",
-      "line": 8,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
-      ],
+      "line": 10,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernUiStyles",
+      "kind": "function",
+      "file": "forge-apps/telemetry/src/lib/ui.ts",
+      "line": 22,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxStyles",
-      "kind": "function",
+      "kind": "variable",
       "file": "forge-apps/telemetry/src/lib/ui.ts",
-      "line": 24,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
-      ],
+      "line": 337,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
-      "name": "getAstryxHeaderHtml",
+      "name": "getModernToastScript",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/ui.ts",
-      "line": 159,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
-      ],
+      "line": 339,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxToastScript",
+      "kind": "variable",
+      "file": "forge-apps/telemetry/src/lib/ui.ts",
+      "line": 370,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernTooltipScript",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/ui.ts",
-      "line": 177,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
-      ],
+      "line": 372,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxTooltipScript",
+      "kind": "variable",
+      "file": "forge-apps/telemetry/src/lib/ui.ts",
+      "line": 408,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernHeaderHtml",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/ui.ts",
-      "line": 207,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
-      ],
+      "line": 410,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getAstryxHeaderHtml",
+      "kind": "variable",
+      "file": "forge-apps/telemetry/src/lib/ui.ts",
+      "line": 434,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
@@ -6320,6 +6376,20 @@
         "LLR-SUB-004"
       ],
       "missingRequirementFiles": []
+    },
+    {
+      "name": "icons",
+      "kind": "variable",
+      "file": "forge-apps/telemetry/src/lib/icons.ts",
+      "line": 8,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-201",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": [
+        "HLR-UI-201"
+      ]
     },
     {
       "name": "appendWorklog",
@@ -6767,60 +6837,81 @@
       "name": "getHeadStateScript",
       "kind": "function",
       "file": "forge-apps/code/src/lib/ui.ts",
-      "line": 8,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
-      ],
+      "line": 10,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernUiStyles",
+      "kind": "function",
+      "file": "forge-apps/code/src/lib/ui.ts",
+      "line": 22,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxStyles",
-      "kind": "function",
+      "kind": "variable",
       "file": "forge-apps/code/src/lib/ui.ts",
-      "line": 24,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
-      ],
+      "line": 337,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
-      "name": "getAstryxHeaderHtml",
+      "name": "getModernToastScript",
       "kind": "function",
       "file": "forge-apps/code/src/lib/ui.ts",
-      "line": 159,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
-      ],
+      "line": 339,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxToastScript",
+      "kind": "variable",
+      "file": "forge-apps/code/src/lib/ui.ts",
+      "line": 370,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernTooltipScript",
       "kind": "function",
       "file": "forge-apps/code/src/lib/ui.ts",
-      "line": 177,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
-      ],
+      "line": 372,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "getAstryxTooltipScript",
+      "kind": "variable",
+      "file": "forge-apps/code/src/lib/ui.ts",
+      "line": 408,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getModernHeaderHtml",
       "kind": "function",
       "file": "forge-apps/code/src/lib/ui.ts",
-      "line": 207,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
-      ],
+      "line": 410,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getAstryxHeaderHtml",
+      "kind": "variable",
+      "file": "forge-apps/code/src/lib/ui.ts",
+      "line": 434,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
@@ -6992,6 +7083,20 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "icons",
+      "kind": "variable",
+      "file": "forge-apps/code/src/lib/icons.ts",
+      "line": 8,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-201",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": [
+        "HLR-UI-201"
+      ]
+    },
+    {
       "name": "ClaimResult",
       "kind": "interface",
       "file": "forge-apps/code/src/session-coordinator.ts",
@@ -7103,7 +7208,7 @@
       "name": "renderCatalogHtml",
       "kind": "function",
       "file": "forge-apps/code/src/ui/catalog.ts",
-      "line": 15,
+      "line": 16,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7115,7 +7220,7 @@
       "name": "renderWorkbenchHtml",
       "kind": "function",
       "file": "forge-apps/code/src/ui/workbench.ts",
-      "line": 15,
+      "line": 16,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7733,6 +7838,42 @@
       "missingRequirementFiles": [
         "SR-GATE-001"
       ]
+    },
+    {
+      "name": "DIRECTIVE_TARGETS",
+      "kind": "variable",
+      "file": "scripts/sync-directives.ts",
+      "line": 17,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "SyncResult",
+      "kind": "interface",
+      "file": "scripts/sync-directives.ts",
+      "line": 26,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "syncDirectoryDirectives",
+      "kind": "function",
+      "file": "scripts/sync-directives.ts",
+      "line": 37,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "syncAllDirectives",
+      "kind": "function",
+      "file": "scripts/sync-directives.ts",
+      "line": 75,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
     },
     {
       "name": "WatchdogOptions",
@@ -9209,13 +9350,8 @@
         "apps/src/sdk/src/registry.ts:62#isAppDisabled",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
         "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
-        "forge-apps/app-template/src/server.ts:88#startTemplateServer",
+        "forge-apps/app-template/src/server.ts:109#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
-        "forge-apps/app-template/src/lib/ui.ts:8#getHeadStateScript",
-        "forge-apps/app-template/src/lib/ui.ts:24#getAstryxStyles",
-        "forge-apps/app-template/src/lib/ui.ts:159#getAstryxHeaderHtml",
-        "forge-apps/app-template/src/lib/ui.ts:177#getAstryxToastScript",
-        "forge-apps/app-template/src/lib/ui.ts:207#getAstryxTooltipScript",
         "forge-apps/app-template/src/lib/sdk.ts:19#StandaloneLogger",
         "forge-apps/app-template/src/lib/sdk.ts:74#createLogger",
         "forge-apps/app-template/src/lib/sdk.ts:85#getDatabaseClient",
@@ -9295,11 +9431,6 @@
         "forge-apps/code/src/db/schema.ts:7#ProjectRecord",
         "forge-apps/code/src/db/schema.ts:24#ProjectMemberRecord",
         "forge-apps/code/src/db/schema.ts:39#ActiveSessionRecord",
-        "forge-apps/code/src/lib/ui.ts:8#getHeadStateScript",
-        "forge-apps/code/src/lib/ui.ts:24#getAstryxStyles",
-        "forge-apps/code/src/lib/ui.ts:159#getAstryxHeaderHtml",
-        "forge-apps/code/src/lib/ui.ts:177#getAstryxToastScript",
-        "forge-apps/code/src/lib/ui.ts:207#getAstryxTooltipScript",
         "forge-apps/code/src/lib/sdk.ts:19#StandaloneLogger",
         "forge-apps/code/src/lib/sdk.ts:74#createLogger",
         "forge-apps/code/src/lib/sdk.ts:85#getDatabaseClient",
@@ -9323,8 +9454,8 @@
         "forge-apps/code/src/session-coordinator.ts:213#respondToTakeover",
         "forge-apps/code/src/session-coordinator.ts:259#leaveSession",
         "forge-apps/code/src/session-coordinator.ts:275#recordHeartbeat",
-        "forge-apps/code/src/ui/catalog.ts:15#renderCatalogHtml",
-        "forge-apps/code/src/ui/workbench.ts:15#renderWorkbenchHtml",
+        "forge-apps/code/src/ui/catalog.ts:16#renderCatalogHtml",
+        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml",
         "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
       ],
@@ -9338,13 +9469,8 @@
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-TEL-801_TELEMETRY_ENGINE.mdx",
       "implementedIn": [
         "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
-        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:114#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
-        "forge-apps/telemetry/src/lib/ui.ts:8#getHeadStateScript",
-        "forge-apps/telemetry/src/lib/ui.ts:24#getAstryxStyles",
-        "forge-apps/telemetry/src/lib/ui.ts:159#getAstryxHeaderHtml",
-        "forge-apps/telemetry/src/lib/ui.ts:177#getAstryxToastScript",
-        "forge-apps/telemetry/src/lib/ui.ts:207#getAstryxTooltipScript",
         "forge-apps/telemetry/src/lib/sdk.ts:19#StandaloneLogger",
         "forge-apps/telemetry/src/lib/sdk.ts:74#createLogger",
         "forge-apps/telemetry/src/lib/sdk.ts:85#getDatabaseClient",
@@ -9651,13 +9777,8 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/architecture.mdx",
       "implementedIn": [
-        "forge-apps/app-template/src/server.ts:88#startTemplateServer",
+        "forge-apps/app-template/src/server.ts:109#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
-        "forge-apps/app-template/src/lib/ui.ts:8#getHeadStateScript",
-        "forge-apps/app-template/src/lib/ui.ts:24#getAstryxStyles",
-        "forge-apps/app-template/src/lib/ui.ts:159#getAstryxHeaderHtml",
-        "forge-apps/app-template/src/lib/ui.ts:177#getAstryxToastScript",
-        "forge-apps/app-template/src/lib/ui.ts:207#getAstryxTooltipScript",
         "forge-apps/app-template/src/lib/sdk.ts:19#StandaloneLogger",
         "forge-apps/app-template/src/lib/sdk.ts:74#createLogger",
         "forge-apps/app-template/src/lib/sdk.ts:85#getDatabaseClient",
@@ -9672,12 +9793,39 @@
         "forge-apps/app-template/src/lib/types.ts:33#AuthGuardResult",
         "forge-apps/app-template/src/lib/types.ts:43#ScopedHierarchyResponse",
         "forge-apps/app-template/src/lib/types.ts:62#ProblemDetails",
+        "forge-apps/app-template/src/lib/icons.ts:8#icons",
         "forge-apps/app-template/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/app-template/scripts/backup-db.ts:42#executeMicroAppBackup"
+        "forge-apps/app-template/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/telemetry/src/lib/icons.ts:8#icons",
+        "forge-apps/code/src/lib/icons.ts:8#icons"
       ],
       "verifiedIn": [
         "scripts/test/create-app.test.ts",
         "forge-apps/code/test/unit/lock-coordinator.test.ts"
+      ]
+    },
+    "LLR-SDK-001": {
+      "id": "LLR-SDK-001",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/submodules/env-app-registry.mdx",
+      "implementedIn": [
+        "apps/src/types/src/index.ts:31#ForgeAppManifest",
+        "apps/src/dev-dashboard/src/db/db.ts:40#AppRegistryRecord",
+        "apps/src/sdk/src/registry.ts:14#ServiceEntry",
+        "apps/src/sdk/src/registry.ts:33#LoadRegistryOptions",
+        "apps/src/sdk/src/registry.ts:45#getAppStatus",
+        "apps/src/sdk/src/registry.ts:62#isAppDisabled",
+        "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
+        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
+        "scripts/docker-resolver.ts:32#TargetValidation",
+        "scripts/docker-resolver.ts:95#resolveCoreServices",
+        "scripts/docker-resolver.ts:137#resolveForgeApps",
+        "scripts/docker-resolver.ts:182#validateTarget",
+        "scripts/docker-resolver.ts:266#printBanner"
+      ],
+      "verifiedIn": [
+        "apps/src/sdk/test/unit/registry.test.ts",
+        "scripts/test/docker-resolver.test.ts"
       ]
     },
     "HLR-CODE-001": {
@@ -9709,7 +9857,7 @@
       "type": "HLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/forge-telemetry.mdx",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:114#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -9720,7 +9868,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/forge-telemetry.mdx",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:114#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -9753,7 +9901,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/telemetry/llr/README.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:114#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/integration/db-isolation.test.ts"
@@ -9852,30 +10000,6 @@
       "verifiedIn": [
         "apps/src/dev-dashboard/test/unit/services-probe.test.ts",
         "forge-apps/app-template/test/contracts/health-schema.test.ts"
-      ]
-    },
-    "LLR-SDK-001": {
-      "id": "LLR-SDK-001",
-      "type": "LLR",
-      "docFile": "apps/src/docs/src/content/docs/llr/LLR-SDK-001_DECLARATIVE_ENV_SERVICE_REGIST.mdx",
-      "implementedIn": [
-        "apps/src/types/src/index.ts:31#ForgeAppManifest",
-        "apps/src/dev-dashboard/src/db/db.ts:40#AppRegistryRecord",
-        "apps/src/sdk/src/registry.ts:14#ServiceEntry",
-        "apps/src/sdk/src/registry.ts:33#LoadRegistryOptions",
-        "apps/src/sdk/src/registry.ts:45#getAppStatus",
-        "apps/src/sdk/src/registry.ts:62#isAppDisabled",
-        "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
-        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
-        "scripts/docker-resolver.ts:32#TargetValidation",
-        "scripts/docker-resolver.ts:95#resolveCoreServices",
-        "scripts/docker-resolver.ts:137#resolveForgeApps",
-        "scripts/docker-resolver.ts:182#validateTarget",
-        "scripts/docker-resolver.ts:266#printBanner"
-      ],
-      "verifiedIn": [
-        "apps/src/sdk/test/unit/registry.test.ts",
-        "scripts/test/docker-resolver.test.ts"
       ]
     },
     "LLR-DB-005": {
@@ -10056,11 +10180,6 @@
         "forge-apps/code/src/db/schema.ts:7#ProjectRecord",
         "forge-apps/code/src/db/schema.ts:24#ProjectMemberRecord",
         "forge-apps/code/src/db/schema.ts:39#ActiveSessionRecord",
-        "forge-apps/code/src/lib/ui.ts:8#getHeadStateScript",
-        "forge-apps/code/src/lib/ui.ts:24#getAstryxStyles",
-        "forge-apps/code/src/lib/ui.ts:159#getAstryxHeaderHtml",
-        "forge-apps/code/src/lib/ui.ts:177#getAstryxToastScript",
-        "forge-apps/code/src/lib/ui.ts:207#getAstryxTooltipScript",
         "forge-apps/code/src/lib/sdk.ts:19#StandaloneLogger",
         "forge-apps/code/src/lib/sdk.ts:74#createLogger",
         "forge-apps/code/src/lib/sdk.ts:85#getDatabaseClient",
@@ -10084,8 +10203,8 @@
         "forge-apps/code/src/session-coordinator.ts:213#respondToTakeover",
         "forge-apps/code/src/session-coordinator.ts:259#leaveSession",
         "forge-apps/code/src/session-coordinator.ts:275#recordHeartbeat",
-        "forge-apps/code/src/ui/catalog.ts:15#renderCatalogHtml",
-        "forge-apps/code/src/ui/workbench.ts:15#renderWorkbenchHtml",
+        "forge-apps/code/src/ui/catalog.ts:16#renderCatalogHtml",
+        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml",
         "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
       ],
@@ -10198,13 +10317,8 @@
         "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
         "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
         "apps/src/sdk/src/logger.ts:119#ForgeLogger",
-        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:114#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
-        "forge-apps/telemetry/src/lib/ui.ts:8#getHeadStateScript",
-        "forge-apps/telemetry/src/lib/ui.ts:24#getAstryxStyles",
-        "forge-apps/telemetry/src/lib/ui.ts:159#getAstryxHeaderHtml",
-        "forge-apps/telemetry/src/lib/ui.ts:177#getAstryxToastScript",
-        "forge-apps/telemetry/src/lib/ui.ts:207#getAstryxTooltipScript",
         "forge-apps/telemetry/src/lib/sdk.ts:19#StandaloneLogger",
         "forge-apps/telemetry/src/lib/sdk.ts:74#createLogger",
         "forge-apps/telemetry/src/lib/sdk.ts:85#getDatabaseClient",
