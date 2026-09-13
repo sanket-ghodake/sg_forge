@@ -18,7 +18,7 @@ networks:
 
   # 3. Forge Apps Network (Managed Egress / Autonomous Micro-Apps)
   forge-apps-net:
-    name: ${CONTAINER_PREFIX:-ag}_forge_apps_net
+    name: ${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}
     driver: bridge
 
 volumes:

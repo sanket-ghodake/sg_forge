@@ -75,3 +75,44 @@ forge-apps/app-template/
 ├── logs/                          # Isolated structured JSON log sink & token ledger
 └── test/                          # 5-Tier test suite (unit, integration, security, contracts, e2e)
 ```
+
+---
+
+## ⚠️ Subpath Ingress & Asset Routing Rules for App Authors
+
+When building micro-apps for SG Forge, they are hosted under a subpath namespace (e.g. `/apps/my-app/`):
+
+### 1. Never Hardcode Leading Slash Asset or API Paths
+```html
+<!-- ❌ BAD: Resolves to domain root http://domain/images/logo.png (404) -->
+<img src="/images/logo.png" />
+fetch('/health')
+
+<!-- ✅ GOOD: Uses HTML base href or relative paths -->
+<base href="/apps/my-app/">
+<img src="images/logo.png" />
+```
+
+### 2. Client-Side JavaScript Fetch Best Practice
+```javascript
+// ✅ Derive active subpath dynamically
+const apiBase = window.location.pathname.endsWith('/') 
+  ? window.location.pathname 
+  : window.location.pathname + '/';
+
+fetch(apiBase + 'health').then(r => r.json());
+```
+
+### 3. Framework Base Path Configurations
+* **Next.js (`next.config.js`)**:
+  `basePath: process.env.BASE_PATH || '/apps/my-app'`
+* **Vite (`vite.config.ts`)**:
+  `base: './'`
+
+### 4. Docker Network (`FORGE_APPS_NETWORK`)
+Standalone execution (`./run.sh up`) auto-bootstraps the network. If using raw Docker Compose, run:
+```bash
+docker network create ${FORGE_APPS_NETWORK:-ag_forge_apps_net} || true
+docker compose up -d
+```
+

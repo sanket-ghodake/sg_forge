@@ -1,0 +1,191 @@
+---
+title: Developer Ingress & Submodule Troubleshooting Guide
+description: In-depth engineering solutions for Docker networking, reverse proxy asset routing, and Content Security Policy image handling.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Resilient Submodule Ingress & Deployment"
+  analogy="When micro-apps live behind an air-gapped reverse proxy gateway, they operate in a subpath namespace: understanding path stripping, Docker mesh naming, and browser asset resolution ensures smooth deployment on any machine."
+  impact="Eliminates broken images, 404 script assets, and Docker network bootstrap crashes on new host machines."
+/>
+
+<TraceabilityBadge reqId="SR-SUB-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-NET-001" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-001" type="LLR" status="verified" />
+
+## 1. Issue: Docker Gateway Network Not Found
+
+### The Error Symptom
+When starting an autonomous submodule on a fresh machine:
+```text
+network ag_forge_apps_net declared as external, but could not be found
+```
+
+### Root Cause
+Submodule compose files (`forge-apps/*/docker-compose.yml`) declare the shared gateway mesh with `external: true`. This informs Docker that the network is pre-provisioned by the platform. If you run `docker compose up` inside a submodule before the root stack has been started, Docker fails immediately.
+
+### Solutions
+
+#### Solution A: Run via Submodule Toolchain (Recommended)
+Each submodule's `./run.sh` contains an automatic network bootstrap hook:
+```bash
+cd forge-apps/app-template
+./run.sh up
+```
+*This verifies if the network exists and auto-creates it before invoking `docker compose`.*
+
+#### Solution B: Bootstrap the Network in 1 Command
+If using raw `docker compose`:
+```bash
+docker network create ${FORGE_APPS_NETWORK:-ag_forge_apps_net} || true
+docker compose up -d
+```
+
+#### Solution C: Runtime Network Override (`FORGE_APPS_NETWORK`)
+You can configure a custom network name across the entire platform in `.env`:
+```env
+# Define once in root .env or submodule .env
+FORGE_APPS_NETWORK="production_mesh_net"
+```
+Both core compose files (`docker/dev`, `docker/prod`) and submodule compose files read this runtime variable.
+
+---
+
+## 2. Issue: Reverse Proxy Asset Routing & Broken Images (404s)
+
+### The Error Symptom
+* Images render as broken icons.
+* CSS/JS assets fail to load with `404 Not Found` or `Refused to execute script because its MIME type ('text/html') is not executable`.
+* Client `fetch('/health')` or `fetch('/api/...')` hits the root landing page instead of the micro-app.
+
+### Root Cause: The "Leading Slash" Path-Stripping Trap
+1. Caddy routes micro-apps using `handle_path /apps/telemetry*`.
+2. `handle_path` **strips** `/apps/telemetry` from the request path before forwarding it to the upstream service.
+3. If your HTML outputs an absolute path with a leading slash:
+   ```html
+   <!-- ❌ BAD: Resolves against the domain root! -->
+   <img src="/images/logo.png" />
+   ```
+4. The browser requests `http://domain:8080/images/logo.png` (at the domain root).
+5. Caddy has no rule for `/images/logo.png` under `/apps/telemetry`, so it forwards the request to the root landing service, returning a 404 or the landing page HTML.
+
+### Solutions for App Authors
+
+#### Solution 1: Use HTML `<base href>` (Universal)
+Add a `<base>` tag inside your HTML `<head>`:
+```html
+<head>
+  <base href="/apps/telemetry/">
+</head>
+<body>
+  <!-- Resolves cleanly to /apps/telemetry/images/logo.png -->
+  <img src="images/logo.png" />
+</body>
+```
+
+#### Solution 2: Dynamic API Base in Client JavaScript
+Never hardcode leading slashes in client `fetch()` calls:
+```javascript
+// ✅ Derive active base path dynamically
+const apiBase = window.location.pathname.endsWith('/') 
+  ? window.location.pathname 
+  : window.location.pathname + '/';
+
+// Calls /apps/telemetry/health instead of /health
+fetch(apiBase + 'health')
+  .then(res => res.json())
+  .then(data => console.log(data));
+```
+
+#### Solution 3: Framework Subpath Base Configuration
+* **Next.js (`next.config.js`)**:
+  ```javascript
+  module.exports = {
+    basePath: process.env.BASE_PATH || '/apps/telemetry',
+    assetPrefix: process.env.BASE_PATH || '/apps/telemetry',
+  };
+  ```
+* **Vite / React / Vue (`vite.config.ts`)**:
+  ```typescript
+  export default defineConfig({
+    base: './', // Or process.env.BASE_PATH || '/apps/telemetry/'
+  });
+  ```
+
+---
+
+## 3. Issue: Canonical Trailing Slash Redirection
+
+### The Symptom
+Navigating to `http://domain:8080/apps/telemetry` (without a trailing slash) causes relative asset URLs to resolve against `/` instead of `/apps/telemetry/`.
+
+### The Gateway Invariant
+Caddy automatically handles this with a `308 Permanent Redirect`:
+```nginx
+@noSlash_telemetry path /apps/telemetry
+redir @noSlash_telemetry /apps/telemetry/ 308
+```
+This forces the browser URL to `/apps/telemetry/`, ensuring relative URLs like `images/logo.png` resolve to `/apps/telemetry/images/logo.png`.
+
+---
+
+## 4. Issue: Content Security Policy (CSP) Image Blocking
+
+### The Error Symptom
+In browser console:
+```text
+Refused to load the image 'blob:...' because it violates the following Content Security Policy directive: "img-src 'self' data:"
+```
+
+### Root Cause
+SG Forge enforces strict air-gapped Content Security Policies. Any image source not explicitly declared in `img-src` is rejected by modern browsers.
+
+### Rules & Allowances
+1. **Local Assets & SVG Data**: Allowed via `'self'` and `data:`.
+2. **In-Memory & Canvas Previews**: Allowed via `blob:`. `AIR_GAPPED_CSP` permits `img-src 'self' data: blob:`.
+3. **External CDN Images (Avatars, S3, Cloudinary)**:
+   - For autonomous submodules needing external images (e.g. GitHub avatars in Cloud VS Code), configure a scoped CSP block in [`scripts/generate-proxy.ts`](file:///home/sanket/Desktop/Sanket/org_website_clone/scripts/generate-proxy.ts):
+     ```nginx
+     @myApp path /apps/myapp*
+     header @myApp Content-Security-Policy "default-src 'self'; img-src 'self' data: blob: https://*.githubusercontent.com; ..."
+     ```
+
+---
+
+## 5. Mapping Topologies Beyond Local Docker Containers
+
+The `.env` service registry (`APP_<ID>="..."`) supports versatile deployment models:
+
+| Deployment Topology | Example `.env` Entry | How Caddy Routes It |
+| :--- | :--- | :--- |
+| **Local Docker Microservice** | `APP_TEL="Telemetry\|8087\|/apps/tel\|Ops\|Public\|app-telemetry"` | `http://app-telemetry:8087` on Docker network |
+| **Host Machine Process (Bun/Node)** | `APP_TOOL="Dev Tool\|5000\|/apps/tool\|Dev\|Developer\|host.docker.internal"` | `http://host.docker.internal:5000` via host-gateway |
+| **Remote Cloud / Intranet Service** | `APP_CRM="CRM\|443\|/apps/crm\|Sales\|Admin\|https://crm.corp.internal"` | `https://crm.corp.internal` (TLS reverse proxy) |
+| **Multi-Machine Cluster (Remote Host)**| `APP_TEL="Telemetry\|8087\|/apps/tel\|Ops\|Public\|http://192.168.1.50:8087"`| Direct LAN/WAN reverse proxy to remote host |
+| **Direct Headless Redirection** | Set `DISABLE_LANDING="true"` | Root `/` redirects to `/portal` automatically |
+
+---
+
+## 6. Verification & Diagnostic Checklist
+
+When troubleshooting a newly deployed micro-app:
+
+```bash
+# 1. Verify trailing-slash 308 redirect
+curl -sI http://localhost:8080/apps/telemetry | grep -i location
+# Expected: location: /apps/telemetry/
+
+# 2. Verify subpath response
+curl -sI http://localhost:8080/apps/telemetry/ | grep -i "HTTP/"
+# Expected: HTTP/1.1 200 OK
+
+# 3. Verify CSP headers permit blob: and data:
+curl -sI http://localhost:8080/apps/telemetry/ | grep -i "content-security-policy"
+# Expected: img-src 'self' data: blob:
+
+# 4. Verify Docker network connection
+docker network inspect ag_forge_apps_net --format '{{json .Containers}}'
+```

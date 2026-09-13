@@ -13,7 +13,7 @@ networks:
 
   # 2. Reverse-Proxy Gateway Mesh (Inbound routing from Caddy proxy only)
   forge-gateway-net:
-    name: ${CONTAINER_PREFIX:-ag}_forge_apps_net
+    name: ${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}
     external: true
 
 services:
@@ -23,13 +23,13 @@ services:
       dockerfile: docker/Dockerfile
     container_name: ${CONTAINER_PREFIX:-ag}-app-telemetry-dev
     ports:
-      - "8087:8087"
+      - "${PORT:-8087}:${PORT:-8087}"
     env_file:
       - path: .env
         required: false
     environment:
-      - PORT=8087
-      - NODE_ENV=development
+      - PORT=${PORT:-8087}
+      - NODE_ENV=${NODE_ENV:-development}
     command: ["bun", "--watch", "src/server.ts"]
     volumes:
       - ./src:/app/src
@@ -41,8 +41,14 @@ services:
         aliases:
           - app-telemetry
     restart: unless-stopped
+    stop_grace_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8087/health || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:${PORT:-8087}/health || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 3

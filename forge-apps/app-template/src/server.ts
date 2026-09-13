@@ -31,6 +31,7 @@ function renderAppHtml(user?: AuthUser, hierarchy?: ScopedHierarchyResponse | nu
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/apps/template/">
   <title>${brand.name} - Micro-App Template</title>
   ${getHeadStateScript({ defaultTheme: 'dark' })}
   <style>
@@ -67,8 +68,9 @@ function renderAppHtml(user?: AuthUser, hierarchy?: ScopedHierarchyResponse | nu
     </div>
   </main>
   <script>
+    const apiBase = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
     window.onerror = function(msg, src, lineno, colno, err) {
-      fetch('/api/logs/browser', {
+      fetch(apiBase + 'api/logs/browser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ service: 'app-template', severity: 'ERROR', message: msg, timestamp: new Date().toISOString() })

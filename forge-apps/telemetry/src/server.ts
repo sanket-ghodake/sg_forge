@@ -19,6 +19,7 @@ function renderAppHtml(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/apps/telemetry/">
   <title>${brand.name} - Telemetry Micro-App (Public)</title>
   ${getHeadStateScript({ defaultTheme: 'dark' })}
   <style>
@@ -99,8 +100,9 @@ function renderAppHtml(): string {
     </div>
   </main>
   <script>
+    const apiBase = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
     function updateVitals() {
-      fetch('/health')
+      fetch(apiBase + 'health')
         .then(res => res.json())
         .then(data => {
           document.getElementById('val-mem').innerText = data.memoryMb + ' MB';
@@ -112,7 +114,7 @@ function renderAppHtml(): string {
     setInterval(updateVitals, 2000);
 
     window.onerror = function(msg, src, lineno, colno, err) {
-      fetch('/api/logs/browser', {
+      fetch(apiBase + 'api/logs/browser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ service: 'telemetry', severity: 'ERROR', message: msg, timestamp: new Date().toISOString() })

@@ -91,7 +91,72 @@ rtk ./run.sh verify
 
 ### Standalone Docker Execution
 ```bash
-# Launch submodule in isolation
+# Launch submodule in isolation (auto-bootstraps network if missing)
 cd forge-apps/app-template
+./run.sh up
+# Or standard docker compose:
 docker compose up -d --build
 ```
+
+## 5. Dynamic Network Configuration (`FORGE_APPS_NETWORK`)
+
+The Docker mesh connecting the gateway to micro-apps is dynamically configured at runtime via the `FORGE_APPS_NETWORK` environment variable.
+
+* **Default Value**: `ag_forge_apps_net` (or `${CONTAINER_PREFIX:-ag}_forge_apps_net`).
+* **Runtime Override**: Define `FORGE_APPS_NETWORK="my_custom_mesh"` in `.env`.
+* **Universal Binding**: Both core compose files (`docker/dev`, `docker/prod`) and submodule compose files (`forge-apps/*/docker-compose.yml`) bind to this same runtime variable, preventing network naming discrepancies.
+* **Auto-Bootstrapping**: Submodule `run.sh` scripts check for this network and auto-create it if it does not yet exist, guaranteeing standalone execution on fresh machines.
+
+## 6. Diverse Ingress Mapping (Beyond Local Containers)
+
+Forge Apps are not restricted to local Docker containers on the same host. The declarative registry in `.env` supports multiple network deployment topologies:
+
+```env
+APP_<ID>="<Display Name>|<Port>|<Ingress Path>|<Category>|<Access Role>|[Upstream Target Override]"
+```
+
+### Topology 1: Standard Submodule Container
+Runs on the shared Docker bridge network (`forge-apps-net`):
+```env
+APP_TELEMETRY="Live Telemetry|8087|/apps/telemetry|Operations|Public|app-telemetry"
+```
+
+### Topology 2: Host Machine Native Process (Bare-Metal)
+Runs directly on the host machine OS (e.g. Bun, Node, Go, or Python) on port `5000`:
+```env
+APP_TOOL="Native Dev Tool|5000|/apps/tool|Developer|Developer|host.docker.internal"
+```
+*Caddy reaches the host process via `host.docker.internal:host-gateway`.*
+
+### Topology 3: Remote Cloud / Intranet Microservice
+Runs on an external server, VM, or Kubernetes cluster:
+```env
+APP_CRM="Enterprise CRM|443|/apps/crm|Sales|Employee|https://crm.corp.internal"
+```
+*Caddy terminates TLS, proxies to the remote HTTPS endpoint, and forwards identity headers.*
+
+### Topology 4: Multi-Machine Cluster (Core on Server A, Apps on Server B)
+Core platform runs on `192.168.1.10`, Forge App runs on `192.168.1.50`:
+```env
+APP_TELEMETRY="Telemetry App|8087|/apps/telemetry|Operations|Public|http://192.168.1.50:8087"
+```
+
+## 7. Reverse Proxy Subpath Asset Routing & Image Protection Rules
+
+When micro-apps are exposed under a subpath (e.g. `/apps/telemetry/`), asset routing must follow strict reverse proxy standards:
+
+### Invariant 1: Canonical Trailing Slash Redirection
+* Requests to `/apps/telemetry` are automatically redirected via `308 Permanent Redirect` to `/apps/telemetry/`.
+* **Why**: Without a trailing slash, browsers interpret `/apps/telemetry` as a file at `/apps/` and resolve relative assets (`<img src="logo.png">`) to `http://domain/logo.png` (domain root = 404).
+
+### Invariant 2: Relative Asset Paths or Base Href
+* Micro-apps must NEVER hardcode leading-slash asset paths (`<img src="/logo.png">`) or leading-slash API fetches (`fetch('/health')`).
+* Use either:
+  1. HTML `<base href="/apps/<app-id>/">` in the document `<head>`.
+  2. Relative paths: `<img src="./logo.png">` or `fetch('health')`.
+  3. Framework base paths (e.g., Next.js `basePath: '/apps/<app-id>'`, Vite `base: './'`).
+
+### Invariant 3: Content Security Policy (CSP) Image Governance
+* Platform CSP enforces `img-src 'self' data: blob:`.
+* In-memory canvas rendering, file previews, and SVG blobs are fully permitted offline.
+* If an autonomous app requires external CDN images (e.g. avatars), configure a scoped CSP override in Caddy (e.g. `@codeApp` pattern in `scripts/generate-proxy.ts`).

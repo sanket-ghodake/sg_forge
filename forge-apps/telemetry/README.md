@@ -86,3 +86,13 @@ forge-apps/telemetry/
 ├── logs/                          # Isolated structured JSON log sink & token ledger
 └── test/                          # 5-Tier test suite (unit, integration, security, contracts, e2e)
 ```
+
+---
+
+## 🌐 Ingress & Standalone Execution Notes
+
+* **Gateway Routing**: Exposed under `/apps/telemetry/` via Caddy with canonical 308 trailing slash redirection.
+* **Asset & API Paths**: Uses HTML `<base href="/apps/telemetry/">` and dynamic `apiBase` so that `health` and `api/logs/browser` resolve correctly under the subpath namespace without hitting domain root.
+* **Standalone Docker**: Run `./run.sh up` to auto-bootstrap the `${FORGE_APPS_NETWORK:-ag_forge_apps_net}` network.
+* **Standalone Bare Metal**: Run `./run.sh dev` to start locally on port 8087 without Docker.
+

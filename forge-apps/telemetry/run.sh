@@ -17,28 +17,42 @@ if [ ! -f "$DIR/.env" ] && [ -f "$DIR/.env.example" ]; then
   cp "$DIR/.env.example" "$DIR/.env"
 fi
 
-# Resolve Bun Runtime via 3-tier cascade
+CMD="${1:-help}"
+shift || true
+
+# Resolve Bun Runtime via 3-tier cascade (with autonomous setup bootstrap)
 if [ -f "$DIR/portables/bun/bin/bun" ]; then
   BUN_BIN="$DIR/portables/bun/bin/bun"
 elif [ -f "$DIR/../../portables/bun/bin/bun" ]; then
   BUN_BIN="$DIR/../../portables/bun/bin/bun"
 elif command -v bun >/dev/null 2>&1; then
   BUN_BIN="bun"
+elif [ "$CMD" = "setup" ]; then
+  echo "📥 Bun runtime not detected on isolated machine. Auto-installing portable Bun..."
+  if command -v curl >/dev/null 2>&1; then
+    mkdir -p "$DIR/portables/bun"
+    curl -fsSL https://bun.sh/install | BUN_INSTALL="$DIR/portables/bun" bash >/dev/null 2>&1 || true
+  fi
+  if [ -f "$DIR/portables/bun/bin/bun" ]; then
+    BUN_BIN="$DIR/portables/bun/bin/bun"
+  elif command -v bun >/dev/null 2>&1; then
+    BUN_BIN="bun"
+  else
+    echo "❌ Error: Could not auto-install Bun. Please install Bun from https://bun.sh"
+    exit 1
+  fi
 else
-  echo "❌ Error: Bun runtime not found. Run './run.sh setup' or install Bun from https://bun.sh"
+  echo "❌ Error: Bun runtime not found. Run './run.sh setup' to bootstrap or install Bun from https://bun.sh"
   exit 1
 fi
 
 ensure_gateway_network() {
-  local net_name="${CONTAINER_PREFIX:-ag}_forge_apps_net"
+  local net_name="${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}"
   if ! docker network inspect "$net_name" >/dev/null 2>&1; then
     echo "🌐 Creating standalone gateway network: $net_name..."
     docker network create "$net_name" >/dev/null 2>&1 || true
   fi
 }
-
-CMD="${1:-help}"
-shift || true
 
 case "$CMD" in
   setup)
@@ -104,12 +118,15 @@ case "$CMD" in
     ;;
   build)
     echo "🐳 Building standalone Docker image..."
-    exec docker build -f docker/Dockerfile -t "${PWD##*/}" .
+    exec docker build -f docker/Dockerfile -t "${PWD##*/}" "$@" .
     ;;
-  compose|docker)
+  compose|docker|up)
     ensure_gateway_network
-    echo "🐳 Running standalone Docker Compose (${*:-up -d})..."
-    exec docker compose "${@:-up -d}"
+    if [ $# -eq 0 ]; then
+      set -- up -d
+    fi
+    echo "🐳 Running standalone Docker Compose ($*)..."
+    exec docker compose "$@"
     ;;
   graft)
     echo "🧠 Running Graft Code Context Graph..."
@@ -137,9 +154,16 @@ case "$CMD" in
     exec "$DIR/portables/bin/council" "$@"
     ;;
   worklog)
-    exec "$BUN_BIN" run scripts/append-worklog.ts "$@"
+    if [ $# -eq 0 ]; then
+      echo "❌ Usage: ./run.sh worklog <message>"
+      exit 1
+    fi
+    exec "$BUN_BIN" run scripts/append-worklog.ts "$*"
     ;;
   spectral|contracts)
+    if [ $# -eq 0 ]; then
+      set -- docs/api/openapi.yaml
+    fi
     exec "$DIR/portables/bin/spectral" lint "$@"
     ;;
   doctor)

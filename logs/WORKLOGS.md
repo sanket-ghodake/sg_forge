@@ -31,3 +31,7 @@
 2026-09-13 19:11 | implement full toolchain, folder structure, and auto-setup parity for forge-apps and create-app.ts
 2026-09-13 19:18 | Comprehensive deployment audit & guide for remote machines, network topology, and reverse proxy asset routing
 2026-09-13 19:20 | complete round 2 audit, OpenAPI 3.1 Spectral tags, Invariant #8 READMEs, and create-app parity across all forge apps
+2026-09-13 19:40 | harden 24*7 auto-restart docker setup, log rotation, stop grace period, and run.sh argument dispatch across forge apps
+2026-09-13 19:46 | audit isolated developer workflow, bootstrap Bun in run.sh setup, and verify zero dummy files across forge apps
+2026-09-13 19:56 | Implemented dynamic FORGE_APPS_NETWORK configuration, reverse proxy subpath canonical redirects, and CSP blob image support
+2026-09-13 20:01 | Created developer ingress and submodule troubleshooting guides in docs portal and READMEs

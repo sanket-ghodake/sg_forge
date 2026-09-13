@@ -71,7 +71,7 @@ export function generateCaddyfile(): string {
 
     # Strict Air-Gap CSP for all standard platform services
     @airGapped not path /apps/code*
-    header @airGapped Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; connect-src 'self' ws: wss:; worker-src 'self' blob:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    header @airGapped Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; connect-src 'self' ws: wss:; worker-src 'self' blob:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
 
     # Scoped CSP: Allow Outbound Traffic Strictly to GitHub Only for VS Code App
     @codeApp path /apps/code*
@@ -153,9 +153,13 @@ export function generateCaddyfile(): string {
 
   for (const s of subServices) {
     const upstream = s.upstreamUrl || `http://${s.containerName}:${s.port}`;
+    const safeId = s.id.replace(/[^a-zA-Z0-9]/g, '_');
     if (s.id === 'code') {
       caddyContent += `
     # ${s.name} (${s.id}) [Role: ${s.role}]
+    @noSlash_${safeId} path ${s.path}
+    redir @noSlash_${safeId} ${s.path}/ 308
+
     handle_path ${s.path}* {
         header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data: blob:; img-src 'self' data: blob: https://*.githubusercontent.com https://avatars.githubusercontent.com https://github.com; connect-src 'self' ws: wss: https://api.github.com https://*.github.com https://*.githubusercontent.com; worker-src 'self' blob:; frame-src 'self' https:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://github.com"
         reverse_proxy ${upstream} {
@@ -169,6 +173,9 @@ export function generateCaddyfile(): string {
     } else {
       caddyContent += `
     # ${s.name} (${s.id}) [Role: ${s.role}]
+    @noSlash_${safeId} path ${s.path}
+    redir @noSlash_${safeId} ${s.path}/ 308
+
     handle_path ${s.path}* {
         reverse_proxy ${upstream} {
             header_up Host {host}

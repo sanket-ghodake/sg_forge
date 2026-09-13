@@ -90,10 +90,25 @@ goto :not_compose
 :do_compose
 echo 🐳 Running standalone Docker Compose...
 shift
-docker compose %*
+set "DOCKER_ARGS=%*"
+if "%DOCKER_ARGS%"=="" set "DOCKER_ARGS=up -d"
+docker compose %DOCKER_ARGS%
 goto :eof
 
 :not_compose
+
+if "%CMD%"=="contracts" goto :do_contracts
+if "%CMD%"=="spectral" goto :do_contracts
+goto :not_contracts
+
+:do_contracts
+shift
+set "DOCS_ARG=%*"
+if "%DOCS_ARG%"=="" set "DOCS_ARG=docs\api\openapi.yaml"
+call portables\bin\spectral.cmd lint %DOCS_ARG% 2>nul || call spectral lint %DOCS_ARG%
+goto :eof
+
+:not_contracts
 
 if "%CMD%"=="graft" (
     echo 🧠 Running Graft Code Context Graph...

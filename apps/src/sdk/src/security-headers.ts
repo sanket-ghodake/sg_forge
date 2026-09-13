@@ -13,7 +13,7 @@ export const AIR_GAPPED_CSP: string = [
   "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  "img-src 'self' data:",
+  "img-src 'self' data: blob:",
   "connect-src 'self'",
   "worker-src 'self' blob:",
   "frame-ancestors 'self'",

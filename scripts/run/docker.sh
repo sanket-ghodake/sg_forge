@@ -24,7 +24,7 @@ fi
 # Discovers isolated forge-apps/*/docker-compose.yml based on active .env registry
 # ==============================================================================
 ensure_forge_network() {
-    local gateway_net="${CONTAINER_PREFIX:-ag}_forge_apps_net"
+    local gateway_net="${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}"
     if ! docker network inspect "$gateway_net" >/dev/null 2>&1; then
         docker network create "$gateway_net" >/dev/null 2>&1 || true
     fi

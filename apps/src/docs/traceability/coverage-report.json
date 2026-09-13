@@ -5472,7 +5472,7 @@
       "name": "startTemplateServer",
       "kind": "function",
       "file": "forge-apps/app-template/src/server.ts",
-      "line": 86,
+      "line": 88,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -5784,7 +5784,7 @@
       "name": "startTelemetryServer",
       "kind": "function",
       "file": "forge-apps/telemetry/src/server.ts",
-      "line": 130,
+      "line": 132,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -8934,7 +8934,7 @@
         "apps/src/sdk/src/registry.ts:62#isAppDisabled",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
         "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
-        "forge-apps/app-template/src/server.ts:86#startTemplateServer",
+        "forge-apps/app-template/src/server.ts:88#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
         "forge-apps/app-template/src/lib/ui.ts:8#getHeadStateScript",
         "forge-apps/app-template/src/lib/ui.ts:24#getAstryxStyles",
@@ -9063,7 +9063,7 @@
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-TEL-801_TELEMETRY_ENGINE.mdx",
       "implementedIn": [
         "apps/src/dev-dashboard/src/db/db.ts:60#TrafficEventRecord",
-        "forge-apps/telemetry/src/server.ts:130#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
         "forge-apps/telemetry/src/lib/ui.ts:8#getHeadStateScript",
         "forge-apps/telemetry/src/lib/ui.ts:24#getAstryxStyles",
@@ -9360,7 +9360,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/architecture.mdx",
       "implementedIn": [
-        "forge-apps/app-template/src/server.ts:86#startTemplateServer",
+        "forge-apps/app-template/src/server.ts:88#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
         "forge-apps/app-template/src/lib/ui.ts:8#getHeadStateScript",
         "forge-apps/app-template/src/lib/ui.ts:24#getAstryxStyles",
@@ -9418,7 +9418,7 @@
       "type": "HLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/forge-telemetry.mdx",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:130#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -9429,7 +9429,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/forge-telemetry.mdx",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:130#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -9462,7 +9462,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/telemetry/llr/README.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:130#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/integration/db-isolation.test.ts"
@@ -9882,7 +9882,7 @@
         "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
         "apps/src/dev-dashboard/src/db/db.ts:60#TrafficEventRecord",
         "apps/src/sdk/src/logger.ts:119#ForgeLogger",
-        "forge-apps/telemetry/src/server.ts:130#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:132#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
         "forge-apps/telemetry/src/lib/ui.ts:8#getHeadStateScript",
         "forge-apps/telemetry/src/lib/ui.ts:24#getAstryxStyles",

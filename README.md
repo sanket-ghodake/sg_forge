@@ -54,6 +54,7 @@ run.bat dev
 * **[Living Documentation Portal (`@forge/docs`)](apps/src/docs/README.md)**: Unified living documentation portal powered by Astro Starlight and Pagefind.
 * **[Visual Architecture Atlas (Non-Technical)](apps/src/docs/src/content/docs/executive/visual-atlas.mdx)**: Intuitive visual architecture guide designed for executives, product managers, and non-technical stakeholders.
 * **[Organization Deployment & Quickstart Guide](apps/src/docs/src/content/docs/operations/deployment-quickstart.mdx)**: Production deployment instructions, `.env` configuration, port mapping, and operational commands.
+* **[Developer Ingress & Submodule Troubleshooting Guide](apps/src/docs/src/content/docs/submodules/troubleshooting.mdx)**: In-depth engineering solutions for Docker networking mesh (`FORGE_APPS_NETWORK`), reverse proxy subpath asset routing, CSP image rules, and remote service mapping.
 * **[Portable Open-Source Toolchain Manual](apps/src/docs/tools/PORTABLE_TOOLCHAIN.md)**: Complete guide to Gitleaks, Biome, Knip, Autocannon, Repomix, SCC, RTK, Graft, and Astryx CLI.
 * **[Developer Workflow & Testing Guide](apps/src/docs/setup/WORKFLOW_SETUP.md)**: Daily developer workflows, 5-tier testing pyramid, and engineering standards.
 * **[Security & Zero-Trust Architecture](apps/src/docs/security/README.md)**: Zero-trust iframe sandboxing, scoped JWT tokens, supply chain defense, and ASVS 5.0 invariants.
