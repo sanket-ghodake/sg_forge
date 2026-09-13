@@ -33,7 +33,7 @@ export class DevDashboardAuthManager {
    * Retrieves configured master password from environment or defaults to 'password123'.
    */
   public getMasterPassword(): string {
-    if (process.env.NODE_ENV === 'test' || process.env.FORGE_TEST_MODE === 'true' || process.env.BUN_ENV === 'test') {
+    if (process.env.NODE_ENV !== 'production' && (process.env.NODE_ENV === 'test' || process.env.FORGE_TEST_MODE === 'true' || process.env.BUN_ENV === 'test')) {
       return this.defaultPassword;
     }
     const configured = process.env.DEV_DASHBOARD_PASSWORD || process.env.DEVCENTER_PASSWORD;
@@ -45,10 +45,9 @@ export class DevDashboardAuthManager {
         configured.includes('change-me') ||
         configured.includes('dev-operator')
       ) {
-        logger.error(
-          '[FATAL SECURITY] In production, DEV_DASHBOARD_PASSWORD must be configured with a secure, non-default password of at least 12 characters.'
-        );
-        return configured || this.defaultPassword;
+        const msg = '[FATAL SECURITY] In production, DEV_DASHBOARD_PASSWORD must be configured with a secure, non-default password of at least 12 characters.';
+        logger.error(msg);
+        throw new Error(msg);
       }
     }
     return configured || this.defaultPassword;

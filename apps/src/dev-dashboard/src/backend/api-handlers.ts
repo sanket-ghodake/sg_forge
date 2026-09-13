@@ -8,6 +8,7 @@ import { hostController } from './host-controller';
 import { handleAppsApi } from './apps-controller';
 import { handleDevAuthApi } from './auth-session';
 import { handleDevEmployeeApi } from './api-employee-handlers';
+import { handleAnalyticsApi } from './api-analytics-handlers';
 
 /**
  * handleApiRequest
@@ -275,6 +276,12 @@ export async function handleApiRequest(req: Request, url: URL): Promise<Response
     const concurrency = Number(body.concurrency) || 1;
     const result = await trafficController.runTargetBenchmark(target, samples, concurrency);
     return Response.json({ status: 'ok', ...result });
+  }
+
+  // 12. Vercel-Style True Telemetry & Analytics Engine
+  if (path.startsWith('/api/analytics')) {
+    const analyticsRes = await handleAnalyticsApi(path, req, url);
+    if (analyticsRes) return analyticsRes;
   }
 
   // 12a. Aggregated Traffic Metrics (Golden Signals & Time Series)

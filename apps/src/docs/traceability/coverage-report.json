@@ -1,11 +1,11 @@
 {
   "timestamp": "2026-09-06T21:45:00.000Z",
-  "totalExportedSymbols": 650,
-  "documentedSymbols": 599,
-  "symbolCoveragePercent": 92.2,
-  "totalRequirements": 71,
-  "implementedRequirements": 71,
-  "verifiedRequirements": 71,
+  "totalExportedSymbols": 678,
+  "documentedSymbols": 607,
+  "symbolCoveragePercent": 89.5,
+  "totalRequirements": 72,
+  "implementedRequirements": 72,
+  "verifiedRequirements": 72,
   "orphanRequirements": [],
   "symbols": [
     {
@@ -3100,6 +3100,8 @@
       "line": 7,
       "hasDoc": true,
       "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001",
         "HLR-UI-401",
         "LLR-UI-001"
       ],
@@ -3277,12 +3279,9 @@
       "name": "renderTrafficTab",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-renderer-traffic.ts",
-      "line": 12,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
@@ -3304,6 +3303,8 @@
       "line": 7,
       "hasDoc": true,
       "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001",
         "HLR-UI-401",
         "LLR-UI-001"
       ],
@@ -3433,7 +3434,7 @@
       "name": "handleApiRequest",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/backend/api-handlers.ts",
-      "line": 16,
+      "line": 17,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3469,7 +3470,7 @@
       "name": "devAuthManager",
       "kind": "variable",
       "file": "apps/src/dev-dashboard/src/backend/auth-session.ts",
-      "line": 183,
+      "line": 182,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3481,7 +3482,7 @@
       "name": "handleDevAuthApi",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/backend/auth-session.ts",
-      "line": 189,
+      "line": 188,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3646,6 +3647,33 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "LiveInspectorRecord",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/backend/analytics-controller.ts",
+      "line": 14,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "AnalyticsController",
+      "kind": "class",
+      "file": "apps/src/dev-dashboard/src/backend/analytics-controller.ts",
+      "line": 37,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "analyticsController",
+      "kind": "variable",
+      "file": "apps/src/dev-dashboard/src/backend/analytics-controller.ts",
+      "line": 179,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "TrafficMetricsResponse",
       "kind": "interface",
       "file": "apps/src/dev-dashboard/src/backend/traffic-controller.ts",
@@ -3706,10 +3734,112 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "ParsedClientSpecs",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 7,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "ResolvedLocation",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "countryCodeToFlag",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 28,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "parseUserAgent",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 40,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "resolveIpLocation",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 162,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "createVisitorFingerprint",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 216,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "maskIpAddress",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 232,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TrafficCategory",
+      "kind": "type",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 242,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "classifyTrafficCategory",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/telemetry-parser.ts",
+      "line": 251,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleAnalyticsApi",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/api-analytics-handlers.ts",
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "startDevDashboardServer",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/server.ts",
-      "line": 21,
+      "line": 22,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3718,10 +3848,22 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "seedHistoricalTelemetry",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-seeder.ts",
+      "line": 61,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "resolveDataDir",
       "kind": "variable",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 20,
+      "line": 21,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-302",
@@ -3733,7 +3875,7 @@
       "name": "getSafeDbPath",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 28,
+      "line": 29,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-302",
@@ -3745,7 +3887,7 @@
       "name": "AppRegistryRecord",
       "kind": "interface",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 39,
+      "line": 40,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -3757,7 +3899,7 @@
       "name": "TrafficEventRecord",
       "kind": "interface",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 60,
+      "line": 61,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -3769,7 +3911,7 @@
       "name": "IssueReportRecord",
       "kind": "interface",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 77,
+      "line": 78,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-303",
@@ -3781,7 +3923,7 @@
       "name": "AuditLogRecord",
       "kind": "interface",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 96,
+      "line": 97,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -3793,7 +3935,7 @@
       "name": "platformDb",
       "kind": "variable",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 487,
+      "line": 493,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-302",
@@ -3874,6 +4016,81 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "TelemetryDatabaseManager",
+      "kind": "class",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-db.ts",
+      "line": 31,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "telemetryDb",
+      "kind": "variable",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-db.ts",
+      "line": 466,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TrafficCategory",
+      "kind": "type",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-types.ts",
+      "line": 7,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TelemetryEventInput",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-types.ts",
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TelemetrySummary",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-types.ts",
+      "line": 34,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TimeSeriesBucket",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-types.ts",
+      "line": 61,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "BreakdownItem",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-types.ts",
+      "line": 74,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TelemetryBreakdowns",
+      "kind": "interface",
+      "file": "apps/src/dev-dashboard/src/db/telemetry-types.ts",
+      "line": 82,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "RemoteDbConfig",
       "kind": "interface",
       "file": "apps/src/dev-dashboard/src/db/remote-connectors.ts",
@@ -3918,6 +4135,69 @@
       "requirements": [
         "HLR-SDK-302",
         "LLR-DB-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "ClientMachineMetrics",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/telemetry-client.ts",
+      "line": 10,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "ClientWebVitals",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/telemetry-client.ts",
+      "line": 21,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "ClientTelemetryPayload",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/telemetry-client.ts",
+      "line": 30,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TelemetryClientOptions",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/telemetry-client.ts",
+      "line": 40,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getClientMachineSpecs",
+      "kind": "function",
+      "file": "apps/src/sdk/src/telemetry-client.ts",
+      "line": 50,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "initAppTelemetry",
+      "kind": "function",
+      "file": "apps/src/sdk/src/telemetry-client.ts",
+      "line": 72,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-TEL-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8112,7 +8392,6 @@
         "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts:9#getEmployeeDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-host-scripts.ts:7#getHostDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-issues.ts:12#renderIssuesTab",
-        "apps/src/dev-dashboard/src/frontend/ui-renderer-traffic.ts:12#renderTrafficTab",
         "apps/src/dev-dashboard/src/frontend/ui-traffic-styles.ts:7#getTrafficStyles",
         "apps/src/dev-dashboard/src/frontend/ui-issues-styles.ts:7#getIssuesStyles",
         "apps/src/sdk/src/branding.ts:14#BrandConfig",
@@ -8226,7 +8505,6 @@
         "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts:9#getEmployeeDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-host-scripts.ts:7#getHostDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-issues.ts:12#renderIssuesTab",
-        "apps/src/dev-dashboard/src/frontend/ui-renderer-traffic.ts:12#renderTrafficTab",
         "apps/src/dev-dashboard/src/frontend/ui-traffic-styles.ts:7#getTrafficStyles",
         "apps/src/dev-dashboard/src/frontend/ui-issues-styles.ts:7#getIssuesStyles",
         "apps/src/sdk/src/branding.ts:14#BrandConfig",
@@ -8366,9 +8644,9 @@
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:57#AppsFleetOverview",
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:420#appsController",
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:423#handleAppsApi",
-        "apps/src/dev-dashboard/src/db/db.ts:20#resolveDataDir",
-        "apps/src/dev-dashboard/src/db/db.ts:28#getSafeDbPath",
-        "apps/src/dev-dashboard/src/db/db.ts:487#platformDb",
+        "apps/src/dev-dashboard/src/db/db.ts:21#resolveDataDir",
+        "apps/src/dev-dashboard/src/db/db.ts:29#getSafeDbPath",
+        "apps/src/dev-dashboard/src/db/db.ts:493#platformDb",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:15#DbTelemetryStats",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:38#SchemaGraphNode",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:61#SchemaGraphEdge",
@@ -8564,7 +8842,7 @@
         "apps/src/auth/src/backend/telemetry.ts:209#authTelemetry",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-login.ts:15#renderDevLoginHtml",
         "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
-        "apps/src/dev-dashboard/src/db/db.ts:77#IssueReportRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:78#IssueReportRecord",
         "apps/src/sdk/src/error-handler.ts:18#createSafeHandler",
         "apps/src/sdk/src/logger.ts:14#LogLevel",
         "apps/src/sdk/src/logger.ts:25#redactSensitiveData",
@@ -8606,7 +8884,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/features/observability.mdx",
       "implementedIn": [
-        "apps/src/dev-dashboard/src/db/db.ts:77#IssueReportRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:78#IssueReportRecord",
         "apps/src/sdk/src/error-handler.ts:18#createSafeHandler"
       ],
       "verifiedIn": [
@@ -8895,7 +9173,7 @@
         "apps/src/auth/src/backend/iam-engine.ts:12#EvaluatedIamContext",
         "apps/src/auth/src/backend/iam-engine.ts:21#evaluateUserPermissions",
         "apps/src/auth/src/backend/iam-engine.ts:56#hasPermission",
-        "apps/src/dev-dashboard/src/db/db.ts:96#AuditLogRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:97#AuditLogRecord",
         "apps/src/sdk/src/directory-client.ts:15#OrgTreeNodeDto",
         "apps/src/sdk/src/directory-client.ts:33#OrgTreeResponseDto",
         "apps/src/sdk/src/directory-client.ts:42#EmployeeListItemDto",
@@ -8927,7 +9205,7 @@
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-SDK-301_SERVICE_REGISTRY.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:31#ForgeAppManifest",
-        "apps/src/dev-dashboard/src/db/db.ts:39#AppRegistryRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:40#AppRegistryRecord",
         "apps/src/sdk/src/registry.ts:14#ServiceEntry",
         "apps/src/sdk/src/registry.ts:33#LoadRegistryOptions",
         "apps/src/sdk/src/registry.ts:45#getAppStatus",
@@ -9062,7 +9340,7 @@
       "type": "HLR",
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-TEL-801_TELEMETRY_ENGINE.mdx",
       "implementedIn": [
-        "apps/src/dev-dashboard/src/db/db.ts:60#TrafficEventRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
         "forge-apps/telemetry/src/server.ts:132#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
         "forge-apps/telemetry/src/lib/ui.ts:8#getHeadStateScript",
@@ -9230,6 +9508,8 @@
       "type": "HLR",
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-DEV-501_HEALTH_MESH.mdx",
       "implementedIn": [
+        "apps/src/dev-dashboard/src/frontend/ui-traffic-scripts.ts:7#getTrafficDashboardScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-traffic-styles.ts:7#getTrafficStyles",
         "apps/src/dev-dashboard/src/backend/services-controller.ts:20#ServiceOperationalState",
         "apps/src/dev-dashboard/src/backend/services-controller.ts:26#ServiceHealthStatus",
         "apps/src/dev-dashboard/src/backend/services-controller.ts:47#ServicesVitalsSummary",
@@ -9239,11 +9519,11 @@
         "apps/src/dev-dashboard/src/backend/host-controller.ts:42#HostDiagnosticsReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:88#HighAvailabilityReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:306#hostController",
-        "apps/src/dev-dashboard/src/backend/api-handlers.ts:16#handleApiRequest",
+        "apps/src/dev-dashboard/src/backend/api-handlers.ts:17#handleApiRequest",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:16#DevSessionRecord",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:28#DevDashboardAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:183#devAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:189#handleDevAuthApi",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:182#devAuthManager",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:188#handleDevAuthApi",
         "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:21#handleDevEmployeeApi",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:24#detectHostMemoryAndVirtualization",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:115#LogEntry",
@@ -9257,11 +9537,24 @@
         "apps/src/dev-dashboard/src/backend/traffic-controller.ts:70#BenchmarkResult",
         "apps/src/dev-dashboard/src/backend/traffic-controller.ts:94#TrafficController",
         "apps/src/dev-dashboard/src/backend/traffic-controller.ts:351#trafficController",
-        "apps/src/dev-dashboard/src/server.ts:21#startDevDashboardServer"
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:7#ParsedClientSpecs",
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:40#parseUserAgent",
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:162#resolveIpLocation",
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:251#classifyTrafficCategory",
+        "apps/src/dev-dashboard/src/server.ts:22#startDevDashboardServer",
+        "apps/src/dev-dashboard/src/db/telemetry-seeder.ts:61#seedHistoricalTelemetry",
+        "apps/src/dev-dashboard/src/db/telemetry-types.ts:7#TrafficCategory",
+        "apps/src/sdk/src/telemetry-client.ts:10#ClientMachineMetrics",
+        "apps/src/sdk/src/telemetry-client.ts:50#getClientMachineSpecs",
+        "apps/src/sdk/src/telemetry-client.ts:72#initAppTelemetry"
       ],
       "verifiedIn": [
+        "apps/src/dev-dashboard/test/unit/telemetry-parser.test.ts",
+        "apps/src/dev-dashboard/test/unit/telemetry-rollups.test.ts",
         "apps/src/dev-dashboard/test/unit/vitals-engine.test.ts",
-        "apps/src/dev-dashboard/test/unit/services-probe.test.ts"
+        "apps/src/dev-dashboard/test/unit/services-probe.test.ts",
+        "apps/src/dev-dashboard/test/security/telemetry-privacy.test.ts",
+        "apps/src/dev-dashboard/test/integration/analytics-api.test.ts"
       ]
     },
     "HLR-NET-002": {
@@ -9305,9 +9598,9 @@
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:57#AppsFleetOverview",
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:420#appsController",
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:423#handleAppsApi",
-        "apps/src/dev-dashboard/src/db/db.ts:20#resolveDataDir",
-        "apps/src/dev-dashboard/src/db/db.ts:28#getSafeDbPath",
-        "apps/src/dev-dashboard/src/db/db.ts:487#platformDb",
+        "apps/src/dev-dashboard/src/db/db.ts:21#resolveDataDir",
+        "apps/src/dev-dashboard/src/db/db.ts:29#getSafeDbPath",
+        "apps/src/dev-dashboard/src/db/db.ts:493#platformDb",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:15#DbTelemetryStats",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:38#SchemaGraphNode",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:61#SchemaGraphEdge",
@@ -9539,11 +9832,11 @@
         "apps/src/dev-dashboard/src/backend/host-controller.ts:42#HostDiagnosticsReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:88#HighAvailabilityReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:306#hostController",
-        "apps/src/dev-dashboard/src/backend/api-handlers.ts:16#handleApiRequest",
+        "apps/src/dev-dashboard/src/backend/api-handlers.ts:17#handleApiRequest",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:16#DevSessionRecord",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:28#DevDashboardAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:183#devAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:189#handleDevAuthApi",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:182#devAuthManager",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:188#handleDevAuthApi",
         "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:21#handleDevEmployeeApi",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:24#detectHostMemoryAndVirtualization",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:115#LogEntry",
@@ -9557,7 +9850,7 @@
         "apps/src/dev-dashboard/src/backend/traffic-controller.ts:70#BenchmarkResult",
         "apps/src/dev-dashboard/src/backend/traffic-controller.ts:94#TrafficController",
         "apps/src/dev-dashboard/src/backend/traffic-controller.ts:351#trafficController",
-        "apps/src/dev-dashboard/src/server.ts:21#startDevDashboardServer"
+        "apps/src/dev-dashboard/src/server.ts:22#startDevDashboardServer"
       ],
       "verifiedIn": [
         "apps/src/dev-dashboard/test/unit/services-probe.test.ts",
@@ -9570,7 +9863,7 @@
       "docFile": "apps/src/docs/src/content/docs/llr/LLR-SDK-001_DECLARATIVE_ENV_SERVICE_REGIST.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:31#ForgeAppManifest",
-        "apps/src/dev-dashboard/src/db/db.ts:39#AppRegistryRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:40#AppRegistryRecord",
         "apps/src/sdk/src/registry.ts:14#ServiceEntry",
         "apps/src/sdk/src/registry.ts:33#LoadRegistryOptions",
         "apps/src/sdk/src/registry.ts:45#getAppStatus",
@@ -9610,7 +9903,7 @@
         "apps/src/auth/src/backend/employee-controller.ts:32#EmployeeListItem",
         "apps/src/auth/src/backend/employee-controller.ts:58#EmployeeController",
         "apps/src/auth/src/backend/employee-controller.ts:458#employeeController",
-        "apps/src/dev-dashboard/src/db/db.ts:96#AuditLogRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:97#AuditLogRecord",
         "apps/src/sdk/src/directory-client.ts:15#OrgTreeNodeDto",
         "apps/src/sdk/src/directory-client.ts:33#OrgTreeResponseDto",
         "apps/src/sdk/src/directory-client.ts:42#EmployeeListItemDto",
@@ -9822,6 +10115,30 @@
         "apps/src/sdk/test/security/security-headers-defense.test.ts"
       ]
     },
+    "LLR-TEL-001": {
+      "id": "LLR-TEL-001",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/llr/LLR-TEL-001_VERCEL_STYLE_TRUE_TELEMETRY.mdx",
+      "implementedIn": [
+        "apps/src/dev-dashboard/src/frontend/ui-traffic-scripts.ts:7#getTrafficDashboardScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-traffic-styles.ts:7#getTrafficStyles",
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:7#ParsedClientSpecs",
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:40#parseUserAgent",
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:162#resolveIpLocation",
+        "apps/src/dev-dashboard/src/backend/telemetry-parser.ts:251#classifyTrafficCategory",
+        "apps/src/dev-dashboard/src/db/telemetry-seeder.ts:61#seedHistoricalTelemetry",
+        "apps/src/dev-dashboard/src/db/telemetry-types.ts:7#TrafficCategory",
+        "apps/src/sdk/src/telemetry-client.ts:10#ClientMachineMetrics",
+        "apps/src/sdk/src/telemetry-client.ts:50#getClientMachineSpecs",
+        "apps/src/sdk/src/telemetry-client.ts:72#initAppTelemetry"
+      ],
+      "verifiedIn": [
+        "apps/src/dev-dashboard/test/unit/telemetry-parser.test.ts",
+        "apps/src/dev-dashboard/test/unit/telemetry-rollups.test.ts",
+        "apps/src/dev-dashboard/test/security/telemetry-privacy.test.ts",
+        "apps/src/dev-dashboard/test/integration/analytics-api.test.ts"
+      ]
+    },
     "LLR-SDK-007": {
       "id": "LLR-SDK-007",
       "type": "LLR",
@@ -9882,7 +10199,7 @@
       "implementedIn": [
         "apps/src/dev-dashboard/src/frontend/ui-renderer-login.ts:15#renderDevLoginHtml",
         "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
-        "apps/src/dev-dashboard/src/db/db.ts:60#TrafficEventRecord",
+        "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
         "apps/src/sdk/src/logger.ts:119#ForgeLogger",
         "forge-apps/telemetry/src/server.ts:132#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",

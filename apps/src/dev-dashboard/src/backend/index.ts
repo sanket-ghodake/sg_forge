@@ -8,4 +8,7 @@ export * from './services-controller';
 export * from './apps-controller';
 export * from './api-employee-handlers';
 export * from './api-handlers';
+export * from './telemetry-parser';
+export * from './analytics-controller';
+export * from './api-analytics-handlers';
 

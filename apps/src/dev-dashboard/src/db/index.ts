@@ -6,3 +6,5 @@
 export * from './db';
 export * from './remote-connectors';
 export * from './db-diagnostics';
+export * from './telemetry-db';
+export * from './telemetry-seeder';

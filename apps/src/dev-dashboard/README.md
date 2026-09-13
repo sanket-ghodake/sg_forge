@@ -17,7 +17,7 @@ Real-time platform telemetry, organization directory management, database diagno
 | **Complexity Score** | `2,821` | Comprehensive administrative studio & query engine |
 | **Language Breakdown** | TypeScript (13,396 SLOC), Markdown (152), Docker (14), JSON (14) | 100% type-safe |
 | **Database Instance** | `dev_dashboard.db` | Dedicated Turso libSQL/SQLite database |
-| **5-Tier Test Suite** | `113` passing tests | `test/unit/`, `test/integration/`, `test/security/`, `test/contracts/`, `test/e2e/` |
+| **5-Tier Test Suite** | `155` passing tests | `test/unit/`, `test/integration/`, `test/security/`, `test/contracts/`, `test/e2e/` |
 | **Verification Gate** | **100% Passing** ✅ | 100% Soft 500-Line Cap & Zero-Leak Redaction |
 
 ---
@@ -28,9 +28,10 @@ Real-time platform telemetry, organization directory management, database diagno
 2. **Employee & Directory Studio**: Comprehensive management studio with full CRUD, tree restructuring, reporting lines editor, and instant avatar generation.
 3. **Unified Database Studio & Remote Gateway**: Enterprise database studio merging schema inspector, fast paginated table data browser, monospace SQL editor with `READ_ONLY` safety sandbox, and dynamic remote microservice DB connections (`/api/db/connect`).
 4. **Live SSE Log Streamer**: Zero-disk-churn in-memory ring buffer streaming structured logs via Server-Sent Events (`/api/logs/stream`).
-5. **Traffic & SRE Golden Signals**: Real-time request telemetry, response durations, and status code distributions.
-6. **RFC 7807 Issue Center**: Deduplicated exception logs grouped by fingerprint with sanitized stack traces.
-7. **System Terminal Monitor**: Live output streamer inspecting server processes and container vitals.
+5. **Vercel-Grade True Telemetry & 1-Year Observability Studio**: Real-time client IP capture, air-gapped machine/device specifications, browser/OS demographics, multi-metric SVG area timelines, and 1-year historical daily rollups (`telemetry_daily_rollups`) querying 365 days in `<5ms`.
+6. **3-Tier Traffic Scoping & Liveness Probe Exclusion**: Automated classification isolating synthetic health checks (`/health`, `/api/services`, `/api/overview/stats`) into `probe`, S2S sync into `mesh`, and authentic human visitors into `user` (default view) with instant UI switching (`[ 👤 End Users ]`, `[ 🌐 All Traffic ]`, `[ ⚙️ Internal & Probes ]`).
+7. **RFC 7807 Issue Center**: Deduplicated exception logs grouped by fingerprint with sanitized stack traces.
+8. **System Terminal Monitor**: Live output streamer inspecting server processes and container vitals.
 
 ---
 

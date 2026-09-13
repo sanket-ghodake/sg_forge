@@ -13,6 +13,7 @@ import {
   resolveCanonicalDataDir,
   resolveCanonicalDbPath,
 } from '@forge/sdk';
+import { telemetryDb, type TelemetryEventInput } from './telemetry-db';
 
 const logger = createLogger('dev-dashboard-db');
 
@@ -257,13 +258,24 @@ class PlatformDatabaseManager {
     this.db.run('INSERT INTO audit_logs (id, actor_id, action_type, target_service, payload_json, result_status, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, actorId, actionType, targetService, payload, status, now]);
   }
 
-  public recordTraffic(appId: string, path: string, method: string, statusCode: number, durationMs: number, traceId?: string): void {
-    const id = `trf-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-    const now = Math.floor(Date.now() / 1000);
-    this.db.run(
-      'INSERT INTO traffic_events (id, app_id, path, method, status_code, duration_ms, trace_id, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [id, appId, path, method, statusCode, durationMs, traceId || null, now]
-    );
+  public recordTraffic(
+    appId: string,
+    path: string,
+    method: string,
+    statusCode: number,
+    durationMs: number,
+    traceId?: string,
+    extra?: Partial<TelemetryEventInput>
+  ): void {
+    telemetryDb.recordTrafficEvent({
+      app_id: appId,
+      path,
+      method,
+      status_code: statusCode,
+      duration_ms: durationMs,
+      trace_id: traceId,
+      ...extra,
+    });
   }
 
   public listDatabases(): Array<{ name: string; path: string; sizeBytes: number }> {
@@ -468,20 +480,14 @@ class PlatformDatabaseManager {
   public updateIssueStatus(id: string, status: string): boolean {
     return (this.db.run('UPDATE issue_reports SET status = ? WHERE id = ?', [status, id]) as any).changes > 0;
   }
-
   public deleteIssue(id: string): boolean {
     return (this.db.run('DELETE FROM issue_reports WHERE id = ?', [id]) as any).changes > 0;
   }
-
   public getRawDb(): Database { return this.db; }
-
   public getAuditLogs(limit = 50): AuditLogRecord[] {
     return this.db.query('SELECT * FROM audit_logs ORDER BY timestamp DESC LIMIT ?').all(limit) as AuditLogRecord[];
   }
 }
 
-/**
- * Global singleton instance of PlatformDatabaseManager.
- * @requirements [HLR-SDK-302] [LLR-DB-001]
- */
+/** Global singleton instance of PlatformDatabaseManager. @requirements [HLR-SDK-302] [LLR-DB-001] */
 export const platformDb = new PlatformDatabaseManager();

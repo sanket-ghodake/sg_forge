@@ -23,3 +23,4 @@ export * from './security-headers';
 export * from './service-worker';
 export * from './backup';
 export * from './crypto';
+export * from './telemetry-client';

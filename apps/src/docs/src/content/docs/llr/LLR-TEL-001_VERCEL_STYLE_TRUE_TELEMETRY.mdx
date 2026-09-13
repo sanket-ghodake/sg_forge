@@ -1,0 +1,120 @@
+---
+title: LLR-TEL-001 - Vercel-Style True Telemetry & 1-Year Rollup Engine
+description: Low-level requirement defining real client IP extraction, air-gapped machine parsing, 3-tier traffic classification, and 1-year historical rollup aggregation.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-TEL-001" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. **Client IP Extraction & Offline Geolocation**:
+   - Extract real client IP from gateway reverse-proxy headers (`X-Real-IP`, `X-Forwarded-For`).
+   - Classify IP subnet (Loopback, RFC 1918 Private, Public IPv4/IPv6) without outbound network calls.
+   - Resolve country code, country name, and flag emoji via deterministic air-gapped subnet dictionary.
+2. **Machine & User-Agent Parsing**:
+   - Parse client Operating System (macOS, Windows, Linux, iOS, Android), Browser (Chrome, Safari, Firefox, Edge), CPU architecture (`arm64`, `x86_64`), and device category (`Desktop`, `Mobile`, `Tablet`, `Bot`).
+3. **3-Tier Traffic Classification & Probe Exclusion (Council Decision 2026-09-13)**:
+   - Automated cluster liveness and UI polling requests (`/health`, `/livez`, `/readyz`, `/api/services`, `/api/overview/stats`, `/api/apps`) are classified as `probe`.
+   - Internal service-to-service calls (loopback / private network with toolchain UAs) are classified as `mesh`.
+   - Real interactive human visitors are classified as `user` and serve as the **default telemetry view**, guaranteeing unpolluted latency percentiles (p50/p90/p99) and genuine unique visitor counts.
+4. **Continuous Request Telemetry Pipeline**:
+   - Non-blocking asynchronous event capture on every request wrapped in `@forge/sdk/createSafeHandler`.
+   - Client-side Web Vitals and screen hardware specs collected via `initAppTelemetry()`.
+5. **1-Year Historical Aggregation & Rollups**:
+   - Real-time events stored in `traffic_events` with auto-pruning after retention window.
+   - Continuous daily rollup compaction into `telemetry_daily_rollups` with partitioned metric counts (`user_requests`, `mesh_requests`, `probe_requests`) enabling `<5ms` multi-month/1-year queries.
+
+---
+
+## 2. Architecture & Pipeline Diagram
+
+<div style="margin: 2rem 0; padding: 1.25rem; background: var(--forge-bg-surface); border: 1px solid var(--forge-border); border-radius: var(--forge-radius); overflow-x: auto;">
+  <svg viewBox="0 0 880 340" style="width: 100%; height: auto; min-width: 720px; font-family: var(--forge-font-sans, system-ui, sans-serif);">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--forge-border)" />
+      </marker>
+      <marker id="arrow-primary" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--forge-primary)" />
+      </marker>
+    </defs>
+
+    <!-- Column 1: Ingress Sources -->
+    <rect x="20" y="20" width="220" height="70" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-success)" stroke-width="1.5" />
+    <text x="35" y="48" font-size="14" font-weight="600" fill="var(--forge-text-main)">👤 Real End Users</text>
+    <text x="35" y="68" font-size="11" fill="var(--forge-text-muted)">Browser UAs • Public / Local IPs</text>
+
+    <rect x="20" y="115" width="220" height="70" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-primary)" stroke-width="1.5" />
+    <text x="35" y="143" font-size="14" font-weight="600" fill="var(--forge-text-main)">🔗 Internal S2S Mesh</text>
+    <text x="35" y="163" font-size="11" fill="var(--forge-text-muted)">Loopback • cURL • Service Sync</text>
+
+    <rect x="20" y="210" width="220" height="70" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-warning)" stroke-width="1.5" />
+    <text x="35" y="238" font-size="14" font-weight="600" fill="var(--forge-text-main)">⚙️ Liveness & Probes</text>
+    <text x="35" y="258" font-size="11" fill="var(--forge-text-muted)">/health • /api/services • Polling</text>
+
+    <!-- Column 2: Classifier Engine -->
+    <rect x="320" y="70" width="220" height="170" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-border)" stroke-width="1.5" />
+    <text x="340" y="105" font-size="14" font-weight="600" fill="var(--forge-primary)">⚡ Telemetry Classifier</text>
+    <text x="340" y="128" font-size="11" font-family="monospace" fill="var(--forge-text-muted)">classifyTrafficCategory()</text>
+    <line x1="340" y1="142" x2="520" y2="142" stroke="var(--forge-border)" stroke-width="1" />
+    <text x="340" y="165" font-size="11" fill="var(--forge-text-main)">• Path Pattern Matching</text>
+    <text x="340" y="185" font-size="11" fill="var(--forge-text-main)">• User-Agent Detection</text>
+    <text x="340" y="205" font-size="11" fill="var(--forge-text-main)">• Subnet & Header Checks</text>
+    <text x="340" y="225" font-size="10" fill="var(--forge-text-subtle)">Tag: 'user' | 'mesh' | 'probe'</text>
+
+    <!-- Column 3: Storage & Analytical Engine -->
+    <rect x="620" y="20" width="240" height="110" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-border)" stroke-width="1.5" />
+    <text x="640" y="48" font-size="13" font-weight="600" fill="var(--forge-text-main)">🗄️ Storage Engine (SQLite)</text>
+    <text x="640" y="70" font-size="11" font-family="monospace" fill="var(--forge-text-muted)">traffic_events (idx_te_cat_time)</text>
+    <text x="640" y="90" font-size="11" font-family="monospace" fill="var(--forge-text-muted)">telemetry_daily_rollups</text>
+    <text x="640" y="110" font-size="10" fill="var(--forge-success)">✓ Partitioned user/mesh/probe</text>
+
+    <rect x="620" y="160" width="240" height="120" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-success)" stroke-width="1.5" />
+    <text x="640" y="188" font-size="13" font-weight="600" fill="var(--forge-text-main)">📊 Dev Dashboard UI</text>
+    <text x="640" y="210" font-size="11" fill="var(--forge-text-muted)">Filter: [ End Users | All | Mesh ]</text>
+    <text x="640" y="232" font-size="11" fill="var(--forge-success)">✓ Clean SLOs (< 2ms true latency)</text>
+    <text x="640" y="254" font-size="11" fill="var(--forge-primary)">✓ Real Unique Visitor Traffic</text>
+    <text x="640" y="270" font-size="10" fill="var(--forge-text-subtle)">Zero probe loop skew</text>
+
+    <!-- Connectors: Ingress -> Classifier -->
+    <line x1="240" y1="55" x2="320" y2="110" stroke="var(--forge-success)" stroke-width="1.5" marker-end="url(#arrow)" />
+    <line x1="240" y1="150" x2="320" y2="150" stroke="var(--forge-primary)" stroke-width="1.5" marker-end="url(#arrow)" />
+    <line x1="240" y1="245" x2="320" y2="190" stroke="var(--forge-warning)" stroke-width="1.5" marker-end="url(#arrow)" />
+
+    <!-- Connectors: Classifier -> Storage & UI -->
+    <line x1="540" y1="120" x2="620" y2="75" stroke="var(--forge-border)" stroke-width="1.5" marker-end="url(#arrow)" />
+    <line x1="540" y1="175" x2="620" y2="210" stroke="var(--forge-primary)" stroke-width="1.5" marker-end="url(#arrow-primary)" />
+  </svg>
+</div>
+
+---
+
+## 3. Safety & Verification Invariants
+
+* **Zero Outbound Egress**: Geolocation and machine intelligence must operate 100% offline within `core-airgap-net`.
+* **Zero Dummy Data in Live Pipeline**: All live requests must capture real IPs, real user agents, and real execution latencies.
+* **Isolated Traffic Scopes**: Liveness poll loops must never corrupt real visitor statistics or latency SLO calculations.
+* **500-Line Soft Cap**: Storage, controller, and UI modules must stay within cohesive modular boundaries ($\le 500$ lines).
+
+---
+
+## 4. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-DEV-501" type="HLR" status="verified" />
+* **Council Architecture Decision**: `logs/council/2026-09-13-telemetry-filtering-exclude-health-liveness-pollin.md`
+* **Implemented in Source**: 
+  - `apps/src/dev-dashboard/src/db/telemetry-types.ts`
+  - `apps/src/dev-dashboard/src/backend/telemetry-parser.ts`
+  - `apps/src/dev-dashboard/src/db/telemetry-db.ts`
+  - `apps/src/dev-dashboard/src/backend/analytics-controller.ts`
+  - `apps/src/dev-dashboard/src/backend/api-analytics-handlers.ts`
+  - `apps/src/dev-dashboard/src/frontend/ui-renderer-traffic.ts`
+  - `apps/src/dev-dashboard/src/frontend/ui-traffic-scripts.ts`
+* **Verified in Test Suite**: 
+  - `apps/src/dev-dashboard/test/unit/telemetry-parser.test.ts`
+  - `apps/src/dev-dashboard/test/integration/analytics-api.test.ts`

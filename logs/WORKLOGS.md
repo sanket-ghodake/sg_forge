@@ -36,3 +36,5 @@
 2026-09-13 19:56 | Implemented dynamic FORGE_APPS_NETWORK configuration, reverse proxy subpath canonical redirects, and CSP blob image support
 2026-09-13 20:01 | Created developer ingress and submodule troubleshooting guides in docs portal and READMEs
 2026-09-13 20:17 | Fix Services & Processes Command Center multi-net routing, polling lock, and live drawer sync
+2026-09-13 20:39 | Implemented Vercel-style True Telemetry in Dev Dashboard with 1-year rollup engine, IP/machine inspection, and 5-tier test coverage
+2026-09-13 21:00 | Implemented Vercel-style true telemetry with 3-tier traffic filtering and probe exclusion in Dev Dashboard

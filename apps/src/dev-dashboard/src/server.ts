@@ -8,6 +8,7 @@
 import { createLogger, createSafeHandler, handleBrandAssetRequest } from '@forge/sdk';
 import { handleApiRequest } from './backend/api-handlers';
 import { devAuthManager } from './backend/auth-session';
+import { parseUserAgent, classifyTrafficCategory } from './backend/telemetry-parser';
 import { renderDashboardHtml, renderDevLoginHtml } from './frontend';
 import { platformDb } from './db';
 
@@ -38,7 +39,9 @@ export function startDevDashboardServer(port: number = PORT) {
         memoryMb: Number((process.memoryUsage().rss / (1024 * 1024)).toFixed(1)),
         timestamp: Date.now(),
       });
-      platformDb.recordTraffic('dev-dashboard', url.pathname, req.method, 200, Number((performance.now() - startMs).toFixed(2)));
+      platformDb.recordTraffic('dev-dashboard', url.pathname, req.method, 200, Number((performance.now() - startMs).toFixed(2)), undefined, {
+        traffic_category: 'probe',
+      });
       return res;
     }
 
@@ -52,6 +55,12 @@ export function startDevDashboardServer(port: number = PORT) {
     if (path === '/api/logs/ingest' && req.method === 'POST') {
       const ingestRes = await handleApiRequest(req, url);
       if (ingestRes) return ingestRes;
+    }
+
+    // 2c. Telemetry Beacon Collector (Cross-App Real Telemetry Ingest)
+    if (path === '/api/analytics/collect' && req.method === 'POST') {
+      const collectRes = await handleApiRequest(req, url);
+      if (collectRes) return collectRes;
     }
 
     // 3. Single Active Session Authentication Guard
@@ -78,9 +87,23 @@ export function startDevDashboardServer(port: number = PORT) {
     // 4. Authenticated API Endpoints
     const apiResponse = await handleApiRequest(req, url);
     if (apiResponse) {
-      if (!url.pathname.includes('/api/logs/stream') && !url.pathname.includes('/api/analytics/traffic')) {
+      if (!url.pathname.includes('/api/logs/stream') && !url.pathname.includes('/api/analytics')) {
         const duration = Number((performance.now() - startMs).toFixed(2));
-        platformDb.recordTraffic('dev-dashboard', url.pathname, req.method, apiResponse.status || 200, duration);
+        const clientIp = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')?.split(',')[0].trim() || '127.0.0.1';
+        const userAgent = req.headers.get('user-agent') || '';
+        const referer = req.headers.get('referer') || '';
+        const parsedUa = parseUserAgent(userAgent);
+        const category = classifyTrafficCategory(url.pathname, userAgent, clientIp);
+        platformDb.recordTraffic('dev-dashboard', url.pathname, req.method, apiResponse.status || 200, duration, undefined, {
+          traffic_category: category,
+          client_ip: clientIp,
+          browser_name: parsedUa.browserName,
+          browser_version: parsedUa.browserVersion,
+          os_name: parsedUa.osName,
+          os_version: parsedUa.osVersion,
+          device_category: parsedUa.deviceCategory,
+          referer: referer || undefined,
+        });
       }
       return apiResponse;
     }
@@ -104,7 +127,21 @@ export function startDevDashboardServer(port: number = PORT) {
 
     // 5. Authenticated UI Dashboard Delivery
     const duration = Number((performance.now() - startMs).toFixed(2));
-    platformDb.recordTraffic('dev-dashboard', url.pathname, req.method, 200, duration);
+    const clientIp = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')?.split(',')[0].trim() || '127.0.0.1';
+    const userAgent = req.headers.get('user-agent') || '';
+    const referer = req.headers.get('referer') || '';
+    const parsedUiUa = parseUserAgent(userAgent);
+    const uiCategory = classifyTrafficCategory(url.pathname, userAgent, clientIp);
+    platformDb.recordTraffic('dev-dashboard', url.pathname, req.method, 200, duration, undefined, {
+      traffic_category: uiCategory,
+      client_ip: clientIp,
+      browser_name: parsedUiUa.browserName,
+      browser_version: parsedUiUa.browserVersion,
+      os_name: parsedUiUa.osName,
+      os_version: parsedUiUa.osVersion,
+      device_category: parsedUiUa.deviceCategory,
+      referer: referer || undefined,
+    });
     return new Response(renderDashboardHtml(), {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });

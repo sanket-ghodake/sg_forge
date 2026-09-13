@@ -45,6 +45,10 @@ export function createSafeHandler(
       if (!headers.has('x-trace-id')) {
         headers.set('x-trace-id', traceId);
       }
+
+      // Asynchronously dispatch real request telemetry without blocking response
+      dispatchRequestTelemetry(serviceName, req, response.status, durationMs, traceId);
+
       return new Response(securedResponse.body, {
         status: securedResponse.status,
         statusText: securedResponse.statusText,
@@ -59,6 +63,9 @@ export function createSafeHandler(
         { durationMs, path: url.pathname },
         traceId
       );
+
+      // Asynchronously dispatch error telemetry
+      dispatchRequestTelemetry(serviceName, req, 500, durationMs, traceId);
 
       const acceptHeader = req.headers.get('accept') || '';
       const isHtmlRequest =
@@ -114,3 +121,58 @@ export function createSafeHandler(
     }
   };
 }
+
+/**
+ * Asynchronously dispatches server request telemetry without blocking response delivery.
+ * @requirements [HLR-DEV-501] [LLR-TEL-001]
+ */
+function dispatchRequestTelemetry(
+  serviceName: string,
+  req: Request,
+  status: number,
+  durationMs: number,
+  traceId: string
+): void {
+  try {
+    const url = new URL(req.url);
+    if (
+      url.pathname.includes('/api/analytics') ||
+      url.pathname.includes('/api/logs/stream') ||
+      url.pathname.endsWith('/health') ||
+      url.pathname.endsWith('/livez') ||
+      url.pathname.endsWith('/readyz')
+    ) {
+      return;
+    }
+
+    const clientIp =
+      req.headers.get('x-real-ip') ||
+      req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      req.headers.get('cf-connecting-ip') ||
+      '127.0.0.1';
+    const userAgent = req.headers.get('user-agent') || '';
+    const referer = req.headers.get('referer') || '';
+    const devDashboardPort = process.env.DEV_DASHBOARD_PORT || '3002';
+    const ingestUrl = `http://127.0.0.1:${devDashboardPort}/api/analytics/collect`;
+
+    fetch(ingestUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service: serviceName,
+        path: url.pathname,
+        method: req.method,
+        statusCode: status,
+        durationMs,
+        clientIp,
+        userAgent,
+        referer,
+        traceId,
+        timestamp: Math.floor(Date.now() / 1000),
+      }),
+    }).catch(() => {
+      // Silently ignore if Dev Dashboard is not running during isolated tests
+    });
+  } catch {}
+}
+

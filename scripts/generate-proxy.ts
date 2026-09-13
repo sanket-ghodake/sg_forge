@@ -164,9 +164,13 @@ export function generateCaddyfile(): string {
         header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data: blob:; img-src 'self' data: blob: https://*.githubusercontent.com https://avatars.githubusercontent.com https://github.com; connect-src 'self' ws: wss: https://api.github.com https://*.github.com https://*.githubusercontent.com; worker-src 'self' blob:; frame-src 'self' https:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://github.com"
         reverse_proxy ${upstream} {
             header_up Host {host}
+            header_up X-Real-IP {remote_host}
             header_up X-Forwarded-Host {host}
             header_up X-Forwarded-Proto {scheme}
             header_up X-Forwarded-Prefix ${s.path}
+            header_up Sec-CH-UA {>Sec-CH-UA}
+            header_up Sec-CH-UA-Platform {>Sec-CH-UA-Platform}
+            header_up Sec-CH-UA-Mobile {>Sec-CH-UA-Mobile}
         }
     }
 `;
@@ -179,9 +183,13 @@ export function generateCaddyfile(): string {
     handle_path ${s.path}* {
         reverse_proxy ${upstream} {
             header_up Host {host}
+            header_up X-Real-IP {remote_host}
             header_up X-Forwarded-Host {host}
             header_up X-Forwarded-Proto {scheme}
             header_up X-Forwarded-Prefix ${s.path}
+            header_up Sec-CH-UA {>Sec-CH-UA}
+            header_up Sec-CH-UA-Platform {>Sec-CH-UA-Platform}
+            header_up Sec-CH-UA-Mobile {>Sec-CH-UA-Mobile}
         }
     }
 `;
@@ -197,8 +205,12 @@ export function generateCaddyfile(): string {
     handle {
         reverse_proxy ${upstream} {
             header_up Host {host}
+            header_up X-Real-IP {remote_host}
             header_up X-Forwarded-Host {host}
             header_up X-Forwarded-Proto {scheme}
+            header_up Sec-CH-UA {>Sec-CH-UA}
+            header_up Sec-CH-UA-Platform {>Sec-CH-UA-Platform}
+            header_up Sec-CH-UA-Mobile {>Sec-CH-UA-Mobile}
         }
     }
 }
