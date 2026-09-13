@@ -143,31 +143,27 @@ class PlatformDatabaseManager {
     const upsert = this.db.prepare(`
       INSERT INTO apps_registry (id, name, port, ingress_path, category, access_role, container_name, db_file_path, runtime_type, status, updated_at)
       VALUES ($id, $name, $port, $path, $category, $role, $container, $dbPath, $runtime, 'active', strftime('%s', 'now'))
-      ON CONFLICT(id) DO UPDATE SET name = excluded.name, port = excluded.port, ingress_path = excluded.ingress_path, category = excluded.category, access_role = excluded.access_role, container_name = excluded.container_name, updated_at = strftime('%s', 'now');
+      ON CONFLICT(id) DO UPDATE SET name = excluded.name, port = excluded.port, ingress_path = excluded.ingress_path, category = excluded.category, access_role = excluded.access_role, container_name = excluded.container_name, db_file_path = excluded.db_file_path, updated_at = strftime('%s', 'now');
     `);
 
     for (const s of services) {
       const dbPath = join(DATA_DIR, `${s.id}.db`);
       upsert.run({
-        $id: s.id,
-        $name: s.name,
-        $port: s.port,
-        $path: s.path,
-        $category: s.category,
-        $role: s.role,
-        $container: s.containerName,
-        $dbPath: dbPath,
-        $runtime: 'bun-watch',
+        $id: s.id, $name: s.name, $port: s.port, $path: s.path, $category: s.category,
+        $role: s.role, $container: s.containerName, $dbPath: dbPath, $runtime: 'bun-watch',
       });
     }
 
-    // Prune only transient test entries not present in .env, preserving user-created dynamic apps
-    const validIds = services.map((s) => s.id);
-    if (validIds.length > 0) {
-      const placeholders = validIds.map(() => '?').join(',');
-      this.db.run(`DELETE FROM apps_registry WHERE (id LIKE 'test_%' OR id LIKE 'e2e_%' OR id LIKE 'mock_%') AND id NOT IN (${placeholders})`, validIds);
+    const validIds = new Set(services.map((s) => s.id));
+    const currentRows = this.db.query('SELECT id FROM apps_registry').all() as { id: string }[];
+    for (const row of currentRows) {
+      if (!validIds.has(row.id)) {
+        const forgeDir = join(process.cwd(), 'forge-apps', row.id);
+        if (row.id.startsWith('test_') || row.id.startsWith('e2e_') || row.id.startsWith('mock_') || !existsSync(forgeDir)) {
+          this.db.run('DELETE FROM apps_registry WHERE id = ?', [row.id]);
+        }
+      }
     }
-
     logger.info(`🌱 Synchronized ${services.length} services from .env registry into apps_registry`);
   }
 

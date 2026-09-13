@@ -63,28 +63,41 @@ class ServicesController {
   private cpuHistory: Map<string, number[]> = new Map();
   private ramHistory: Map<string, number[]> = new Map();
 
+  private isPolling = false;
+
   constructor() {
     this.pollAllServices();
-    setInterval(() => this.pollAllServices(), 1000);
+    setInterval(() => this.pollAllServices(), 2000);
   }
 
   private getCandidateUrls(app: AppRegistryRecord): string[] {
     const port = app.port;
     const isDocker = existsSync('/.dockerenv') || !!process.env.DOCKER_CONTAINER;
-    const hosts: string[] = [];
+    const urls: string[] = [];
 
-    if (isDocker) {
-      if (app.container_name) hosts.push(app.container_name);
-      hosts.push(app.id, `app-${app.id}`, `forge-${app.id}`);
-      hosts.push('localhost', '127.0.0.1');
-    } else {
-      hosts.push('localhost', '127.0.0.1');
-      if (app.container_name) hosts.push(app.container_name);
-      hosts.push(app.id, `app-${app.id}`, `forge-${app.id}`);
+    if (app.remote_url) {
+      const clean = app.remote_url.replace(/\/+$/, '');
+      urls.push(clean.endsWith('/health') ? clean : `${clean}/health`);
     }
 
-    const uniqueHosts = Array.from(new Set(hosts));
-    return uniqueHosts.map((h) => `http://${h}:${port}/health`);
+    const proxyPort = process.env.PROD_HTTP_PORT || process.env.HTTP_PORT || '80';
+    const cleanIngress = app.ingress_path ? app.ingress_path.replace(/\/+$/, '') : '';
+    const proxyPath = cleanIngress === '' ? '/health' : `${cleanIngress}/health`;
+
+    if (isDocker) {
+      urls.push(`http://proxy:${proxyPort}${proxyPath}`);
+      urls.push(`http://proxy${proxyPath}`);
+      if (app.container_name) urls.push(`http://${app.container_name}:${port}/health`);
+      urls.push(`http://app-${app.id}:${port}/health`, `http://${app.id}:${port}/health`);
+      urls.push(`http://localhost:${port}/health`, `http://127.0.0.1:${port}/health`);
+    } else {
+      urls.push(`http://localhost:${port}/health`, `http://127.0.0.1:${port}/health`);
+      urls.push(`http://localhost:${proxyPort}${proxyPath}`);
+      if (app.container_name) urls.push(`http://${app.container_name}:${port}/health`);
+      urls.push(`http://app-${app.id}:${port}/health`, `http://${app.id}:${port}/health`);
+    }
+
+    return Array.from(new Set(urls));
   }
 
   public async pollServiceHealth(app: AppRegistryRecord): Promise<ServiceHealthStatus> {
@@ -97,7 +110,7 @@ class ServicesController {
     for (const url of urls) {
       try {
         const s = performance.now();
-        const resp = await fetch(url, { signal: AbortSignal.timeout(500) });
+        const resp = await fetch(url, { signal: AbortSignal.timeout(350) });
         if (resp.ok) {
           latencyMs = Number((performance.now() - s).toFixed(1));
           body = await resp.json().catch(() => ({}));
@@ -106,7 +119,7 @@ class ServicesController {
           break;
         }
       } catch {
-        // Candidate host unreachable, try next
+        // Unreachable candidate, try next
       }
     }
 
@@ -182,8 +195,16 @@ class ServicesController {
   }
 
   public async pollAllServices(): Promise<ServiceHealthStatus[]> {
-    const apps = platformDb.getAppsRegistry();
-    return Promise.all(apps.map((app) => this.pollServiceHealth(app)));
+    if (this.isPolling) {
+      return this.getAllHealthStatuses();
+    }
+    this.isPolling = true;
+    try {
+      const apps = platformDb.getAppsRegistry();
+      return await Promise.all(apps.map((app) => this.pollServiceHealth(app)));
+    } finally {
+      this.isPolling = false;
+    }
   }
 
   public getAllHealthStatuses(): ServiceHealthStatus[] {

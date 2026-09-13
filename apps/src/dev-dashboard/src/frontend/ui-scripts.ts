@@ -439,12 +439,12 @@ export function getDashboardScripts(): string {
     // 🧹 Clean Any Errant Browser Autofill Credentials on Startup
     function sanitizeSearchInputs() {
       const s = document.getElementById('services-search-input');
-      if (s && s.value && (s.value.includes('@') || s.value === 'alice.eng@forge.internal')) {
+      if (s && s.value && (s.value === 'alice.eng@forge.internal' || s.value === 'operator@forge.internal')) {
         s.value = '';
         if (typeof filterServicesTable === 'function') filterServicesTable();
       }
       const l = document.getElementById('logs-search-input');
-      if (l && l.value && l.value.includes('@')) {
+      if (l && l.value && (l.value === 'alice.eng@forge.internal' || l.value === 'operator@forge.internal')) {
         l.value = '';
       }
     }

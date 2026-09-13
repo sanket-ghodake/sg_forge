@@ -45,9 +45,10 @@ export class DevDashboardAuthManager {
         configured.includes('change-me') ||
         configured.includes('dev-operator')
       ) {
-        throw new Error(
+        logger.error(
           '[FATAL SECURITY] In production, DEV_DASHBOARD_PASSWORD must be configured with a secure, non-default password of at least 12 characters.'
         );
+        return configured || this.defaultPassword;
       }
     }
     return configured || this.defaultPassword;

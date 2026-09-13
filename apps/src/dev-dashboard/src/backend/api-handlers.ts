@@ -97,6 +97,30 @@ export async function handleApiRequest(req: Request, url: URL): Promise<Response
     return Response.json({ status: 'ok', services, summary });
   }
 
+  // 3b. Safe Synthetic Health Probe (Avoids Cross-Port Browser CSP Blocks)
+  if (path === '/api/services/probe' && req.method === 'GET') {
+    const serviceId = url.searchParams.get('serviceId');
+    if (!serviceId) {
+      return Response.json({ error: 'Missing serviceId parameter' }, { status: 400 });
+    }
+    const app = platformDb.getAppById(serviceId);
+    if (!app) {
+      return Response.json({ error: `Service '${serviceId}' not found in registry` }, { status: 404 });
+    }
+    const result = await servicesController.pollServiceHealth(app);
+    return Response.json({
+      status: 'ok',
+      serviceId,
+      operationalState: result.status,
+      latencyMs: result.latencyMs,
+      livez: result.livez,
+      readyz: result.readyz,
+      memoryMb: result.memoryMb,
+      cpuPercent: result.cpuPercent,
+      uptimeSeconds: result.uptimeSeconds,
+    });
+  }
+
   // 4. Service Control: Restart
   if (path === '/api/services/restart' && req.method === 'POST') {
     const body: any = await req.json().catch(() => ({}));

@@ -3361,7 +3361,7 @@
       "name": "servicesController",
       "kind": "variable",
       "file": "apps/src/dev-dashboard/src/backend/services-controller.ts",
-      "line": 305,
+      "line": 326,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3469,7 +3469,7 @@
       "name": "devAuthManager",
       "kind": "variable",
       "file": "apps/src/dev-dashboard/src/backend/auth-session.ts",
-      "line": 182,
+      "line": 183,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3481,7 +3481,7 @@
       "name": "handleDevAuthApi",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/backend/auth-session.ts",
-      "line": 188,
+      "line": 189,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3793,7 +3793,7 @@
       "name": "platformDb",
       "kind": "variable",
       "file": "apps/src/dev-dashboard/src/db/db.ts",
-      "line": 491,
+      "line": 487,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-302",
@@ -8368,7 +8368,7 @@
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:423#handleAppsApi",
         "apps/src/dev-dashboard/src/db/db.ts:20#resolveDataDir",
         "apps/src/dev-dashboard/src/db/db.ts:28#getSafeDbPath",
-        "apps/src/dev-dashboard/src/db/db.ts:491#platformDb",
+        "apps/src/dev-dashboard/src/db/db.ts:487#platformDb",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:15#DbTelemetryStats",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:38#SchemaGraphNode",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:61#SchemaGraphEdge",
@@ -9233,7 +9233,7 @@
         "apps/src/dev-dashboard/src/backend/services-controller.ts:20#ServiceOperationalState",
         "apps/src/dev-dashboard/src/backend/services-controller.ts:26#ServiceHealthStatus",
         "apps/src/dev-dashboard/src/backend/services-controller.ts:47#ServicesVitalsSummary",
-        "apps/src/dev-dashboard/src/backend/services-controller.ts:305#servicesController",
+        "apps/src/dev-dashboard/src/backend/services-controller.ts:326#servicesController",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:16#DiskVolumeStats",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:29#NetworkInterfaceInfo",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:42#HostDiagnosticsReport",
@@ -9242,8 +9242,8 @@
         "apps/src/dev-dashboard/src/backend/api-handlers.ts:16#handleApiRequest",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:16#DevSessionRecord",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:28#DevDashboardAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:182#devAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:188#handleDevAuthApi",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:183#devAuthManager",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:189#handleDevAuthApi",
         "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:21#handleDevEmployeeApi",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:24#detectHostMemoryAndVirtualization",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:115#LogEntry",
@@ -9260,7 +9260,8 @@
         "apps/src/dev-dashboard/src/server.ts:21#startDevDashboardServer"
       ],
       "verifiedIn": [
-        "apps/src/dev-dashboard/test/unit/vitals-engine.test.ts"
+        "apps/src/dev-dashboard/test/unit/vitals-engine.test.ts",
+        "apps/src/dev-dashboard/test/unit/services-probe.test.ts"
       ]
     },
     "HLR-NET-002": {
@@ -9306,7 +9307,7 @@
         "apps/src/dev-dashboard/src/backend/apps-controller.ts:423#handleAppsApi",
         "apps/src/dev-dashboard/src/db/db.ts:20#resolveDataDir",
         "apps/src/dev-dashboard/src/db/db.ts:28#getSafeDbPath",
-        "apps/src/dev-dashboard/src/db/db.ts:491#platformDb",
+        "apps/src/dev-dashboard/src/db/db.ts:487#platformDb",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:15#DbTelemetryStats",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:38#SchemaGraphNode",
         "apps/src/dev-dashboard/src/db/db-diagnostics.ts:61#SchemaGraphEdge",
@@ -9532,7 +9533,7 @@
         "apps/src/dev-dashboard/src/backend/services-controller.ts:20#ServiceOperationalState",
         "apps/src/dev-dashboard/src/backend/services-controller.ts:26#ServiceHealthStatus",
         "apps/src/dev-dashboard/src/backend/services-controller.ts:47#ServicesVitalsSummary",
-        "apps/src/dev-dashboard/src/backend/services-controller.ts:305#servicesController",
+        "apps/src/dev-dashboard/src/backend/services-controller.ts:326#servicesController",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:16#DiskVolumeStats",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:29#NetworkInterfaceInfo",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:42#HostDiagnosticsReport",
@@ -9541,8 +9542,8 @@
         "apps/src/dev-dashboard/src/backend/api-handlers.ts:16#handleApiRequest",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:16#DevSessionRecord",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:28#DevDashboardAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:182#devAuthManager",
-        "apps/src/dev-dashboard/src/backend/auth-session.ts:188#handleDevAuthApi",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:183#devAuthManager",
+        "apps/src/dev-dashboard/src/backend/auth-session.ts:189#handleDevAuthApi",
         "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:21#handleDevEmployeeApi",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:24#detectHostMemoryAndVirtualization",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:115#LogEntry",
@@ -9559,6 +9560,7 @@
         "apps/src/dev-dashboard/src/server.ts:21#startDevDashboardServer"
       ],
       "verifiedIn": [
+        "apps/src/dev-dashboard/test/unit/services-probe.test.ts",
         "forge-apps/app-template/test/contracts/health-schema.test.ts"
       ]
     },

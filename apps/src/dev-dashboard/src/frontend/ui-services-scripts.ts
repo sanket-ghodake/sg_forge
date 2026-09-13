@@ -117,8 +117,32 @@ export function getServicesDashboardScripts(): string {
           window._initialAppFilter = null;
         }
 
+        if (_activeInspectedServiceId) {
+          updateActiveDrawerVitals(_activeInspectedServiceId);
+        }
+
         renderFilteredServicesTable();
       } catch (err) { console.error('Services load failed', err); }
+    }
+
+    function updateActiveDrawerVitals(serviceId) {
+      const s = _cachedServices.find(x => x.id === serviceId);
+      if (!s) return;
+      const statusBadge = document.getElementById('drawer-status-badge');
+      if (statusBadge) {
+        statusBadge.className = 'astryx-badge ' + (s.status === 'RUNNING' ? 'badge-running' : s.status === 'STOPPED' ? 'badge-stopped' : 'badge-starting');
+        statusBadge.innerHTML = (s.status === 'RUNNING' ? '<span class="badge-dot"></span> ' : '') + s.status;
+      }
+      const latEl = document.getElementById('drawer-latency-val');
+      if (latEl) latEl.textContent = s.latencyMs + 'ms';
+      const cpuVal = document.getElementById('drawer-cpu-val');
+      if (cpuVal) cpuVal.textContent = s.cpuPercent + '%';
+      const cpuSpark = document.getElementById('drawer-cpu-spark');
+      if (cpuSpark && typeof renderSparklineSvg === 'function') cpuSpark.innerHTML = renderSparklineSvg(s.cpuSparkline, false);
+      const ramVal = document.getElementById('drawer-ram-val');
+      if (ramVal) ramVal.textContent = s.memoryMb + ' MB';
+      const ramSpark = document.getElementById('drawer-ram-spark');
+      if (ramSpark && typeof renderSparklineSvg === 'function') ramSpark.innerHTML = renderSparklineSvg(s.ramSparkline, true);
     }
 
     function openServiceDrawer(serviceId) {
@@ -133,7 +157,7 @@ export function getServicesDashboardScripts(): string {
       const metaEl = document.getElementById('drawer-svc-meta');
       const bodyEl = document.getElementById('drawer-body-content');
 
-      const icons = { landing: '🏠', auth: '🔒', portal: '📂', 'dev-dashboard': '📊', 'dev-hub': '🔀', expenses: '💳', billing: '🧾', telemetry: '📡' };
+      const icons = { landing: '🏠', auth: '🔒', portal: '📂', 'dev-dashboard': '📊', 'dev-hub': '🔀', expenses: '💳', billing: '🧾', telemetry: '📡', code: '💻', docs: '📖' };
       if (iconEl) iconEl.textContent = icons[s.id] || '⚡';
       if (nameEl) nameEl.textContent = s.name + ' (' + s.id + ')';
       if (metaEl) metaEl.textContent = 'Port: :' + s.port + ' | Ingress: ' + s.ingressPath;
@@ -141,9 +165,9 @@ export function getServicesDashboardScripts(): string {
       if (bodyEl) {
         bodyEl.innerHTML = \`
           <div class="drawer-card">
-            <div class="drawer-card-title"><span>🩺 Dual-Probe Health Verification</span><span class="astryx-badge \${s.status === 'RUNNING' ? 'badge-running' : 'badge-stopped'}">\${s.status}</span></div>
+            <div class="drawer-card-title"><span>🩺 Dual-Probe Health Verification</span><span id="drawer-status-badge" class="astryx-badge \${s.status === 'RUNNING' ? 'badge-running' : 'badge-stopped'}">\${s.status}</span></div>
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; margin-bottom:0.65rem;">
-              <span>Recorded Latency: <strong style="color:var(--forge-primary);">\${s.latencyMs}ms</strong></span>
+              <span>Recorded Latency: <strong id="drawer-latency-val" style="color:var(--forge-primary);">\${s.latencyMs}ms</strong></span>
               <button class="astryx-btn btn-primary" style="padding:0.25rem 0.6rem; font-size:0.74rem;" onclick="testServiceHealthProbe('\${s.id}', '\${s.port}', '\${s.ingressPath}')">🚀 Ping /health</button>
             </div>
             <div id="drawer-probe-output" class="drawer-probe-result">Click 'Ping /health' to test live endpoint responsiveness.</div>
@@ -154,13 +178,13 @@ export function getServicesDashboardScripts(): string {
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
               <div style="background:var(--forge-bg-elevated); padding:0.6rem; border-radius:4px; border:1px solid var(--forge-border);">
                 <div style="font-size:0.7rem; color:var(--forge-text-muted);">CPU Utilization</div>
-                <div style="font-size:1.1rem; font-weight:700; color:var(--forge-text-main);">\${s.cpuPercent}%</div>
-                <div style="margin-top:0.3rem;">\${renderSparklineSvg(s.cpuSparkline, false)}</div>
+                <div id="drawer-cpu-val" style="font-size:1.1rem; font-weight:700; color:var(--forge-text-main);">\${s.cpuPercent}%</div>
+                <div id="drawer-cpu-spark" style="margin-top:0.3rem;">\${renderSparklineSvg(s.cpuSparkline, false)}</div>
               </div>
               <div style="background:var(--forge-bg-elevated); padding:0.6rem; border-radius:4px; border:1px solid var(--forge-border);">
                 <div style="font-size:0.7rem; color:var(--forge-text-muted);">RAM Memory Usage</div>
-                <div style="font-size:1.1rem; font-weight:700; color:var(--forge-text-main);">\${s.memoryMb} MB</div>
-                <div style="margin-top:0.3rem;">\${renderSparklineSvg(s.ramSparkline, true)}</div>
+                <div id="drawer-ram-val" style="font-size:1.1rem; font-weight:700; color:var(--forge-text-main);">\${s.memoryMb} MB</div>
+                <div id="drawer-ram-spark" style="margin-top:0.3rem;">\${renderSparklineSvg(s.ramSparkline, true)}</div>
               </div>
             </div>
           </div>
@@ -196,32 +220,31 @@ export function getServicesDashboardScripts(): string {
       output.textContent = '⏱️ Dispatching synthetic /health probe...';
       const t0 = performance.now();
       try {
-        const isProxied = window.location.port === '80' || window.location.port === '443' || window.location.port === '' || window.location.pathname.startsWith('/devcenter');
-        const targetUrl = isProxied
-          ? (ingressPath === '/' ? '/health' : ingressPath + '/health')
-          : (window.location.protocol + '//' + window.location.hostname + ':' + port + '/health');
-        const res = await fetch(targetUrl);
+        const res = await fetch(apiBase + '/api/services/probe?serviceId=' + encodeURIComponent(serviceId));
         const duration = (performance.now() - t0).toFixed(2);
-        let bodyText = '';
-        try {
+        if (res.ok) {
           const json = await res.json();
-          bodyText = JSON.stringify(json, null, 2);
-        } catch {
-          bodyText = await res.text();
+          output.textContent = 'HTTP Status: 200 OK\\nRound-trip Time: ' + duration + 'ms (Remote Latency: ' + json.latencyMs + 'ms)\\nOperational State: ' + json.operationalState + '\\nLivez: ' + json.livez + ' | Readyz: ' + json.readyz + '\\nProcess Memory: ' + json.memoryMb + ' MB | CPU: ' + json.cpuPercent + '% | Uptime: ' + json.uptimeSeconds + 's';
+        } else {
+          const errJson = await res.json().catch(() => ({}));
+          output.textContent = '⚠️ Probe Error (' + duration + 'ms): HTTP ' + res.status + ' - ' + (errJson.error || errJson.detail || res.statusText);
         }
-        output.textContent = 'HTTP Status: ' + res.status + ' ' + res.statusText + '\\nRound-trip Time: ' + duration + 'ms\\nTarget Route: ' + targetUrl + '\\nResponse Body:\\n' + bodyText;
       } catch (err) {
         const duration = (performance.now() - t0).toFixed(2);
-        output.textContent = '⚠️ Probe Error (' + duration + 'ms): ' + (err.message || err);
+        output.textContent = '⚠️ Probe Network Error (' + duration + 'ms): ' + (err.message || err);
       }
     }
 
-    async function rollingRestartFleet() {
-      const btn = event && event.target;
+    async function rollingRestartFleet(e) {
+      const btn = (e && e.target) || document.querySelector('button[onclick*="rollingRestartFleet"]') || (typeof event !== 'undefined' && event?.target);
       if (btn) btn.textContent = '⏳ Restarting Fleet...';
       for (const s of _cachedServices) {
         if (s.status === 'RUNNING') {
-          await fetch(apiBase + '/api/services/restart', { method: 'POST', body: JSON.stringify({ serviceId: s.id }) });
+          await fetch(apiBase + '/api/services/restart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ serviceId: s.id })
+          });
         }
       }
       if (btn) btn.textContent = '🔄 Restart Fleet';
@@ -230,13 +253,21 @@ export function getServicesDashboardScripts(): string {
     }
 
     async function restartService(id) {
-      await fetch(apiBase + '/api/services/restart', { method: 'POST', body: JSON.stringify({ serviceId: id }) });
+      await fetch(apiBase + '/api/services/restart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ serviceId: id })
+      });
       loadServices();
       loadTopology();
     }
 
     async function toggleServiceState(id, state) {
-      await fetch(apiBase + '/api/services/toggle', { method: 'POST', body: JSON.stringify({ serviceId: id, state }) });
+      await fetch(apiBase + '/api/services/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ serviceId: id, state })
+      });
       loadServices();
       loadTopology();
     }
