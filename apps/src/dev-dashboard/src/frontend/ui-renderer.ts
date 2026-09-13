@@ -155,7 +155,7 @@ export function renderDashboardHtml(): string {
             <div>
               <h2 style="font-size: 1.2rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.45rem; font-weight: 600;">
                 <span style="color: var(--forge-primary); display: flex; align-items: center;">${astryxIcons.services}</span> Services & Processes Command Center
-                <button class="help-btn" onclick="openHelpModal()" title="Help & Architecture Explainer">?</button>
+                <button class="help-btn" onclick="openHelpModal()" title="Help & Architecture Explainer" style="display: inline-flex; align-items: center; justify-content: center;">${astryxIcons.helpCircle}</button>
               </h2>
               <p style="color: var(--forge-text-muted); font-size: 0.82rem;">Real-time operational status, dual-probe latency, rolling sparklines, and flyout process inspector.</p>
             </div>
@@ -195,14 +195,14 @@ export function renderDashboardHtml(): string {
             <table class="data-table">
               <thead>
                 <tr>
-                  <th style="width: 110px;">Status</th>
+                  <th style="width: 105px;">Status</th>
                   <th>Service Name</th>
-                  <th style="width: 130px;">CPU Load</th>
-                  <th style="width: 140px;">RAM Usage</th>
-                  <th style="width: 90px;">Dual-Probe</th>
-                  <th style="width: 70px;">Port</th>
-                  <th>Route Ingress</th>
-                  <th style="width: 200px; text-align: right;">Actions</th>
+                  <th style="width: 125px;">CPU Load</th>
+                  <th style="width: 135px;">RAM Usage</th>
+                  <th style="width: 110px;"><span style="display: inline-flex; align-items: center; gap: 0.35rem;">${astryxIcons.activity} Dual-Probe</span></th>
+                  <th style="width: 85px;"><span style="display: inline-flex; align-items: center; gap: 0.35rem;">${astryxIcons.hash} Port</span></th>
+                  <th><span style="display: inline-flex; align-items: center; gap: 0.35rem;">${astryxIcons.globe} Route Ingress</span></th>
+                  <th style="width: 205px; text-align: right;"><span style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 0.35rem;">${astryxIcons.sliders} Actions</span></th>
                 </tr>
               </thead>
               <tbody id="services-tbody"></tbody>

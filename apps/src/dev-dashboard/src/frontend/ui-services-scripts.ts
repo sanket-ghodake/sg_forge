@@ -1,11 +1,41 @@
 /**
  * @forge/dev-dashboard - Services & Processes Command Center Scripts (2026 LTS)
  * Option C high-density fleet table, live multi-filtering, and slide-out inspector drawer.
-  * @requirements [HLR-UI-401] [LLR-UI-001]
+ * Astryx Zero-Emoji Standard with precision monochrome SVG stroke icons.
+ * @requirements [HLR-UI-401] [LLR-UI-001]
  */
 
+import { astryxIcons } from '@forge/ui';
+
 export function getServicesDashboardScripts(): string {
+  const svcIconsJson = JSON.stringify({
+    landing: astryxIcons.home,
+    auth: astryxIcons.lock,
+    portal: astryxIcons.folder,
+    'dev-dashboard': astryxIcons.services,
+    'dev-hub': astryxIcons.gitBranch,
+    expenses: astryxIcons.creditCard,
+    billing: astryxIcons.receipt,
+    telemetry: astryxIcons.radio,
+    code: astryxIcons.code,
+    docs: astryxIcons.bookOpen,
+  });
+
   return `
+    const _svcIcons = ${svcIconsJson};
+    const _defaultSvcIcon = ${JSON.stringify(astryxIcons.services)};
+    const _icoRefresh = ${JSON.stringify(astryxIcons.refresh)};
+    const _icoStop = ${JSON.stringify(astryxIcons.stop)};
+    const _icoPlay = ${JSON.stringify(astryxIcons.play)};
+    const _icoLogs = ${JSON.stringify(astryxIcons.logs)};
+    const _icoSliders = ${JSON.stringify(astryxIcons.sliders)};
+    const _icoActivity = ${JSON.stringify(astryxIcons.activity)};
+    const _icoZap = ${JSON.stringify(astryxIcons.zap)};
+    const _icoHash = ${JSON.stringify(astryxIcons.hash)};
+    const _icoGlobe = ${JSON.stringify(astryxIcons.globe)};
+    const _icoExtLink = ${JSON.stringify(astryxIcons.externalLink)};
+    const _icoSettings = ${JSON.stringify(astryxIcons.settings)};
+
     let _cachedServices = [];
     let _activeServiceFilter = 'all';
     let _activeInspectedServiceId = null;
@@ -50,21 +80,25 @@ export function getServicesDashboardScripts(): string {
         const sBadge = s.status === 'RUNNING' ? '<span class="astryx-badge badge-running"><span class="badge-dot"></span> RUNNING</span>' :
           s.status === 'STOPPED' ? '<span class="astryx-badge badge-stopped">STOPPED</span>' :
           s.status === 'DEGRADED' ? '<span class="astryx-badge badge-degraded">DEGRADED</span>' : '<span class="astryx-badge badge-starting">STARTING</span>';
+        
         const actions = s.status === 'RUNNING'
-          ? '<button class="astryx-btn btn-outline" style="padding:0.2rem 0.45rem; font-size:0.72rem;" onclick="event.stopPropagation(); restartService(\\\'' + s.id + '\\\')">🔄</button>' +
-            '<button class="astryx-btn btn-outline" style="padding:0.2rem 0.45rem; font-size:0.72rem;" onclick="event.stopPropagation(); toggleServiceState(\\\'' + s.id + '\\\',\\\'stop\\\')">🛑</button>'
-          : '<button class="astryx-btn btn-primary" style="padding:0.2rem 0.55rem; font-size:0.72rem;" onclick="event.stopPropagation(); toggleServiceState(\\\'' + s.id + '\\\',\\\'start\\\')">▶️ Start</button>';
+          ? '<button class="astryx-btn btn-outline svc-action-btn" data-astryx-tooltip="Restart Process" onclick="event.stopPropagation(); restartService(\\\'' + s.id + '\\\')">' + _icoRefresh + '</button>' +
+            '<button class="astryx-btn btn-outline svc-action-btn btn-danger-hover" data-astryx-tooltip="Halt Process" onclick="event.stopPropagation(); toggleServiceState(\\\'' + s.id + '\\\',\\\'stop\\\')">' + _icoStop + '</button>'
+          : '<button class="astryx-btn btn-primary svc-action-btn" data-astryx-tooltip="Start Process" onclick="event.stopPropagation(); toggleServiceState(\\\'' + s.id + '\\\',\\\'start\\\')">' + _icoPlay + ' Start</button>';
 
         const isSelected = s.id === _activeInspectedServiceId;
+        const svcIcon = _svcIcons[s.id] || _defaultSvcIcon;
+        const probeIcon = s.latencyMs < 5 ? _icoZap : _icoActivity;
+
         return '<tr class="service-row-clickable ' + (isSelected ? 'selected-row' : '') + '" onclick="openServiceDrawer(\\\'' + s.id + '\\\')">' +
           '<td>' + sBadge + '</td>' +
-          '<td><div style="display:flex; align-items:center; gap:0.4rem;"><strong>' + s.name + '</strong> <code style="font-size:0.72rem; color:var(--forge-text-subtle);">' + s.id + '</code></div></td>' +
+          '<td><div style="display:flex; align-items:center; gap:0.45rem;"><span class="svc-row-icon">' + svcIcon + '</span><div><strong>' + s.name + '</strong> <code style="font-size:0.72rem; color:var(--forge-text-subtle); display:block;">' + s.id + '</code></div></div></td>' +
           '<td><div class="sparkline-cell"><span style="min-width:32px; font-weight:600;">' + s.cpuPercent + '%</span>' + renderSparklineSvg(s.cpuSparkline, false) + '</div></td>' +
           '<td><div class="sparkline-cell"><span style="min-width:48px; font-weight:600;">' + s.memoryMb + ' MB</span>' + renderSparklineSvg(s.ramSparkline, true) + '</div></td>' +
-          '<td><span class="latency-pill ' + latClass + '" title="Dual-probe latency">' + s.latencyMs + 'ms</span></td>' +
-          '<td><code>' + s.port + '</code></td>' +
-          '<td><a href="' + s.ingressPath + '" target="_blank" onclick="event.stopPropagation()" style="color:var(--forge-primary); text-decoration:none;"><code>' + s.ingressPath + ' ↗</code></a></td>' +
-          '<td style="text-align:right;"><div style="display:inline-flex; gap:0.3rem;">' + actions + '<button class="astryx-btn btn-outline" style="padding:0.2rem 0.45rem; font-size:0.72rem;" onclick="event.stopPropagation(); openAppLogsModal(\\\'' + s.id + '\\\',\\\'' + s.name + '\\\',\\\'' + s.port + '\\\',\\\'' + s.ingressPath + '\\\')">📜</button><button class="astryx-btn btn-outline" style="padding:0.2rem 0.45rem; font-size:0.72rem;" onclick="event.stopPropagation(); openServiceDrawer(\\\'' + s.id + '\\\')">🔍</button></div></td>' +
+          '<td><span class="latency-pill ' + latClass + '" title="Dual-probe latency"><span style="display:inline-flex; align-items:center;">' + probeIcon + '</span> ' + s.latencyMs + 'ms</span></td>' +
+          '<td><span class="service-port-tag"><span style="display:inline-flex; align-items:center; color:var(--forge-text-muted);">' + _icoHash + '</span><code>:' + s.port + '</code></span></td>' +
+          '<td><a href="' + s.ingressPath + '" target="_blank" onclick="event.stopPropagation()" class="service-ingress-link"><span style="display:inline-flex; align-items:center; color:var(--forge-text-muted);">' + _icoGlobe + '</span><code>' + s.ingressPath + '</code><span style="display:inline-flex; align-items:center; opacity:0.8;">' + _icoExtLink + '</span></a></td>' +
+          '<td style="text-align:right;"><div style="display:inline-flex; gap:0.3rem;">' + actions + '<button class="astryx-btn btn-outline svc-action-btn" data-astryx-tooltip="View Live Logs" onclick="event.stopPropagation(); openAppLogsModal(\\\'' + s.id + '\\\',\\\'' + s.name + '\\\',\\\'' + s.port + '\\\',\\\'' + s.ingressPath + '\\\')">' + _icoLogs + '</button><button class="astryx-btn btn-outline svc-action-btn" data-astryx-tooltip="Inspect Process Details" onclick="event.stopPropagation(); openServiceDrawer(\\\'' + s.id + '\\\')">' + _icoSliders + '</button></div></td>' +
         '</tr>';
       }).join('');
     }
@@ -157,24 +191,24 @@ export function getServicesDashboardScripts(): string {
       const metaEl = document.getElementById('drawer-svc-meta');
       const bodyEl = document.getElementById('drawer-body-content');
 
-      const icons = { landing: '🏠', auth: '🔒', portal: '📂', 'dev-dashboard': '📊', 'dev-hub': '🔀', expenses: '💳', billing: '🧾', telemetry: '📡', code: '💻', docs: '📖' };
-      if (iconEl) iconEl.textContent = icons[s.id] || '⚡';
+      const svcIcon = _svcIcons[s.id] || _defaultSvcIcon;
+      if (iconEl) iconEl.innerHTML = svcIcon;
       if (nameEl) nameEl.textContent = s.name + ' (' + s.id + ')';
       if (metaEl) metaEl.textContent = 'Port: :' + s.port + ' | Ingress: ' + s.ingressPath;
 
       if (bodyEl) {
         bodyEl.innerHTML = \`
           <div class="drawer-card">
-            <div class="drawer-card-title"><span>🩺 Dual-Probe Health Verification</span><span id="drawer-status-badge" class="astryx-badge \${s.status === 'RUNNING' ? 'badge-running' : 'badge-stopped'}">\${s.status}</span></div>
+            <div class="drawer-card-title"><span style="display:inline-flex; align-items:center; gap:0.4rem;"><span class="drawer-title-icon">\${_icoActivity}</span> Dual-Probe Health Verification</span><span id="drawer-status-badge" class="astryx-badge \${s.status === 'RUNNING' ? 'badge-running' : 'badge-stopped'}">\${s.status}</span></div>
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; margin-bottom:0.65rem;">
               <span>Recorded Latency: <strong id="drawer-latency-val" style="color:var(--forge-primary);">\${s.latencyMs}ms</strong></span>
-              <button class="astryx-btn btn-primary" style="padding:0.25rem 0.6rem; font-size:0.74rem;" onclick="testServiceHealthProbe('\${s.id}', '\${s.port}', '\${s.ingressPath}')">🚀 Ping /health</button>
+              <button class="astryx-btn btn-primary" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.25rem 0.6rem; font-size:0.74rem;" onclick="testServiceHealthProbe('\${s.id}', '\${s.port}', '\${s.ingressPath}')">\${_icoZap} Ping /health</button>
             </div>
             <div id="drawer-probe-output" class="drawer-probe-result">Click 'Ping /health' to test live endpoint responsiveness.</div>
           </div>
 
           <div class="drawer-card">
-            <div class="drawer-card-title"><span>📊 Real-Time Vitals</span><span style="font-size:0.75rem; color:var(--forge-text-muted);">High-Frequency</span></div>
+            <div class="drawer-card-title"><span style="display:inline-flex; align-items:center; gap:0.4rem;"><span class="drawer-title-icon">\${_icoZap}</span> Real-Time Vitals</span><span style="font-size:0.75rem; color:var(--forge-text-muted);">High-Frequency</span></div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
               <div style="background:var(--forge-bg-elevated); padding:0.6rem; border-radius:4px; border:1px solid var(--forge-border);">
                 <div style="font-size:0.7rem; color:var(--forge-text-muted);">CPU Utilization</div>
@@ -190,12 +224,12 @@ export function getServicesDashboardScripts(): string {
           </div>
 
           <div class="drawer-card">
-            <div class="drawer-card-title"><span>⚡ Lifecycle Operations</span></div>
+            <div class="drawer-card-title"><span style="display:inline-flex; align-items:center; gap:0.4rem;"><span class="drawer-title-icon">\${_icoSettings}</span> Lifecycle Operations</span></div>
             <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-              <button class="astryx-btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.76rem;" onclick="restartService('\${s.id}')">🔄 Restart Process</button>
-              <button class="astryx-btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.76rem;" onclick="toggleServiceState('\${s.id}', '\${s.status === 'RUNNING' ? 'stop' : 'start'}')">\${s.status === 'RUNNING' ? '🛑 Halt Process' : '▶️ Start Process'}</button>
-              <button class="astryx-btn btn-outline" style="padding:0.35rem 0.75rem; font-size:0.76rem;" onclick="openAppLogsModal('\${s.id}', '\${s.name}', '\${s.port}', '\${s.ingressPath}')">📜 4-Pillar Logs</button>
-              <a class="astryx-btn btn-primary" href="\${s.ingressPath}" target="_blank" style="padding:0.35rem 0.75rem; font-size:0.76rem; text-decoration:none;">🔗 Open URL ↗</a>
+              <button class="astryx-btn btn-outline" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.75rem; font-size:0.76rem;" onclick="restartService('\${s.id}')">\${_icoRefresh} Restart Process</button>
+              <button class="astryx-btn btn-outline" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.75rem; font-size:0.76rem;" onclick="toggleServiceState('\${s.id}', '\${s.status === 'RUNNING' ? 'stop' : 'start'}')">\${s.status === 'RUNNING' ? _icoStop + ' Halt Process' : _icoPlay + ' Start Process'}</button>
+              <button class="astryx-btn btn-outline" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.75rem; font-size:0.76rem;" onclick="openAppLogsModal('\${s.id}', '\${s.name}', '\${s.port}', '\${s.ingressPath}')">\${_icoLogs} 4-Pillar Logs</button>
+              <a class="astryx-btn btn-primary" href="\${s.ingressPath}" target="_blank" style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.75rem; font-size:0.76rem; text-decoration:none;">\${_icoExtLink} Open URL</a>
             </div>
           </div>\`;
       }
@@ -217,7 +251,7 @@ export function getServicesDashboardScripts(): string {
     async function testServiceHealthProbe(serviceId, port, ingressPath) {
       const output = document.getElementById('drawer-probe-output');
       if (!output) return;
-      output.textContent = '⏱️ Dispatching synthetic /health probe...';
+      output.textContent = 'Dispatching synthetic /health probe...';
       const t0 = performance.now();
       try {
         const res = await fetch(apiBase + '/api/services/probe?serviceId=' + encodeURIComponent(serviceId));
@@ -227,17 +261,17 @@ export function getServicesDashboardScripts(): string {
           output.textContent = 'HTTP Status: 200 OK\\nRound-trip Time: ' + duration + 'ms (Remote Latency: ' + json.latencyMs + 'ms)\\nOperational State: ' + json.operationalState + '\\nLivez: ' + json.livez + ' | Readyz: ' + json.readyz + '\\nProcess Memory: ' + json.memoryMb + ' MB | CPU: ' + json.cpuPercent + '% | Uptime: ' + json.uptimeSeconds + 's';
         } else {
           const errJson = await res.json().catch(() => ({}));
-          output.textContent = '⚠️ Probe Error (' + duration + 'ms): HTTP ' + res.status + ' - ' + (errJson.error || errJson.detail || res.statusText);
+          output.textContent = 'Probe Error (' + duration + 'ms): HTTP ' + res.status + ' - ' + (errJson.error || errJson.detail || res.statusText);
         }
       } catch (err) {
         const duration = (performance.now() - t0).toFixed(2);
-        output.textContent = '⚠️ Probe Network Error (' + duration + 'ms): ' + (err.message || err);
+        output.textContent = 'Probe Network Error (' + duration + 'ms): ' + (err.message || err);
       }
     }
 
     async function rollingRestartFleet(e) {
       const btn = (e && e.target) || document.querySelector('button[onclick*="rollingRestartFleet"]') || (typeof event !== 'undefined' && event?.target);
-      if (btn) btn.textContent = '⏳ Restarting Fleet...';
+      if (btn) btn.innerHTML = _icoRefresh + ' Restarting Fleet...';
       for (const s of _cachedServices) {
         if (s.status === 'RUNNING') {
           await fetch(apiBase + '/api/services/restart', {
@@ -247,7 +281,7 @@ export function getServicesDashboardScripts(): string {
           });
         }
       }
-      if (btn) btn.textContent = '🔄 Restart Fleet';
+      if (btn) btn.innerHTML = _icoRefresh + ' Restart Fleet';
       loadServices();
       loadTopology();
     }

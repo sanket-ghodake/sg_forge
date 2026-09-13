@@ -4,6 +4,7 @@
  */
 
 import { loadBrandConfig } from '@forge/sdk';
+import { astryxIcons } from '@forge/ui';
 
 /**
  * getModalsHtml
@@ -102,7 +103,7 @@ export function getModalsHtml(): string {
   <div class="astryx-modal-backdrop" id="help-modal">
     <div class="astryx-modal">
       <div class="astryx-modal-header">
-        <h3>❓ Services & Processes Architecture Guide</h3>
+        <h3 style="display: flex; align-items: center; gap: 0.4rem;"><span style="color: var(--forge-primary); display: flex; align-items: center;">${astryxIcons.helpCircle}</span> Services & Processes Architecture Guide</h3>
         <button class="astryx-modal-close" onclick="closeHelpModal()">&times;</button>
       </div>
       <div class="astryx-modal-body">
@@ -116,7 +117,6 @@ export function getModalsHtml(): string {
       </div>
     </div>
   </div>
-
   <!-- App-Specific 4-Pillar Live Log Inspector Modal -->
   <div class="astryx-modal-backdrop" id="app-logs-modal">
     <div class="astryx-modal log-modal-content">
@@ -155,7 +155,7 @@ export function getModalsHtml(): string {
     <div class="drawer-resizer" id="service-drawer-resizer" title="Drag edge to resize (Double-click to reset)"></div>
     <div class="drawer-header">
       <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <span style="font-size: 1.3rem;" id="drawer-svc-icon">⚡</span>
+        <span style="display: flex; align-items: center; color: var(--forge-primary);" id="drawer-svc-icon">${astryxIcons.services}</span>
         <div>
           <h3 id="drawer-svc-name" style="margin: 0; font-size: 1rem; color: var(--forge-text-main);">Service Name</h3>
           <span id="drawer-svc-meta" style="font-size: 0.75rem; color: var(--forge-text-muted);">Port: :3000 | Ingress: /</span>
@@ -496,4 +496,3 @@ export function getModalsHtml(): string {
   </div>
   `;
 }
-

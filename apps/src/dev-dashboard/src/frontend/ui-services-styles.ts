@@ -35,5 +35,18 @@ export function getServicesStyles(): string {
     .drawer-card { background: var(--forge-bg-card); border: 1px solid var(--forge-border); border-radius: var(--forge-radius-sm); padding: 1rem; }
     .drawer-card-title { font-size: 0.85rem; font-weight: 700; color: var(--forge-text-main); margin-bottom: 0.65rem; display: flex; align-items: center; justify-content: space-between; }
     .drawer-probe-result { font-family: monospace; font-size: 0.74rem; background: var(--forge-bg-elevated); border: 1px solid var(--forge-border); border-radius: var(--forge-radius-sm); padding: 0.65rem; max-height: 160px; overflow-y: auto; white-space: pre-wrap; color: var(--forge-text-main); scrollbar-width: thin; scrollbar-color: var(--forge-border-medium) transparent; }
+    .service-port-tag { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.74rem; background: var(--forge-bg-surface); border: 1px solid var(--forge-border); padding: 0.15rem 0.45rem; border-radius: 4px; }
+    .service-port-tag code { color: var(--forge-text-main); font-family: 'Geist Mono', monospace; }
+    .service-ingress-link { display: inline-flex; align-items: center; gap: 0.3rem; text-decoration: none; color: var(--forge-primary); font-size: 0.76rem; background: var(--forge-primary-bg); border: 1px solid var(--forge-border); padding: 0.18rem 0.5rem; border-radius: 4px; transition: var(--forge-transition); }
+    .service-ingress-link:hover { background: var(--forge-bg-card-hover); border-color: var(--forge-primary); }
+    .service-ingress-link code { font-family: 'Geist Mono', monospace; font-size: 0.74rem; }
+    .latency-pill { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.72rem; font-weight: 600; padding: 0.15rem 0.45rem; border-radius: 12px; }
+    .latency-fast { background: var(--forge-primary-bg); color: var(--forge-primary); border: 1px solid var(--forge-primary); }
+    .latency-medium { background: var(--forge-warning-bg); color: var(--forge-warning); border: 1px solid var(--forge-warning); }
+    .latency-slow { background: var(--forge-error-bg); color: var(--forge-error); border: 1px solid var(--forge-error); }
+    .svc-action-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.22rem 0.48rem; font-size: 0.72rem; border-radius: 4px; line-height: 1; }
+    .svc-action-btn.btn-danger-hover:hover { border-color: var(--forge-error) !important; color: var(--forge-error) !important; background: var(--forge-error-bg) !important; }
+    .svc-row-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 4px; background: var(--forge-bg-surface); border: 1px solid var(--forge-border); color: var(--forge-primary); flex-shrink: 0; }
+    .drawer-title-icon { display: inline-flex; align-items: center; color: var(--forge-primary); }
   `;
 }
