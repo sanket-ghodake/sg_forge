@@ -16,7 +16,7 @@ if not exist "%DIR%.env" (
     )
 )
 
-rem Resolve Bun Runtime
+rem Resolve Bun Runtime via 3-tier cascade
 set "BUN_BIN=bun"
 if exist "%DIR%portables\bun\bin\bun.exe" (
     set "BUN_BIN=%DIR%portables\bun\bin\bun.exe"
@@ -26,6 +26,25 @@ if exist "%DIR%portables\bun\bin\bun.exe" (
 
 set "CMD=%~1"
 if "%CMD%"=="" set "CMD=help"
+
+if "%CMD%"=="setup" (
+    echo ⚡ [Forge App] Bootstrapping autonomous micro-app environment...
+    if not exist "%DIR%.env" (
+        if exist "%DIR%.env.example" copy "%DIR%.env.example" "%DIR%.env" >nul
+    )
+    git config core.filemode false 2>nul
+    git config core.autocrlf false 2>nul
+    git config core.hooksPath .githooks 2>nul
+    echo 📦 Installing dependencies with Bun...
+    "%BUN_BIN%" install
+    "%BUN_BIN%" run scripts\sync-ignores.ts
+    if not exist "%DIR%logs" mkdir "%DIR%logs"
+    if not exist "%DIR%logs\WORKLOGS.md" echo # WORKLOGS > "%DIR%logs\WORKLOGS.md"
+    if not exist "%DIR%logs\commits.jsonl" type nul > "%DIR%logs\commits.jsonl"
+    if not exist "%DIR%logs\token-ledger.jsonl" type nul > "%DIR%logs\token-ledger.jsonl"
+    echo ✨ Setup completed successfully! Run 'run.bat dev' to start.
+    goto :eof
+)
 
 if "%CMD%"=="dev" (
     echo 🚀 Starting standalone micro-app in watch mode...
@@ -113,6 +132,22 @@ if "%CMD%"=="worklog" (
     goto :eof
 )
 
+if "%CMD%"=="doctor" (
+    echo 🩺 [Forge App] Running Diagnostics...
+    echo 1. Bun Runtime:
+    "%BUN_BIN%" --version
+    echo ✅ Diagnostics Completed.
+    goto :eof
+)
+
+if "%CMD%"=="clean" (
+    echo 🧹 Cleaning caches...
+    rmdir /s /q .cache 2>nul
+    rmdir /s /q dist 2>nul
+    echo ✨ Cleaned.
+    goto :eof
+)
+
 if "%CMD%"=="setup-hooks" (
     echo ⚓ Configuring Git hooks (.githooks)...
     git config core.hooksPath .githooks
@@ -124,6 +159,7 @@ echo.
 echo SG Forge Autonomous Micro-App Submodule Windows CLI
 echo.
 echo Usage:
+echo   run.bat setup          Bootstrap environment, permissions, DB, and dependencies
 echo   run.bat dev            Start local server in hot-reload watch mode
 echo   run.bat start          Start server in production mode
 echo   run.bat test           Execute local 5-tier test suites
@@ -135,6 +171,8 @@ echo   run.bat graft [cmd]    Run Graft code context graph
 echo   run.bat tokens [cmd]   Display lifetime spend, sync ledger, or launch TUI
 echo   run.bat headroom [cmd] Run Headroom context compression engine
 echo   run.bat council [idea] Run Council of AI multi-agent decision framework
+echo   run.bat doctor         Inspect toolchain status
+echo   run.bat clean          Clean temporary build caches
 echo   run.bat worklog [msg]  Append task completion to logs\WORKLOGS.md
 echo   run.bat setup-hooks    Activate git hooks (.githooks)
 echo   run.bat help           Show this banner

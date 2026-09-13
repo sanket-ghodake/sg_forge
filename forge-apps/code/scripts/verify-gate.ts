@@ -189,12 +189,19 @@ if (existsSync(serverPath)) {
 // --------------------------------------------------------------------------
 // Check 10: Multi-Agent Directives Sync
 // --------------------------------------------------------------------------
-const agentDirectives = ['AGENTS.md', 'GEMINI.md', 'CLAUDE.md'];
+const agentDirectives = [
+  'AGENTS.md',
+  'GEMINI.md',
+  'CLAUDE.md',
+  join('.agents', 'AGENTS.md'),
+  join('.github', 'copilot-instructions.md'),
+  join('.cursor', 'rules', 'AGENTS.md'),
+];
 const missingDirectives = agentDirectives.filter((f) => !existsSync(join(APP_ROOT, f)));
 if (missingDirectives.length > 0) {
   failGate('10', 'Multi-Agent Directives Sync', `Missing agent files: ${missingDirectives.join(', ')}`);
 } else {
-  passGate('10', 'Multi-Agent Directives Sync', 'Agent directives synchronized across AGENTS.md, GEMINI.md, and CLAUDE.md.');
+  passGate('10', 'Multi-Agent Directives Sync', 'Agent directives synchronized across AGENTS.md, Copilot, Gemini, Claude, and Cursor.');
 }
 
 // --------------------------------------------------------------------------
@@ -210,7 +217,13 @@ if (!existsSync(logsDir) || !existsSync(join(logsDir, 'README.md')) || !existsSy
 // --------------------------------------------------------------------------
 // Check 12: 5-Tier Microservice Test Governance
 // --------------------------------------------------------------------------
-const testProc = spawnSync('bun', ['test'], { cwd: APP_ROOT, encoding: 'utf8' });
+let bunExec = 'bun';
+if (existsSync(join(APP_ROOT, 'portables', 'bun', 'bin', 'bun'))) {
+  bunExec = join(APP_ROOT, 'portables', 'bun', 'bin', 'bun');
+} else if (existsSync(join(APP_ROOT, '..', '..', 'portables', 'bun', 'bin', 'bun'))) {
+  bunExec = join(APP_ROOT, '..', '..', 'portables', 'bun', 'bin', 'bun');
+}
+const testProc = spawnSync(bunExec, ['test'], { cwd: APP_ROOT, encoding: 'utf8' });
 if (testProc.status !== 0) {
   failGate('12', '5-Tier Microservice Tests', `bun test failed:\n${testProc.stdout || testProc.stderr}`);
 } else {

@@ -9,7 +9,7 @@
  *   rtk bun scripts/create-app.ts inventory "Inventory & Asset Tracker" "Operations" "Employee / Admin"
  */
 
-import { chmodSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { Database } from 'bun:sqlite';
 import { join, relative } from 'node:path';
@@ -156,6 +156,7 @@ export function createApp(options: CreateAppOptions): {
     'template-db': `${appName}-db`,
     'template.db': `${appName}.db`,
     'template_items': `${appName.replace(/-/g, '_')}_items`,
+    'templateDb': `${appName.replace(/-/g, '')}Db`,
     'template microservice': `${appName} microservice`,
   });
 
@@ -180,13 +181,27 @@ export function createApp(options: CreateAppOptions): {
     });
   }
 
-  // Multi-Agent Directives Parity
-  for (const docFile of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md', join('.agents', 'AGENTS.md')]) {
+  // Multi-Agent Directives & Toolchain Parity
+  for (const docFile of [
+    'AGENTS.md',
+    'CLAUDE.md',
+    'GEMINI.md',
+    '.cursorrules',
+    join('.agents', 'AGENTS.md'),
+    join('.github', 'copilot-instructions.md'),
+    join('.cursor', 'rules', 'AGENTS.md'),
+  ]) {
     replaceInFile(docFile, {
       'FORGE MICRO-APP SUBMODULE': `${displayName.toUpperCase()} SUBMODULE`,
       'MICRO-APP SUBMODULE': `${displayName.toUpperCase()} SUBMODULE`,
     });
   }
+
+  // docs/api/openapi.yaml
+  replaceInFile(join('docs', 'api', 'openapi.yaml'), {
+    'Forge Micro-App API': `${displayName} API`,
+    'app-template': `app-${appName}`,
+  });
 
   // README.md
   writeFileSync(
@@ -217,7 +232,11 @@ export function createApp(options: CreateAppOptions): {
       } else if (/\.test\.ts$/.test(entry.name)) {
         let content = readFileSync(full, 'utf8');
         content = content.replaceAll('@forge/app-template', `@forge-apps/${appName}`);
+        content = content.replaceAll('Forge App Template', displayName);
         content = content.replaceAll('App Template', displayName);
+        content = content.replaceAll('app-template', `app-${appName}`);
+        content = content.replaceAll('template_items', `${appName.replace(/-/g, '_')}_items`);
+        content = content.replaceAll('templateDb', `${appName.replace(/-/g, '')}Db`);
         content = content.replaceAll('startTemplateServer', `start${appName.replace(/-/g, '')}Server`);
         writeFileSync(full, content, 'utf8');
       }
@@ -229,6 +248,10 @@ export function createApp(options: CreateAppOptions): {
   const appDataDir = join(targetDir, 'data');
   if (!existsSync(appDataDir)) {
     mkdirSync(appDataDir, { recursive: true });
+  }
+  const dataReadme = join(templateDir, 'data', 'README.md');
+  if (existsSync(dataReadme)) {
+    copyFileSync(dataReadme, join(appDataDir, 'README.md'));
   }
   const dbPath = join(appDataDir, `${appName}.db`);
   const db = new Database(dbPath);
@@ -252,14 +275,35 @@ export function createApp(options: CreateAppOptions): {
   }
   try {
     execSync('git config core.hooksPath .githooks', { cwd: targetDir, stdio: 'ignore' });
+    execSync('git config core.filemode false', { cwd: targetDir, stdio: 'ignore' });
+    execSync('git config core.autocrlf false', { cwd: targetDir, stdio: 'ignore' });
   } catch {}
 
-  // Set executable permissions on CLI runner and githooks
+  // Set executable permissions on CLI runner, env.sh, portables/bin, and githooks
   try {
     chmodSync(join(targetDir, 'run.sh'), 0o755);
-    chmodSync(join(targetDir, '.githooks', 'pre-commit'), 0o755);
-    chmodSync(join(targetDir, '.githooks', 'post-commit'), 0o755);
-    chmodSync(join(targetDir, 'portables', 'bin', 'rtk'), 0o755);
+    chmodSync(join(targetDir, 'env.sh'), 0o755);
+    const binDir = join(targetDir, 'portables', 'bin');
+    if (existsSync(binDir)) {
+      for (const b of readdirSync(binDir)) {
+        if (!b.endsWith('.md')) {
+          try { chmodSync(join(binDir, b), 0o755); } catch {}
+        }
+      }
+    }
+    const hooksDir = join(targetDir, '.githooks');
+    if (existsSync(hooksDir)) {
+      for (const h of readdirSync(hooksDir)) {
+        if (!h.endsWith('.md')) {
+          try { chmodSync(join(hooksDir, h), 0o755); } catch {}
+        }
+      }
+    }
+  } catch {}
+
+  // Auto-run initial setup inside new micro-app
+  try {
+    execSync('./run.sh setup', { cwd: targetDir, stdio: 'ignore' });
   } catch {}
 
   // 6. Register Submodule in Root .gitmodules

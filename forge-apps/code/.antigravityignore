@@ -4,6 +4,7 @@ dist/
 build/
 out/
 .cache/
+portables/**/cache/
 *.tsbuildinfo
 
 # Submodule Environment & Secrets
@@ -33,10 +34,12 @@ logs/token-ledger-backup.jsonl
 codeburn-*.json
 .headroom/
 headroom-*.json
+graphify-out/cache/
+graphify-out/.graphify_*
+repomix-output.xml
 
 # Operating System & IDE Transients
 .DS_Store
 Thumbs.db
 .idea/
-.vscode/
 *.swp

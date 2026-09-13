@@ -26,3 +26,8 @@
 2026-09-12 11:16 | Audit and synchronize forge-apps template, micro-apps, env files, multi-agent rules, and toolchain syncing
 2026-09-12 11:33 | Audit and align Forge micro-app environment specifications, remove dead JWT secrets, enforce Invariant #8 folder docs, synchronize toolchain rules, and document auth boundaries
 2026-09-12 12:33 | Fix docker dev/prod endpoint reporting and enforce dynamic container lifecycle based on .env
+2026-09-13 18:55 | audit .github copilot instructions, portable toolchain, and auto-setup parity for forge-apps
+2026-09-13 18:59 | review full folder structure, toolchain, and repo-level parity between main repo and forge-apps
+2026-09-13 19:11 | implement full toolchain, folder structure, and auto-setup parity for forge-apps and create-app.ts
+2026-09-13 19:18 | Comprehensive deployment audit & guide for remote machines, network topology, and reverse proxy asset routing
+2026-09-13 19:20 | complete round 2 audit, OpenAPI 3.1 Spectral tags, Invariant #8 READMEs, and create-app parity across all forge apps

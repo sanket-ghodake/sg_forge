@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 /**
  * Standalone Forge Micro-App - Ignore & Git Attributes Synchronization Script (2026 LTS)
- * Ensures consistency across .gitignore, .dockerignore, .antigravityignore, .cursorignore, .copilotignore, and .gitattributes.
+ * Ensures consistency across .gitignore, .dockerignore, .antigravityignore, .cursorignore,
+ * .copilotignore, .graftignore, .graphifyignore, .repomixignore, and .gitattributes.
  */
 
 import { existsSync, writeFileSync } from 'node:fs';
@@ -15,6 +16,7 @@ dist/
 build/
 out/
 .cache/
+portables/**/cache/
 *.tsbuildinfo
 
 # Submodule Environment & Secrets
@@ -44,18 +46,21 @@ logs/token-ledger-backup.jsonl
 codeburn-*.json
 .headroom/
 headroom-*.json
+graphify-out/cache/
+graphify-out/.graphify_*
+repomix-output.xml
 
 # Operating System & IDE Transients
 .DS_Store
 Thumbs.db
 .idea/
-.vscode/
 *.swp
 `;
 
 const DOCKER_IGNORE_PATTERNS = `.git
 .agents
 .githooks
+.github
 node_modules
 test
 logs
@@ -76,6 +81,7 @@ const GIT_ATTRIBUTES_CONTENT = `* text=auto eol=lf
 *.md text eol=lf
 *.sh text eol=lf
 *.bat text eol=crlf
+*.cmd text eol=crlf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.png binary
@@ -93,6 +99,9 @@ const IGNORE_TARGETS = [
   '.antigravityignore',
   '.cursorignore',
   '.copilotignore',
+  '.graftignore',
+  '.graphifyignore',
+  '.repomixignore',
 ];
 
 for (const target of IGNORE_TARGETS) {
