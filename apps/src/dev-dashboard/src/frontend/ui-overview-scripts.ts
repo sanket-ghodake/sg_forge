@@ -40,7 +40,9 @@ export function getOverviewDashboardScripts(): string {
         updateOverviewTopologyNodes(services);
         updateOverviewRadar(databases, vitals);
       } catch (err) {
-        console.error('Failed to load overview data', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load overview data', err);
       }
     }
 

@@ -237,9 +237,13 @@ describe('Forge Client State Engine [LLR-UI-006] [HLR-UI-403]', () => {
       expect(script).toContain("document.documentElement.setAttribute('data-theme'");
       expect(script).toContain('data-sidebar-collapsed');
       expect(script).toContain('forge:v1:platform:theme');
-      expect(script).toContain("reading 'starttime'");
+      expect(script).toContain('starttime');
       expect(script).toContain('reportallchanges');
       expect(script).toContain('PerformanceObserver');
+      expect(script).toContain('requestIdleCallback');
+      expect(script).toContain('origSetTimeout');
+      expect(script).toContain('wrapTargetListeners');
+      expect(script).toContain('origConsoleError');
     });
   });
 });

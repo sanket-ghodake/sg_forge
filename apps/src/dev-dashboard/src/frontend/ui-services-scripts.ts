@@ -156,7 +156,11 @@ export function getServicesDashboardScripts(): string {
         }
 
         renderFilteredServicesTable();
-      } catch (err) { console.error('Services load failed', err); }
+      } catch (err) {
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Services load warning:', err);
+      }
     }
 
     function updateActiveDrawerVitals(serviceId) {

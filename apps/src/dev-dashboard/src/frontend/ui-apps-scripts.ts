@@ -101,7 +101,9 @@ export function getAppsDashboardScripts(): string {
 
         renderAppsView();
       } catch (err) {
-        console.error('Apps fetch error:', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Apps fetch warning:', err);
       }
     }
 

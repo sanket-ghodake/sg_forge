@@ -18,7 +18,9 @@ export function getHostDashboardScripts(): string {
         }
         loadReliabilityDiagnostics();
       } catch (err) {
-        console.error('Failed to load host vitals', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load host vitals', err);
       }
     }
 
@@ -241,7 +243,9 @@ export function getHostDashboardScripts(): string {
           }
         }
       } catch (err) {
-        console.error('Failed to load reliability diagnostics', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load reliability diagnostics', err);
       }
     }
 

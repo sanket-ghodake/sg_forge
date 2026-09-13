@@ -68,4 +68,15 @@ describe('Tier 1 Unit: Frontend Script Syntax & Astryx HTML Integrity', () => {
     const duplicates = Object.entries(funcCounts).filter(([, count]) => count > 1);
     expect(duplicates).toEqual([]);
   });
+
+  it('Arrange, Act, Assert: Client scripts define isTransientNetworkError and resilient fetch retry', () => {
+    // Arrange
+    const html = renderDashboardHtml();
+
+    // Assert
+    expect(html).toContain('isTransientNetworkError');
+    expect(html).toContain('network_changed');
+    expect(html).toContain('_isRetry');
+    expect(html).toContain('navigator.connection');
+  });
 });

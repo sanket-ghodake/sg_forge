@@ -45,14 +45,14 @@ export function getHeadStateScript(
       var isNoise = function(m, s, stk) {
         var str = ((m || '') + ' ' + (s || '') + ' ' + (stk || '')).toLowerCase();
         return (
-          str.indexOf("reading 'starttime'") !== -1 ||
-          str.indexOf("reportallchanges") !== -1 ||
-          str.indexOf("chrome-extension:") !== -1 ||
-          str.indexOf("moz-extension:") !== -1 ||
-          str.indexOf("safari-extension:") !== -1 ||
-          str.indexOf("edge-extension:") !== -1 ||
-          str.indexOf("extensions::") !== -1 ||
-          (str.indexOf("starttime") !== -1 && (str.indexOf("vm") !== -1 || str.indexOf("<anonymous>") !== -1))
+          str.indexOf('starttime') !== -1 ||
+          str.indexOf('reportallchanges') !== -1 ||
+          str.indexOf('chrome-extension:') !== -1 ||
+          str.indexOf('moz-extension:') !== -1 ||
+          str.indexOf('safari-extension:') !== -1 ||
+          str.indexOf('edge-extension:') !== -1 ||
+          str.indexOf('extensions::') !== -1 ||
+          str.indexOf('web-vitals') !== -1
         );
       };
 
@@ -86,15 +86,108 @@ export function getHeadStateScript(
         }
       }, true);
 
-      /* 2. Defensive PerformanceObserver Safe-Guard */
-      if (typeof PerformanceObserver !== 'undefined' && PerformanceObserver.prototype && PerformanceObserver.prototype.observe) {
-        var origObserve = PerformanceObserver.prototype.observe;
-        PerformanceObserver.prototype.observe = function(opts) {
-          try {
-            return origObserve.call(this, opts);
-          } catch(err) {
-            /* Ignore unsupported metrics or observe collisions from injected scripts */
+      /* 2. Defensive Async Scheduling & Observer Safe-Guards */
+      if (typeof window.requestIdleCallback === 'function') {
+        var origRequestIdleCallback = window.requestIdleCallback;
+        window.requestIdleCallback = function(cb, opts) {
+          if (typeof cb !== 'function') return origRequestIdleCallback.apply(this, arguments);
+          return origRequestIdleCallback.call(this, function(deadline) {
+            try {
+              return cb(deadline);
+            } catch (err) {
+              var m = err ? (err.message || String(err)) : '';
+              var s = err ? (err.stack || '') : '';
+              if (isNoise(m, '', s)) return;
+              throw err;
+            }
+          }, opts);
+        };
+      }
+
+      var origSetTimeout = window.setTimeout;
+      window.setTimeout = function(cb, delay) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        if (typeof cb === 'function') {
+          var safeCb = function() {
+            try {
+              return cb.apply(this, arguments);
+            } catch (err) {
+              var m = err ? (err.message || String(err)) : '';
+              var s = err ? (err.stack || '') : '';
+              if (isNoise(m, '', s)) return;
+              throw err;
+            }
+          };
+          return origSetTimeout.apply(this, [safeCb, delay].concat(args));
+        }
+        return origSetTimeout.apply(this, arguments);
+      };
+
+      if (typeof PerformanceObserver !== 'undefined') {
+        var OrigObserver = PerformanceObserver;
+        var WrappedObserver = function(cb) {
+          if (typeof cb === 'function') {
+            var safeCb = function(list, obs) {
+              try {
+                return cb.call(this, list, obs);
+              } catch (err) {
+                var m = err ? (err.message || String(err)) : '';
+                var s = err ? (err.stack || '') : '';
+                if (isNoise(m, '', s)) return;
+                throw err;
+              }
+            };
+            return new OrigObserver(safeCb);
           }
+          return new OrigObserver(cb);
+        };
+        WrappedObserver.prototype = OrigObserver.prototype;
+        if (OrigObserver.supportedEntryTypes) {
+          WrappedObserver.supportedEntryTypes = OrigObserver.supportedEntryTypes;
+        }
+        window.PerformanceObserver = WrappedObserver;
+      }
+
+      var wrapTargetListeners = function(target) {
+        if (!target || !target.addEventListener) return;
+        var origAdd = target.addEventListener;
+        var origRemove = target.removeEventListener;
+        target.addEventListener = function(type, listener, options) {
+          if (typeof listener === 'function') {
+            var safeListener = function(event) {
+              try {
+                return listener.call(this, event);
+              } catch (err) {
+                var m = err ? (err.message || String(err)) : '';
+                var s = err ? (err.stack || '') : '';
+                if (isNoise(m, '', s)) return;
+                throw err;
+              }
+            };
+            listener._astryxSafe = safeListener;
+            return origAdd.call(this, type, safeListener, options);
+          }
+          return origAdd.call(this, type, listener, options);
+        };
+        if (origRemove) {
+          target.removeEventListener = function(type, listener, options) {
+            var actual = (listener && listener._astryxSafe) || listener;
+            return origRemove.call(this, type, actual, options);
+          };
+        }
+      };
+      wrapTargetListeners(window);
+      wrapTargetListeners(document);
+
+      if (typeof window.console !== 'undefined' && window.console.error) {
+        var origConsoleError = window.console.error;
+        window.console.error = function() {
+          var args = Array.prototype.slice.call(arguments);
+          var joined = args.map(function(a) {
+            return typeof a === 'object' ? (a && a.message ? a.message : (a && a.stack ? a.stack : '')) : String(a);
+          }).join(' ');
+          if (isNoise(joined, '', '')) return;
+          return origConsoleError.apply(this, arguments);
         };
       }
 

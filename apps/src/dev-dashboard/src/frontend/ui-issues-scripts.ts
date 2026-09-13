@@ -31,7 +31,9 @@ export function getIssuesDashboardScripts(): string {
           renderIssuesList(cachedIssuesList);
         }
       } catch (err) {
-        console.error('Failed to load issues', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load issues', err);
       }
     }
 

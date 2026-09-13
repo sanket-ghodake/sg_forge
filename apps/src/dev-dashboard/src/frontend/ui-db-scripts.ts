@@ -152,7 +152,11 @@ export function getDbDashboardScripts(): string {
 
         s1.value = targetDb;
         inspectDatabase(targetDb);
-      } catch (err) { console.error('Databases load failed', err); }
+      } catch (err) {
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Databases load warning:', err);
+      }
     }
 
     function switchDbSubTab(tab) {
@@ -201,7 +205,11 @@ export function getDbDashboardScripts(): string {
           renderQuickQueries(dbName, []);
         }
         if (currentDbSubTab === 'graph') loadDbSchemaGraph(dbName);
-      } catch (err) { console.error('Inspect DB failed', err); }
+      } catch (err) {
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Inspect DB warning:', err);
+      }
     }
 
     async function loadDbTelemetry(dbName) {
@@ -219,7 +227,11 @@ export function getDbDashboardScripts(): string {
           if (recCountEl) recCountEl.textContent = res.totalRecordsEstimated.toLocaleString();
           if (cacheEl) cacheEl.textContent = (res.journalMode || 'WAL').toUpperCase() + ' (' + res.integrityStatus + ')';
         }
-      } catch (err) { console.error('Telemetry fetch failed', err); }
+      } catch (err) {
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Telemetry fetch warning:', err);
+      }
     }
 
     async function loadDbSchemaGraph(dbName) {

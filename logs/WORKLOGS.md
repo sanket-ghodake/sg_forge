@@ -39,3 +39,5 @@
 2026-09-13 20:39 | Implemented Vercel-style True Telemetry in Dev Dashboard with 1-year rollup engine, IP/machine inspection, and 5-tier test coverage
 2026-09-13 21:00 | Implemented Vercel-style true telemetry with 3-tier traffic filtering and probe exclusion in Dev Dashboard
 2026-09-13 21:14 | Refactor Services & Processes Command Center to zero-emoji Astryx SVG icons and enhanced column treatments
+2026-09-13 21:52 | Fixed dev dashboard network change fetch errors and extension/DevTools startTime reportAllChanges noise suppression
+2026-09-13 22:07 | resolve Web Vitals attribution startTime error via comprehensive async scheduling shields and Playwright Chrome test suite

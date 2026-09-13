@@ -31,25 +31,50 @@ export function getDashboardScripts(): string {
     let currentAppLogService = null;
     let appLogBuffer = [];
 
-    // 🛡️ Resilient Operator Bearer Interceptor
+    window.isTransientNetworkError = function(err) {
+      if (!err) return false;
+      const msg = (err.message || String(err)).toLowerCase();
+      return (
+        err.name === 'TypeError' && (msg.includes('failed to fetch') || msg.includes('network') || msg.includes('aborted') || msg.includes('load failed'))
+      ) || msg.includes('network_changed') || msg.includes('networkerror');
+    };
+
+    // 🛡️ Resilient Operator Bearer & Network Transition Interceptor
     const _origFetch = window.fetch;
-    window.fetch = function(input, init) {
+    window.fetch = async function(input, init) {
+      let reqInit = init;
       try {
         const urlStr = typeof input === 'string' ? input : (input && input.url) ? input.url : '';
         if (urlStr.includes('/api/')) {
           let token = null;
           try { token = sessionStorage.getItem('forge:devcenter:token'); } catch(e) {}
           if (token) {
-            init = Object.assign({}, init);
-            const headers = new Headers(init.headers || {});
+            reqInit = Object.assign({}, reqInit);
+            const headers = new Headers(reqInit.headers || {});
             if (!headers.has('Authorization')) {
               headers.set('Authorization', 'Bearer ' + token);
             }
-            init.headers = headers;
+            reqInit.headers = headers;
           }
         }
       } catch (e) {}
-      return _origFetch.call(this, input, init);
+
+      const method = (reqInit && reqInit.method ? reqInit.method : 'GET').toUpperCase();
+      try {
+        return await _origFetch.call(this, input, reqInit);
+      } catch (fetchErr) {
+        // Auto-heal transient network switch / ERR_NETWORK_CHANGED for idempotent GET requests
+        if (method === 'GET' && (!reqInit || !reqInit._isRetry)) {
+          try {
+            await new Promise(r => setTimeout(r, 250));
+            const retryInit = Object.assign({}, reqInit, { _isRetry: true });
+            return await _origFetch.call(this, input, retryInit);
+          } catch (retryErr) {
+            throw retryErr;
+          }
+        }
+        throw fetchErr;
+      }
     };
 
     window.handleDevLogout = async function() {
@@ -342,7 +367,10 @@ export function getDashboardScripts(): string {
         if (!cont || !res.logs) return;
         cont.innerHTML = res.logs.length ? '<table class="data-table"><thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Target</th><th>Status</th></tr></thead><tbody>' +
           res.logs.map(l => '<tr><td>' + new Date(l.timestamp*1000).toLocaleTimeString() + '</td><td>' + l.actor_id + '</td><td><code>' + l.action_type + '</code></td><td>' + l.target_service + '</td><td><span class="astryx-badge badge-running">' + l.result_status + '</span></td></tr>').join('') + '</tbody></table>' : '<p style="color:var(--forge-text-muted);">Zero audit logs recorded.</p>';
-      } catch (err) { console.error('Audit load failed', err); }
+      } catch (err) {
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        console.warn('Audit load warning', err);
+      }
     }
 
     // 🚀 Refresh Active Tab Data Helper
@@ -373,6 +401,15 @@ export function getDashboardScripts(): string {
       reconnectSSE();
       refreshActiveTab();
     });
+
+    if (typeof navigator !== 'undefined' && navigator.connection) {
+      try {
+        navigator.connection.addEventListener('change', () => {
+          reconnectSSE();
+          refreshActiveTab();
+        });
+      } catch(e) {}
+    }
 
     window.addEventListener('focus', () => {
       refreshActiveTab();
@@ -453,5 +490,3 @@ export function getDashboardScripts(): string {
     setTimeout(sanitizeSearchInputs, 1000);
   `;
 }
-
-

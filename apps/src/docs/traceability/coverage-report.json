@@ -8415,6 +8415,7 @@
         "apps/src/docs/test/unit/astryx-theme.test.ts",
         "apps/src/docs/test/unit/landing-page.test.ts",
         "apps/src/docs/test/security/astryx-compliance.test.ts",
+        "apps/src/dev-dashboard/test/e2e/devcenter-browser-resilience.pw.test.ts",
         "apps/src/ui/test/e2e/ui-bundle-integrity.test.ts"
       ]
     },
@@ -8519,6 +8520,7 @@
       ],
       "verifiedIn": [
         "apps/src/docs/test/unit/astryx-theme.test.ts",
+        "apps/src/dev-dashboard/test/e2e/devcenter-browser-resilience.pw.test.ts",
         "apps/src/ui/test/contracts/theme-tokens-schema.test.ts"
       ]
     },

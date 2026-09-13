@@ -133,7 +133,9 @@ export function getTrafficDashboardScripts(): string {
           }
         }
       } catch (err) {
-        console.error('Failed to load telemetry overview', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load telemetry overview', err);
       }
     }
 
@@ -144,7 +146,9 @@ export function getTrafficDashboardScripts(): string {
         cachedTimeSeriesBuckets = res.buckets || [];
         renderTelemetryTimelineChart(cachedTimeSeriesBuckets, currentChartMetric);
       } catch (err) {
-        console.error('Failed to load telemetry time series', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load telemetry time series', err);
       }
     }
 
@@ -227,7 +231,9 @@ export function getTrafficDashboardScripts(): string {
           renderInsightCard('insight-referrers', b.referrers || [], null);
         }
       } catch (err) {
-        console.error('Failed to load telemetry breakdowns', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load telemetry breakdowns', err);
       }
     }
 
@@ -271,7 +277,9 @@ export function getTrafficDashboardScripts(): string {
         cachedInspectorEvents = res.events || [];
         renderInspectorTable(cachedInspectorEvents);
       } catch (err) {
-        console.error('Failed to load telemetry inspector', err);
+        if (typeof isTransientNetworkError === 'function' && isTransientNetworkError(err)) return;
+        if (err && (err.name === 'TypeError' || String(err).includes('Failed to fetch'))) return;
+        console.warn('Failed to load telemetry inspector', err);
       }
     }
 
