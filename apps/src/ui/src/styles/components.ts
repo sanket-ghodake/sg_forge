@@ -250,6 +250,36 @@ export function getComponentStyles(): string {
       border: 1px solid var(--forge-border-medium);
     }
 
+    .badge-warning {
+      background: var(--forge-warning-bg);
+      color: var(--forge-warning);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .badge-danger {
+      background: var(--forge-error-bg);
+      color: var(--forge-error);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    [data-theme="light"] .badge-warning {
+      background: var(--forge-warning-bg);
+      color: var(--forge-warning);
+      border: 1px solid rgba(217, 119, 6, 0.28);
+    }
+
+    [data-theme="light"] .badge-danger {
+      background: var(--forge-error-bg);
+      color: var(--forge-error);
+      border: 1px solid rgba(220, 38, 38, 0.28);
+    }
+
+    [data-theme="light"] .badge-online {
+      background: var(--forge-success-bg);
+      color: var(--forge-success);
+      border: 1px solid rgba(36, 180, 126, 0.28);
+    }
+
     .badge-pill {
       background: var(--forge-bg-elevated);
       color: var(--forge-text-muted);
@@ -342,23 +372,60 @@ export function getComponentStyles(): string {
       transform: translateY(-1px);
     }
 
-    .astryx-input, .astryx-select {
-      height: 32px;
+    .btn-ghost,
+    .btn-ghost:link,
+    .btn-ghost:visited {
+      background: var(--forge-bg-card);
+      border: 1px solid var(--forge-border);
+      color: var(--forge-text-muted) !important;
+      font-weight: 500;
+      text-decoration: none !important;
+    }
+
+    .btn-ghost:hover,
+    .btn-ghost:active {
+      border-color: var(--forge-border-medium);
+      background: var(--forge-bg-card-hover);
+      color: var(--forge-text-main) !important;
+      transform: translateY(-1px);
+    }
+
+    .form-input, .astryx-input, .astryx-select {
       background: var(--forge-bg-card);
       border: 1px solid var(--forge-border);
       border-radius: var(--forge-radius-sm);
       color: var(--forge-text-main);
-      padding: 0 0.75rem;
-      font-size: 0.82rem;
-      font-family: inherit;
+      padding: 0.48rem 0.75rem;
+      font-size: 0.84rem;
+      font-family: var(--forge-font-sans, inherit);
       outline: none;
       transition: var(--forge-transition);
       box-sizing: border-box;
     }
 
-    .astryx-input:focus, .astryx-select:focus {
+    .form-input:hover, .astryx-input:hover {
+      border-color: var(--forge-border-medium);
+      background: var(--forge-bg-card-hover);
+    }
+
+    .form-input:focus, .form-input:focus-visible, .astryx-input:focus, .astryx-select:focus {
       border-color: var(--forge-primary);
-      box-shadow: 0 0 0 1px var(--forge-primary);
+      box-shadow: 0 0 0 2px var(--forge-primary-bg, rgba(62, 207, 142, 0.2));
+      background: var(--forge-bg-card);
+    }
+
+    .form-input::placeholder, .astryx-input::placeholder {
+      color: var(--forge-text-subtle);
+      opacity: 0.85;
+    }
+
+    textarea.form-input, textarea.astryx-textarea {
+      font-family: var(--forge-font-sans, inherit);
+      line-height: 1.55;
+      resize: vertical;
+      min-height: 84px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--forge-border-medium) transparent;
     }
 
     .astryx-grid {

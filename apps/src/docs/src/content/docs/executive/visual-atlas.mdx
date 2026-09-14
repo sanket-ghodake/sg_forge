@@ -114,7 +114,23 @@ How quickly can a new software engineer become productive on SG Forge?
 
 ---
 
-## 7. Plain-English Architecture Glossary
+## 7. App Access Governance & Delegated Control
+
+How do employees request access to tools without burdening central IT?
+
+<DiagramEmbed 
+  diagram="23-app-access-request-lifecycle" 
+  title="App Access Request Lifecycle & Security Invariants" 
+  caption="Deduplicated self-service requests, real-time manager alerts, 1-click dock activation, and automated offboarding transitions."
+/>
+
+* **Self-Service Marketplace**: Employees browse internal tools and request access with business justification. Duplicate requests are blocked automatically.
+* **Delegated Authority**: Application owners review and approve requests for their specific tools with strict cross-app privacy boundaries.
+* **Instant Offboarding**: When an employee leaves the company, all access requests and approvals automatically transition to inactive states with zero audit data loss.
+
+---
+
+## 8. Plain-English Architecture Glossary
 
 | Technical Term | What It Means in Plain English | Business Impact |
 | :--- | :--- | :--- |
@@ -124,3 +140,5 @@ How quickly can a new software engineer become productive on SG Forge?
 | **Single Page Application (SPA)** | A website that updates its screens instantly without reloading or showing white screens between clicks. | Provides a smooth, desktop-quality user experience on both computers and phones. |
 | **Bidirectional Traceability** | A digital ledger ensuring that every single button and feature traces back to a written business requirement and a test. | Guarantees 100% test verification and eliminates dead, untested code. |
 | **RFC 7807 Problem Details** | A standardized incident report format used whenever something goes wrong. | Reduces support ticket resolution time from hours to minutes. |
+| **Delegated App RBAC** | Giving specific tool leads approval power over who enters their application without granting them full IT master keys. | Eliminates IT approval bottlenecks while preserving strict security boundaries. |
+

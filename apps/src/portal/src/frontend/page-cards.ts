@@ -187,11 +187,13 @@ export function renderPageCards(user?: HeaderUserContext): string {
     displayName: user?.displayName || 'Authorized Member',
     roles: user?.roles || ['roles/employee'],
     isAdmin: user !== undefined ? (user.isAdmin ?? Boolean(user.roles?.some(r => r.includes('admin') || r.includes('manager')))) : true,
+    department: user?.department,
+    approvedApps: user?.approvedApps,
   };
 
   return `
     ${renderCanvasView()}
-    ${renderAppsView(userContext.roles)}
+    ${renderAppsView(userContext)}
     ${renderProfileView(userContext)}
     ${renderInboxView(userContext)}
     ${userContext.isAdmin ? `

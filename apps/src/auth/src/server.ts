@@ -28,6 +28,7 @@ import {
   handleCreateEmployee,
   handleUpdateEmployee,
   handleRevokeEmployee,
+  handleResetEmployeePassword,
   handleBatchImport,
   handleBulkAction,
   handleExportEmployees,
@@ -162,6 +163,12 @@ export function startAuthServer(port: number = PORT) {
       return applySecurityHeaders(response);
     }
 
+    if (path === '/api/v1/auth/org/employees/reset-password' || path === '/auth/api/v1/auth/org/employees/reset-password') {
+      if (method === 'POST') response = await handleResetEmployeePassword(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
     if (path === '/api/v1/auth/org/employees/import' || path === '/auth/api/v1/auth/org/employees/import') {
       if (method === 'POST') response = await handleBatchImport(req);
       else response = new Response('Method Not Allowed', { status: 405 });
@@ -265,7 +272,9 @@ export function startAuthServer(port: number = PORT) {
       const parts = subPath.split('/');
       const empId = parts[0];
 
-      if (parts[1] === 'revoke' && method === 'POST') {
+      if (parts[1] === 'reset-password' && method === 'POST') {
+        response = await handleResetEmployeePassword(req, empId);
+      } else if (parts[1] === 'revoke' && method === 'POST') {
         response = await handleRevokeEmployee(req, empId);
       } else if (method === 'PATCH' || method === 'POST') {
         response = await handleUpdateEmployee(req, empId);

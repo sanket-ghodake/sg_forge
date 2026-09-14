@@ -175,6 +175,22 @@ export function generateCaddyfile(): string {
     }
 `;
     } else {
+      if (s.id === 'portal') {
+        caddyContent += `
+    # Direct Portal API Ingress (without /portal prefix)
+    handle /api/v1/portal/* {
+        reverse_proxy ${upstream} {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-Host {host}
+            header_up X-Forwarded-Proto {scheme}
+            header_up Sec-CH-UA {>Sec-CH-UA}
+            header_up Sec-CH-UA-Platform {>Sec-CH-UA-Platform}
+            header_up Sec-CH-UA-Mobile {>Sec-CH-UA-Mobile}
+        }
+    }
+`;
+      }
       caddyContent += `
     # ${s.name} (${s.id}) [Role: ${s.role}]
     @noSlash_${safeId} path ${s.path}

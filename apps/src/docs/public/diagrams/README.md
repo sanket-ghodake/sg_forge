@@ -28,3 +28,6 @@ This directory houses the authoritative, self-contained, accessible Astryx vecto
 | **20** | [`20-disaster-recovery-backup.html`](./20-disaster-recovery-backup.html) | Disaster Recovery | AES-256-GCM Backup, Rolling Retention & Restore |
 | **21** | [`21-security-strix-audit.html`](./21-security-strix-audit.html) | Security Audit | In-Chat AI Code Review & Live Endpoint Pentest |
 | **22** | [`22-docker-orchestration-dev-prod.html`](./22-docker-orchestration-dev-prod.html) | Docker Lifecycle | Dev Bind-Mount Hot Reload vs Multi-Stage Prod AOT Compilation & Obfuscation |
+| **23** | [`23-app-access-request-lifecycle.html`](./23-app-access-request-lifecycle.html) | Sequence Timed | Enterprise app access request lifecycle, deduplication, dynamic catalog hydration & offboarding |
+| **24** | [`24-app-governance-rbac-architecture.html`](./24-app-governance-rbac-architecture.html) | System Architecture | App access governance, 3-tab portal navigation, cross-app isolation, entitled users roster & real-time SLA engine |
+

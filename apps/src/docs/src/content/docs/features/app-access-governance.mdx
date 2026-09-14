@@ -1,0 +1,286 @@
+---
+title: Enterprise App Access Governance & Lifecycle
+description: Comprehensive operational guide for self-service app discovery, deduplicated access requests, scoped delegated admin governance, entitled users rosters, and offboarding lifecycle states.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Zero-Trust App Governance Without Administrative Bottlenecks"
+  analogy="In traditional enterprises, employees submit tickets to a central IT queue that sits stalled for weeks, or apps are left wide open, leaking sensitive internal records. SG Forge establishes self-service marketplace discovery with delegated app administrators, strict cross-app boundaries, instant active dock hydration, and zero data loss offboarding."
+  impact="Eliminates IT ticket sprawl, guarantees delegated admins only see their assigned applications, enforces mathematical SLA tracking, and instantly removes access upon employee offboarding while preserving full compliance audit trails."
+/>
+
+<TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+<TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-PORTAL-001" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-PORTAL-002" type="LLR" status="verified" />
+
+## 1. Architectural Overview & Invariants
+
+The SG Forge App Governance subsystem provides a sovereign, multi-tenant access control mesh built on top of dedicated Turso libSQL databases and the Astryx design engine. It governs how employees discover tools, request access, and receive approvals, while giving appointed application administrators full visibility into entitled users.
+
+<DiagramEmbed 
+  diagram="23-app-access-request-lifecycle" 
+  title="App Access Request Lifecycle & Security Invariants" 
+  caption="End-to-end request sequence: Client submission, deduplication guard, real-time admin alert routing, cross-app isolation, live catalog hydration, and offboarding state machine."
+/>
+
+### Non-Negotiable Security Invariants
+1. **Deduplication Defense**: An employee cannot submit duplicate access requests for an application if a request is already `PENDING` or previously `APPROVED`.
+2. **Anti-Self-Approval Enforcement**: App administrators and platform managers cannot approve or reject their own access requests. Decisions require dual authorization.
+3. **Strict Cross-App Isolation**: An administrator assigned to App A has strictly zero visibility into App B's requests, audit logs, or management dialogs.
+4. **Dynamic Admin Turnover Rerouting**: When an application's administrators change, all current and historic pending requests automatically route to the newly designated admins without data migrations.
+5. **Zero Data Loss Offboarding**: When an employee is offboarded, pending requests transition to `USER_INACTIVE`, approved grants transition to `REVOKED_INACTIVE`, and admin roles are purged—preserving complete compliance records for SOC 2 and ISO 27001.
+6. **100% Real-Time DB Telemetry**: All metrics, rosters, and SLA durations are calculated via live SQL queries. Static mocks and fallback dummy emails are strictly forbidden.
+
+---
+
+## 2. Portal 3-Tab Architecture & Dynamic Catalog Hydration
+
+The Portal workspace organizes applications into a responsive 3-tab layout:
+
+```
+┌───────────────────────────────┬───────────────────────────────┬───────────────────────────────┐
+│  1. My Active Apps (N)        │  2. Marketplace Apps          │  3. Access Requests           │
+│  Instant Launch Buttons       │  Discovery & Request Access   │  Personal Audit & History     │
+└───────────────────────────────┴───────────────────────────────┴───────────────────────────────┘
+```
+
+<DiagramEmbed 
+  diagram="24-app-governance-rbac-architecture" 
+  title="App Access Governance & Delegated RBAC Architecture" 
+  caption="Layered view: 3-tab presentation layer, scoped governance modal, cross-app isolation barrier, entitled users roster, and Turso libSQL storage engine."
+/>
+
+### Tab 1: My Active Apps
+- **Purpose**: High-productivity workspace showing only applications the user is authorized to run.
+- **Dynamic Hydration**:
+  - **SSR Hydration**: The server checks user identity and approved access grants via `getUserApprovedAppIds(userId, userEmail)` during initial page render.
+  - **CSR Live Reconciliation**: When an administrator approves a request while the user is active, `reconcileActiveAppsCatalog()` dynamically generates the application card, binds the 1-click **Launch** button, and increments the `#my-apps-tab-counter` badge without requiring a full page refresh.
+
+### Tab 2: Marketplace Apps
+- **Purpose**: Complete enterprise app catalog displaying public tools and restricted internal services.
+- **State Indicators**:
+  - **Active Tools**: Displays green `Access Active` badge with direct launch link.
+  - **Restricted Tools**: Displays `Request Access` button opening justification dialog.
+  - **Pending Decisions**: Displays amber `Pending Decision` pill. Clicking displays the `View Details` modal with the submission timestamp, requested justification, and current reviewer queue.
+
+### Tab 3: Access Requests
+- **Purpose**: Self-service transparency hub for employees to monitor the status of their historical and active requests.
+- **Filtering**: Instant client-side filters for `ALL`, `PENDING`, `APPROVED`, `REJECTED`, and `INACTIVE`.
+
+---
+
+## 3. Request Lifecycle & Deduplication Protocol
+
+### Submitting an Access Request
+
+An employee submits an access request with a business rationale. The system verifies that the user does not already have an active or pending request.
+
+#### Example: Client Request Submission (cURL)
+```bash
+curl -s -X POST http://portal.sgforge.local/api/v1/portal/apps/requests \
+  -H "Content-Type: application/json" \
+  -H "Cookie: forge_session=<VALID_SESSION_TOKEN>" \
+  -d '{
+    "appId": "code",
+    "notes": "Need access to SG Forge Code Studio for sprint 44 backend development."
+  }'
+```
+
+#### Success Response (201 Created)
+```json
+{
+  "success": true,
+  "requestId": "req_01j7b9k2x4m1",
+  "status": "PENDING",
+  "appId": "code",
+  "appName": "SG Forge Code Studio",
+  "createdAt": "2026-09-15T10:00:00.000Z",
+  "message": "Access request submitted successfully."
+}
+```
+
+#### Duplicate Rejection (400 Bad Request / RFC 7807)
+If the user attempts to raise a second request for the same application:
+```json
+{
+  "type": "https://sgforge.internal/errors/duplicate-request",
+  "title": "Duplicate Access Request",
+  "status": 400,
+  "detail": "An active or pending access request already exists for this application.",
+  "instance": "/api/v1/portal/apps/requests",
+  "traceId": "trace_99f1a2b3c4d5"
+}
+```
+
+---
+
+## 4. Delegated App Governance Modal Suite
+
+Each application provides a scoped administrative governance modal accessible exclusively to Organization Admins and App Admins assigned to that specific tool.
+
+### Modal Tabs Overview
+
+| Tab | Functionality | Key Endpoints |
+| :--- | :--- | :--- |
+| **Access Policies** | Toggle between Public and Restricted access; configure auto-approval department rules. | `GET/POST /api/v1/portal/apps/:appId/policies` |
+| **App Admins** | Assign or revoke delegated administrators for this application. | `GET/POST /api/v1/portal/apps/:appId/admins` |
+| **History & SLA** | Complete audit trail of past approvals/rejections with mathematical SLA response metrics. | `GET /api/v1/portal/apps/:appId/history` |
+| **Entitled Users** | Real-time roster of all employees holding active access with single-click revocation. | `GET /api/v1/portal/apps/:appId/users`<br/>`POST /api/v1/portal/apps/users/revoke` |
+
+### Entitled Users Roster & Revocation
+
+The **Entitled Users** tab queries active access records directly from `portal_app_requests` where `status = 'APPROVED'`.
+
+#### Inspecting Entitled Users (cURL)
+```bash
+curl -s -X GET http://portal.sgforge.local/api/v1/portal/apps/code/users \
+  -H "Cookie: forge_session=<ADMIN_SESSION_TOKEN>"
+```
+
+#### Response (200 OK)
+```json
+{
+  "appId": "code",
+  "totalUsers": 2,
+  "users": [
+    {
+      "userId": "usr_dev_elena",
+      "userEmail": "elena@forge.internal",
+      "userName": "Elena Rostova",
+      "grantedAt": "2026-09-14T08:30:00.000Z",
+      "grantedBy": "usr_admin_marcus",
+      "notes": "Lead backend developer access"
+    },
+    {
+      "userId": "usr_dev_sanket",
+      "userEmail": "sanket@forge.internal",
+      "userName": "Sanket Ghodake",
+      "grantedAt": "2026-09-15T09:15:00.000Z",
+      "grantedBy": "usr_admin_marcus",
+      "notes": "Approved for sprint 44 feature delivery"
+    }
+  ]
+}
+```
+
+#### Single-Click Access Revocation (cURL)
+```bash
+curl -s -X POST http://portal.sgforge.local/api/v1/portal/apps/users/revoke \
+  -H "Content-Type: application/json" \
+  -H "Cookie: forge_session=<ADMIN_SESSION_TOKEN>" \
+  -d '{
+    "appId": "code",
+    "userId": "usr_dev_elena",
+    "reason": "Project reassignment to Infrastructure team."
+  }'
+```
+
+#### Revocation Response (200 OK)
+```json
+{
+  "success": true,
+  "appId": "code",
+  "userId": "usr_dev_elena",
+  "status": "REVOKED",
+  "revokedAt": "2026-09-15T10:15:00.000Z",
+  "message": "User access successfully revoked."
+}
+```
+
+---
+
+## 5. Cross-App Admin Isolation & Turnover Rerouting
+
+### Isolation Enforcement
+Every administrative route verifies delegated authority via `isAuthorizedForApp(adminUserId, appId)`:
+
+```typescript
+// apps/src/portal/src/backend/app-requests-service.ts
+export async function isAuthorizedForApp(
+  adminUserId: string, 
+  appId: string, 
+  isGlobalAdmin: boolean
+): Promise<boolean> {
+  if (isGlobalAdmin) return true;
+  const assigned = await getAppAdmins(appId);
+  return assigned.some(admin => admin.userId === adminUserId);
+}
+```
+
+If an administrator assigned solely to the `telemetry` application attempts to inspect or approve requests for `code`:
+- The API terminates immediately with `403 Forbidden`.
+- The incident is logged to `logs/portal/security.log` with caller ID and trace token.
+- The UI filters out all non-assigned apps from the admin panel automatically.
+
+### Dynamic Admin Turnover
+SG Forge decouples pending requests from individual reviewer IDs:
+1. When Employee A requests access to App X, the request is tied to `appId = 'X'` and `status = 'PENDING'`.
+2. When the organization changes the administrator for App X from Marcus to Elena:
+   - Marcus's admin record is removed from `portal_app_admins`.
+   - Elena is assigned to `portal_app_admins`.
+   - Elena's inbox immediately displays all pending requests for App X, including those submitted prior to her appointment.
+   - Marcus immediately loses visibility and decision rights for App X.
+
+---
+
+## 6. Employee Offboarding & Lifecycle State Transitions
+
+When an employee departs the organization, IT triggers the offboarding flow (`POST /api/v1/portal/employees/:id/offboard`). The system preserves compliance audit trails while instantly severing all active privileges:
+
+```
+┌─────────────────────────────────┐
+│     EMPLOYEE OFFBOARDING        │
+│ POST /employees/:id/offboard    │
+└────────────────┬────────────────┘
+                 │
+                 ├───> Pending Requests: Transition to 'USER_INACTIVE'
+                 │
+                 ├───> Approved Access:  Transition to 'REVOKED_INACTIVE'
+                 │
+                 └───> Admin Roles:      DELETE FROM portal_app_admins
+```
+
+### State Machine Definitions
+
+| Status | Trigger Event | Resulting Permission | Audit Retention |
+| :--- | :--- | :--- | :--- |
+| `PENDING` | User submits request | Inactive (cannot launch) | Retained in queue |
+| `APPROVED` | Delegated admin approves | Active (app unlocked in dock) | Permanent audit record |
+| `REJECTED` | Delegated admin rejects | Inactive | Permanent audit record with rationale |
+| `USER_INACTIVE` | Employee offboarded while request pending | Terminated | Retained in audit history for compliance |
+| `REVOKED` | Admin revokes access via Entitled Users tab | Terminated | Preserves grant and revoke timestamps |
+| `REVOKED_INACTIVE` | Employee offboarded while holding access | Terminated | Preserves full employee tenure history |
+
+---
+
+## 7. Mathematical SLA Engine & Zero-Dummy Guarantee
+
+All administrative analytics within SG Forge operate with **zero dummy data**:
+
+```text
+Average SLA Duration = (1 / N) * Σ (decided_at - created_at)
+```
+
+- **Live Timestamps**: `created_at` and `decided_at` store ISO-8601 millisecond-precision UTC timestamps.
+- **Mathematical Calculation**: The SLA badge renders real averages (e.g. `24m`, `2.4h`, `1.2d`). If no decisions have been recorded yet, the UI displays `N/A (No decisions recorded)` rather than a fake placeholder.
+- **Audit Table**: Directly reflects historical rows from the database with real decider names, requester emails, and decision notes.
+
+---
+
+## 8. REST API Reference
+
+| Method | Endpoint | RBAC Scope | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/v1/portal/apps/requests` | `User` | Fetch caller's submitted access requests. |
+| `POST` | `/api/v1/portal/apps/requests` | `User` | Submit a new access request (enforces deduplication). |
+| `GET` | `/api/v1/portal/apps/requests/admin` | `App Admin` / `Org Admin` | Fetch pending requests scoped to caller's assigned apps. |
+| `POST` | `/api/v1/portal/apps/requests/decide` | `App Admin` / `Org Admin` | Approve or reject request (enforces anti-self-approval). |
+| `GET` | `/api/v1/portal/apps/:appId/users` | `App Admin` / `Org Admin` | Retrieve list of entitled users for a specific app. |
+| `POST` | `/api/v1/portal/apps/users/revoke` | `App Admin` / `Org Admin` | Revoke an active user's access grant. |
+| `GET` | `/api/v1/portal/apps/:appId/history` | `App Admin` / `Org Admin` | Fetch audit logs and SLA statistics for an app. |
+| `POST` | `/api/v1/portal/employees/:id/offboard`| `Org Admin` | Offboard user, cascading request and admin states. |

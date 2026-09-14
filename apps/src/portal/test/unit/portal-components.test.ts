@@ -188,4 +188,61 @@ describe('Tier 1 Unit: Portal Layout Components', () => {
     const emojiRegex = /[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u;
     expect(emojiRegex.test(appsSection)).toBe(false);
   });
+
+  it('renders app admins roster and governance details modal in compliance with approval workflow', () => {
+    // Arrange & Act
+    const html = renderPortalHtml();
+
+    // Assert: App Details modal has admins list container
+    expect(html).toContain('id="app-details-admins-list"');
+    expect(html).toContain('App Administrators & Designated Approvers');
+
+    // Assert: Request Details modal is rendered with who will approve section
+    expect(html).toContain('id="modal-request-details"');
+    expect(html).toContain('id="req-detail-approvers-list"');
+    expect(html).toContain('Who Will Approve This Request?');
+    expect(html).toContain('Anti-Self-Approval Policy Active');
+  });
+
+  it('guarantees zero client-side JavaScript syntax errors in rendered HTML script tags', () => {
+    // Arrange & Act
+    const html = renderPortalHtml({
+      id: 'usr_syntax_check',
+      email: 'check@forge.internal',
+      displayName: 'Syntax Checker',
+      roles: ['roles/employee', 'roles/admin'],
+      isAdmin: true,
+    });
+
+    // Extract and validate all <script>...</script> blocks
+    const scriptRegex = /<script>([\s\S]*?)<\/script>/g;
+    let match;
+    let scriptCount = 0;
+    while ((match = scriptRegex.exec(html)) !== null) {
+      scriptCount++;
+      const code = match[1];
+      expect(() => {
+        new Function(code);
+      }).not.toThrow();
+    }
+    expect(scriptCount).toBeGreaterThan(0);
+  });
+
+  it('renders approved restricted apps in My Active Apps catalog when approvedApps are provided', () => {
+    // Arrange & Act: User has approved access to restricted telemetry app
+    const html = renderPortalHtml({
+      id: 'usr_approved_employee',
+      email: 'approved.emp@forge.internal',
+      displayName: 'Approved Staff',
+      roles: ['roles/employee'],
+      isAdmin: false,
+      approvedApps: ['telemetry'],
+    });
+
+    // Assert: My Active Apps section contains the approved app
+    const myAppsCatalog = html.slice(html.indexOf('id="apps-catalog-grid"'), html.indexOf('id="tab-content-marketplace"'));
+    expect(myAppsCatalog).toContain('data-app-id="telemetry"');
+    expect(myAppsCatalog).toContain('Live Telemetry Dashboard');
+    expect(myAppsCatalog).toContain('Open');
+  });
 });

@@ -36,8 +36,8 @@ export function renderAdminAuditView(): string {
       <div class="portal-view-header">
         <div>
           <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <div class="portal-view-badge" style="background: rgba(var(--forge-primary-rgb, 99, 102, 241), 0.15); color: var(--forge-primary);">
-              <span class="badge-dot" style="background: var(--forge-primary);"></span>
+            <div class="portal-view-badge">
+              <span class="badge-dot"></span>
               <span>Admin Console</span>
             </div>
             <span class="portal-view-audience" style="font-size: 0.74rem; color: var(--forge-text-subtle);">Audience: <strong style="color: var(--forge-text-muted); font-weight: 500;">Admins & Security Officers</strong></span>

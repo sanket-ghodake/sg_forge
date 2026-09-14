@@ -5,6 +5,9 @@
   * @requirements [HLR-PORTAL-201] [LLR-UI-001]
  */
 
+import { getAppsRequestsScript } from './ui-apps-requests-scripts';
+import { getAppsModalsScript } from './ui-apps-modals-scripts';
+
 export function getAppsClientScript(): string {
   return `
     (function() {
@@ -225,206 +228,8 @@ export function getAppsClientScript(): string {
         if (listBtn) listBtn.addEventListener('click', function() { applyViewMode('list'); });
       }
 
-      // ── 5. Real-Time Persistent Request Access Engine ──
-      var activeRequests = [];
-
-      function updateRequestsUI() {
-        var reqList = document.getElementById('active-user-requests-list');
-        var indicator = document.getElementById('pending-requests-indicator');
-        var countText = document.getElementById('pending-req-count-text');
-
-        if (indicator && countText) {
-          if (activeRequests.length > 0) {
-            indicator.style.display = 'inline-flex';
-            countText.textContent = activeRequests.length + (activeRequests.length === 1 ? ' Request Pending Review' : ' Requests Pending Review');
-          } else {
-            indicator.style.display = 'none';
-          }
-        }
-
-        if (reqList) {
-          if (activeRequests.length === 0) {
-            reqList.innerHTML = '';
-            reqList.style.display = 'none';
-            return;
-          }
-
-          reqList.style.display = 'block';
-          reqList.innerHTML = '<div class="requests-panel-box">' +
-            '<div class="requests-panel-title">' +
-              '<span class="badge-dot" style="background: var(--forge-warning);"></span>' +
-              '<span>Your Submitted Access Requests</span>' +
-            '</div>' +
-            '<div class="requests-cards-stack">' +
-              activeRequests.map(function(r) {
-                var safeAppName = escapeHtml(r.appName);
-                var safeReason = escapeHtml(r.reasonType + (r.notes ? ' · ' + r.notes : ''));
-                var safeId = escapeHtml(r.id);
-                return '<div class="user-request-chip">' +
-                  '<div class="user-request-info">' +
-                    '<strong>' + safeAppName + '</strong>' +
-                    '<span class="user-request-reason">' + safeReason + '</span>' +
-                  '</div>' +
-                  '<div class="user-request-status">' +
-                    '<span class="astryx-badge badge-warning">Pending Approval</span>' +
-                    '<button class="astryx-btn btn-sm btn-ghost cancel-user-req-btn" data-req-id="' + safeId + '" data-req-app="' + safeAppName + '" style="color: var(--forge-danger);">Cancel</button>' +
-                  '</div>' +
-                '</div>';
-              }).join('') +
-            '</div>' +
-          '</div>';
-        }
-      }
-
-      async function loadUserAccessRequests() {
-        try {
-          var res = await fetch(getApiPrefix() + '/api/v1/portal/apps/requests');
-          if (!res.ok) return;
-          var body = await res.json();
-          activeRequests = body.data || [];
-          updateRequestsUI();
-        } catch(e) {}
-      }
-
-      function initRequestAccess() {
-        var reqModal = document.getElementById('modal-request-access');
-        var appNameSpan = document.getElementById('req-access-app-name');
-        var submitBtn = document.getElementById('submit-access-req-btn');
-        var reasonSelect = document.getElementById('req-access-justification-type');
-        var reasonText = document.getElementById('req-access-reason');
-        var activeRequestTargetAppId = '';
-        var activeRequestTargetAppName = '';
-
-        document.addEventListener('click', function(e) {
-          var reqBtn = e.target.closest('.request-access-btn');
-          if (reqBtn && reqModal) {
-            e.preventDefault();
-            activeRequestTargetAppId = reqBtn.getAttribute('data-app-id') || 'app_custom';
-            activeRequestTargetAppName = reqBtn.getAttribute('data-app-name') || 'Application';
-            if (appNameSpan) appNameSpan.textContent = activeRequestTargetAppName;
-            if (reasonText) reasonText.value = '';
-            reqModal.classList.add('active');
-            reqModal.setAttribute('aria-hidden', 'false');
-          }
-        });
-
-        if (submitBtn && reqModal) {
-          submitBtn.addEventListener('click', async function() {
-            var reasonType = reasonSelect ? reasonSelect.value : 'Core Job Requirement';
-            var notes = reasonText ? reasonText.value.trim() : '';
-
-            try {
-              var res = await fetch(getApiPrefix() + '/api/v1/portal/apps/requests', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  appId: activeRequestTargetAppId,
-                  appName: activeRequestTargetAppName,
-                  reasonType: reasonType,
-                  notes: notes
-                })
-              });
-              if (res.ok) {
-                if (window.astryxToast) {
-                  window.astryxToast('Access request submitted for ' + activeRequestTargetAppName, 'success');
-                }
-                loadUserAccessRequests();
-              }
-            } catch(e) {}
-
-            reqModal.classList.remove('active');
-            reqModal.setAttribute('aria-hidden', 'true');
-          });
-        }
-
-        // Cancel Request Handler with Database Sync
-        document.addEventListener('click', async function(e) {
-          var cancelBtn = e.target.closest('.cancel-user-req-btn');
-          if (cancelBtn) {
-            e.preventDefault();
-            var reqId = cancelBtn.getAttribute('data-req-id');
-            try {
-              var res = await fetch(getApiPrefix() + '/api/v1/portal/apps/requests/cancel', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: reqId })
-              });
-              if (res.ok) {
-                activeRequests = activeRequests.filter(function(r) { return r.id !== reqId; });
-                updateRequestsUI();
-                if (window.astryxToast) {
-                  window.astryxToast('Access request cancelled', 'info');
-                }
-              }
-            } catch(e) {}
-          }
-        });
-      }
-
-      // ── 6. App Details Inspection Modal ──
-      function initAppDetailsModal() {
-        document.addEventListener('click', function(e) {
-          var infoBtn = e.target.closest('.open-app-info-btn');
-          if (infoBtn) {
-            e.preventDefault();
-            var modal = document.getElementById('modal-app-details');
-            if (!modal) return;
-
-            var card = infoBtn.closest('.app-card-item, .marketplace-card-item');
-            if (card) {
-              var title = card.querySelector('.app-card-title, .market-card-title');
-              var desc = card.querySelector('.app-card-desc, .market-card-desc');
-              var dept = card.getAttribute('data-category') || 'Platform Workspace';
-              var tags = card.getAttribute('data-tags') || '';
-              var launchLink = card.querySelector('.app-launch-action');
-
-              var dTitle = document.getElementById('app-details-title');
-              var dDept = document.getElementById('app-details-dept');
-              var dDesc = document.getElementById('app-details-desc');
-              var dTags = document.getElementById('app-details-tags');
-              var dActionBtn = document.getElementById('app-details-action-btn');
-
-              if (dTitle && title) dTitle.textContent = title.textContent.trim();
-              if (dDept) dDept.textContent = dept;
-              if (dDesc && desc) dDesc.textContent = desc.textContent.trim();
-              if (dTags) {
-                var tagArr = tags.split(' ').filter(Boolean);
-                dTags.innerHTML = tagArr.map(function(t) {
-                  return '<span class="app-tag-pill">' + escapeHtml(t) + '</span>';
-                }).join('');
-              }
-              if (dActionBtn) {
-                if (launchLink) {
-                  dActionBtn.textContent = 'Open Application';
-                  dActionBtn.setAttribute('href', launchLink.getAttribute('href'));
-                  dActionBtn.style.display = 'inline-flex';
-                } else {
-                  dActionBtn.style.display = 'none';
-                }
-              }
-
-              modal.classList.add('open');
-              modal.classList.add('active');
-              modal.setAttribute('aria-hidden', 'false');
-            }
-          }
-
-          var closeBtn = e.target.closest('[data-close-modal="modal-app-details"], .astryx-modal-close');
-          if (closeBtn) {
-            var modalToClose = document.getElementById('modal-app-details');
-            if (modalToClose) {
-              modalToClose.classList.remove('open');
-              modalToClose.classList.remove('active');
-              modalToClose.setAttribute('aria-hidden', 'true');
-            }
-          }
-          if (e.target && e.target.id === 'modal-app-details') {
-            e.target.classList.remove('open');
-            e.target.classList.remove('active');
-            e.target.setAttribute('aria-hidden', 'true');
-          }
-        });
-      }
+      ${getAppsRequestsScript()}
+      ${getAppsModalsScript()}
 
       // Initializer
       function start() {
@@ -434,6 +239,7 @@ export function getAppsClientScript(): string {
         initFilterHandlers();
         initViewMode();
         initRequestAccess();
+        initRequestDetailsModal();
         initAppDetailsModal();
         loadUserAccessRequests();
       }

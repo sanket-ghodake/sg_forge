@@ -17,7 +17,7 @@ Primary enterprise employee workspace, admin governance center, visual 2D intera
 | **Complexity Score** | `952` | Strict client-side SPA routing & state conductors |
 | **Language Breakdown** | TypeScript, Markdown, Docker, JSON | 100% type-safe |
 | **Database Instance** | `portal.db` | Dedicated Turso libSQL/SQLite database (Multi-User Isolated) |
-| **5-Tier Test Suite** | `69` passing tests | `test/unit/`, `test/integration/`, `test/security/`, `test/contracts/`, `test/e2e/` |
+| **5-Tier Test Suite** | `87` passing tests | `test/unit/`, `test/integration/`, `test/security/`, `test/contracts/`, `test/e2e/` |
 | **Verification Gate** | **100% Passing** ✅ | Strict SPA invariant, zero hardcoded data, and Astryx compliance |
 
 ---
@@ -34,6 +34,14 @@ Primary enterprise employee workspace, admin governance center, visual 2D intera
 3. **100% Astryx Design Tokens (`@forge/ui`)**:
    - Zero ad-hoc CSS or browser defaults.
    - Seamless dark/light theme switching with cross-tab `BroadcastChannel` synchronization.
+4. **App Access Governance & Scoped Delegated RBAC**:
+   - 3-Tab application catalog: *My Active Apps* (dynamic SSR + CSR hydration), *Marketplace Apps* (discovery & requests), and *Access Requests* (audit trail).
+   - Anti-duplicate submission defense (`PENDING` / `APPROVED` checks).
+   - Anti-self-approval enforcement for administrators.
+   - Cross-app isolation barrier (`isAuthorizedForApp` preventing leakage of foreign app controls).
+   - App Admin visibility into entitled users with single-click access revocation.
+   - Real-time Turso database telemetry with mathematical SLA average duration calculation.
+   - Complete employee offboarding state transitions (`USER_INACTIVE`, `REVOKED_INACTIVE`, admin role purging).
 
 ---
 
@@ -42,9 +50,10 @@ Primary enterprise employee workspace, admin governance center, visual 2D intera
 * **Top Header Bar**: Multi-tenant organization selector, command finder trigger (`⌘K`), theme switcher, and modern top-right user profile popover.
 * **Auto-Collapsible Left Sidebar**: Compact 56px icon rail and 224px expanded navigation drawer with hover-peek and role-guarded Admin Console.
 * **9 Purpose-Built Views**: 
-  - **Employee Hub**: *Company Map*, *Apps & Tools Hub*, *My Profile*, *Announcements*.
+  - **Employee Hub**: *Company Map*, *Apps & Tools Hub* (3-Tab layout), *My Profile*, *Announcements*.
   - **Admin Console**: *Member Management*, *App Permissions*, *Org Chart Editor*, *Security & Audit*, *Workspace Settings*.
-* **Delegated App Access & Inbox**: Restricted applications can be requested directly from the Marketplace with business justification, routing to manager & admin pending queue with Anti-Self-Approval enforcement.
+* **Delegated App Access & Inbox**: Restricted applications can be requested directly from the Marketplace with business justification, routing to delegated app admins with Anti-Self-Approval enforcement.
+* **App Governance Modal Suite**: 4-tab scoped configuration per application (*Access Policies*, *App Admins*, *History & SLA*, *Entitled Users* with 1-click revocation).
 * **Universal Employee Onboarding**: Single-member invites with reporting line manager linking, plus high-performance CSV batch ingestion with dry-run syntax validation and anti-formula injection defenses.
 * **Sandboxed Micro-App Host**: Sandboxed iframe embedding with bidirectional `@forge/sdk` postMessage handshake bridge.
 

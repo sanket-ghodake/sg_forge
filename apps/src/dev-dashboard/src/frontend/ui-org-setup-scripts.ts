@@ -6,7 +6,7 @@
 
 export function getOrgSetupScripts(): string {
   return `
-    let orgSetupData = { organization: null, nodeTypes: [], nodes: [] };
+    orgSetupData = orgSetupData || { organization: null, nodeTypes: [], nodes: [] };
 
     async function loadOrgSetupData() {
       try {

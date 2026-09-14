@@ -13,6 +13,7 @@ import {
   batchImportEmployeesApi,
   bulkActionEmployeesApi,
   fetchOrgTree,
+  resetEmployeePasswordApi,
 } from '@forge/sdk';
 
 /**
@@ -182,5 +183,21 @@ export async function handleDevEmployeeApi(path: string, req: Request, url: URL)
     }
   }
 
+  // 10. Reset Employee Password (Forced Update Flow)
+  if (path === '/api/employees/reset-password' && req.method === 'POST') {
+    try {
+      const body: any = await req.json().catch(() => null);
+      if (!body || !body.id) return Response.json({ error: 'Missing employee ID' }, { status: 400 });
+      if (!body.temporaryPassword || typeof body.temporaryPassword !== 'string' || body.temporaryPassword.length < 8) {
+        return Response.json({ error: 'Temporary password of at least 8 characters is required' }, { status: 400 });
+      }
+      const result = await resetEmployeePasswordApi(body.id, body.temporaryPassword);
+      return Response.json(result);
+    } catch (err: any) {
+      return Response.json({ error: err?.message || 'Failed to reset employee password' }, { status: 400 });
+    }
+  }
+
   return null;
 }
+

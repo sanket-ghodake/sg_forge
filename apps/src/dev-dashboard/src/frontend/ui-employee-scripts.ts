@@ -1,6 +1,8 @@
+import { astryxIcons } from '@forge/ui';
 import { getEmployeeImportScripts } from './ui-employee-import-scripts';
 import { getEmployeeDrawerAndTreeScripts } from './ui-employee-drawer-scripts';
 import { getEmployeeModalScripts } from './ui-employee-modal-scripts';
+import { getEmployeePasswordScripts } from './ui-employee-password-scripts';
 import { getOrgSetupScripts } from './ui-org-setup-scripts';
 import { getEmployeeTableScripts } from './ui-employee-table-scripts';
 
@@ -19,6 +21,8 @@ export function getEmployeeDashboardScripts(): string {
     let employeeCurrentPage = 1;
     let employeePageLimit = 25;
     let isEmpStateInitialized = false;
+    let focusedEmployeeId = null;
+    let orgSetupData = { organization: null, nodeTypes: [], nodes: [] };
 
     function getSavedEmployeeState() {
       try {
@@ -152,7 +156,9 @@ export function getEmployeeDashboardScripts(): string {
         renderDepartmentDropdown();
         if (currentEmployeeSubTab === 'table') renderEmployeeTable();
         else if (currentEmployeeSubTab === 'tree') loadOrgChartTree();
-        if (!orgSetupData?.organization) loadOrgSetupData().catch(() => {});
+        if (typeof loadOrgSetupData === 'function' && (!orgSetupData || !orgSetupData.organization)) {
+          loadOrgSetupData().catch(() => {});
+        }
       } catch (err) {
         if (typeof showAstryxToast === 'function') {
           showAstryxToast('error', 'Error loading employees: ' + err.message);
@@ -185,9 +191,11 @@ export function getEmployeeDashboardScripts(): string {
           deptListEl.innerHTML = '<span style="font-size: 0.74rem; color: var(--forge-text-muted);">No departments configured.</span>';
         } else {
           deptListEl.innerHTML = employeeData.departments.map(d => {
-            const count = items.filter(i => i.org_node_id === d.id || i.department_name === d.name).length;
-            return '<div class="emp-dept-chip" onclick="filterByDepartment(\\'' + d.id + '\\')" title="Filter table by ' + (d.name || '') + '">' +
-              '<span style="display:inline-flex;align-items:center;gap:0.35rem;">' + astryxIcons.building + ' ' + (d.name || 'Unnamed') + '</span>' +
+            const count = items.filter(i => (d.id && i.org_node_id === d.id) || (d.name && i.department_name === d.name)).length;
+            const deptId = (d.id || '').replace(/'/g, "\\'");
+            const safeName = (d.name || 'Unnamed').replace(/"/g, '&quot;');
+            return '<div class="emp-dept-chip" onclick="filterByDepartment(\\'' + deptId + '\\')" title="Filter table by ' + safeName + '">' +
+              '<span style="display:inline-flex;align-items:center;gap:0.35rem;">' + ${JSON.stringify(astryxIcons.building)} + ' ' + safeName + '</span>' +
               '<span class="emp-dept-chip-count">' + count + '</span>' +
             '</div>';
           }).join('');
@@ -265,6 +273,11 @@ export function getEmployeeDashboardScripts(): string {
 
     function handleEmployeeRowClick(event, userId) {
       if (!userId || (event && event.target && (event.target.tagName === 'INPUT' || event.target.tagName === 'BUTTON' || (event.target.closest && (event.target.closest('button') || event.target.closest('input') || event.target.closest('a')))))) return;
+      focusedEmployeeId = userId;
+      persistEmployeeState();
+      document.querySelectorAll('.emp-row').forEach(r => {
+        r.classList.toggle('focused', r.dataset.id === userId);
+      });
       try { openEmployeeDrawer(userId); } catch (e) {}
     }
 
@@ -372,6 +385,8 @@ export function getEmployeeDashboardScripts(): string {
     }
 
     ${getEmployeeModalScripts()}
+
+    ${getEmployeePasswordScripts()}
 
     ${getEmployeeImportScripts()}
 

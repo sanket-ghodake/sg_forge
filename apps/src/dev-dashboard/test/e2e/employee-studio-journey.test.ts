@@ -173,4 +173,46 @@ describe('E2E: Dev Dashboard Employee Studio Journey', () => {
     expect(json.status).toBe('ok');
     expect(json.processed).toBe(userIds.length);
   });
+
+  it('9. Administratively restores/resets employee password via HTTP POST /api/employees/reset-password', async () => {
+    // 1. Get an existing employee from directory
+    const listRes = await fetch(`http://localhost:${TEST_PORT}/api/employees?limit=1`, {
+      headers: AUTH_HEADERS,
+    });
+    const listJson = await listRes.json();
+    const emp = listJson.items[0];
+    expect(emp).toBeDefined();
+
+    // 2. Perform password reset via dev-dashboard API
+    const tempPassword = 'NewTemporaryAdminPass#2026!';
+    const resetRes = await fetch(`http://localhost:${TEST_PORT}/api/employees/reset-password`, {
+      method: 'POST',
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({
+        id: emp.id,
+        temporaryPassword: tempPassword,
+      }),
+    });
+
+    expect(resetRes.status).toBe(200);
+    const resetJson = await resetRes.json();
+    expect(resetJson.ok).toBe(true);
+    expect(resetJson.must_change_password).toBe(true);
+
+    // 3. User authenticates with temporary password and is intercepted with MUST_CHANGE_PASSWORD
+    const loginRes = await fetch(`http://localhost:${AUTH_TEST_PORT}/api/v1/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: emp.email,
+        password: tempPassword,
+      }),
+    });
+
+    expect(loginRes.status).toBe(200);
+    const loginJson = await loginRes.json();
+    expect(loginJson.status).toBe('MUST_CHANGE_PASSWORD');
+    expect(loginJson.tempToken).toBeDefined();
+  });
 });
+

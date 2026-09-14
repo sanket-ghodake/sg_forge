@@ -92,5 +92,99 @@ describe('Tier 1 Unit: Employee Studio State Persistence Governance', () => {
     const emojiRegex = /[\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u;
     expect(emojiRegex.test(tableContent)).toBe(false);
   });
+
+  it('Arrange, Act, Assert: astryxIcons is exposed on window and renderEmployeeVitals executes without ReferenceError', () => {
+    // Arrange
+    const html = renderDashboardHtml();
+    expect(html).toContain('window.astryxIcons');
+
+    const mockElements: Record<string, any> = {
+      'emp-stat-total': { textContent: '' },
+      'emp-stat-active': { textContent: '' },
+      'emp-stat-suspended': { textContent: '' },
+      'emp-stat-depts': { textContent: '' },
+      'emp-tab-badge-count': { textContent: '' },
+      'emp-overview-dept-list': { innerHTML: '' },
+    };
+
+    const mockDoc = {
+      getElementById: (id: string) => mockElements[id] || null,
+      querySelectorAll: () => [],
+      querySelector: () => null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      createElement: () => ({ style: {}, appendChild: () => {}, classList: { add: () => {}, remove: () => {} }, setAttribute: () => {} }),
+      body: { appendChild: () => {}, classList: { add: () => {}, remove: () => {} } },
+      documentElement: { setAttribute: () => {}, getAttribute: () => 'dark' },
+    };
+
+    const scriptMatches = html.match(/<script>([\s\S]*?)<\/script>/g) || [];
+    const mainScript = scriptMatches.find(s => s.includes('loadEmployees') || s.includes('EMP_STATE_KEY')) || '';
+    expect(mainScript).not.toBe('');
+    const scriptContent = mainScript.replace(/<\/?script>/g, '');
+
+    // Act & Assert
+    const runScript = new Function('window', 'document', 'location', 'localStorage', 'sessionStorage', `
+      ${scriptContent}
+      employeeData = {
+        total: 2,
+        items: [
+          { id: 'usr-1', status: 'ACTIVE', department_name: 'Engineering', org_node_id: 'dept-1' },
+          { id: 'usr-2', status: 'INVITED', department_name: 'Product', org_node_id: 'dept-2' }
+        ],
+        departments: [
+          { id: 'dept-1', name: 'Engineering' },
+          { id: 'dept-2', name: 'Product' }
+        ]
+      };
+      renderEmployeeVitals();
+      switchEmployeeSubTab('overview');
+      switchEmployeeSubTab('table');
+      return {
+        deptHtml: document.getElementById('emp-overview-dept-list').innerHTML,
+        hasIcons: typeof window.astryxIcons === 'object' && window.astryxIcons !== null
+      };
+    `);
+
+    const mockWin = {
+      location: { pathname: '/devcenter', search: '?tab=employees&emp_focus=usr-superadmin&emp_subtab=table&emp_status=INVITED' },
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      fetch: async () => ({ ok: true, json: async () => ({ status: 'ok', items: [], departments: [] }) }),
+      history: { replaceState: () => {} },
+    };
+
+    const result = runScript(
+      mockWin,
+      mockDoc,
+      mockWin.location,
+      { getItem: () => null, setItem: () => {} },
+      { getItem: () => null, setItem: () => {} }
+    );
+
+    expect(result.hasIcons).toBe(true);
+    expect(result.deptHtml).toContain('emp-dept-chip');
+    expect(result.deptHtml).toContain('Engineering');
+    expect(result.deptHtml).toContain('<svg');
+  });
+
+  it('Arrange, Act, Assert: Table Toolbar supports dynamic icon-only mode and anti-overlap styling', () => {
+    // Arrange
+    const html = renderDashboardHtml();
+
+    // Assert toolbar structure and labels
+    expect(html).toContain('id="emp-table-toolbar"');
+    expect(html).toContain('emp-add-btn-label');
+    expect(html).toContain('emp-fullscreen-btn-label');
+    expect(html).toContain('filter-chip-label');
+    expect(html).toContain('emp-metric-count');
+    expect(html).toContain('emp-metric-label');
+    expect(html).toContain('initEmployeeToolbarResizeObserver');
+
+    // Assert anti-overlap styles in CSS
+    expect(html).toContain('toolbar-compact');
+    expect(html).toContain('toolbar-icon-mode');
+  });
 });
+
 

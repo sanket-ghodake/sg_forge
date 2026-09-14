@@ -30,46 +30,54 @@ export function renderEmployeeTableSubTab(): string {
         </div>
 
         <!-- Directory Toolbar -->
-        <div class="emp-table-toolbar">
+        <div class="emp-table-toolbar" id="emp-table-toolbar">
           <div class="emp-toolbar-left">
             <div class="services-search-box emp-search-box">
               <span class="emp-search-icon">${astryxIcons.search}</span>
-              <input type="search" id="emp-search-input" placeholder="Search by name, email, code, title... (⌘K)" oninput="filterEmployees()">
+              <input type="search" id="emp-search-input" placeholder="Search members... (⌘K)" oninput="filterEmployees()">
               <button type="button" id="emp-search-clear" class="emp-search-clear-btn" onclick="clearEmployeeSearch()" title="Clear Search" style="display: none;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
             </div>
-            <select class="form-input emp-dept-select" id="emp-dept-filter" onchange="filterEmployees()">
+            <select class="form-input emp-dept-select" id="emp-dept-filter" onchange="filterEmployees()" title="Filter by Department">
               <option value="">All Departments</option>
             </select>
             <div class="filter-chip-group emp-status-chips" id="emp-filter-chips">
-              <button class="filter-chip active" data-filter="all" onclick="setEmployeeStatusFilter('all')">All</button>
-              <button class="filter-chip" data-filter="ACTIVE" onclick="setEmployeeStatusFilter('ACTIVE')">
-                <span class="status-pulse-dot active"></span> Active
+              <button class="filter-chip active" data-filter="all" onclick="setEmployeeStatusFilter('all')" title="Show All Members">
+                <span class="chip-icon">${astryxIcons.users}</span>
+                <span class="filter-chip-label">All</span>
               </button>
-              <button class="filter-chip" data-filter="INVITED" onclick="setEmployeeStatusFilter('INVITED')">
-                <span class="status-pulse-dot invited"></span> Invited
+              <button class="filter-chip" data-filter="ACTIVE" onclick="setEmployeeStatusFilter('ACTIVE')" title="Active Members Only">
+                <span class="status-pulse-dot active"></span>
+                <span class="filter-chip-label">Active</span>
               </button>
-              <button class="filter-chip" data-filter="SUSPENDED" onclick="setEmployeeStatusFilter('SUSPENDED')">
-                <span class="status-pulse-dot suspended"></span> Suspended
+              <button class="filter-chip" data-filter="INVITED" onclick="setEmployeeStatusFilter('INVITED')" title="Invited Members Only">
+                <span class="status-pulse-dot invited"></span>
+                <span class="filter-chip-label">Invited</span>
+              </button>
+              <button class="filter-chip" data-filter="SUSPENDED" onclick="setEmployeeStatusFilter('SUSPENDED')" title="Suspended Members Only">
+                <span class="status-pulse-dot suspended"></span>
+                <span class="filter-chip-label">Suspended</span>
               </button>
             </div>
           </div>
 
           <div class="emp-toolbar-right">
             <div class="emp-toolbar-metrics" id="emp-table-quick-metrics">
-              <span class="emp-metric-pill" id="emp-metric-pill-total">0 Members</span>
+              <span class="emp-metric-pill" id="emp-metric-pill-total" title="Total Members Roster">
+                <span class="emp-metric-count">0</span><span class="emp-metric-label"> Members</span>
+              </span>
             </div>
-            <button type="button" class="astryx-btn btn-outline" id="btn-emp-table-refresh" onclick="refreshEmployeeDirectory()" title="Refresh Roster">
+            <button type="button" class="astryx-btn btn-outline emp-btn-icon-only" id="btn-emp-table-refresh" onclick="refreshEmployeeDirectory()" title="Refresh Roster">
               <span class="emp-btn-icon">${astryxIcons.refresh}</span>
             </button>
             <button type="button" class="astryx-btn btn-outline emp-btn-fullscreen-toggle" id="btn-emp-fullscreen" onclick="toggleEmployeeTableFullscreen()" title="Toggle Full Canvas (Esc to exit)">
               <span class="emp-btn-icon" id="emp-fullscreen-btn-icon">${astryxIcons.maximize}</span>
-              <span id="emp-fullscreen-btn-label">Full Screen</span>
+              <span id="emp-fullscreen-btn-label" class="emp-btn-label">Full Screen</span>
             </button>
-            <button type="button" class="astryx-btn btn-primary" onclick="openAddEmployeeModal()">
+            <button type="button" class="astryx-btn btn-primary emp-btn-add-member" onclick="openAddEmployeeModal()" title="Add Member">
               <span class="emp-btn-icon">${astryxIcons.plus}</span>
-              <span>Add Member</span>
+              <span class="emp-btn-label" id="emp-add-btn-label">Add Member</span>
             </button>
           </div>
         </div>

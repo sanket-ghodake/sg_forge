@@ -16,6 +16,7 @@ export function getBaseStyles(): string {
     :root, [data-theme="dark"] {
       --forge-bg-root: ${d.bgRoot};
       --forge-bg-surface: ${d.bgSurface};
+      --forge-bg-surface-rgb: 23, 23, 23;
       --forge-bg-card: ${d.bgCard};
       --forge-bg-card-hover: ${d.bgCardHover};
       --forge-bg-elevated: ${d.bgElevated};
@@ -24,6 +25,7 @@ export function getBaseStyles(): string {
       --forge-border-medium: ${d.borderMedium};
       --forge-border-hover: ${d.borderMedium};
       --forge-primary: ${d.primary};
+      --forge-primary-rgb: 62, 207, 142;
       --forge-primary-hover: #34b27b;
       --forge-primary-bg: rgba(62, 207, 142, 0.12);
       --forge-primary-btn-text: #121212;
@@ -52,6 +54,7 @@ export function getBaseStyles(): string {
     [data-theme="light"] {
       --forge-bg-root: ${l.bgRoot};
       --forge-bg-surface: ${l.bgSurface};
+      --forge-bg-surface-rgb: 255, 255, 255;
       --forge-bg-card: ${l.bgCard};
       --forge-bg-card-hover: ${l.bgCardHover};
       --forge-bg-elevated: ${l.bgElevated};
@@ -60,6 +63,7 @@ export function getBaseStyles(): string {
       --forge-border-medium: ${l.borderMedium};
       --forge-border-hover: ${l.borderMedium};
       --forge-primary: ${l.primary};
+      --forge-primary-rgb: 36, 180, 126;
       --forge-primary-hover: #1ea672;
       --forge-primary-bg: rgba(36, 180, 126, 0.10);
       --forge-primary-btn-text: #ffffff;

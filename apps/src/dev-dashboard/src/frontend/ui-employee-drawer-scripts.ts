@@ -9,7 +9,7 @@ import { astryxIcons } from '@forge/ui';
 export function getEmployeeDrawerAndTreeScripts(): string {
   return `
     /* Interactive Org Chart State */
-    let focusedEmployeeId = null;
+    focusedEmployeeId = focusedEmployeeId || null;
     let orgChartZoom = 1.0;
     let orgChartPan = { x: 0, y: 0 };
     let isPanningOrg = false;
@@ -309,7 +309,7 @@ export function getEmployeeDrawerAndTreeScripts(): string {
             '<button class="org-zoom-btn" onclick="zoomOrgChart(0.10)" title="Zoom In (+)">+</button>' +
             '<span class="org-zoom-level" id="org-zoom-level">' + Math.round(orgChartZoom * 100) + '%</span>' +
             '<button class="org-zoom-btn" onclick="zoomOrgChart(-0.10)" title="Zoom Out (−)">−</button>' +
-            '<button class="org-zoom-btn" onclick="resetOrgChartTransform()" title="Reset Zoom & Center">⛶</button>' +
+            '<button class="org-zoom-btn" onclick="resetOrgChartTransform()" title="Reset Zoom & Center" style="display:inline-flex;align-items:center;justify-content:center;">' + ${JSON.stringify(astryxIcons.minimize)} + '</button>' +
           '</div>' +
         '</div>';
 
@@ -442,6 +442,7 @@ export function getEmployeeDrawerAndTreeScripts(): string {
           '<div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">' +
             '<button class="astryx-btn btn-outline" style="font-size: 0.75rem;" onclick="openEditEmployeeModal(\\\'' + emp.id + '\\\')">Edit Details</button>' +
             '<button class="astryx-btn btn-outline" style="font-size: 0.75rem;" onclick="setEmployeeViewMode(\\\'tree\\\'); setOrgFocus(\\\'' + emp.id + '\\\'); closeEmployeeDrawer();">Focus in Org Chart</button>' +
+            '<button class="astryx-btn btn-outline" style="font-size: 0.75rem; color: var(--forge-warning); border-color: var(--forge-border);" onclick="openResetPasswordModal(\\\'' + emp.id + '\\\')">Restore Password</button>' +
             '<button class="astryx-btn btn-outline" style="font-size: 0.75rem; color: var(--forge-accent); border-color: var(--forge-border);" onclick="revokeEmployeeSessions(\\\'' + emp.id + '\\\')">Revoke Sessions</button>' +
           '</div>' +
         '</div>';

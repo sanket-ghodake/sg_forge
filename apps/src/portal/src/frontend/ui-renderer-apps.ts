@@ -5,6 +5,7 @@
 
 import { astryxIcons } from '@forge/ui';
 import { getPortalApps, type MicroAppItem } from './ui-apps-data';
+import type { HeaderUserContext } from './layout-header';
 
 export * from './ui-apps-data';
 
@@ -12,15 +13,24 @@ export * from './ui-apps-data';
  * renderAppsView
  * @requirements [HLR-PORTAL-201] [LLR-UI-001]
  */
-export function renderAppsView(userContextOrAdmin: boolean | string[] = false): string {
+export function renderAppsView(userContextOrAdmin: boolean | string[] | HeaderUserContext = false): string {
+  const isContextObj = typeof userContextOrAdmin === 'object' && !Array.isArray(userContextOrAdmin) && userContextOrAdmin !== null;
   const userRoles = Array.isArray(userContextOrAdmin)
     ? userContextOrAdmin
-    : userContextOrAdmin
-      ? ['roles/admin']
-      : ['roles/employee'];
+    : isContextObj
+      ? (userContextOrAdmin as HeaderUserContext).roles || ['roles/employee']
+      : userContextOrAdmin
+        ? ['roles/admin']
+        : ['roles/employee'];
   const isAdmin = userRoles.some((r) => r.includes('admin') || r.includes('manager'));
-  const { activeApps, marketplaceApps } = getPortalApps(userRoles);
-  const uniqueCategories = Array.from(new Set([...activeApps, ...marketplaceApps].map((a) => a.category).filter(Boolean)));
+  const appBindings = isContextObj ? (userContextOrAdmin as HeaderUserContext).approvedApps : undefined;
+  const userDept = isContextObj ? (userContextOrAdmin as HeaderUserContext).department : undefined;
+
+  const { activeApps, marketplaceApps, allApps } = getPortalApps(userRoles, {
+    department: userDept,
+    appBindings,
+  });
+  const uniqueCategories = Array.from(new Set(allApps.map((a) => a.category).filter(Boolean)));
 
   return `
     <div id="view-apps" class="portal-page-view">
@@ -46,18 +56,23 @@ export function renderAppsView(userContextOrAdmin: boolean | string[] = false): 
         </div>
       </div>
 
-      <!-- 2. Simple 2-Mode Segmented View Switcher -->
+      <!-- 2. 3-Mode Segmented View Switcher -->
       <div class="apps-view-switcher-bar">
         <div class="apps-nav-tabs" role="tablist" aria-label="Apps View Modes">
           <button class="apps-tab-btn active" data-hub-tab="my-apps" role="tab" aria-selected="true">
             <span class="tab-icon">${astryxIcons.apps || ''}</span>
             <span>My Active Apps</span>
-            <span class="apps-tab-counter">${activeApps.length}</span>
+            <span id="my-apps-tab-counter" class="apps-tab-counter">${activeApps.length}</span>
           </button>
           <button class="apps-tab-btn" data-hub-tab="marketplace" role="tab" aria-selected="false">
             <span class="tab-icon">${astryxIcons.sparkles || ''}</span>
-            <span>Request Access</span>
-            <span class="apps-tab-counter">${marketplaceApps.length}</span>
+            <span>Marketplace Apps</span>
+            <span class="apps-tab-counter">${allApps.length}</span>
+          </button>
+          <button class="apps-tab-btn" data-hub-tab="requests" role="tab" aria-selected="false">
+            <span class="tab-icon">${astryxIcons.shield || ''}</span>
+            <span>Access Requests</span>
+            <span id="requests-tab-counter" class="apps-tab-counter" style="display: none;">0</span>
           </button>
         </div>
 
@@ -151,30 +166,29 @@ export function renderAppsView(userContextOrAdmin: boolean | string[] = false): 
         </div>
       </div>
 
-      <!-- 4. TAB 2: REQUEST ACCESS / MARKETPLACE -->
+      <!-- 4. TAB 2: MARKETPLACE APPS -->
       <div id="tab-content-marketplace" class="apps-tab-content">
         <div class="marketplace-intro-banner">
           <div class="marketplace-intro-text">
-            <h2 class="marketplace-title">Elevated Access Applications</h2>
+            <h2 class="marketplace-title">Organization Marketplace & Elevated Apps</h2>
             <p class="marketplace-subtitle">
-              These applications require specific department approval. Click Request Access to submit an approval request to your lead.
+              Discover all platform applications. Launch tools you have access to or request department approval for elevated software.
             </p>
           </div>
         </div>
 
-        <!-- User Submitted Requests List -->
-        <div id="active-user-requests-list" class="active-user-requests-list"></div>
-
         <div class="marketplace-grid" id="marketplace-grid">
-          ${marketplaceApps.map(app => `
-            <div class="marketplace-card-item" data-app-id="${app.id}" data-category="${app.category}" data-tags="${(app.tags || []).join(' ')}">
+          ${allApps.map(app => {
+            const hasAccess = !app.isRestricted;
+            return `
+            <div class="marketplace-card-item ${hasAccess ? 'is-granted' : ''}" data-app-id="${app.id}" data-category="${app.category}" data-tags="${(app.tags || []).join(' ')}" data-is-restricted="${app.isRestricted ? 'true' : 'false'}">
               <div class="market-card-header">
                 <div class="app-card-icon-box" style="width: 42px; height: 42px;">${app.iconSvg}</div>
                 <div class="market-card-meta">
                   <h3 class="market-card-title">${app.name}</h3>
                   <div class="market-card-sub">
                     <span class="market-dept-tag">${app.departmentOwner || app.category}</span>
-                    <span class="approval-type-tag">${app.approvalType || 'Approval Required'}</span>
+                    <span class="approval-type-tag">${hasAccess ? 'Access Active' : (app.approvalType || 'Approval Required')}</span>
                   </div>
                 </div>
               </div>
@@ -192,21 +206,47 @@ export function renderAppsView(userContextOrAdmin: boolean | string[] = false): 
 
               <div class="market-card-footer">
                 <div class="required-role-pill">
-                  ${astryxIcons.shield || ''}
-                  <span>${app.requiredRole ? 'Role: ' + app.requiredRole : 'Department Approval'}</span>
+                  ${hasAccess ? `<span class="status-indicator status-online"></span><span>Active</span>` : `${astryxIcons.shield || ''}<span>${app.requiredRole ? 'Role: ' + app.requiredRole : 'Approval Required'}</span>`}
                 </div>
-                <div class="market-actions">
+                <div class="market-actions market-actions-slot" data-app-id="${app.id}">
                   <button class="astryx-btn btn-sm btn-ghost open-app-info-btn" data-info-id="${app.id}">
                     Details
                   </button>
-                  <button class="astryx-btn btn-sm btn-primary request-access-btn" data-app-name="${app.name}" data-app-id="${app.id}" data-approval="${app.approvalType || 'Manager Approval'}">
-                    Request Access
-                  </button>
+                  ${hasAccess ? `
+                    <a href="${app.ingressPath}" class="astryx-btn btn-sm btn-primary app-launch-action" target="_self">
+                      <span>Launch</span>
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                  ` : `
+                    <button class="astryx-btn btn-sm btn-primary request-access-btn" data-app-name="${app.name}" data-app-id="${app.id}" data-approval="${app.approvalType || 'Manager Approval'}">
+                      Request Access
+                    </button>
+                  `}
                 </div>
               </div>
             </div>
-          `).join('')}
+          `}).join('')}
         </div>
+      </div>
+
+      <!-- 5. TAB 3: ACCESS REQUESTS -->
+      <div id="tab-content-requests" class="apps-tab-content">
+        <div class="marketplace-intro-banner" style="margin-bottom: 1rem;">
+          <div class="marketplace-intro-text">
+            <h2 class="marketplace-title">Your Access Requests</h2>
+            <p class="marketplace-subtitle">
+              Track real-time approval status, review approver notes, or cancel pending requests.
+            </p>
+          </div>
+          <div class="requests-filter-pills" id="requests-status-filters" style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+            <button class="cat-pill active req-filter-pill" data-req-status="ALL">All Requests</button>
+            <button class="cat-pill req-filter-pill" data-req-status="PENDING">Pending Review</button>
+            <button class="cat-pill req-filter-pill" data-req-status="APPROVED">Approved</button>
+            <button class="cat-pill req-filter-pill" data-req-status="DECLINED">Declined</button>
+          </div>
+        </div>
+
+        <div id="active-user-requests-list" class="active-user-requests-list"></div>
       </div>
     </div>
   `;

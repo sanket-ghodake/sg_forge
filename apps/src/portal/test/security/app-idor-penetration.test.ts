@@ -114,8 +114,8 @@ describe('Tier 3 Security: IDOR & Access Governance Penetration Tests', () => {
   it('IDOR defense: user cannot cancel an access request belonging to another user', async () => {
     // Arrange: User A creates a request
     const server = startPortalServer(0);
-    const victimToken = createInternalServiceToken(['roles/employee'], 'usr_victim');
-    const attackerToken = createInternalServiceToken(['roles/employee'], 'usr_attacker');
+    const victimToken = createInternalServiceToken(['roles/employee'], `usr_victim_${Date.now()}`);
+    const attackerToken = createInternalServiceToken(['roles/employee'], `usr_attacker_${Date.now()}`);
 
     try {
       const createRes = await fetch(`http://localhost:${server.port}/api/v1/portal/apps/requests`, {

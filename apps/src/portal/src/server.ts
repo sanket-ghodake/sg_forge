@@ -29,6 +29,7 @@ import {
   setUserDeliveryPreference,
   createAppAccessRequest,
   getUserAppAccessRequests,
+  getUserApprovedAppIds,
   cancelAppAccessRequest,
   getPendingAppAccessRequests,
   decideAppAccessRequest,
@@ -36,6 +37,7 @@ import {
   getUserApiTokens,
   revokeApiToken,
 } from './backend/inbox-service';
+import { handleAppGovernanceRoutes } from './backend/app-governance-routes';
 
 const PORT = Number(process.env.PORTAL_PORT || process.env.PORT || 3001);
 const logger = createLogger('portal-service');
@@ -124,8 +126,11 @@ export function startPortalServer(port: number = PORT) {
     }
 
     if (url.pathname === '/api/v1/portal/apps' || url.pathname === '/portal/api/v1/portal/apps') {
-      const { activeApps, marketplaceApps } = getPortalApps(userRoles);
-      return Response.json({ ok: true, data: activeApps, marketplace: marketplaceApps });
+      const appBindings = getUserApprovedAppIds(auth.user!.id, auth.user!.email);
+      const { activeApps, marketplaceApps, allApps } = getPortalApps(userRoles, {
+        appBindings,
+      });
+      return Response.json({ ok: true, data: activeApps, marketplace: marketplaceApps, all: allApps });
     }
 
     // ── App Access Requests API ──
@@ -149,8 +154,8 @@ export function startPortalServer(port: number = PORT) {
             notes: body.notes,
           });
           return Response.json({ ok: true, data: created });
-        } catch {
-          return Response.json({ ok: false, error: 'Invalid request body' }, { status: 400 });
+        } catch (err: any) {
+          return Response.json({ ok: false, error: err?.message || 'Invalid request body' }, { status: 400 });
         }
       }
       return Response.json({ ok: false, error: 'Method not allowed' }, { status: 405 });
@@ -173,7 +178,7 @@ export function startPortalServer(port: number = PORT) {
       if (!isAdmin) {
         return Response.json({ ok: false, error: 'Forbidden: Administrative role required to review requests' }, { status: 403 });
       }
-      const pending = getPendingAppAccessRequests();
+      const pending = getPendingAppAccessRequests({ userId: auth.user!.id, userEmail: auth.user!.email, userRoles, isSuperAdmin });
       return Response.json({ ok: true, data: pending });
     }
 
@@ -198,6 +203,9 @@ export function startPortalServer(port: number = PORT) {
         const result = await decideAppAccessRequest(requestId, auth.user!.id, decision, {
           notes: body.notes || body.reason,
           headers: forwardHeaders,
+          adminUserEmail: auth.user!.email,
+          isSuperAdmin,
+          userRoles,
         });
 
         if (!result.ok) {
@@ -209,6 +217,10 @@ export function startPortalServer(port: number = PORT) {
         return Response.json({ ok: false, error: err?.message || 'Failed to decide request' }, { status: 400 });
       }
     }
+
+    // ── Application Governance & Admins API ──
+    const govResponse = await handleAppGovernanceRoutes(req, url, auth as any, forwardHeaders);
+    if (govResponse) return govResponse;
 
     // ── Developer Personal Access Tokens API ──
     if (url.pathname === '/api/v1/portal/tokens' || url.pathname === '/portal/api/v1/portal/tokens') {
@@ -435,6 +447,7 @@ export function startPortalServer(port: number = PORT) {
     }
 
     const userAgent = req.headers.get('user-agent') || 'Browser Session';
+    const approvedApps = getUserApprovedAppIds(auth.user!.id, auth.user!.email);
     const user: HeaderUserContext = {
       id: auth.user!.id,
       email: auth.user!.email,
@@ -442,6 +455,7 @@ export function startPortalServer(port: number = PORT) {
       roles: userRoles,
       isAdmin,
       userAgent,
+      approvedApps,
     };
 
     return new Response(renderPortalHtml(user), {

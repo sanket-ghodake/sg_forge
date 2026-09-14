@@ -12,6 +12,8 @@ import { renderPageCards } from './page-cards';
 import { renderPortalModals } from './ui-modals';
 import { renderCommandPalette } from './ui-command-palette';
 import { getPortalClientScript } from './ui-scripts';
+import { getAppGovernanceClientScript } from './ui-admin-apps-governance-scripts';
+import { getAppRequestHistoryClientScript } from './ui-admin-apps-history-scripts';
 import { getPortalApps } from './ui-apps-data';
 import { getLiveNotifications } from '../backend/inbox-service';
 
@@ -36,9 +38,14 @@ export function renderPortalHtml(user?: HeaderUserContext): string {
     displayName: user?.displayName || 'Authorized Member',
     roles: user?.roles || ['roles/employee'],
     isAdmin: user?.isAdmin ?? Boolean(user?.roles?.some(r => r.includes('admin') || r.includes('manager'))),
+    department: user?.department,
+    approvedApps: user?.approvedApps || [],
   };
 
-  const { allApps } = getPortalApps(userContext.roles);
+  const { allApps } = getPortalApps(userContext.roles, {
+    department: userContext.department,
+    appBindings: userContext.approvedApps,
+  });
   let unreadCount = 0;
   try {
     const notifs = getLiveNotifications(userContext.id);
@@ -126,10 +133,13 @@ export function renderPortalHtml(user?: HeaderUserContext): string {
   <!-- Interactive Scripts -->
   <script>
     window.__PORTAL_USER__ = ${safeUserJson};
+    window.__PORTAL_APPS__ = ${JSON.stringify(allApps).replace(/</g, '\\u003c')};
     ${getAstryxToastScript()}
     ${getAstryxDropdownScript()}
     ${getAstryxTooltipScript()}
     ${getPortalClientScript()}
+    ${getAppGovernanceClientScript()}
+    ${getAppRequestHistoryClientScript()}
   </script>
 </body>
 </html>`;

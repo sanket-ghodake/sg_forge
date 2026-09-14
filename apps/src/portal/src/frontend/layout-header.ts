@@ -17,6 +17,8 @@ export interface HeaderUserContext {
   isAdmin: boolean;
   userAgent?: string;
   ip?: string;
+  department?: string;
+  approvedApps?: string[];
 }
 
 /**

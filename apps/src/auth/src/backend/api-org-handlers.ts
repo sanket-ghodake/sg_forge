@@ -10,6 +10,7 @@ import { parseEmployeeCsv } from './employee-import';
 import { getOrgTree } from './org-tree-service';
 import { verifyJwt, hashToken } from './crypto';
 import { getAuthDb } from '../db/db';
+import { resetEmployeePassword } from './employee-password-service';
 
 const logger = createLogger('auth-org-api');
 
@@ -450,6 +451,41 @@ export async function handleBindAppPolicy(req: Request): Promise<Response> {
   } catch (err: any) {
     logger.error('Failed to bind app policy:', err);
     return problem('Bad Request', err?.message || 'Failed to bind app policy', 400);
+  }
+}
+
+/**
+ * Handle POST /api/v1/auth/org/employees/reset-password (or :id/reset-password)
+ * Administratively reset an employee's password and force password update on next login.
+ * @requirements [HLR-AUTH-101] [LLR-AUTH-003]
+ */
+export async function handleResetEmployeePassword(req: Request, employeeId?: string): Promise<Response> {
+  const ip = extractClientIp(req);
+  const auth = extractAuthContext(req);
+
+  if (!auth.isAuthenticated) {
+    return problem('Unauthorized', 'Authentication required to reset employee password', 401);
+  }
+  if (!hasAdminRole(auth.roles)) {
+    return problem('Forbidden', 'Insufficient permissions. Requires administrative role.', 403);
+  }
+
+  try {
+    const body: any = await req.json().catch(() => ({}));
+    const targetId = employeeId || body?.id || body?.userId;
+    if (!targetId) return problem('Bad Request', 'Missing employee ID', 400);
+
+    const temporaryPassword = body?.temporaryPassword || body?.password;
+    if (!temporaryPassword || typeof temporaryPassword !== 'string' || temporaryPassword.length < 8) {
+      return problem('Bad Request', 'Temporary password of at least 8 characters is required', 400);
+    }
+
+    const actorId = auth.userId || 'devcenter-admin';
+    const result = resetEmployeePassword(targetId, temporaryPassword, actorId, ip);
+    return Response.json(result);
+  } catch (err: any) {
+    logger.warn('Failed to reset employee password:', err);
+    return problem('Bad Request', err?.message || 'Failed to reset employee password', 400);
   }
 }
 

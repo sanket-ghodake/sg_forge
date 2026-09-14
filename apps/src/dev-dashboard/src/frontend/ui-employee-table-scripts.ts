@@ -39,7 +39,7 @@ export function getEmployeeTableScripts(): string {
         if (total === 0) metricsEl.textContent = 'Showing 0 of 0 members';
         else metricsEl.textContent = 'Showing ' + (startIndex + 1) + '–' + Math.min(startIndex + paginatedItems.length, total) + ' of ' + total + ' members';
       }
-      if (pillTotal) pillTotal.textContent = total + ' Members';
+      if (pillTotal) pillTotal.innerHTML = '<span class="emp-metric-count">' + total + '</span><span class="emp-metric-label"> Members</span>';
 
       if (selectionEl && selectedCountEl) {
         if (selectedEmployeeIds.size > 0) {
@@ -93,7 +93,8 @@ export function getEmployeeTableScripts(): string {
             '</button>'
           : '<span class="emp-no-mgr">Direct / Head</span>';
 
-        return '<tr class="emp-row" data-id="' + emp.id + '" onclick="handleEmployeeRowClick(event, this.dataset.id)">' +
+        const isFocused = Boolean(focusedEmployeeId && emp.id === focusedEmployeeId);
+        return '<tr class="emp-row' + (isFocused ? ' focused' : '') + '" data-id="' + emp.id + '" onclick="handleEmployeeRowClick(event, this.dataset.id)">' +
           '<td class="emp-cell-checkbox" onclick="event.stopPropagation()">' +
             '<input type="checkbox" ' + isChecked + ' class="emp-checkbox" data-emp-id="' + emp.id + '" onchange="toggleEmployeeSelection(this.getAttribute(\\'data-emp-id\\'), this.checked)">' +
           '</td>' +
@@ -139,6 +140,9 @@ export function getEmployeeTableScripts(): string {
               '<button type="button" class="emp-action-btn" title="Edit Member" data-emp-id="' + emp.id + '" onclick="openEditEmployeeModal(this.getAttribute(\\'data-emp-id\\'))">' +
                 '${astryxIcons.edit}' +
               '</button>' +
+              '<button type="button" class="emp-action-btn" title="Restore / Reset Password" data-emp-id="' + emp.id + '" onclick="openResetPasswordModal(this.getAttribute(\\'data-emp-id\\'))">' +
+                '${astryxIcons.key}' +
+              '</button>' +
               '<button type="button" class="emp-action-btn emp-action-revoke" title="Revoke Active Sessions" data-emp-id="' + emp.id + '" onclick="revokeEmployeeSessions(this.getAttribute(\\'data-emp-id\\'))">' +
                 '${astryxIcons.userX}' +
               '</button>' +
@@ -146,6 +150,15 @@ export function getEmployeeTableScripts(): string {
           '</td>' +
         '</tr>';
       }).join('');
+
+      if (focusedEmployeeId) {
+        setTimeout(() => {
+          const focusedRow = document.querySelector('.emp-row.focused');
+          if (focusedRow && typeof focusedRow.scrollIntoView === 'function') {
+            focusedRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        }, 50);
+      }
     }
 
     function renderEmployeePagination(totalPages) {
@@ -234,10 +247,10 @@ export function getEmployeeTableScripts(): string {
         const ind = document.getElementById('emp-sort-' + f + '-indicator');
         if (!ind) return;
         if (f === field) {
-          ind.innerHTML = dir === 1 ? '${astryxIcons.arrowUp}' : '${astryxIcons.arrowDown}';
+          ind.innerHTML = dir === 1 ? ${JSON.stringify(astryxIcons.arrowUp)} : ${JSON.stringify(astryxIcons.arrowDown)};
           ind.classList.add('active');
         } else {
-          ind.innerHTML = '${astryxIcons.arrowUpDown}';
+          ind.innerHTML = ${JSON.stringify(astryxIcons.arrowUpDown)};
           ind.classList.remove('active');
         }
       });
@@ -282,7 +295,9 @@ export function getEmployeeTableScripts(): string {
 
       if (hud) hud.style.display = isEmpTableFullscreen ? 'flex' : 'none';
       if (labelEl) labelEl.textContent = isEmpTableFullscreen ? 'Exit Full Screen' : 'Full Screen';
-      if (iconEl) iconEl.innerHTML = isEmpTableFullscreen ? '${astryxIcons.minimize}' : '${astryxIcons.maximize}';
+      if (iconEl) iconEl.innerHTML = isEmpTableFullscreen ? ${JSON.stringify(astryxIcons.minimize)} : ${JSON.stringify(astryxIcons.maximize)};
+      const fsBtn = document.getElementById('btn-emp-fullscreen');
+      if (fsBtn) fsBtn.title = isEmpTableFullscreen ? 'Exit Full Screen (Esc)' : 'Toggle Full Canvas (Esc to exit)';
 
       if (isEmpTableFullscreen && typeof showAstryxToast === 'function') {
         showAstryxToast('info', 'Full Canvas Mode active. Press Esc to exit.');
@@ -314,6 +329,37 @@ export function getEmployeeTableScripts(): string {
       navigator.clipboard.writeText(email).then(() => {
         if (typeof showAstryxToast === 'function') showAstryxToast('success', 'Email copied: ' + email);
       }).catch(() => {});
+    }
+
+    // Dynamic Toolbar Responsiveness: auto-switches buttons to crisp icons when space is constrained
+    function initEmployeeToolbarResizeObserver() {
+      const toolbar = document.getElementById('emp-table-toolbar');
+      if (!toolbar || typeof ResizeObserver === 'undefined') return;
+      if (toolbar._roAttached) return;
+      toolbar._roAttached = true;
+
+      const ro = new ResizeObserver(entries => {
+        for (const entry of entries) {
+          const w = entry.contentRect.width;
+          if (w < 780) {
+            toolbar.classList.add('toolbar-compact', 'toolbar-icon-mode');
+          } else if (w < 980) {
+            toolbar.classList.add('toolbar-compact');
+            toolbar.classList.remove('toolbar-icon-mode');
+          } else {
+            toolbar.classList.remove('toolbar-compact', 'toolbar-icon-mode');
+          }
+        }
+      });
+      ro.observe(toolbar);
+    }
+
+    if (typeof document !== 'undefined') {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEmployeeToolbarResizeObserver);
+      } else {
+        setTimeout(initEmployeeToolbarResizeObserver, 50);
+      }
     }
 
     // Keyboard listener for Escape key (to exit fullscreen) and hotkeys

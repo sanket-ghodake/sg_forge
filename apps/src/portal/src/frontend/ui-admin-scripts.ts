@@ -309,9 +309,11 @@ export function getAdminClientScript(): string {
       document.addEventListener('click', function(e) {
         const editPolicyBtn = e.target.closest('.edit-app-policy-btn');
         if (editPolicyBtn) {
+          e.preventDefault();
+          e.stopPropagation();
           const appId = editPolicyBtn.getAttribute('data-id');
-          if (window.astryxToast) {
-            window.astryxToast('Access policy configuration active for ' + appId, 'info');
+          if (appId && window.openAppGovernanceModal) {
+            window.openAppGovernanceModal(appId);
           }
         }
       });

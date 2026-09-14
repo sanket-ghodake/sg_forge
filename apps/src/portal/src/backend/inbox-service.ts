@@ -38,18 +38,7 @@ export interface LiveCompanyEvent {
   relativeTime: string;
 }
 
-/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
-export interface AppAccessRequestItem {
-  id: string;
-  userId: string;
-  userEmail: string;
-  appId: string;
-  appName: string;
-  reasonType: string;
-  notes?: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  createdAt: number;
-}
+export type { AppAccessRequestItem } from './app-requests-service';
 
 /** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
 export interface UserApiTokenItem {
@@ -322,144 +311,16 @@ export function setUserDeliveryPreference(userId: string, pref: string): boolean
   }
 }
 
-/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
-export function createAppAccessRequest(req: {
-  userId: string;
-  userEmail: string;
-  appId: string;
-  appName: string;
-  reasonType: string;
-  notes?: string;
-}): AppAccessRequestItem | null {
-  const db = getDatabase();
-  try {
-    const id = `req_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-    const now = Date.now();
-    db.run(`
-      INSERT INTO portal_app_access_requests (id, user_id, user_email, app_id, appName, reason_type, notes, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDING', ?)
-    `, [id, req.userId, req.userEmail, req.appId, req.appName, req.reasonType, req.notes || null, now]);
-
-    return {
-      id,
-      userId: req.userId,
-      userEmail: req.userEmail,
-      appId: req.appId,
-      appName: req.appName,
-      reasonType: req.reasonType,
-      notes: req.notes,
-      status: 'PENDING',
-      createdAt: now,
-    };
-  } catch (err: any) {
-    logger.error('Failed to create app access request', err);
-    return null;
-  }
-}
-
-/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
-export function getUserAppAccessRequests(userId: string): AppAccessRequestItem[] {
-  const db = getDatabase();
-  try {
-    const rows = db.query<any, [string]>(`
-      SELECT id, user_id, user_email, app_id, appName, reason_type, notes, status, created_at
-      FROM portal_app_access_requests
-      WHERE user_id = ?
-      ORDER BY created_at DESC
-    `).all(userId);
-
-    return rows.map((r: any) => ({
-      id: r.id,
-      userId: r.user_id,
-      userEmail: r.user_email,
-      appId: r.app_id,
-      appName: r.appName,
-      reasonType: r.reason_type,
-      notes: r.notes || undefined,
-      status: r.status,
-      createdAt: r.created_at,
-    }));
-  } catch {
-    return [];
-  }
-}
-
-/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
-export function cancelAppAccessRequest(userId: string, requestId: string): boolean {
-  const db = getDatabase();
-  try {
-    const res = db.run('DELETE FROM portal_app_access_requests WHERE id = ? AND user_id = ?', [requestId, userId]);
-    return res.changes > 0;
-  } catch {
-    return false;
-  }
-}
-
-/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
-export function getPendingAppAccessRequests(): any[] {
-  const db = getDatabase();
-  try {
-    const rows = db.query<any, []>(`SELECT id, user_id, user_email, app_id, appName, reason_type, notes, status, created_at FROM portal_app_access_requests WHERE status = 'PENDING' ORDER BY created_at DESC`).all();
-    return rows.map((r: any) => ({
-      id: r.id, userId: r.user_id, userEmail: r.user_email,
-      appId: r.app_id, app_id: r.app_id, appName: r.appName,
-      reasonType: r.reason_type, notes: r.notes || undefined,
-      status: r.status, createdAt: r.created_at,
-    }));
-  } catch { return []; }
-}
-
-/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
-export async function decideAppAccessRequest(
-  requestId: string,
-  adminUserId: string,
-  decision: 'APPROVE' | 'REJECT',
-  options: { notes?: string; headers?: Record<string, string> } = {}
-): Promise<{ ok: boolean; status: string; error?: string }> {
-  const db = getDatabase();
-  try {
-    const req = db.query<any, [string]>('SELECT * FROM portal_app_access_requests WHERE id = ?').get(requestId);
-    if (!req) return { ok: false, status: 'error', error: 'Request not found' };
-
-    // Anti-Self-Approval Security Defense: Admin cannot approve their own access request
-    if (req.user_id === adminUserId) {
-      return { ok: false, status: 'error', error: 'Forbidden: Anti-Self-Approval policy active. You cannot approve your own access request.' };
-    }
-
-    const now = Date.now();
-    const newStatus = decision === 'APPROVE' ? 'APPROVED' : 'REJECTED';
-    db.run('UPDATE portal_app_access_requests SET status = ? WHERE id = ?', [newStatus, requestId]);
-
-    const targetAppName = req.appName || req.app_id || 'Application';
-    if (decision === 'APPROVE') {
-      try {
-        await bindAppPolicyApi({ userId: req.user_id, appId: req.app_id }, { headers: options.headers });
-      } catch (err: any) {
-        logger.warn('Inter-service app policy binding note:', err instanceof Error ? { error: err.message } : undefined);
-      }
-      createNotification({
-        id: `notif_${now}_${Math.random().toString(36).slice(2, 6)}`,
-        userId: req.user_id, orgId: null, type: 'ACTION',
-        title: 'App Access Approved',
-        message: `Your request for ${targetAppName} was approved. You can now launch this tool from your Apps hub.`,
-        sender: 'Security & App Governance', timestamp: 'Just now', isUnread: true, categoryTag: 'APP_ACCESS',
-      });
-    } else {
-      createNotification({
-        id: `notif_${now}_${Math.random().toString(36).slice(2, 6)}`,
-        userId: req.user_id, orgId: null, type: 'ACTION',
-        title: 'App Access Declined',
-        message: `Your request for ${targetAppName} was declined by the administrator.`,
-        sender: 'Security & App Governance', timestamp: 'Just now', isUnread: true, categoryTag: 'APP_ACCESS',
-      });
-    }
-
-    return { ok: true, status: newStatus };
-  } catch (err: any) {
-    logger.error('Failed to decide app access request', err);
-    return { ok: false, status: 'error', error: err?.message || 'Failed to process decision' };
-  }
-}
+// ── App Access Requests Service Re-Exports ──
+export {
+  createAppAccessRequest,
+  getUserAppAccessRequests,
+  getUserApprovedAppIds,
+  cancelAppAccessRequest,
+  getPendingAppAccessRequests,
+  decideAppAccessRequest,
+  markEmployeeRequestsInactive,
+} from './app-requests-service';
 
 
 /** @requirements [HLR-PORTAL-201] [LLR-UI-003] */

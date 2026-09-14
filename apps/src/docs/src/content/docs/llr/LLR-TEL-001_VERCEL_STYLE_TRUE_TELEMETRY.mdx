@@ -44,7 +44,7 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
       </marker>
     </defs>
 
-    <!-- Column 1: Ingress Sources -->
+    {/* Column 1: Ingress Sources */}
     <rect x="20" y="20" width="220" height="70" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-success)" stroke-width="1.5" />
     <text x="35" y="48" font-size="14" font-weight="600" fill="var(--forge-text-main)">👤 Real End Users</text>
     <text x="35" y="68" font-size="11" fill="var(--forge-text-muted)">Browser UAs • Public / Local IPs</text>
@@ -57,7 +57,7 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
     <text x="35" y="238" font-size="14" font-weight="600" fill="var(--forge-text-main)">⚙️ Liveness & Probes</text>
     <text x="35" y="258" font-size="11" fill="var(--forge-text-muted)">/health • /api/services • Polling</text>
 
-    <!-- Column 2: Classifier Engine -->
+    {/* Column 2: Classifier Engine */}
     <rect x="320" y="70" width="220" height="170" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-border)" stroke-width="1.5" />
     <text x="340" y="105" font-size="14" font-weight="600" fill="var(--forge-primary)">⚡ Telemetry Classifier</text>
     <text x="340" y="128" font-size="11" font-family="monospace" fill="var(--forge-text-muted)">classifyTrafficCategory()</text>
@@ -67,7 +67,7 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
     <text x="340" y="205" font-size="11" fill="var(--forge-text-main)">• Subnet & Header Checks</text>
     <text x="340" y="225" font-size="10" fill="var(--forge-text-subtle)">Tag: 'user' | 'mesh' | 'probe'</text>
 
-    <!-- Column 3: Storage & Analytical Engine -->
+    {/* Column 3: Storage & Analytical Engine */}
     <rect x="620" y="20" width="240" height="110" rx="8" fill="var(--forge-bg-card)" stroke="var(--forge-border)" stroke-width="1.5" />
     <text x="640" y="48" font-size="13" font-weight="600" fill="var(--forge-text-main)">🗄️ Storage Engine (SQLite)</text>
     <text x="640" y="70" font-size="11" font-family="monospace" fill="var(--forge-text-muted)">traffic_events (idx_te_cat_time)</text>
@@ -81,12 +81,12 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
     <text x="640" y="254" font-size="11" fill="var(--forge-primary)">✓ Real Unique Visitor Traffic</text>
     <text x="640" y="270" font-size="10" fill="var(--forge-text-subtle)">Zero probe loop skew</text>
 
-    <!-- Connectors: Ingress -> Classifier -->
+    {/* Connectors: Ingress -> Classifier */}
     <line x1="240" y1="55" x2="320" y2="110" stroke="var(--forge-success)" stroke-width="1.5" marker-end="url(#arrow)" />
     <line x1="240" y1="150" x2="320" y2="150" stroke="var(--forge-primary)" stroke-width="1.5" marker-end="url(#arrow)" />
     <line x1="240" y1="245" x2="320" y2="190" stroke="var(--forge-warning)" stroke-width="1.5" marker-end="url(#arrow)" />
 
-    <!-- Connectors: Classifier -> Storage & UI -->
+    {/* Connectors: Classifier -> Storage & UI */}
     <line x1="540" y1="120" x2="620" y2="75" stroke="var(--forge-border)" stroke-width="1.5" marker-end="url(#arrow)" />
     <line x1="540" y1="175" x2="620" y2="210" stroke="var(--forge-primary)" stroke-width="1.5" marker-end="url(#arrow-primary)" />
   </svg>

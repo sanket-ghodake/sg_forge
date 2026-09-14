@@ -67,6 +67,7 @@ export default defineConfig({
             { label: 'Astryx UI & Viewports', slug: 'features/astryx-ui' },
             { label: 'Client State & Storage Engine', slug: 'features/client-state' },
             { label: '4-Pillar Observability & RFC 7807', slug: 'features/observability' },
+            { label: 'App Access Governance & Lifecycle', slug: 'features/app-access-governance' },
           ],
         },
         {

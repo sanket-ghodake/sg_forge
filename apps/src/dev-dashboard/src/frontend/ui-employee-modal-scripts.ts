@@ -277,10 +277,10 @@ export function getEmployeeModalScripts(): string {
         // Top Navigation Bar
         html += '<div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid var(--forge-border); flex-wrap: wrap; gap: 0.5rem;">' +
           '<div style="font-size: 0.76rem; color: var(--forge-text-muted); display: flex; align-items: center; gap: 0.35rem;">' +
-            '<span style="display:inline-flex;align-items:center;gap:0.25rem;">' + \`${astryxIcons.building}\` + ' Organization</span> &rsaquo; <span>Reporting Hierarchy</span>' +
+            '<span style="display:inline-flex;align-items:center;gap:0.25rem;">' + ${JSON.stringify(astryxIcons.building)} + ' Organization</span> &rsaquo; <span>Reporting Hierarchy</span>' +
           '</div>' +
           '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.2rem 0.55rem; display:inline-flex;align-items:center;gap:0.35rem;" onclick="closeHierarchyModal(); setOrgFocus(\\\'' + u.id + '\\\');">' +
-            \`\${astryxIcons.topology}\` + ' Full Org Studio &rarr;' +
+            ${JSON.stringify(astryxIcons.topology)} + ' Full Org Studio &rarr;' +
           '</button>' +
         '</div>';
 
@@ -317,7 +317,7 @@ export function getEmployeeModalScripts(): string {
               '<div style="font-size: 0.72rem; color: var(--forge-text-muted); font-family: monospace; margin-top: 0.15rem;">' + u.email + '</div>' +
               '<div style="display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.5rem;">' +
                 uRoles +
-                (u.department_name ? '<span class="astryx-badge" style="background: var(--forge-bg-card); display:inline-flex;align-items:center;gap:0.25rem;">' + \`${astryxIcons.building}\` + ' ' + u.department_name + '</span>' : '') +
+                (u.department_name ? '<span class="astryx-badge" style="background: var(--forge-bg-card); display:inline-flex;align-items:center;gap:0.25rem;">' + ${JSON.stringify(astryxIcons.building)} + ' ' + u.department_name + '</span>' : '') +
               '</div>' +
             '</div>' +
           '</div>' +
@@ -389,3 +389,5 @@ export function getEmployeeModalScripts(): string {
     window.openAddDepartmentFromMemberModal = openAddDepartmentFromMemberModal;
   `;
 }
+
+

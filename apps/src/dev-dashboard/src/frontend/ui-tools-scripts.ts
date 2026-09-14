@@ -32,9 +32,9 @@ export function getToolsDashboardScripts(): string {
           body: JSON.stringify({ url, authToken: token, type })
         }).then(r => r.json());
         if (res.success) {
-          if (st) st.innerHTML = '<span style="color:var(--forge-success);">🟢 Connection successful (' + res.latencyMs + 'ms latency)</span>';
+          if (st) st.innerHTML = '<span style="color:var(--forge-success);display:inline-flex;align-items:center;gap:0.35rem;"><span class="status-pulse-dot active"></span>Connection successful (' + res.latencyMs + 'ms latency)</span>';
         } else {
-          if (st) st.innerHTML = '<span style="color:var(--forge-accent);">🔴 Connection failed: ' + (res.error || 'Check endpoint and credentials') + '</span>';
+          if (st) st.innerHTML = '<span style="color:var(--forge-accent);display:inline-flex;align-items:center;gap:0.35rem;"><span class="status-pulse-dot suspended"></span>Connection failed: ' + (res.error || 'Check endpoint and credentials') + '</span>';
         }
       } catch (err) {
         if (st) st.innerHTML = '<span style="color:var(--forge-accent);">Ping error: ' + err.message + '</span>';

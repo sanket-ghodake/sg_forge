@@ -25,3 +25,4 @@ export * from './backup';
 export * from './crypto';
 export * from './telemetry-client';
 export * from './org-setup-client';
+export * from './employee-password-client';

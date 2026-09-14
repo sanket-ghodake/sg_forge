@@ -4,6 +4,7 @@
  */
 
 import { getInboxStyles } from './ui-styles-inbox';
+import { getModalCustomStyles } from './ui-styles-modals';
 
 /**
  * getPortalCustomStyles
@@ -127,6 +128,17 @@ export function getPortalCustomStyles(): string {
     .portal-page-view { display: none; animation: viewFadeIn 0.18s ease-in-out; }
     .portal-page-view.active { display: block; }
     @keyframes viewFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Standardized Portal View Header & Titles ── */
+    .portal-view-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; gap: 1.25rem; flex-wrap: wrap; }
+    .portal-view-title { font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); letter-spacing: -0.02em; margin: 0.35rem 0 0.25rem 0; }
+    .portal-view-desc { font-size: 0.82rem; color: var(--forge-text-muted); margin: 0; max-width: 680px; line-height: 1.45; }
+    .portal-view-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 600;
+      padding: 0.18rem 0.55rem; border-radius: var(--forge-radius-full); background: var(--forge-primary-bg);
+      border: 1px solid var(--forge-border); color: var(--forge-primary);
+    }
+    .portal-view-badge .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--forge-primary); }
 
     html[data-active-view="canvas"] #view-canvas, html[data-active-view="apps"] #view-apps, html[data-active-view="profile"] #view-profile, html[data-active-view="notifications"] #view-notifications, html[data-active-view="admin-members"] #view-admin-members, html[data-active-view="admin-apps"] #view-admin-apps, html[data-active-view="admin-org"] #view-admin-org, html[data-active-view="admin-audit"] #view-admin-audit, html[data-active-view="admin-settings"] #view-admin-settings { display: block !important; }
 
@@ -331,7 +343,7 @@ export function getPortalCustomStyles(): string {
     .apps-catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.15rem; }
     .app-card-item { background: var(--forge-bg-surface); border: 1px solid var(--forge-border); border-radius: var(--forge-radius); padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; transition: var(--forge-transition); box-shadow: var(--forge-shadow-card); position: relative; }
     .app-card-item:hover { border-color: var(--forge-border-medium); box-shadow: var(--forge-shadow-hover); }
-    .app-card-item.is-pinned { border-color: rgba(var(--forge-primary-rgb, 99, 102, 241), 0.4); }
+    .app-card-item.is-pinned { border-color: var(--forge-primary); }
     .app-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
     .app-card-brand { display: flex; align-items: center; gap: 0.65rem; }
     .app-card-icon-box { width: 38px; height: 38px; border-radius: var(--forge-radius-sm); background: var(--forge-bg-card); border: 1px solid var(--forge-border); display: flex; align-items: center; justify-content: center; color: var(--forge-primary); flex-shrink: 0; }
@@ -403,6 +415,22 @@ export function getPortalCustomStyles(): string {
     .astryx-table th { background: var(--forge-bg-card); color: var(--forge-text-muted); font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.75rem 1rem; border-bottom: 1px solid var(--forge-border); }
     .astryx-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--forge-border); color: var(--forge-text-main); vertical-align: middle; }
     .astryx-table tr:hover td { background: var(--forge-bg-card-hover); }
+    [data-theme="light"] .astryx-table th { background: var(--forge-bg-elevated); color: var(--forge-text-muted); }
+    [data-theme="light"] .astryx-table tr:hover td { background: var(--forge-bg-elevated); }
+    .astryx-table code {
+      font-family: var(--forge-font-mono, monospace); font-size: 0.78rem; padding: 0.18rem 0.45rem;
+      border-radius: var(--forge-radius-sm); background: var(--forge-bg-card); border: 1px solid var(--forge-border); color: var(--forge-text-main);
+    }
+    [data-theme="light"] .astryx-table code { background: var(--forge-bg-elevated); border-color: var(--forge-border); }
+    .app-port-tag {
+      display: inline-flex; align-items: center; font-family: var(--forge-font-mono, monospace); font-size: 0.78rem;
+      font-weight: 500; padding: 0.15rem 0.45rem; border-radius: var(--forge-radius-sm); background: var(--forge-bg-card);
+      border: 1px solid var(--forge-border); color: var(--forge-text-muted);
+    }
+    [data-theme="light"] .app-port-tag { background: var(--forge-bg-elevated); border-color: var(--forge-border); color: var(--forge-text-main); }
+    [data-theme="light"] .user-dropdown-popover { box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--forge-border); }
+    [data-theme="light"] .portal-search-modal { background: rgba(15, 23, 42, 0.45); }
+    [data-theme="light"] .portal-search-box { box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.18), 0 0 0 1px var(--forge-border); }
     .table-user-cell { display: flex; align-items: center; gap: 0.65rem; }
     .table-user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--forge-primary); color: var(--forge-bg-root); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
     .table-user-name { font-weight: 600; color: var(--forge-text-main); }
@@ -412,16 +440,7 @@ export function getPortalCustomStyles(): string {
     .admin-table-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem; }
     .table-summary-pill { font-size: 0.8rem; color: var(--forge-text-muted); }
 
-    /* ── Modals & Backdrop Dialogs ── */
-    .astryx-modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(16px); z-index: 2500; align-items: center; justify-content: center; opacity: 0; }
-    .astryx-modal-backdrop.active, .astryx-modal-backdrop.open { display: flex !important; opacity: 1 !important; animation: viewFadeIn 0.15s ease; }
-    .astryx-modal-backdrop.active .astryx-modal, .astryx-modal-backdrop.open .astryx-modal { transform: scale(1) translateY(0) !important; }
-    .astryx-modal-box { width: 90%; max-width: 480px; background: var(--forge-bg-surface); border: 1px solid var(--forge-border-medium); border-radius: var(--forge-radius); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8); overflow: hidden; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid var(--forge-border); }
-    .modal-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--forge-text-main); }
-    .modal-close-btn { background: transparent; border: none; color: var(--forge-text-muted); cursor: pointer; font-size: 1.1rem; }
-    .modal-body { padding: 1.25rem; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 0.6rem; padding: 0.85rem 1.25rem; border-top: 1px solid var(--forge-border); background: var(--forge-bg-card); }
+    ${getModalCustomStyles()}
 
     /* ── Command Palette (⌘K) ── */
     .portal-search-modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(16px); z-index: 3000; align-items: flex-start; justify-content: center; padding-top: 12vh; }

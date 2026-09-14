@@ -9,7 +9,7 @@ import { getIssuesDashboardScripts } from './ui-issues-scripts';
 import { getHostDashboardScripts } from './ui-host-scripts';
 import { getAppsDashboardScripts } from './ui-apps-scripts';
 import { getDropdownScripts } from './ui-dropdown-scripts';
-import { getAstryxToastScript, getAstryxTooltipScript } from '@forge/ui';
+import { getAstryxToastScript, getAstryxTooltipScript, astryxIcons } from '@forge/ui';
 
 /**
  * getDashboardScripts
@@ -17,6 +17,8 @@ import { getAstryxToastScript, getAstryxTooltipScript } from '@forge/ui';
  */
 export function getDashboardScripts(): string {
   return `
+    window.astryxIcons = ${JSON.stringify(astryxIcons)};
+    var astryxIcons = window.astryxIcons;
     ${getAstryxToastScript()}
     ${getAstryxTooltipScript()}
     ${getDropdownScripts()}

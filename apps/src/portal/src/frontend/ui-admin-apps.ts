@@ -18,8 +18,8 @@ export function renderAdminAppsView(): string {
       <div class="portal-view-header">
         <div>
           <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <div class="portal-view-badge" style="background: rgba(var(--forge-primary-rgb, 99, 102, 241), 0.15); color: var(--forge-primary);">
-              <span class="badge-dot" style="background: var(--forge-primary);"></span>
+            <div class="portal-view-badge">
+              <span class="badge-dot"></span>
               <span>Admin Console</span>
             </div>
             <span class="portal-view-audience" style="font-size: 0.74rem; color: var(--forge-text-subtle);">Audience: <strong style="color: var(--forge-text-muted); font-weight: 500;">Admins & IT Leads</strong></span>
@@ -30,9 +30,12 @@ export function renderAdminAppsView(): string {
           </p>
         </div>
 
-        <div class="portal-view-actions">
+        <div class="portal-view-actions" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="astryx-btn btn-secondary" id="open-all-requests-history-btn" data-astryx-tooltip="View All Access Requests & Audit History">
+            ${astryxIcons.history || astryxIcons.clock || ''} Access Requests & History
+          </button>
           <button class="astryx-btn btn-primary" id="open-register-app-btn">
-            ${astryxIcons.plus || '+'} Register Micro-App
+            ${astryxIcons.plus || ''} Register Micro-App
           </button>
         </div>
       </div>
@@ -74,9 +77,14 @@ export function renderAdminAppsView(): string {
                   <span style="font-size: 0.8rem; color: var(--forge-text-muted); margin-left: 4px;">${app.status === 'ONLINE' ? 'Active Ingress' : 'Standby'}</span>
                 </td>
                 <td style="text-align: right;">
-                  <button class="astryx-btn btn-sm btn-ghost edit-app-policy-btn" data-id="${app.id}" data-astryx-tooltip="Configure Access Policy">
-                    ${astryxIcons.settings || '⚙️'}
-                  </button>
+                  <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 0.35rem;">
+                    <button class="astryx-btn btn-sm btn-ghost view-app-history-btn" data-id="${app.id}" data-name="${app.name}" data-astryx-tooltip="Access Requests & Audit History">
+                      ${astryxIcons.history || astryxIcons.clock || ''}
+                    </button>
+                    <button class="astryx-btn btn-sm btn-ghost edit-app-policy-btn" data-id="${app.id}" data-astryx-tooltip="Configure Access Policy">
+                      ${astryxIcons.settings || ''}
+                    </button>
+                  </div>
                 </td>
               </tr>
             `).join('')}

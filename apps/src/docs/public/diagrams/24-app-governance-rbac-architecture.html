@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App Access Governance & Delegated RBAC Architecture</title>
+  <style>
+    :root {
+      --bg-root: #0b0f19;
+      --bg-surface: #111827;
+      --primary: #6366f1;
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #06b6d4;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body { background: var(--bg-root); color: var(--text); font-family: var(--font); margin: 0; padding: 24px; display: flex; justify-content: center; }
+    .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 960px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.36); }
+    svg { width: 100%; height: auto; display: block; }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-root: #f8fafc;
+        --bg-surface: #ffffff;
+        --primary: #4f46e5;
+        --accent: #059669;
+        --warning: #d97706;
+        --danger: #dc2626;
+        --info: #0891b2;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+      }
+      .card { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+      svg rect[fill="#111827"] { fill: #ffffff !important; stroke: #e2e8f0; }
+      svg rect[stroke="rgba(255,255,255,0.08)"], svg line[stroke="rgba(255,255,255,0.08)"], svg path[stroke="rgba(255,255,255,0.08)"] { stroke: #e2e8f0 !important; }
+      svg text[fill="#F3F4F6"], svg text[fill="#ffffff"] { fill: #0f172a !important; }
+      svg text[fill="#9CA3AF"] { fill: #475569 !important; }
+      svg rect[fill="#1E1B4B"] { fill: #eef2ff !important; stroke: #818cf8 !important; }
+      svg rect[fill="#064E3B"] { fill: #ecfdf5 !important; stroke: #10b981 !important; }
+      svg rect[fill="#451A03"] { fill: #fffbeb !important; stroke: #f59e0b !important; }
+      svg rect[fill="#450A0A"] { fill: #fef2f2 !important; stroke: #ef4444 !important; }
+      svg rect[fill="#164E63"] { fill: #f0fdfa !important; stroke: #06b6d4 !important; }
+      svg text[fill="#818CF8"], svg text[fill="#A5B4FC"] { fill: #4338ca !important; }
+      svg text[fill="#34D399"] { fill: #047857 !important; }
+      svg text[fill="#FBBF24"] { fill: #b45309 !important; }
+      svg text[fill="#F87171"] { fill: #b91c1c !important; }
+      svg text[fill="#67E8F9"] { fill: #0e7490 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <svg viewBox="0 0 920 700" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title-24 desc-24">
+      <title id="title-24">Enterprise App Access Governance &amp; Delegated RBAC Architecture</title>
+      <desc id="desc-24">Architectural schematic of SG Forge 3-tab portal navigation, scoped app governance modal, cross-app isolation security boundary, entitled users roster, and Turso libSQL real-time storage engine.</desc>
+
+      <!-- Main Header Banner -->
+      <rect x="20" y="20" width="880" height="54" rx="8" fill="#1E1B4B" stroke="#6366F1" stroke-width="1.5"/>
+      <text x="460" y="45" text-anchor="middle" fill="#F3F4F6" font-size="15" font-weight="700">Enterprise App Access Governance &amp; Delegated RBAC Architecture</text>
+      <text x="460" y="62" text-anchor="middle" fill="#9CA3AF" font-size="11">3-Tab Portal Navigation · Scoped Delegated Governance · Entitled Users Roster · Zero-Dummy Real-Time DB</text>
+
+      <!-- LAYER 1: CLIENT PRESENTATION LAYER (PORTAL SPA) -->
+      <rect x="20" y="90" width="880" height="155" rx="8" fill="#111827" stroke="rgba(255,255,255,0.08)" stroke-width="1.2"/>
+      <text x="40" y="112" fill="#818CF8" font-size="11" font-weight="700" letter-spacing="0.05em">LAYER 1: PRESENTATION LAYER (PORTAL SPA 3-TAB ENGINE)</text>
+
+      <!-- Tab 1: My Active Apps -->
+      <rect x="40" y="125" width="260" height="105" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+      <rect x="52" y="137" width="16" height="16" rx="3" fill="#10B981"/>
+      <path d="M56 145 L60 149 L65 141" stroke="#064E3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="75" y="150" fill="#34D399" font-size="12" font-weight="700">1. My Active Apps</text>
+      <rect x="235" y="138" width="55" height="18" rx="9" fill="#111827"/>
+      <text x="262" y="151" text-anchor="middle" fill="#34D399" font-size="9.5" font-weight="600">Active (N)</text>
+      <text x="52" y="175" fill="#F3F4F6" font-size="9.5">Dynamic SSR &amp; CSR Hydration</text>
+      <text x="52" y="190" fill="#9CA3AF" font-size="8.5">&bull; Instant 1-Click Launch Button</text>
+      <text x="52" y="203" fill="#9CA3AF" font-size="8.5">&bull; Reconciled via getUserApprovedAppIds()</text>
+      <text x="52" y="216" fill="#9CA3AF" font-size="8.5">&bull; Auto-syncs on access approval event</text>
+
+      <!-- Tab 2: Marketplace Apps -->
+      <rect x="330" y="125" width="260" height="105" rx="6" fill="#1E1B4B" stroke="#6366F1" stroke-width="1"/>
+      <rect x="342" y="137" width="16" height="16" rx="3" fill="#6366F1"/>
+      <circle cx="350" cy="145" r="4" stroke="#1E1B4B" stroke-width="1.6"/>
+      <text x="365" y="150" fill="#818CF8" font-size="12" font-weight="700">2. Marketplace Apps</text>
+      <text x="342" y="175" fill="#F3F4F6" font-size="9.5">Universal App Catalog &amp; Actions</text>
+      <text x="342" y="190" fill="#9CA3AF" font-size="8.5">&bull; Public Apps: Instant Launch</text>
+      <text x="342" y="203" fill="#9CA3AF" font-size="8.5">&bull; Restricted: Request Access Dialog</text>
+      <text x="342" y="216" fill="#9CA3AF" font-size="8.5">&bull; Pending Status Pill &amp; Details Modal</text>
+
+      <!-- Tab 3: Access Requests -->
+      <rect x="620" y="125" width="260" height="105" rx="6" fill="#451A03" stroke="#F59E0B" stroke-width="1"/>
+      <rect x="632" y="137" width="16" height="16" rx="3" fill="#F59E0B"/>
+      <path d="M636 142 H644 M636 145 H644 M636 148 H641" stroke="#451A03" stroke-width="1.5" stroke-linecap="round"/>
+      <text x="655" y="150" fill="#FBBF24" font-size="12" font-weight="700">3. Access Requests</text>
+      <text x="632" y="175" fill="#F3F4F6" font-size="9.5">Self-Service Request Auditing</text>
+      <text x="632" y="190" fill="#9CA3AF" font-size="8.5">&bull; Filter by Pending, Approved, Rejected</text>
+      <text x="632" y="203" fill="#9CA3AF" font-size="8.5">&bull; Inactive User status visibility</text>
+      <text x="632" y="216" fill="#9CA3AF" font-size="8.5">&bull; Complete rationale &amp; timestamps</text>
+
+      <!-- Inter-layer Flow Indicator 1 -->
+      <line x1="460" y1="245" x2="460" y2="275" stroke="#6366F1" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <polygon points="456,273 460,279 464,273" fill="#6366F1"/>
+
+      <!-- LAYER 2: DELEGATED GOVERNANCE & CROSS-APP ISOLATION BARRIER -->
+      <rect x="20" y="280" width="880" height="175" rx="8" fill="#111827" stroke="rgba(255,255,255,0.08)" stroke-width="1.2"/>
+      <text x="40" y="302" fill="#34D399" font-size="11" font-weight="700" letter-spacing="0.05em">LAYER 2: SECURITY BOUNDARY &amp; CROSS-APP ISOLATION ENGINE</text>
+
+      <!-- App Governance Modal Suite -->
+      <rect x="40" y="315" width="460" height="125" rx="6" fill="#164E63" stroke="#06B6D4" stroke-width="1"/>
+      <text x="55" y="335" fill="#67E8F9" font-size="11.5" font-weight="700">App Governance Modal Suite (Per-App Context)</text>
+      
+      <!-- 4 Modal Tabs Subgrid -->
+      <rect x="55" y="348" width="95" height="40" rx="4" fill="#111827" stroke="rgba(255,255,255,0.1)"/>
+      <text x="102" y="365" text-anchor="middle" fill="#F3F4F6" font-size="8.5" font-weight="600">Access Policies</text>
+      <text x="102" y="378" text-anchor="middle" fill="#9CA3AF" font-size="7.5">Public / Restricted</text>
+
+      <rect x="160" y="348" width="95" height="40" rx="4" fill="#111827" stroke="rgba(255,255,255,0.1)"/>
+      <text x="207" y="365" text-anchor="middle" fill="#F3F4F6" font-size="8.5" font-weight="600">App Admins</text>
+      <text x="207" y="378" text-anchor="middle" fill="#9CA3AF" font-size="7.5">Delegated Grants</text>
+
+      <rect x="265" y="348" width="105" height="40" rx="4" fill="#111827" stroke="rgba(255,255,255,0.1)"/>
+      <text x="317" y="365" text-anchor="middle" fill="#F3F4F6" font-size="8.5" font-weight="600">History &amp; SLA</text>
+      <text x="317" y="378" text-anchor="middle" fill="#9CA3AF" font-size="7.5">Mathematical SLA</text>
+
+      <rect x="380" y="348" width="105" height="40" rx="4" fill="#064E3B" stroke="#10B981"/>
+      <text x="432" y="365" text-anchor="middle" fill="#34D399" font-size="8.5" font-weight="700">Entitled Users</text>
+      <text x="432" y="378" text-anchor="middle" fill="#34D399" font-size="7.5">1-Click Revoke</text>
+
+      <text x="55" y="408" fill="#F3F4F6" font-size="9">&bull; GET /api/v1/portal/apps/:appId/users &rarr; Real-time authorized roster</text>
+      <text x="55" y="423" fill="#9CA3AF" font-size="8.5">&bull; POST /api/v1/portal/apps/users/revoke &rarr; Atomic access revocation</text>
+
+      <!-- Cross-App Isolation Enforcement Box -->
+      <rect x="520" y="315" width="360" height="125" rx="6" fill="#450A0A" stroke="#EF4444" stroke-width="1.2"/>
+      <rect x="532" y="327" width="16" height="16" rx="3" fill="#EF4444"/>
+      <path d="M536 332 L544 340 M544 332 L536 340" stroke="#450A0A" stroke-width="1.8" stroke-linecap="round"/>
+      <text x="555" y="340" fill="#F87171" font-size="11.5" font-weight="700">Strict Cross-App Isolation Boundary</text>
+      <text x="532" y="365" fill="#F3F4F6" font-size="9" font-weight="600">isAuthorizedForApp(adminUserId, appId)</text>
+      <text x="532" y="382" fill="#9CA3AF" font-size="8.5">&bull; App Admins can ONLY see &amp; decide their own apps</text>
+      <text x="532" y="396" fill="#9CA3AF" font-size="8.5">&bull; Foreign app requests strictly filtered from inbox</text>
+      <text x="532" y="410" fill="#9CA3AF" font-size="8.5">&bull; Admin turnover triggers automatic pending request rerouting</text>
+      <text x="532" y="424" fill="#F87171" font-size="8.5">&bull; Unauthorized attempt returns 403 RFC 7807 problem</text>
+
+      <!-- Inter-layer Flow Indicator 2 -->
+      <line x1="460" y1="455" x2="460" y2="485" stroke="#10B981" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <polygon points="456,483 460,489 464,483" fill="#10B981"/>
+
+      <!-- LAYER 3: DATA PERSISTENCE & LIFECYCLE STATE ENGINE -->
+      <rect x="20" y="490" width="880" height="185" rx="8" fill="#111827" stroke="rgba(255,255,255,0.08)" stroke-width="1.2"/>
+      <text x="40" y="512" fill="#FBBF24" font-size="11" font-weight="700" letter-spacing="0.05em">LAYER 3: STORAGE ENGINE &amp; LIFECYCLE STATE MACHINE (TURSO LIBSQL)</text>
+
+      <!-- Table: portal_app_requests -->
+      <rect x="40" y="525" width="270" height="135" rx="6" fill="#1E1B4B" stroke="#6366F1" stroke-width="1"/>
+      <text x="55" y="545" fill="#818CF8" font-size="10.5" font-weight="700">portal_app_requests</text>
+      <text x="55" y="565" fill="#F3F4F6" font-size="8.5">id, org_id, app_id, user_id, user_email</text>
+      <text x="55" y="580" fill="#F3F4F6" font-size="8.5">status: <tspan fill="#FBBF24">PENDING</tspan> | <tspan fill="#34D399">APPROVED</tspan> | <tspan fill="#F87171">REJECTED</tspan></text>
+      <text x="95" y="595" fill="#F3F4F6" font-size="8.5">| <tspan fill="#9CA3AF">USER_INACTIVE</tspan> | <tspan fill="#F87171">REVOKED</tspan></text>
+      <text x="95" y="610" fill="#F3F4F6" font-size="8.5">| <tspan fill="#9CA3AF">REVOKED_INACTIVE</tspan></text>
+      <text x="55" y="630" fill="#9CA3AF" font-size="8">created_at, decided_at, decided_by, notes</text>
+      <text x="55" y="645" fill="#34D399" font-size="7.5">Indexed by: (org_id, app_id, status)</text>
+
+      <!-- State Machine Flow Box -->
+      <rect x="330" y="525" width="280" height="135" rx="6" fill="#111827" stroke="#F59E0B" stroke-width="1"/>
+      <text x="345" y="545" fill="#FBBF24" font-size="10.5" font-weight="700">Employee Offboard State Transitions</text>
+      
+      <rect x="345" y="555" width="110" height="28" rx="4" fill="#451A03" stroke="#F59E0B"/>
+      <text x="400" y="572" text-anchor="middle" fill="#FBBF24" font-size="8.5" font-weight="600">Pending Request</text>
+
+      <path d="M455 569 L485 569" stroke="#EF4444" stroke-width="1.2"/>
+      <polygon points="482,566 488,569 482,572" fill="#EF4444"/>
+
+      <rect x="490" y="555" width="105" height="28" rx="4" fill="#450A0A" stroke="#EF4444"/>
+      <text x="542" y="572" text-anchor="middle" fill="#F87171" font-size="8" font-weight="600">USER_INACTIVE</text>
+
+      <rect x="345" y="595" width="110" height="28" rx="4" fill="#064E3B" stroke="#10B981"/>
+      <text x="400" y="612" text-anchor="middle" fill="#34D399" font-size="8.5" font-weight="600">Approved Access</text>
+
+      <path d="M455 609 L485 609" stroke="#EF4444" stroke-width="1.2"/>
+      <polygon points="482,606 488,609 482,612" fill="#EF4444"/>
+
+      <rect x="490" y="595" width="105" height="28" rx="4" fill="#450A0A" stroke="#EF4444"/>
+      <text x="542" y="612" text-anchor="middle" fill="#F87171" font-size="7.5" font-weight="600">REVOKED_INACTIVE</text>
+
+      <text x="345" y="645" fill="#9CA3AF" font-size="8">&bull; portal_app_admins: Cascade DELETE upon offboarding</text>
+
+      <!-- Real-Time Audit Engine Box -->
+      <rect x="630" y="525" width="250" height="135" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+      <text x="645" y="545" fill="#34D399" font-size="10.5" font-weight="700">Zero-Dummy Real-Time Engine</text>
+      <text x="645" y="567" fill="#F3F4F6" font-size="8.5">&bull; 100% Real DB Queries (Turso)</text>
+      <text x="645" y="582" fill="#F3F4F6" font-size="8.5">&bull; Mathematical SLA Computation:</text>
+      <rect x="645" y="592" width="220" height="22" rx="3" fill="#111827"/>
+      <text x="755" y="607" text-anchor="middle" fill="#34D399" font-size="8" font-family="monospace">avg(decided_at - created_at)</text>
+      <text x="645" y="630" fill="#9CA3AF" font-size="8">&bull; Zero fallback mock emails</text>
+      <text x="645" y="645" fill="#9CA3AF" font-size="8">&bull; Sub-10ms query execution with index</text>
+    </svg>
+  </div>
+</body>
+</html>

@@ -7,9 +7,7 @@
 
 export function getEmployeeTableStyles(): string {
   return `
-    /* ============================================================
-       Table Container & Fullscreen Canvas
-    ============================================================ */
+    /* --- Table Container & Fullscreen Canvas --- */
     .emp-table-container {
       display: flex; flex-direction: column; gap: 0.75rem;
       position: relative;
@@ -23,9 +21,7 @@ export function getEmployeeTableStyles(): string {
       overflow: hidden; display: flex; flex-direction: column;
     }
 
-    /* ============================================================
-       Fullscreen HUD Notification Banner
-    ============================================================ */
+    /* --- Fullscreen HUD Notification Banner --- */
     .emp-fullscreen-hud {
       display: flex; justify-content: space-between; align-items: center;
       padding: 0.45rem 0.85rem;
@@ -52,27 +48,33 @@ export function getEmployeeTableStyles(): string {
     ============================================================ */
     .emp-table-toolbar {
       display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 0.6rem; flex-shrink: 0;
-      padding: 0.6rem 0.85rem;
+      flex-wrap: nowrap; gap: 0.5rem; flex-shrink: 0;
+      padding: 0.45rem 0.75rem;
       background: var(--forge-bg-card);
       border: 1px solid var(--forge-border);
       border-radius: var(--forge-radius-sm);
       box-shadow: var(--forge-shadow-card);
+      min-height: 46px; box-sizing: border-box;
+      overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
     }
+    .emp-table-toolbar::-webkit-scrollbar { display: none; }
     .emp-toolbar-left {
-      display: flex; align-items: center; flex-wrap: wrap;
-      gap: 0.45rem; flex: 1; min-width: 0;
+      display: flex; align-items: center; flex-wrap: nowrap;
+      gap: 0.4rem; flex: 1; min-width: 0;
     }
-    .emp-toolbar-right { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .emp-toolbar-right {
+      display: flex; align-items: center; gap: 0.35rem;
+      flex-shrink: 0; flex-wrap: nowrap;
+    }
 
-    /* Search box — full pill with focus ring */
+    /* Search box — compact pill with focus ring */
     .emp-search-box {
       position: relative; display: flex; align-items: center;
       background: var(--forge-bg-surface); border: 1px solid var(--forge-border);
       border-radius: var(--forge-radius-full);
-      padding: 0 0.65rem; height: 34px;
+      padding: 0 0.6rem; height: 32px; box-sizing: border-box;
       transition: border-color 0.18s ease, box-shadow 0.18s ease;
-      min-width: 200px; max-width: 300px; flex: 1;
+      min-width: 130px; max-width: 220px; flex: 1 1 170px;
     }
     .emp-search-box:focus-within {
       border-color: var(--forge-primary);
@@ -84,8 +86,9 @@ export function getEmployeeTableStyles(): string {
     }
     .emp-search-box input[type="search"] {
       background: transparent; border: none; outline: none;
-      font-size: 0.8rem; color: var(--forge-text-main);
+      font-size: 0.76rem; color: var(--forge-text-main);
       width: 100%; height: 100%; -webkit-appearance: none;
+      text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
     }
     .emp-search-box input[type="search"]::placeholder { color: var(--forge-text-muted); }
     .emp-search-clear-btn {
@@ -99,14 +102,15 @@ export function getEmployeeTableStyles(): string {
 
     /* Dept select — custom styled, appearance: none, no browser defaults */
     .emp-dept-select {
-      height: 34px; padding: 0 2rem 0 0.75rem;
-      background: var(--forge-bg-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.55rem center;
+      height: 32px; padding: 0 1.65rem 0 0.65rem;
+      background: var(--forge-bg-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.45rem center;
       border: 1px solid var(--forge-border);
       border-radius: var(--forge-radius-full);
-      color: var(--forge-text-main); font-size: 0.78rem; font-weight: 500;
+      color: var(--forge-text-main); font-size: 0.75rem; font-weight: 500;
       cursor: pointer; appearance: none; -webkit-appearance: none;
       transition: border-color 0.18s ease, box-shadow 0.18s ease;
-      max-width: 185px;
+      max-width: 135px; min-width: 105px; flex-shrink: 0;
+      text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
     }
     .emp-dept-select:focus {
       outline: none; border-color: var(--forge-primary);
@@ -116,16 +120,17 @@ export function getEmployeeTableStyles(): string {
 
     /* Filter chip pill-group */
     .emp-status-chips {
-      display: inline-flex; align-items: center; gap: 0.2rem;
+      display: inline-flex; align-items: center; gap: 0.15rem;
       background: var(--forge-bg-surface); border: 1px solid var(--forge-border);
-      border-radius: var(--forge-radius-full); padding: 0.18rem;
+      border-radius: var(--forge-radius-full); padding: 2px;
+      height: 32px; box-sizing: border-box; flex-shrink: 0 !important;
     }
     .filter-chip {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      padding: 0.22rem 0.7rem; border-radius: var(--forge-radius-full);
-      background: transparent; border: none;
-      font-size: 0.74rem; font-weight: 600; cursor: pointer;
-      color: var(--forge-text-muted);
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      padding: 0 0.55rem; border-radius: var(--forge-radius-full);
+      background: transparent; border: none; height: 26px; box-sizing: border-box;
+      font-size: 0.72rem; font-weight: 600; cursor: pointer;
+      color: var(--forge-text-muted); flex-shrink: 0 !important;
       transition: background 0.16s ease, color 0.16s ease; white-space: nowrap;
     }
     .filter-chip:hover { color: var(--forge-text-main); background: var(--forge-bg-card-hover); }
@@ -133,24 +138,46 @@ export function getEmployeeTableStyles(): string {
       background: var(--forge-bg-card); color: var(--forge-text-main);
       box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 0 0 1px var(--forge-border-medium);
     }
+    .filter-chip .chip-icon { display: inline-flex; align-items: center; justify-content: center; }
 
-    /* Toolbar metrics + btn icons */
-    .emp-toolbar-metrics { display: flex; align-items: center; }
+    /* Toolbar metrics + buttons */
+    .emp-toolbar-metrics { display: flex; align-items: center; flex-shrink: 0 !important; }
     .emp-metric-pill {
-      font-size: 0.72rem; font-weight: 700; font-family: monospace;
-      padding: 0.22rem 0.6rem;
+      font-size: 0.7rem; font-weight: 700; font-family: monospace;
+      padding: 0 0.55rem; height: 26px; line-height: 26px; box-sizing: border-box;
       background: var(--forge-primary-bg); border: 1px solid var(--forge-border-medium);
       border-radius: var(--forge-radius-full); color: var(--forge-primary);
+      display: inline-flex; align-items: center; white-space: nowrap; flex-shrink: 0 !important;
     }
-    .emp-btn-icon { display: inline-flex; align-items: center; justify-content: center; }
+    .emp-btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    #btn-emp-table-refresh {
+      height: 32px; width: 32px; padding: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0 !important; border-radius: var(--forge-radius-sm);
+    }
     .emp-btn-fullscreen-toggle {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.78rem; font-weight: 600;
+      height: 32px; padding: 0 0.65rem;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.75rem; font-weight: 600;
+      white-space: nowrap; flex-shrink: 0 !important; border-radius: var(--forge-radius-sm);
+    }
+    .emp-btn-add-member {
+      height: 32px; padding: 0 0.75rem;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.76rem; font-weight: 600;
+      white-space: nowrap; flex-shrink: 0 !important; border-radius: var(--forge-radius-sm);
     }
 
-    /* ============================================================
-       Glassmorphic Data Table Card
-    ============================================================ */
+    /* Dynamic Compact & Icon-Only States */
+    .emp-table-toolbar.toolbar-compact #emp-fullscreen-btn-label, .emp-table-toolbar.toolbar-compact .emp-metric-label { display: none !important; }
+    .emp-table-toolbar.toolbar-compact .emp-btn-fullscreen-toggle { width: 32px !important; min-width: 32px !important; max-width: 32px !important; padding: 0 !important; justify-content: center !important; }
+    .emp-table-toolbar.toolbar-compact .emp-dept-select { max-width: 115px; }
+    .emp-table-toolbar.toolbar-icon-mode #emp-add-btn-label, .emp-table-toolbar.toolbar-icon-mode .filter-chip-label { display: none !important; }
+    .emp-table-toolbar.toolbar-icon-mode .emp-btn-add-member { width: 32px !important; min-width: 32px !important; max-width: 32px !important; padding: 0 !important; justify-content: center !important; }
+    .emp-table-toolbar.toolbar-icon-mode .filter-chip { padding: 0 0.45rem !important; justify-content: center !important; }
+    .emp-table-toolbar.toolbar-icon-mode .emp-search-box { min-width: 100px; max-width: 160px; }
+
+    /* --- Glassmorphic Data Table Card --- */
     .emp-table-card {
       padding: 0 !important; overflow: hidden;
       display: flex; flex-direction: column; flex: 1; min-height: 340px;
@@ -167,9 +194,7 @@ export function getEmployeeTableStyles(): string {
     .emp-table-scroll-wrap::-webkit-scrollbar-thumb { background: var(--forge-border-medium); border-radius: 99px; }
     .emp-table-scroll-wrap::-webkit-scrollbar-track { background: transparent; }
 
-    /* ============================================================
-       Table Core — sticky header, alternating rows, fixed-layout
-    ============================================================ */
+    /* --- Table Core — sticky header, alternating rows, fixed-layout --- */
     .emp-modern-table {
       width: 100%; border-collapse: separate; border-spacing: 0;
       margin: 0 !important; font-size: 0.82rem; table-layout: fixed;
@@ -199,6 +224,7 @@ export function getEmployeeTableStyles(): string {
     .emp-row { transition: background 0.12s ease; cursor: pointer; }
     .emp-row:nth-child(even) { background: var(--forge-bg-surface); }
     .emp-row:hover { background: var(--forge-bg-card-hover) !important; }
+    .emp-row.focused { background: rgba(62, 207, 142, 0.12) !important; outline: 1px solid var(--forge-primary); }
 
     /* Cells */
     .emp-modern-table tbody td {
@@ -290,31 +316,18 @@ export function getEmployeeTableStyles(): string {
       border-color: var(--forge-border-medium) !important;
     }
 
-    /* ============================================================
-       Status Badges — pill-style, high-contrast
-    ============================================================ */
+    /* --- Status Badges — pill-style, high-contrast --- */
     .emp-status-badge {
       display: inline-flex; align-items: center; gap: 0.32rem;
       font-size: 0.63rem; font-weight: 800; padding: 0.18rem 0.55rem;
       border-radius: var(--forge-radius-full); border: 1px solid;
       text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap;
     }
-    .emp-status-badge.active {
-      background: var(--forge-success-bg); color: var(--forge-success);
-      border-color: var(--forge-border-medium);
-    }
-    .emp-status-badge.invited {
-      background: var(--forge-bg-elevated); color: var(--forge-accent);
-      border-color: var(--forge-border);
-    }
-    .emp-status-badge.suspended {
-      background: var(--forge-bg-elevated); color: var(--forge-text-muted);
-      border-color: var(--forge-border);
-    }
+    .emp-status-badge.active { background: var(--forge-success-bg); color: var(--forge-success); border-color: var(--forge-border-medium); }
+    .emp-status-badge.invited { background: var(--forge-bg-elevated); color: var(--forge-accent); border-color: var(--forge-border); }
+    .emp-status-badge.suspended { background: var(--forge-bg-elevated); color: var(--forge-text-muted); border-color: var(--forge-border); }
 
-    /* ============================================================
-       Row Actions — visible on hover only
-    ============================================================ */
+    /* --- Row Actions — visible on hover only --- */
     .emp-cell-actions { text-align: right; padding-right: 0.65rem !important; }
     .emp-actions-group {
       display: inline-flex; align-items: center; gap: 0.25rem;
@@ -337,9 +350,7 @@ export function getEmployeeTableStyles(): string {
       border-color: var(--forge-accent); color: var(--forge-accent);
     }
 
-    /* ============================================================
-       Table Footer — pagination + row limit
-    ============================================================ */
+    /* --- Table Footer — pagination + row limit --- */
     .emp-table-footer {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0.55rem 1rem; flex-wrap: wrap; gap: 0.5rem;
@@ -400,9 +411,7 @@ export function getEmployeeTableStyles(): string {
       box-shadow: 0 0 0 2px var(--forge-primary-bg);
     }
 
-    /* ============================================================
-       Empty & Loading States
-    ============================================================ */
+    /* --- Empty & Loading States --- */
     .emp-table-empty-cell, .emp-table-loading-cell {
       text-align: center; padding: 3.5rem 1.5rem !important; color: var(--forge-text-muted);
     }
@@ -421,9 +430,7 @@ export function getEmployeeTableStyles(): string {
     .spinning svg { animation: spin 0.6s linear infinite; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    /* ============================================================
-       Keyboard Hints Bar
-    ============================================================ */
+    /* --- Keyboard Hints Bar --- */
     .emp-table-keyboard-hints {
       display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
       font-size: 0.68rem; color: var(--forge-text-muted); padding: 0.3rem 0.1rem;
@@ -434,15 +441,20 @@ export function getEmployeeTableStyles(): string {
       font-family: monospace; font-size: 0.66rem; color: var(--forge-text-main);
     }
 
-    /* ============================================================
-       Responsive — Fluid down to 320px, zero horizontal overflow
-    ============================================================ */
+    /* --- Responsive — Fluid down to 320px, zero horizontal overflow --- */
+    @media (max-width: 1080px) {
+      #emp-fullscreen-btn-label, .emp-metric-label { display: none !important; }
+      .emp-btn-fullscreen-toggle { width: 32px !important; min-width: 32px !important; max-width: 32px !important; padding: 0 !important; justify-content: center !important; }
+      .emp-dept-select { max-width: 115px; }
+    }
+    @media (max-width: 820px) {
+      #emp-add-btn-label, .filter-chip-label { display: none !important; }
+      .emp-btn-add-member { width: 32px !important; min-width: 32px !important; max-width: 32px !important; padding: 0 !important; justify-content: center !important; }
+      .filter-chip { padding: 0 0.45rem !important; justify-content: center !important; }
+      .emp-search-box { min-width: 100px; max-width: 160px; }
+    }
+
     @media (max-width: 900px) {
-      .emp-table-toolbar { flex-direction: column; align-items: stretch; gap: 0.5rem; }
-      .emp-toolbar-left { width: 100%; flex-wrap: wrap; }
-      .emp-toolbar-right { width: 100%; justify-content: flex-end; }
-      .emp-search-box { max-width: 100%; flex: 1; min-width: 0; }
-      .emp-dept-select { max-width: none; flex: 1; }
       /* Hide IAM Roles col */
       .emp-modern-table thead th:nth-child(6),
       .emp-modern-table tbody td:nth-child(6) { display: none; }
