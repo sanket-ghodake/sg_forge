@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'bun:test';
 import { startTelemetryServer } from '../../src/server';
 
-describe('Tier 5 E2E: Telemetry Full Server Bootstrap [HLR-TEL-801] [LLR-SUB-004]', () => {
+describe('Tier 5 E2E: Telemetry Full Server Bootstrap [HLR-TEL-801] [LLR-SUB-004] [LLR-TEL-003.1]', () => {
   it('Arrange, Act, Assert: serves telemetry dashboard with Astryx header and database badge on ephemeral port', async () => {
     // Arrange: Start on ephemeral port 0
     const server = startTelemetryServer(0);

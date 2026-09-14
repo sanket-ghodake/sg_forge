@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'bun:test';
 import { validateRepoPath } from '../../src/git-sanitizer';
 
-describe('Tier 3 Security: Path Traversal & Repository Sanitization Guard [LLR-SUB-003]', () => {
+describe('Tier 3 Security: Path Traversal & Repository Sanitization Guard [LLR-SUB-003] [LLR-CODE-003.1]', () => {
   it('blocks access to sensitive root system directories (/etc, /root, /sys)', () => {
     const etcTest = validateRepoPath('/etc/passwd');
     expect(etcTest.valid).toBe(false);

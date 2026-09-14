@@ -100,6 +100,17 @@ case "$CMD" in
     echo "🚀 Starting standalone micro-app in watch mode..."
     exec "$BUN_BIN" --watch src/server.ts "$@"
     ;;
+  docs:dev|docs)
+    echo "📖 Starting standalone micro-app with Living Documentation Engine..."
+    echo "   ├─ App Interface:   http://localhost:${PORT:-8099}"
+    echo "   ├─ Docs Hub:        http://localhost:${PORT:-8099}/docs"
+    echo "   └─ OpenAPI 3.1:     http://localhost:${PORT:-8099}/docs/api"
+    exec "$BUN_BIN" --watch src/server.ts "$@"
+    ;;
+  docs:coverage|doc-coverage)
+    echo "📑 Running Living Documentation & Traceability Gate..."
+    exec "$BUN_BIN" run scripts/verify-gate.ts "$@"
+    ;;
   start)
     echo "⚡ Starting standalone micro-app..."
     exec "$BUN_BIN" src/server.ts "$@"

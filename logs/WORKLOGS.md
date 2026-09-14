@@ -70,4 +70,5 @@
 2026-09-15 00:55 | Fixed browser client-side regex escaping SyntaxError in ui-admin-apps-history-scripts.ts and added syntax regression test
 2026-09-15 00:57 | Fixed approved apps hydration on SSR and client-side reconciliation in My Active Apps
 2026-09-15 00:59 | Created publication-grade Diagrams 23 & 24, in-depth App Access Governance documentation chapter, and updated all component READMEs
-
+2026-09-15 01:25 | Establish living documentation parity and traceability gates across all Forge App submodules and generator
+2026-09-15 01:55 | Enforce strict core-only documentation separation with zero Forge App mentions in main docs

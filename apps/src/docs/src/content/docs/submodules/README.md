@@ -8,6 +8,7 @@ description: Index of autonomous Forge Micro-Applications.
 Contains federated documentation synced directly from each Forge App Git submodule:
 
 * [`overview.mdx`](./overview.mdx): Submodule architecture and isolation invariants.
-* [`forge-code.mdx`](./forge-code.mdx): Code exploration and syntax service.
-* [`forge-telemetry.mdx`](./forge-telemetry.mdx): Live telemetry metrics collector.
-* [`forge-template.mdx`](./forge-template.mdx): Golden scaffolding template.
+* [`architecture.mdx`](./architecture.mdx): Submodule governance, network partitions, and contracts.
+* [`env-app-registry.mdx`](./env-app-registry.mdx): Declarative .env service registry and ingress topologies.
+* [`troubleshooting.mdx`](./troubleshooting.mdx): Ingress, network, and reverse proxy troubleshooting.
+* [`forge-template.mdx`](./forge-template.mdx): Golden scaffolding template and reference microservice.

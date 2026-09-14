@@ -12,7 +12,7 @@ const logger = createLogger('code-git-sanitizer');
 
 /**
  * validateRepoPath
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-CODE-701] [LLR-SUB-003] [HLR-CODE-002] [LLR-CODE-002.1] [LLR-CODE-003.1]
  */
 export function validateRepoPath(targetPath: string): { valid: boolean; normalizedPath: string; error?: string } {
   if (!targetPath || typeof targetPath !== 'string') {

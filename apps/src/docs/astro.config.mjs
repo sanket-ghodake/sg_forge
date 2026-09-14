@@ -89,9 +89,12 @@ export default defineConfig({
             { label: 'Submodule Governance', slug: 'submodules/architecture' },
             { label: 'Declarative .env Ingress Registry', slug: 'submodules/env-app-registry' },
             { label: 'Ingress & Troubleshooting', slug: 'submodules/troubleshooting' },
-            { label: 'Code Microservice', slug: 'submodules/forge-code' },
-            { label: 'Telemetry Microservice', slug: 'submodules/forge-telemetry' },
-            { label: 'App Template Microservice', slug: 'submodules/forge-template' },
+            {
+              label: 'App Template (app-template)',
+              collapsed: true,
+              autogenerate: { directory: 'submodules/app-template' },
+            },
+
           ],
         },
         {

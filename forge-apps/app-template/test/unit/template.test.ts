@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'bun:test';
 import { templateDb } from '../../src/db';
 
-describe('Tier 1 Unit: App Template Database & Invariants', () => {
+describe('Tier 1 Unit: App Template Database & Invariants [LLR-APP-002]', () => {
   it('Arrange, Act, Assert: initializes template_items table and executes CRUD queries', () => {
     // Arrange
     const itemId = `item_${Date.now()}`;

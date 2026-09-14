@@ -1,5 +1,6 @@
 ---
 title: "App Template - Low-Level Requirements (`docs/llr/`)"
+description: "App Template - Low-Level Requirements (`docs/llr/`) specification."
 ---
 
 # App Template - Low-Level Requirements (`docs/llr/`)

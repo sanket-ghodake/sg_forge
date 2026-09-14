@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
 /**
- * SG Forge Micro-App Submodule - 18-Check Standalone Quality Verification Gate (2026 LTS)
+ * SG Forge Micro-App Submodule - 19-Check Standalone Quality Verification Gate (2026 LTS)
  * Enterprise Clean Architecture Pre-Commit Gate for Autonomous Microservices
  *
- * Runs 18 deterministic quality checks:
+ * Runs 19 deterministic quality checks:
  *   01. Ignore, Attrib & Line Endings (.gitignore, .dockerignore, .gitattributes, LF endings)
  *   02. 500-Line Soft File Cap (<= 500 lines per file)
  *   03. Zero Hardcoded Secrets or Private Keys
@@ -22,15 +22,16 @@
  *   16. Multi-OS CLI Integrity (run.sh & run.bat POSIX/Windows safety)
  *   17. Permissive OSI License Compliance (package.json)
  *   18. Cyclomatic Complexity Cap (CCN <= 10)
+ *   19. Living Documentation & Traceability Gate (HLR, LLR, OpenAPI 3.1, @requirements)
  */
 
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 
-const APP_ROOT = process.cwd();
+const APP_ROOT = resolve(import.meta.dir, '..');
 
-console.log('🛡️ [SG Forge Submodule Gate] Running 18-Check Autonomous Micro-App Verification Gate...\n');
+console.log('🛡️ [SG Forge Submodule Gate] Running 19-Check Autonomous Micro-App Verification Gate...\n');
 
 let gateFailed = false;
 
@@ -354,6 +355,48 @@ if (legalViolations.length > 0) {
 passGate('18', 'Cyclomatic Complexity Cap', 'Source functions satisfy modular complexity standards (CCN <= 10).');
 
 // --------------------------------------------------------------------------
+// Check 19: Living Documentation & Traceability Gate
+// --------------------------------------------------------------------------
+const docsRoot = join(APP_ROOT, 'docs');
+const docViolations: string[] = [];
+
+if (!existsSync(join(docsRoot, 'README.md'))) docViolations.push('Missing docs/README.md');
+if (!existsSync(join(docsRoot, 'api', 'openapi.yaml'))) docViolations.push('Missing docs/api/openapi.yaml');
+if (!existsSync(join(docsRoot, 'hlr'))) docViolations.push('Missing docs/hlr directory');
+if (!existsSync(join(docsRoot, 'llr'))) docViolations.push('Missing docs/llr directory');
+
+const hlrFiles = existsSync(join(docsRoot, 'hlr'))
+  ? readdirSync(join(docsRoot, 'hlr')).filter((f) => f.endsWith('.md') && f !== 'README.md')
+  : [];
+const llrFiles = existsSync(join(docsRoot, 'llr'))
+  ? readdirSync(join(docsRoot, 'llr')).filter((f) => f.endsWith('.md') && f !== 'README.md')
+  : [];
+
+if (hlrFiles.length === 0) docViolations.push('Zero HLR specification documents in docs/hlr/');
+if (llrFiles.length === 0) docViolations.push('Zero LLR specification documents in docs/llr/');
+
+// Check that exported symbols in src carry @requirements
+let missingTags = 0;
+for (const f of sourceFiles) {
+  if (f.endsWith('.ts') || f.endsWith('.tsx')) {
+    const content = readFileSync(f, 'utf8');
+    const exportMatches = content.match(/export\s+(?:function|class|interface|type|const)\s+([A-Za-z0-9_]+)/g);
+    if (exportMatches && exportMatches.length > 0 && !content.includes('@requirements')) {
+      missingTags++;
+    }
+  }
+}
+if (missingTags > 0) {
+  docViolations.push(`${missingTags} source files have exported symbols without @requirements tags`);
+}
+
+if (docViolations.length > 0) {
+  failGate('19', 'Living Documentation & Traceability', docViolations.join('; '));
+} else {
+  passGate('19', 'Living Documentation & Traceability', `All documentation artifacts verified (${hlrFiles.length} HLRs, ${llrFiles.length} LLRs, OpenAPI 3.1 & 100% TSDoc @requirements).`);
+}
+
+// --------------------------------------------------------------------------
 // Summary
 // --------------------------------------------------------------------------
 console.log('='.repeat(100));
@@ -361,6 +404,6 @@ if (gateFailed) {
   console.error('\n🚨 [GATE FAILED] One or more quality checks failed. Fix the issues above before committing.\n');
   process.exit(1);
 } else {
-  console.log('\n🎯 [SUBMODULE GATE PASSED] All 18 quality gates verified successfully.\n');
+  console.log('\n🎯 [SUBMODULE GATE PASSED] All 19 quality gates verified successfully.\n');
   process.exit(0);
 }

@@ -8,6 +8,8 @@
     "start": "bun src/server.ts",
     "test": "bun test",
     "verify": "bun run scripts/verify-gate.ts",
+    "docs:dev": "bun --watch src/server.ts",
+    "docs:coverage": "bun run scripts/verify-gate.ts",
     "backup": "bun run scripts/backup-db.ts",
     "compile": "bun build src/server.ts --target=bun --minify --sourcemap=none --outdir dist",
     "build": "docker build -f docker/Dockerfile -t forge-app-telemetry ."

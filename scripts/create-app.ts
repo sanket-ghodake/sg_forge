@@ -15,6 +15,7 @@ import { Database } from 'bun:sqlite';
 import { join, relative } from 'node:path';
 import { loadServiceRegistry } from '../apps/src/sdk/src/registry';
 import { generateCaddyfile } from './generate-proxy';
+import { syncSubmoduleDocs } from './sync-submodule-docs';
 
 const REPO_ROOT = process.cwd();
 
@@ -203,14 +204,52 @@ export function createApp(options: CreateAppOptions): {
     'app-template': `app-${appName}`,
   });
 
+  // Customize & Personalize Requirement Specifications (HLR & LLR)
+  const appPrefix = appName.toUpperCase().replace(/-/g, '_').slice(0, 8);
+  const hlrSrc = join(targetDir, 'docs', 'hlr', 'HLR-APP-001_MICROSERVICE_BASELINE.md');
+  const hlrDest = join(targetDir, 'docs', 'hlr', `HLR-${appPrefix}-001_MICROSERVICE_BASELINE.md`);
+  if (existsSync(hlrSrc)) renameSync(hlrSrc, hlrDest);
+
+  const llr1Src = join(targetDir, 'docs', 'llr', 'LLR-APP-001_HEALTH_PROBE_CONTRACT.md');
+  const llr1Dest = join(targetDir, 'docs', 'llr', `LLR-${appPrefix}-001_HEALTH_PROBE_CONTRACT.md`);
+  if (existsSync(llr1Src)) renameSync(llr1Src, llr1Dest);
+
+  const llr2Src = join(targetDir, 'docs', 'llr', 'LLR-APP-002_DATABASE_HANDLER.md');
+  const llr2Dest = join(targetDir, 'docs', 'llr', `LLR-${appPrefix}-002_DATABASE_HANDLER.md`);
+  if (existsSync(llr2Src)) renameSync(llr2Src, llr2Dest);
+
+  for (const docRel of [
+    join('docs', 'hlr', `HLR-${appPrefix}-001_MICROSERVICE_BASELINE.md`),
+    join('docs', 'llr', `LLR-${appPrefix}-001_HEALTH_PROBE_CONTRACT.md`),
+    join('docs', 'llr', `LLR-${appPrefix}-002_DATABASE_HANDLER.md`),
+  ]) {
+    replaceInFile(docRel, {
+      'HLR-APP-001': `HLR-${appPrefix}-001`,
+      'LLR-APP-001': `LLR-${appPrefix}-001`,
+      'LLR-APP-002': `LLR-${appPrefix}-002`,
+      'app-template': appName,
+      'Forge App Template': displayName,
+    });
+  }
+
+  for (const srcRel of ['src/server.ts', 'src/db/index.ts', 'src/lib/docs-viewer.ts']) {
+    replaceInFile(srcRel, {
+      'HLR-APP-001': `HLR-${appPrefix}-001`,
+      'LLR-APP-001': `LLR-${appPrefix}-001`,
+      'LLR-APP-002': `LLR-${appPrefix}-002`,
+    });
+  }
+
   // README.md
   writeFileSync(
     join(targetDir, 'README.md'),
     `# 🚀 ${displayName} (\`forge-apps/${appName}\`)\n\n` +
       `Dedicated isolated microservice submodule operating on internal port \`${allocatedPort}\` with dedicated Turso libSQL instance.\n\n` +
-      `## 🛠️ Routes\n` +
+      `## 🛠️ Routes & Living Documentation\n` +
       `- Ingress Path: \`${ingressPath}\`\n` +
       `- Health Probe: \`${ingressPath}/health\`\n` +
+      `- Documentation Hub: \`${ingressPath}/docs\`\n` +
+      `- OpenAPI 3.1 Explorer: \`${ingressPath}/docs/api\`\n` +
       `- Telemetry Log Bridge: \`${ingressPath}/api/logs/browser\`\n`,
     'utf8'
   );
@@ -333,6 +372,11 @@ export function createApp(options: CreateAppOptions): {
 
   // 8. Regenerate Caddyfile
   generateCaddyfile();
+
+  // 9. Autonomous Living Documentation (Strict Core-Only Separation - Option B)
+  // Micro-app documentation is 100% self-contained in forge-apps/${appName}/docs/
+  // and served directly by the app's local engine at ${ingressPath}/docs and ${ingressPath}/docs/api.
+  // Main repository docs remain strictly core-only and do not register individual submodules.
 
   return {
     success: true,

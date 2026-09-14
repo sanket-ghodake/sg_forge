@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'bun:test';
 import { startTemplateServer } from '../../src/server';
 
-describe('Tier 4 Contract: App Template Health Schema [LLR-SUB-002]', () => {
+describe('Tier 4 Contract: App Template Health Schema [LLR-SUB-002] [HLR-APP-001] [LLR-APP-001]', () => {
   it('Arrange, Act, Assert: returns valid JSON health specification on /health', async () => {
     const server = startTemplateServer(0);
 

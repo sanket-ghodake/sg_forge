@@ -1,5 +1,6 @@
 ---
 title: "Forge App Template Documentation (`docs/`)"
+description: "Forge App Template Documentation (`docs/`) specification."
 ---
 
 # Forge App Template Documentation (`docs/`)

@@ -13,9 +13,11 @@ import {
 } from './lib/sdk';
 import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript, getAstryxToastScript, getAstryxTooltipScript } from './lib/ui';
 import { icons } from './lib/icons';
+import { handleDocsRoute } from './lib/docs-viewer';
 import type { AuthUser, ScopedHierarchyResponse } from './lib/types';
 
 const LOG_DIR = join(import.meta.dir, '..', 'logs');
+const DOCS_DIR = join(import.meta.dir, '..', 'docs');
 const logger = createLogger('app-template', LOG_DIR);
 const PORT = Number(process.env.PORT || 8099);
 
@@ -104,7 +106,7 @@ function renderAppHtml(user?: AuthUser, hierarchy?: ScopedHierarchyResponse | nu
 
 /**
  * startTemplateServer
- * @requirements [HLR-SDK-301] [LLR-SUB-001]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001] [HLR-APP-001] [LLR-APP-001]
  */
 export function startTemplateServer(port: number = PORT) {
   const handler = createSafeHandler(
@@ -132,6 +134,10 @@ export function startTemplateServer(port: number = PORT) {
         logger.logBrowserEvent(body.severity || 'INFO', body.message || 'Browser event', body);
         return Response.json({ status: 'ok' });
       }
+
+      // 📖 Living Documentation & OpenAPI Explorer
+      const docRes = handleDocsRoute(req, 'app-template', 'Forge App Template', DOCS_DIR);
+      if (docRes) return docRes;
 
       // 🛡️ Zero-Trust Auth Guard (Requires Employee or Admin role)
       const auth = authGuard(req, {

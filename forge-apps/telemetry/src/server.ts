@@ -7,9 +7,11 @@ import { join } from 'node:path';
 import { authGuard, createLogger, createSafeHandler, loadBrandConfig } from './lib/sdk';
 import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript, getAstryxToastScript, getAstryxTooltipScript } from './lib/ui';
 import { icons } from './lib/icons';
+import { handleDocsRoute } from './lib/docs-viewer';
 import { telemetryDb } from './db';
 
 const LOG_DIR = join(import.meta.dir, '..', 'logs');
+const DOCS_DIR = join(import.meta.dir, '..', 'docs');
 const logger = createLogger('telemetry', LOG_DIR);
 const PORT = Number(process.env.PORT || 8087);
 
@@ -109,7 +111,7 @@ function renderAppHtml(): string {
 
 /**
  * startTelemetryServer
- * @requirements [HLR-TEL-801] [LLR-SUB-004] [HLR-TEL-001] [LLR-TEL-001.1] [LLR-TEL-001.2]
+ * @requirements [HLR-TEL-801] [LLR-SUB-004] [HLR-TEL-001] [LLR-TEL-001.1] [LLR-TEL-001.2] [HLR-TEL-003] [LLR-TEL-002.1] [LLR-TEL-003.1]
  */
 export function startTelemetryServer(port: number = PORT) {
   const handler = createSafeHandler(
@@ -148,6 +150,10 @@ export function startTelemetryServer(port: number = PORT) {
         logger.logBrowserEvent(body.severity || 'INFO', body.message || 'Browser event', body);
         return Response.json({ status: 'ok' });
       }
+
+      // 📖 Living Documentation & OpenAPI Explorer
+      const docRes = handleDocsRoute(req, 'telemetry', 'Live Telemetry Dashboard', DOCS_DIR);
+      if (docRes) return docRes;
 
       // 🛡️ Zero-Trust Auth Guard (Public app, but subject to admin disablement)
       const auth = authGuard(req, {

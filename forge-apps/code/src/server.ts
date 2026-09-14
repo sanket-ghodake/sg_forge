@@ -33,8 +33,10 @@ import { validateRepoPath } from './git-sanitizer';
 import { renderCatalogHtml } from './ui/catalog';
 import { renderWorkbenchHtml } from './ui/workbench';
 import { auditIngressCall, ingestBrowserTelemetry } from './network-auditor';
+import { handleDocsRoute } from './lib/docs-viewer';
 
 const LOG_DIR = join(import.meta.dir, '..', 'logs');
+const DOCS_DIR = join(import.meta.dir, '..', 'docs');
 const logger = createLogger('code-app', LOG_DIR);
 const PORT = Number(process.env.PORT || 8088);
 
@@ -81,6 +83,10 @@ export function startCodeServer(port: number = PORT) {
         const count = ingestBrowserTelemetry(events, body.userId || 'anonymous', clientIp, userAgent);
         return Response.json({ status: 'ok', ingested: count });
       }
+
+      // 2c. Living Documentation & OpenAPI Explorer
+      const docRes = handleDocsRoute(req, 'code', 'Forge Code App', DOCS_DIR);
+      if (docRes) return docRes;
 
       // 3. Zero-Trust Auth Guard
       const auth = authGuard(req, {

@@ -8,7 +8,7 @@ import { createLogger, getDatabaseClient } from '../lib/sdk';
 const logger = createLogger('template-db');
 /**
  * templateDb
- * @requirements [HLR-SDK-301] [LLR-SUB-001]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001] [HLR-APP-001] [LLR-APP-002]
  */
 export const templateDb = getDatabaseClient('template.db');
 

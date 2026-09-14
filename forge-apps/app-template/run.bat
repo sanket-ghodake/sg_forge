@@ -52,6 +52,24 @@ if "%CMD%"=="dev" (
     goto :eof
 )
 
+if "%CMD%"=="docs:dev" goto :do_docs
+if "%CMD%"=="docs" goto :do_docs
+goto :not_docs
+:do_docs
+echo 📖 Starting standalone micro-app with Living Documentation Engine...
+"%BUN_BIN%" --watch src\server.ts
+goto :eof
+:not_docs
+
+if "%CMD%"=="docs:coverage" goto :do_doc_coverage
+if "%CMD%"=="doc-coverage" goto :do_doc_coverage
+goto :not_doc_coverage
+:do_doc_coverage
+echo 📑 Running Living Documentation & Traceability Gate...
+"%BUN_BIN%" run scripts\verify-gate.ts
+goto :eof
+:not_doc_coverage
+
 if "%CMD%"=="start" (
     echo ⚡ Starting standalone micro-app...
     "%BUN_BIN%" src\server.ts

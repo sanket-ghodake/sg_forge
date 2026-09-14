@@ -60,7 +60,7 @@ const TEST_MAPPINGS: Record<string, string[]> = {
   "apps/src/dev-hub/test/integration/hub-routes.test.ts": ["HLR-HUB-601", "SR-DOC-001"],
 
   // Submodules & Scripts Tests
-  "forge-apps/code/test/security/git-sanitizer.test.ts": ["LLR-SUB-003"],
+  "forge-apps/code/test/security/git-sanitizer.test.ts": ["LLR-SUB-003", "LLR-CODE-003.1"],
   "forge-apps/code/test/unit/lock-coordinator.test.ts": ["LLR-SUB-001", "HLR-CODE-001", "LLR-CODE-001.1"],
   "forge-apps/code/test/integration/code-server.test.ts": ["LLR-SUB-005", "HLR-CODE-002", "LLR-CODE-001.2", "LLR-CODE-002.1"],
   "forge-apps/code/test/contracts/health-schema.test.ts": ["HLR-CODE-003"],
@@ -68,8 +68,9 @@ const TEST_MAPPINGS: Record<string, string[]> = {
   "forge-apps/telemetry/test/unit/telemetry.test.ts": ["HLR-TEL-001", "LLR-TEL-001.1"],
   "forge-apps/telemetry/test/integration/db-isolation.test.ts": ["LLR-DB-002", "SR-TURSO-001", "HLR-TEL-002", "LLR-TEL-001.2"],
   "forge-apps/telemetry/test/contracts/problem-json.test.ts": ["HLR-TEL-003", "LLR-TEL-002.1"],
-  "forge-apps/telemetry/test/e2e/telemetry-server.test.ts": ["HLR-TEL-801", "LLR-SUB-004"],
-  "forge-apps/app-template/test/contracts/health-schema.test.ts": ["LLR-SUB-002"],
+  "forge-apps/telemetry/test/e2e/telemetry-server.test.ts": ["HLR-TEL-801", "LLR-SUB-004", "LLR-TEL-003.1"],
+  "forge-apps/app-template/test/contracts/health-schema.test.ts": ["LLR-SUB-002", "HLR-APP-001", "LLR-APP-001"],
+  "forge-apps/app-template/test/unit/template.test.ts": ["LLR-APP-002"],
   "scripts/test/create-app.test.ts": ["SR-SUB-001", "LLR-SUB-001"],
   "scripts/test/run-sh.test.ts": ["SR-GATE-001", "LLR-SUB-007"],
   "apps/test/security/air-gap-compliance.test.ts": ["SR-SEC-001", "HLR-NET-001", "HLR-NET-002"],
