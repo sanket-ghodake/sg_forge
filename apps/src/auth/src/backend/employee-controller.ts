@@ -213,6 +213,7 @@ export class EmployeeController {
       password?: string;
       must_change_password?: boolean;
       org_id?: string;
+      org_node_id?: string;
     },
     actorId: string = 'auth-service',
     ip: string = '127.0.0.1'
@@ -240,6 +241,12 @@ export class EmployeeController {
     const rawPassword = payload.password || 'password123';
     const { hash, salt } = hashPassword(rawPassword);
 
+    let orgNodeId: string | null = payload.department_id || (payload as any).org_node_id || null;
+    if (orgNodeId) {
+      const node: any = db.query('SELECT id FROM auth_org_nodes WHERE id = ? OR name LIKE ? OR code = ? LIMIT 1;').get(orgNodeId, `%${orgNodeId}%`, orgNodeId);
+      orgNodeId = node ? node.id : null;
+    }
+
     db.transaction(() => {
       db.run(
         `INSERT INTO auth_users (id, org_id, email, password_hash, salt, display_name, principal_type, status, must_change_password, token_version, custom_attributes, created_at, updated_at)
@@ -248,7 +255,7 @@ export class EmployeeController {
       );
       db.run(
         `INSERT INTO auth_employee_profiles (user_id, org_node_id, job_title, employee_code, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?);`,
-        [userId, payload.department_id || null, payload.job_title || 'Employee', payload.employee_code || null, now, now]
+        [userId, orgNodeId, payload.job_title || 'Employee', payload.employee_code || null, now, now]
       );
       if (payload.manager_id) {
         const relId = `rel-${randomBytes(6).toString('hex')}`;
@@ -448,6 +455,28 @@ export class EmployeeController {
     }
 
     return summary;
+  }
+
+  public listManagers(): Array<{
+    id: string;
+    display_name: string;
+    email: string;
+    job_title: string | null;
+    department_name: string | null;
+  }> {
+    const db = this.getDb();
+    return db
+      .query(
+        `SELECT DISTINCT u.id, u.display_name, u.email, p.job_title, n.name as department_name
+         FROM auth_users u
+         LEFT JOIN auth_employee_profiles p ON u.id = p.user_id
+         LEFT JOIN auth_org_nodes n ON p.org_node_id = n.id
+         LEFT JOIN auth_iam_policy_bindings b ON u.id = b.principal_id
+         LEFT JOIN auth_employee_relationships r ON u.id = r.related_to_id
+         WHERE u.status = 'ACTIVE' AND (b.role_id LIKE '%manager%' OR b.role_id LIKE '%lead%' OR b.role_id LIKE '%admin%' OR r.id IS NOT NULL)
+         ORDER BY u.display_name ASC;`
+      )
+      .all() as any[];
   }
 }
 

@@ -4,6 +4,8 @@
  * @requirements [HLR-UI-401] [LLR-UI-001]
  */
 
+import { astryxIcons } from '@forge/ui';
+
 export function getEmployeeDrawerAndTreeScripts(): string {
   return `
     /* Interactive Org Chart State */
@@ -152,7 +154,7 @@ export function getEmployeeDrawerAndTreeScripts(): string {
 
       // Top Breadcrumb & Quick Toolbar
       let breadcrumbsHtml = '<div class="org-tree-breadcrumbs">' +
-        '<span class="org-tree-breadcrumb-item" onclick="jumpToTopLeader()">🏢 Organization Root</span>';
+        '<span class="org-tree-breadcrumb-item" onclick="jumpToTopLeader()">Organization Root</span>';
       chain.forEach(mgr => {
         breadcrumbsHtml += ' <span>&rsaquo;</span> <span class="org-tree-breadcrumb-item" onclick="setOrgFocus(\\\'' + mgr.id + '\\\')">' + (mgr.display_name || 'Manager') + '</span>';
       });
@@ -162,11 +164,11 @@ export function getEmployeeDrawerAndTreeScripts(): string {
         breadcrumbsHtml +
         '<div class="org-search-wrap">' +
           '<div class="org-search-input-box">' +
-            '<span style="color: var(--forge-text-muted); font-size: 0.75rem;">🔍</span>' +
+            '<span style="color: var(--forge-text-muted); display: inline-flex; align-items: center;">${astryxIcons.search}</span>' +
             '<input type="search" id="org-chart-search-input" class="org-search-input" placeholder="Search member to focus..." oninput="filterOrgChartSearch(this.value)" onfocus="filterOrgChartSearch(this.value)" autocomplete="off" />' +
           '</div>' +
-          '<button class="astryx-btn btn-primary" style="font-size: 0.72rem; padding: 0.22rem 0.6rem; height: 26px;" onclick="focusOrgChartSearch()">🔍 Search</button>' +
-          '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.22rem 0.55rem; height: 26px;" onclick="resetOrgChartTransform()">⛶ Center</button>' +
+          '<button class="astryx-btn btn-primary" style="font-size: 0.72rem; padding: 0.22rem 0.6rem; height: 26px; gap: 0.25rem;" onclick="focusOrgChartSearch()">${astryxIcons.search} Search</button>' +
+          '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.22rem 0.55rem; height: 26px;" onclick="resetOrgChartTransform()">Center</button>' +
           '<div id="org-chart-search-results" class="org-search-dropdown" style="display: none;"></div>' +
         '</div>' +
       '</div>';
@@ -181,7 +183,7 @@ export function getEmployeeDrawerAndTreeScripts(): string {
         
         upwardHtml = '<div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 0.15rem;">' +
           '<button class="org-tree-up-nav-btn" onclick="setOrgFocus(\\\'' + directManager.id + '\\\')" title="Move up to direct manager">' +
-            '<span>▲</span> Reports to: ' + (directManager.display_name || 'Manager') +
+            'Reports to: ' + (directManager.display_name || 'Manager') +
           '</button>' +
           '<div class="org-tree-manager-node" onclick="setOrgFocus(\\\'' + directManager.id + '\\\')" title="Click to focus manager in org chart">' +
             '<div class="org-tree-hero-avatar-wrap">' +
@@ -191,14 +193,14 @@ export function getEmployeeDrawerAndTreeScripts(): string {
             '<div style="flex: 1; min-width: 0;">' +
               '<div style="font-size: 0.68rem; font-weight: 700; color: var(--forge-primary); text-transform: uppercase; letter-spacing: 0.04em;">Reporting Line Manager</div>' +
               '<div style="font-weight: 700; color: var(--forge-text-main); font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (directManager.display_name || 'Manager') + '</div>' +
-              '<div style="font-size: 0.74rem; color: var(--forge-text-muted);">' + (directManager.job_title || 'Manager') + ' &bull; 🏢 ' + (directManager.department_name || 'Org') + '</div>' +
+              '<div style="font-size: 0.74rem; color: var(--forge-text-muted);">' + (directManager.job_title || 'Manager') + ' &bull; ' + (directManager.department_name || 'Org') + '</div>' +
             '</div>' +
-            '<button class="astryx-btn btn-outline" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; flex-shrink: 0; color: var(--forge-primary); border-color: var(--forge-primary);">↑ Focus</button>' +
+            '<button class="astryx-btn btn-outline" style="font-size: 0.7rem; padding: 0.2rem 0.5rem; flex-shrink: 0; color: var(--forge-primary); border-color: var(--forge-primary);">Focus</button>' +
           '</div>' +
           '<div class="org-tree-connector-vertical"></div>' +
         '</div>';
       } else {
-        upwardHtml = '<div style="margin-bottom: 0.85rem;"><span class="astryx-badge" style="background: var(--forge-bg-elevated); color: var(--forge-primary); border-color: var(--forge-border-medium); font-size: 0.72rem; padding: 0.25rem 0.65rem;">👑 Top Executive / Organization Root</span></div>';
+        upwardHtml = '<div style="margin-bottom: 0.85rem;"><span class="astryx-badge" style="background: var(--forge-bg-elevated); color: var(--forge-primary); border-color: var(--forge-border-medium); font-size: 0.72rem; padding: 0.25rem 0.65rem;">Top Executive / Organization Root</span></div>';
       }
 
       // =========================================================================
@@ -232,18 +234,18 @@ export function getEmployeeDrawerAndTreeScripts(): string {
             '<div class="org-tree-hero-name">' + (focused.display_name || 'Unnamed Employee') + '</div>' +
             '<div class="org-tree-hero-title">' + (focused.job_title || 'Employee') + '</div>' +
             '<div class="org-tree-hero-meta">' +
-              '<span>🏢 ' + (focused.department_name || 'Unassigned Department') + '</span>' +
-              '<span>✉️ <code>' + (focused.email || 'N/A') + '</code></span>' +
-              (focused.employee_code ? '<span>🏷️ Code: <code>' + focused.employee_code + '</code></span>' : '') +
+              '<span>' + (focused.department_name || 'Unassigned Department') + '</span>' +
+              '<span><code>' + (focused.email || 'N/A') + '</code></span>' +
+              (focused.employee_code ? '<span>Code: <code>' + focused.employee_code + '</code></span>' : '') +
             '</div>' +
           '</div>' +
         '</div>' +
         '<div class="org-tree-hero-actions">' +
           peersNavHtml +
           '<div style="display: flex; gap: 0.35rem; margin-left: auto;">' +
-            '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.22rem 0.55rem;" onclick="openEmployeeDrawer(\\\'' + focused.id + '\\\')">👤 Profile Drawer</button>' +
-            '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.22rem 0.55rem;" onclick="openEditEmployeeModal(\\\'' + focused.id + '\\\')">✏️ Edit Profile</button>' +
-            '<button class="astryx-btn btn-primary" style="font-size: 0.72rem; padding: 0.22rem 0.55rem;" onclick="openAddReportModal(\\\'' + focused.id + '\\\')">➕ Add Report</button>' +
+            '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.22rem 0.55rem;" onclick="openEmployeeDrawer(\\\'' + focused.id + '\\\')">Profile Drawer</button>' +
+            '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.22rem 0.55rem;" onclick="openEditEmployeeModal(\\\'' + focused.id + '\\\')">Edit Profile</button>' +
+            '<button class="astryx-btn btn-primary" style="font-size: 0.72rem; padding: 0.22rem 0.55rem;" onclick="openAddReportModal(\\\'' + focused.id + '\\\')">Add Report</button>' +
           '</div>' +
         '</div>' +
       '</div>';
@@ -270,10 +272,10 @@ export function getEmployeeDrawerAndTreeScripts(): string {
               '</div>' +
             '</div>' +
             '<div class="org-tree-report-footer">' +
-              '<span style="color: var(--forge-text-muted); font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;">🏢 ' + (rep.department_name || 'Dept') + '</span>' +
+              '<span style="color: var(--forge-text-muted); font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;">' + (rep.department_name || 'Dept') + '</span>' +
               '<div style="display: flex; gap: 0.25rem; align-items: center;">' +
                 (subReportsCount > 0
-                  ? '<button class="astryx-btn btn-outline" style="font-size: 0.68rem; padding: 0.12rem 0.45rem; color: var(--forge-primary); border-color: var(--forge-primary);" onclick="event.stopPropagation(); setOrgFocus(\\\'' + rep.id + '\\\')">👥 ' + subReportsCount + ' Reports ↓</button>'
+                  ? '<button class="astryx-btn btn-outline" style="font-size: 0.68rem; padding: 0.12rem 0.45rem; color: var(--forge-primary); border-color: var(--forge-primary);" onclick="event.stopPropagation(); setOrgFocus(\\\'' + rep.id + '\\\')">' + subReportsCount + ' Reports ↓</button>'
                   : '<span style="color: var(--forge-text-muted); font-size: 0.68rem;">Individual</span>') +
                 '<button class="astryx-btn btn-outline" style="font-size: 0.68rem; padding: 0.12rem 0.45rem;" onclick="event.stopPropagation(); setOrgFocus(\\\'' + rep.id + '\\\')">↓ Focus</button>' +
               '</div>' +
@@ -283,13 +285,13 @@ export function getEmployeeDrawerAndTreeScripts(): string {
 
         reportsSectionHtml = '<div class="org-tree-connector-vertical"></div>' +
           '<div class="org-tree-reports-section">' +
-            '<div class="org-tree-branch-header"><span>👥 Direct Reports</span> <span class="astryx-badge" style="background: var(--forge-primary-bg); color: var(--forge-primary);">' + directReports.length + '</span></div>' +
+            '<div class="org-tree-branch-header"><span>Direct Reports</span> <span class="astryx-badge" style="background: var(--forge-primary-bg); color: var(--forge-primary);">' + directReports.length + '</span></div>' +
             '<div class="org-tree-reports-grid">' + reportCardsHtml + '</div>' +
           '</div>';
       } else {
         reportsSectionHtml = '<div style="margin-top: 1.25rem; text-align: center; color: var(--forge-text-muted); font-size: 0.8rem; background: var(--forge-bg-card); padding: 1rem 1.5rem; border-radius: var(--forge-radius-md); border: 1px dashed var(--forge-border);">' +
           '<div>Individual Contributor &bull; 0 Direct Reports under ' + (focused.display_name || 'this member') + '.</div>' +
-          '<button class="astryx-btn btn-outline" style="font-size: 0.74rem; margin-top: 0.5rem;" onclick="openAddReportModal(\\\'' + focused.id + '\\\')">➕ Add Direct Report</button>' +
+          '<button class="astryx-btn btn-outline" style="font-size: 0.74rem; margin-top: 0.5rem;" onclick="openAddReportModal(\\\'' + focused.id + '\\\')">Add Direct Report</button>' +
         '</div>';
       }
 
@@ -380,24 +382,28 @@ export function getEmployeeDrawerAndTreeScripts(): string {
 
     /* Slide-Over Profile Inspector Drawer */
     function openEmployeeDrawer(userId) {
-      const emp = (employeeData.items || []).find(i => i.id === userId);
-      if (!emp) return;
+      try {
+        const emp = (employeeData.items || []).find(i => i.id === userId);
+        if (!emp) return;
 
-      activeDrawerEmployee = emp;
-      const drawer = document.getElementById('emp-profile-drawer');
-      const backdrop = document.getElementById('emp-drawer-backdrop');
-      const avatarEl = document.getElementById('drawer-emp-avatar');
-      const nameEl = document.getElementById('drawer-emp-name');
-      const emailEl = document.getElementById('drawer-emp-email');
+        activeDrawerEmployee = emp;
+        const drawer = document.getElementById('emp-profile-drawer');
+        const backdrop = document.getElementById('emp-drawer-backdrop');
+        const avatarEl = document.getElementById('drawer-emp-avatar');
+        const nameEl = document.getElementById('drawer-emp-name');
+        const emailEl = document.getElementById('drawer-emp-email');
 
-      const initials = (emp.display_name || 'EM').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-      if (avatarEl) avatarEl.textContent = initials;
-      if (nameEl) nameEl.textContent = emp.display_name || 'Unnamed';
-      if (emailEl) emailEl.textContent = emp.email;
+        const initials = (emp.display_name || 'EM').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+        if (avatarEl) avatarEl.textContent = initials;
+        if (nameEl) nameEl.textContent = emp.display_name || 'Unnamed';
+        if (emailEl) emailEl.textContent = emp.email;
 
-      switchDrawerTab('overview');
-      if (backdrop) backdrop.classList.add('open');
-      if (drawer) drawer.classList.add('open');
+        switchDrawerTab('overview');
+        if (backdrop) backdrop.classList.add('open');
+        if (drawer) drawer.classList.add('open');
+      } catch (err) {
+        console.warn('Employee profile drawer activation notice:', err);
+      }
     }
 
     function closeEmployeeDrawer() {
@@ -434,13 +440,13 @@ export function getEmployeeDrawerAndTreeScripts(): string {
         '<div class="drawer-card">' +
           '<div class="drawer-card-title">Quick Actions</div>' +
           '<div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">' +
-            '<button class="astryx-btn btn-outline" style="font-size: 0.75rem;" onclick="openEditEmployeeModal(\\\'' + emp.id + '\\\')">✏️ Edit Details</button>' +
-            '<button class="astryx-btn btn-outline" style="font-size: 0.75rem;" onclick="setEmployeeViewMode(\\\'tree\\\'); setOrgFocus(\\\'' + emp.id + '\\\'); closeEmployeeDrawer();">🌳 Focus in Org Chart</button>' +
-            '<button class="astryx-btn btn-outline" style="font-size: 0.75rem; color: var(--forge-accent); border-color: var(--forge-border);" onclick="revokeEmployeeSessions(\\\'' + emp.id + '\\\')">🔒 Revoke Sessions</button>' +
+            '<button class="astryx-btn btn-outline" style="font-size: 0.75rem;" onclick="openEditEmployeeModal(\\\'' + emp.id + '\\\')">Edit Details</button>' +
+            '<button class="astryx-btn btn-outline" style="font-size: 0.75rem;" onclick="setEmployeeViewMode(\\\'tree\\\'); setOrgFocus(\\\'' + emp.id + '\\\'); closeEmployeeDrawer();">Focus in Org Chart</button>' +
+            '<button class="astryx-btn btn-outline" style="font-size: 0.75rem; color: var(--forge-accent); border-color: var(--forge-border);" onclick="revokeEmployeeSessions(\\\'' + emp.id + '\\\')">Revoke Sessions</button>' +
           '</div>' +
         '</div>';
       } else if (tab === 'roles') {
-        const roles = (emp.roles || ['roles/employee']).map(r => '<div style="background: var(--forge-bg-card); border: 1px solid var(--forge-border); padding: 0.6rem; border-radius: var(--forge-radius-sm); font-size: 0.8rem; margin-bottom: 0.4rem;">🔑 <strong>' + r + '</strong><div style="font-size: 0.7rem; color: var(--forge-text-muted); margin-top: 0.2rem;">Scope: org/* | Resource Condition: (None)</div></div>').join('');
+        const roles = (emp.roles || ['roles/employee']).map(r => '<div style="background: var(--forge-bg-card); border: 1px solid var(--forge-border); padding: 0.6rem; border-radius: var(--forge-radius-sm); font-size: 0.8rem; margin-bottom: 0.4rem;"><strong>' + r + '</strong><div style="font-size: 0.7rem; color: var(--forge-text-muted); margin-top: 0.2rem;">Scope: org/* | Resource Condition: (None)</div></div>').join('');
         body.innerHTML = '<div class="drawer-card"><div class="drawer-card-title">IAM Policy Bindings</div>' + roles + '</div>';
       } else if (tab === 'chain') {
         body.innerHTML = '<div class="drawer-card"><div class="drawer-card-title">Hierarchy</div>' +

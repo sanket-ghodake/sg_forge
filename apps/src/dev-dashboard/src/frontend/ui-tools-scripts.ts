@@ -184,6 +184,11 @@ export function getToolsDashboardScripts(): string {
         e.preventDefault();
         openCommandPalette();
       } else if (e.key === 'Escape') {
+        const deptModal = document.getElementById('modal-org-department');
+        if (deptModal && deptModal.classList.contains('open') && window._addingDeptFromMemberModal) {
+          if (typeof closeDepartmentModal === 'function') closeDepartmentModal();
+          return;
+        }
         closeCommandPalette();
         closeConnectModal();
         closeSafeEnvModal();
@@ -196,6 +201,9 @@ export function getToolsDashboardScripts(): string {
         if (typeof closeEmployeeDrawer === 'function') closeEmployeeDrawer();
         if (typeof closeHierarchyModal === 'function') closeHierarchyModal();
         if (typeof closeImportWizard === 'function') closeImportWizard();
+        if (typeof closeDepartmentModal === 'function') closeDepartmentModal();
+        if (typeof closeLevelModal === 'function') closeLevelModal();
+        if (typeof closeOrgSettingsModal === 'function') closeOrgSettingsModal();
       } else if (document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
         const tabMap = { '1': 'overview', '2': 'services', '3': 'apps', '4': 'database', '5': 'logs', '6': 'traffic', '7': 'issues', '8': 'employees', '9': 'host', '0': 'settings' };
         if (tabMap[e.key]) switchTab(tabMap[e.key]);

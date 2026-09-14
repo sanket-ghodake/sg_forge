@@ -31,7 +31,20 @@ import {
   handleBatchImport,
   handleBulkAction,
   handleExportEmployees,
+  handleGetManagers,
+  handleBindAppPolicy,
 } from './backend/api-org-handlers';
+import {
+  handleGetOrgSetup,
+  handleUpdateOrgProfile,
+  handleUpdateEidConfig,
+  handleGetNextEid,
+  handlePreviewEid,
+  handleUpsertNodeType,
+  handleDeleteNodeType,
+  handleUpsertNode,
+  handleDeleteNode,
+} from './backend/api-org-setup-handlers';
 import { handleGetAuditLogs } from './backend/audit-session-controller';
 
 import { authTelemetry } from './backend/telemetry';
@@ -161,8 +174,82 @@ export function startAuthServer(port: number = PORT) {
       return applySecurityHeaders(response);
     }
 
-    if (path === '/api/v1/auth/org/employees/export' || path === '/auth/api/v1/auth/org/employees/export') {
+    if (
+      path === '/api/v1/auth/org/export' ||
+      path === '/auth/api/v1/auth/org/export' ||
+      path === '/api/v1/auth/org/employees/export' ||
+      path === '/auth/api/v1/auth/org/employees/export'
+    ) {
       if (method === 'GET') response = handleExportEmployees(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/org/managers' || path === '/auth/api/v1/auth/org/managers') {
+      if (method === 'GET') response = handleGetManagers(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/iam/app-policy/bind' || path === '/auth/api/v1/auth/iam/app-policy/bind') {
+      if (method === 'POST') response = await handleBindAppPolicy(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    // ── Organization Setup & Dynamic Hierarchy Engine ──
+    if (path === '/api/v1/auth/org/setup' || path === '/auth/api/v1/auth/org/setup') {
+      if (method === 'GET') response = handleGetOrgSetup(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/org/setup/profile' || path === '/auth/api/v1/auth/org/setup/profile') {
+      if (method === 'POST') response = await handleUpdateOrgProfile(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/org/setup/eid-config' || path === '/auth/api/v1/auth/org/setup/eid-config') {
+      if (method === 'POST') response = await handleUpdateEidConfig(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/org/setup/eid/next' || path === '/auth/api/v1/auth/org/setup/eid/next') {
+      if (method === 'POST') response = handleGetNextEid(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/org/setup/eid/preview' || path === '/auth/api/v1/auth/org/setup/eid/preview') {
+      if (method === 'GET' || method === 'POST') response = handlePreviewEid(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/org/setup/node-types' || path === '/auth/api/v1/auth/org/setup/node-types') {
+      if (method === 'POST') response = await handleUpsertNodeType(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path.startsWith('/api/v1/auth/org/setup/node-types/') || path.startsWith('/auth/api/v1/auth/org/setup/node-types/')) {
+      const typeId = path.split('/').pop() || '';
+      if (method === 'DELETE') response = handleDeleteNodeType(req, typeId);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path === '/api/v1/auth/org/setup/nodes' || path === '/auth/api/v1/auth/org/setup/nodes') {
+      if (method === 'POST') response = await handleUpsertNode(req);
+      else response = new Response('Method Not Allowed', { status: 405 });
+      return applySecurityHeaders(response);
+    }
+
+    if (path.startsWith('/api/v1/auth/org/setup/nodes/') || path.startsWith('/auth/api/v1/auth/org/setup/nodes/')) {
+      const nodeId = path.split('/').pop() || '';
+      if (method === 'DELETE') response = handleDeleteNode(req, nodeId);
       else response = new Response('Method Not Allowed', { status: 405 });
       return applySecurityHeaders(response);
     }

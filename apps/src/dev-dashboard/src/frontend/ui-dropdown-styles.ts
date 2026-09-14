@@ -59,22 +59,22 @@ export function getDropdownStyles(): string {
       transform: rotate(180deg);
     }
     .astryx-custom-select-menu {
-      position: absolute;
-      top: calc(100% + 5px);
+      position: fixed;
+      top: 0;
       left: 0;
-      min-width: 100%;
+      min-width: 140px;
       width: max-content;
-      max-width: min(340px, calc(100vw - 24px));
+      max-width: min(380px, calc(100vw - 24px));
       max-height: 280px;
       overflow-y: auto;
       background: var(--forge-bg-surface);
       border: 1px solid var(--forge-border-medium);
       border-radius: var(--forge-radius-sm);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       padding: 0.35rem;
-      z-index: 1200;
+      z-index: 999999;
       display: none;
       flex-direction: column;
       gap: 0.15rem;
@@ -82,18 +82,16 @@ export function getDropdownStyles(): string {
       box-sizing: border-box;
       scrollbar-width: thin;
       scrollbar-color: var(--forge-border-medium) transparent;
+      pointer-events: auto;
     }
     .astryx-custom-select-wrap.open .astryx-custom-select-menu {
       display: flex;
     }
     .astryx-custom-select-menu.drop-up {
-      top: auto;
-      bottom: calc(100% + 5px);
       animation: selectDropUp 0.16s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .astryx-custom-select-menu.align-right {
-      left: auto;
-      right: 0;
+      /* right offset applied dynamically via fixed positioning coordinates */
     }
     .astryx-custom-select-item {
       display: flex;

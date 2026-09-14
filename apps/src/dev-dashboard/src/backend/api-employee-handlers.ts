@@ -6,6 +6,7 @@
 import {
   fetchEmployeesList,
   fetchEmployeeHierarchy,
+  fetchManagersList,
   createEmployeeApi,
   updateEmployeeApi,
   revokeEmployeeSessionsApi,
@@ -32,6 +33,16 @@ export async function handleDevEmployeeApi(path: string, req: Request, url: URL)
       return Response.json(result);
     } catch (err: any) {
       return Response.json({ error: err?.message || 'Failed to list employees' }, { status: 500 });
+    }
+  }
+
+  // 1b. Eligible Reporting Managers List
+  if (path === '/api/employees/managers' && req.method === 'GET') {
+    try {
+      const managers = await fetchManagersList();
+      return Response.json({ status: 'ok', managers });
+    } catch (err: any) {
+      return Response.json({ error: err?.message || 'Failed to list managers' }, { status: 500 });
     }
   }
 

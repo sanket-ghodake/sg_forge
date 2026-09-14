@@ -24,3 +24,4 @@ export * from './service-worker';
 export * from './backup';
 export * from './crypto';
 export * from './telemetry-client';
+export * from './org-setup-client';

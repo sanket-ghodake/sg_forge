@@ -13,6 +13,8 @@ import {
   fetchOrgTree,
   fetchEmployeesList,
   createEmployeeApi,
+  batchImportEmployeesApi,
+  fetchManagersList,
   fetchAuditLogs,
   fetchUserSessions,
 } from '@forge/sdk';
@@ -28,6 +30,8 @@ import {
   createAppAccessRequest,
   getUserAppAccessRequests,
   cancelAppAccessRequest,
+  getPendingAppAccessRequests,
+  decideAppAccessRequest,
   createApiToken,
   getUserApiTokens,
   revokeApiToken,
@@ -165,6 +169,47 @@ export function startPortalServer(port: number = PORT) {
       }
     }
 
+    if (url.pathname === '/api/v1/portal/apps/requests/pending' || url.pathname === '/portal/api/v1/portal/apps/requests/pending') {
+      if (!isAdmin) {
+        return Response.json({ ok: false, error: 'Forbidden: Administrative role required to review requests' }, { status: 403 });
+      }
+      const pending = getPendingAppAccessRequests();
+      return Response.json({ ok: true, data: pending });
+    }
+
+    if (
+      url.pathname === '/api/v1/portal/apps/requests/decide' ||
+      url.pathname === '/portal/api/v1/portal/apps/requests/decide' ||
+      (url.pathname.startsWith('/api/v1/portal/apps/requests/') && url.pathname.endsWith('/decide')) ||
+      (url.pathname.startsWith('/portal/api/v1/portal/apps/requests/') && url.pathname.endsWith('/decide'))
+    ) {
+      if (req.method !== 'POST') return Response.json({ ok: false, error: 'Method not allowed' }, { status: 405 });
+      if (!isAdmin) {
+        return Response.json({ ok: false, error: 'Forbidden: Administrative role required to decide requests' }, { status: 403 });
+      }
+      try {
+        const body = await req.json();
+        const pathParts = url.pathname.split('/');
+        const urlId = pathParts.length >= 2 && pathParts[pathParts.length - 1] === 'decide' && pathParts[pathParts.length - 2] !== 'requests' ? pathParts[pathParts.length - 2] : null;
+        const requestId = body.requestId || body.id || urlId;
+        if (!requestId) return Response.json({ ok: false, error: 'Request ID is required' }, { status: 400 });
+
+        const decision = body.action === 'APPROVE' || body.decision === 'APPROVE' || body.decision === 'APPROVED' ? 'APPROVE' : 'REJECT';
+        const result = await decideAppAccessRequest(requestId, auth.user!.id, decision, {
+          notes: body.notes || body.reason,
+          headers: forwardHeaders,
+        });
+
+        if (!result.ok) {
+          const isUserError = result.error?.includes('Anti-Self-Approval') || result.error?.includes('not found');
+          return Response.json({ ok: false, error: result.error }, { status: isUserError ? 400 : 403 });
+        }
+        return Response.json({ ok: true, status: result.status });
+      } catch (err: any) {
+        return Response.json({ ok: false, error: err?.message || 'Failed to decide request' }, { status: 400 });
+      }
+    }
+
     // ── Developer Personal Access Tokens API ──
     if (url.pathname === '/api/v1/portal/tokens' || url.pathname === '/portal/api/v1/portal/tokens') {
       if (req.method === 'GET') {
@@ -265,6 +310,7 @@ export function startPortalServer(port: number = PORT) {
             email: body.email,
             job_title: body.jobTitle || body.job_title || 'Team Member',
             department_id: body.department_id,
+            manager_id: body.manager_id,
             role: requestedRole,
           },
           { headers: forwardHeaders }
@@ -272,6 +318,41 @@ export function startPortalServer(port: number = PORT) {
         return Response.json({ ok: true, data: created });
       } catch (err: any) {
         return Response.json({ ok: false, error: err?.message || 'Failed to invite member' }, { status: 400 });
+      }
+    }
+
+    if (url.pathname === '/api/v1/portal/managers' || url.pathname === '/portal/api/v1/portal/managers') {
+      try {
+        const managers = await fetchManagersList({ headers: forwardHeaders });
+        return Response.json({ ok: true, data: managers });
+      } catch (err: any) {
+        return Response.json({ ok: false, error: err?.message || 'Failed to fetch managers' }, { status: 500 });
+      }
+    }
+
+    if (url.pathname === '/api/v1/portal/members/import' || url.pathname === '/portal/api/v1/portal/members/import') {
+      if (req.method !== 'POST') return Response.json({ ok: false, error: 'Method not allowed' }, { status: 405 });
+      if (!isAdmin) {
+        return Response.json({ ok: false, error: 'Forbidden: Bulk import requires administrative roles' }, { status: 403 });
+      }
+      try {
+        const body = await req.json();
+        const records = body.records || [];
+        const options = body.options || { dryRun: Boolean(body.dry_run) };
+        const result = await batchImportEmployeesApi(records, options, {
+          headers: forwardHeaders,
+          csv_data: typeof body.csv_data === 'string' ? body.csv_data : undefined,
+        });
+        const summary = result.summary || result;
+        return Response.json({
+          ok: true,
+          summary,
+          valid_count: summary.valid,
+          imported_count: summary.created,
+          errors: summary.errors || [],
+        });
+      } catch (err: any) {
+        return Response.json({ ok: false, error: err?.message || 'Bulk import failed' }, { status: 400 });
       }
     }
 

@@ -1,8 +1,10 @@
 /**
  * @forge/dev-dashboard - Astryx Styles for Employee Studio & Org Chart (2026 LTS)
  * Design Tokens & Glassmorphic Components compliant with Astryx Standards.
-  * @requirements [HLR-UI-401] [LLR-UI-001]
+ * @requirements [HLR-UI-401] [LLR-UI-001]
  */
+
+import { getEmployeeTableStyles } from './ui-employee-table-styles';
 
 export function getEmployeeStyles(): string {
   return `
@@ -41,22 +43,7 @@ export function getEmployeeStyles(): string {
     .emp-dept-chip:hover { border-color: var(--forge-primary); color: var(--forge-primary); }
     .emp-dept-chip-count { font-size: 0.68rem; font-weight: 700; background: var(--forge-bg-card); color: var(--forge-text-muted); padding: 0.05rem 0.35rem; border-radius: var(--forge-radius-full); }
 
-    /* Integrated Enterprise Table Footer */
-    .emp-table-footer {
-      display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 1rem;
-      border-top: 1px solid var(--forge-border); background: var(--forge-bg-card); flex-wrap: wrap; gap: 0.75rem;
-    }
-    .emp-footer-metrics { font-size: 0.76rem; color: var(--forge-text-muted); font-weight: 500; font-family: monospace; }
-    .emp-footer-center { display: flex; align-items: center; gap: 0.5rem; }
-    .emp-footer-pagination { display: flex; align-items: center; gap: 0.4rem; }
-    .emp-table-keyboard-hints {
-      display: flex; gap: 1.25rem; font-size: 0.72rem; color: var(--forge-text-subtle);
-      padding: 0.5rem 0.25rem 0; margin-top: 0.35rem; flex-wrap: wrap;
-    }
-    .emp-table-keyboard-hints kbd {
-      font-family: monospace; font-size: 0.68rem; background: var(--forge-bg-elevated);
-      border: 1px solid var(--forge-border); padding: 0.05rem 0.35rem; border-radius: 3px; color: var(--forge-text-main);
-    }
+    ${getEmployeeTableStyles()}
 
     /* Floating Batch Action Toolbar */
     .emp-batch-bar {

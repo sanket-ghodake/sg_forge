@@ -51,4 +51,46 @@ describe('Tier 1 Unit: Employee Studio State Persistence Governance', () => {
     // Assert
     expect(syntaxError).toBeNull();
   });
+
+  it('Arrange, Act, Assert: Employee Directory Table HTML renders Fullscreen Canvas and Multipage controls', () => {
+    // Arrange & Act
+    const html = renderDashboardHtml();
+
+    // Assert Fullscreen Canvas elements
+    expect(html).toContain('id="emp-table-container"');
+    expect(html).toContain('id="emp-fullscreen-hud"');
+    expect(html).toContain('id="btn-emp-fullscreen"');
+    expect(html).toContain('Full Screen');
+    expect(html).toContain('Exit Fullscreen');
+
+    // Assert Multipage Pagination elements
+    expect(html).toContain('id="emp-pagination-controls"');
+    expect(html).toContain('id="btn-emp-first"');
+    expect(html).toContain('id="btn-emp-prev"');
+    expect(html).toContain('id="emp-page-pills"');
+    expect(html).toContain('id="btn-emp-next"');
+    expect(html).toContain('id="btn-emp-last"');
+    expect(html).toContain('id="emp-page-limit"');
+
+    // Assert Sortable Column Indicators
+    expect(html).toContain('id="emp-sort-name-indicator"');
+    expect(html).toContain('id="emp-sort-dept-indicator"');
+    expect(html).toContain('id="emp-sort-title-indicator"');
+    expect(html).toContain('id="emp-sort-status-indicator"');
+  });
+
+  it('Arrange, Act, Assert: Employee Directory Table contains ZERO raw OS emojis', () => {
+    // Arrange & Act
+    const html = renderDashboardHtml();
+
+    // Isolate employee subtab table HTML and scripts
+    const tableSectionMatch = html.match(/id="emp-subtab-table"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/);
+    expect(tableSectionMatch).not.toBeNull();
+    const tableContent = tableSectionMatch![0];
+
+    // Assert: ZERO raw OS emojis
+    const emojiRegex = /[\u{1F300}-\u{1F6FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/u;
+    expect(emojiRegex.test(tableContent)).toBe(false);
+  });
 });
+

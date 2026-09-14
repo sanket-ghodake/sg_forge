@@ -6,7 +6,7 @@
 
 import type { Database } from 'bun:sqlite';
 import { randomBytes } from 'node:crypto';
-import { createLogger, getDatabaseClient } from '@forge/sdk';
+import { createLogger, getDatabaseClient, bindAppPolicyApi } from '@forge/sdk';
 
 const logger = createLogger('portal-inbox-service');
 
@@ -388,27 +388,92 @@ export function getUserAppAccessRequests(userId: string): AppAccessRequestItem[]
 export function cancelAppAccessRequest(userId: string, requestId: string): boolean {
   const db = getDatabase();
   try {
-    db.run('DELETE FROM portal_app_access_requests WHERE id = ? AND user_id = ?', [requestId, userId]);
-    return true;
+    const res = db.run('DELETE FROM portal_app_access_requests WHERE id = ? AND user_id = ?', [requestId, userId]);
+    return res.changes > 0;
   } catch {
     return false;
   }
 }
 
 /** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
+export function getPendingAppAccessRequests(): any[] {
+  const db = getDatabase();
+  try {
+    const rows = db.query<any, []>(`SELECT id, user_id, user_email, app_id, appName, reason_type, notes, status, created_at FROM portal_app_access_requests WHERE status = 'PENDING' ORDER BY created_at DESC`).all();
+    return rows.map((r: any) => ({
+      id: r.id, userId: r.user_id, userEmail: r.user_email,
+      appId: r.app_id, app_id: r.app_id, appName: r.appName,
+      reasonType: r.reason_type, notes: r.notes || undefined,
+      status: r.status, createdAt: r.created_at,
+    }));
+  } catch { return []; }
+}
+
+/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
+export async function decideAppAccessRequest(
+  requestId: string,
+  adminUserId: string,
+  decision: 'APPROVE' | 'REJECT',
+  options: { notes?: string; headers?: Record<string, string> } = {}
+): Promise<{ ok: boolean; status: string; error?: string }> {
+  const db = getDatabase();
+  try {
+    const req = db.query<any, [string]>('SELECT * FROM portal_app_access_requests WHERE id = ?').get(requestId);
+    if (!req) return { ok: false, status: 'error', error: 'Request not found' };
+
+    // Anti-Self-Approval Security Defense: Admin cannot approve their own access request
+    if (req.user_id === adminUserId) {
+      return { ok: false, status: 'error', error: 'Forbidden: Anti-Self-Approval policy active. You cannot approve your own access request.' };
+    }
+
+    const now = Date.now();
+    const newStatus = decision === 'APPROVE' ? 'APPROVED' : 'REJECTED';
+    db.run('UPDATE portal_app_access_requests SET status = ? WHERE id = ?', [newStatus, requestId]);
+
+    const targetAppName = req.appName || req.app_id || 'Application';
+    if (decision === 'APPROVE') {
+      try {
+        await bindAppPolicyApi({ userId: req.user_id, appId: req.app_id }, { headers: options.headers });
+      } catch (err: any) {
+        logger.warn('Inter-service app policy binding note:', err instanceof Error ? { error: err.message } : undefined);
+      }
+      createNotification({
+        id: `notif_${now}_${Math.random().toString(36).slice(2, 6)}`,
+        userId: req.user_id, orgId: null, type: 'ACTION',
+        title: 'App Access Approved',
+        message: `Your request for ${targetAppName} was approved. You can now launch this tool from your Apps hub.`,
+        sender: 'Security & App Governance', timestamp: 'Just now', isUnread: true, categoryTag: 'APP_ACCESS',
+      });
+    } else {
+      createNotification({
+        id: `notif_${now}_${Math.random().toString(36).slice(2, 6)}`,
+        userId: req.user_id, orgId: null, type: 'ACTION',
+        title: 'App Access Declined',
+        message: `Your request for ${targetAppName} was declined by the administrator.`,
+        sender: 'Security & App Governance', timestamp: 'Just now', isUnread: true, categoryTag: 'APP_ACCESS',
+      });
+    }
+
+    return { ok: true, status: newStatus };
+  } catch (err: any) {
+    logger.error('Failed to decide app access request', err);
+    return { ok: false, status: 'error', error: err?.message || 'Failed to process decision' };
+  }
+}
+
+
+/** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
 export function createApiToken(userId: string, name: string): { token: string; item: UserApiTokenItem } | null {
   const db = getDatabase();
   try {
     const id = `pat_${Date.now()}_${randomBytes(4).toString('hex')}`;
-    const secret = randomBytes(24).toString('hex');
-    const token = `forge_pat_${secret}`;
-    const prefix = token.slice(0, 14) + '...';
+    const token = `forge_pat_${randomBytes(24).toString('hex')}`;
     const hasher = new Bun.CryptoHasher('sha256');
     hasher.update(token);
     const tokenHash = hasher.digest('hex');
     const now = Date.now();
-    const expiresAt = now + 90 * 86400000;
-    db.run('INSERT INTO portal_user_tokens (id, user_id, name, token_hash, prefix, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, userId, name, tokenHash, prefix, now, expiresAt]);
+    const prefix = token.slice(0, 14) + '...';
+    db.run('INSERT INTO portal_user_tokens (id, user_id, name, token_hash, prefix, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, userId, name, tokenHash, prefix, now, now + 90 * 86400000]);
     return { token, item: { id, name, prefix, createdAt: now } };
   } catch (err: any) {
     logger.error('Failed to create user API token', err);
@@ -419,11 +484,8 @@ export function createApiToken(userId: string, name: string): { token: string; i
 /** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
 export function getUserApiTokens(userId: string): UserApiTokenItem[] {
   try {
-    const rows = getDatabase().query<any, [string]>('SELECT id, name, prefix, created_at FROM portal_user_tokens WHERE user_id = ? ORDER BY created_at DESC').all(userId);
-    return rows.map((r: any) => ({ id: r.id, name: r.name, prefix: r.prefix, createdAt: r.created_at }));
-  } catch {
-    return [];
-  }
+    return getDatabase().query<any, [string]>('SELECT id, name, prefix, created_at FROM portal_user_tokens WHERE user_id = ? ORDER BY created_at DESC').all(userId).map((r: any) => ({ id: r.id, name: r.name, prefix: r.prefix, createdAt: r.created_at }));
+  } catch { return []; }
 }
 
 /** @requirements [HLR-PORTAL-201] [LLR-UI-003] */
@@ -431,7 +493,5 @@ export function revokeApiToken(userId: string, tokenId: string): boolean {
   try {
     getDatabase().run('DELETE FROM portal_user_tokens WHERE id = ? AND user_id = ?', [tokenId, userId]);
     return true;
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 }

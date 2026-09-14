@@ -200,6 +200,19 @@ export function initAuthSchema(db: Database): void {
     CREATE INDEX IF NOT EXISTS idx_org_nodes_parent ON auth_org_nodes(parent_id);
     CREATE INDEX IF NOT EXISTS idx_org_nodes_path ON auth_org_nodes(path);
   `);
+
+  // Safe idempotent migrations for auth_organizations columns
+  try {
+    const orgCols = (db.query(`PRAGMA table_info(auth_organizations);`).all() as any[]).map((c) => c.name);
+    if (!orgCols.includes('eid_prefix')) db.exec(`ALTER TABLE auth_organizations ADD COLUMN eid_prefix TEXT DEFAULT 'EMP';`);
+    if (!orgCols.includes('eid_padding')) db.exec(`ALTER TABLE auth_organizations ADD COLUMN eid_padding INTEGER DEFAULT 4;`);
+    if (!orgCols.includes('eid_counter')) db.exec(`ALTER TABLE auth_organizations ADD COLUMN eid_counter INTEGER DEFAULT 0;`);
+    if (!orgCols.includes('timezone')) db.exec(`ALTER TABLE auth_organizations ADD COLUMN timezone TEXT DEFAULT 'UTC';`);
+    if (!orgCols.includes('contact_email')) db.exec(`ALTER TABLE auth_organizations ADD COLUMN contact_email TEXT;`);
+    if (!orgCols.includes('settings')) db.exec(`ALTER TABLE auth_organizations ADD COLUMN settings TEXT DEFAULT '{}';`);
+  } catch (migErr) {
+    getLogger().warn(`Idempotent migration on auth_organizations skipped or already applied: ${migErr}`);
+  }
 }
 
 /**

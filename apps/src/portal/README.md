@@ -17,7 +17,7 @@ Primary enterprise employee workspace, admin governance center, visual 2D intera
 | **Complexity Score** | `952` | Strict client-side SPA routing & state conductors |
 | **Language Breakdown** | TypeScript, Markdown, Docker, JSON | 100% type-safe |
 | **Database Instance** | `portal.db` | Dedicated Turso libSQL/SQLite database (Multi-User Isolated) |
-| **5-Tier Test Suite** | `44` passing tests | `test/unit/`, `test/integration/`, `test/security/`, `test/contracts/`, `test/e2e/` |
+| **5-Tier Test Suite** | `69` passing tests | `test/unit/`, `test/integration/`, `test/security/`, `test/contracts/`, `test/e2e/` |
 | **Verification Gate** | **100% Passing** ✅ | Strict SPA invariant, zero hardcoded data, and Astryx compliance |
 
 ---
@@ -44,6 +44,8 @@ Primary enterprise employee workspace, admin governance center, visual 2D intera
 * **9 Purpose-Built Views**: 
   - **Employee Hub**: *Company Map*, *Apps & Tools Hub*, *My Profile*, *Announcements*.
   - **Admin Console**: *Member Management*, *App Permissions*, *Org Chart Editor*, *Security & Audit*, *Workspace Settings*.
+* **Delegated App Access & Inbox**: Restricted applications can be requested directly from the Marketplace with business justification, routing to manager & admin pending queue with Anti-Self-Approval enforcement.
+* **Universal Employee Onboarding**: Single-member invites with reporting line manager linking, plus high-performance CSV batch ingestion with dry-run syntax validation and anti-formula injection defenses.
 * **Sandboxed Micro-App Host**: Sandboxed iframe embedding with bidirectional `@forge/sdk` postMessage handshake bridge.
 
 ---

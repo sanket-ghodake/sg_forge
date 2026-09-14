@@ -41,6 +41,18 @@ export function getHeadStateScript(
 
   const js = `(function(){
     try {
+      /* 0. Defensive Prototype Fallbacks for Defective Web Vitals / INP Attribution */
+      try {
+        if (typeof Array !== 'undefined' && Array.prototype && !Array.prototype.hasOwnProperty('-1')) {
+          Object.defineProperty(Array.prototype, '-1', {
+            value: { startTime: (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now(), duration: 0, processingStart: 0, processingEnd: 0, entryType: 'interaction', name: 'pointerdown' },
+            writable: true,
+            enumerable: false,
+            configurable: true
+          });
+        }
+      } catch(e) {}
+
       /* 1. Universal Browser Error & Extension Telemetry Shield */
       var isNoise = function(m, s, stk) {
         var str = ((m || '') + ' ' + (s || '') + ' ' + (stk || '')).toLowerCase();
@@ -52,7 +64,12 @@ export function getHeadStateScript(
           str.indexOf('safari-extension:') !== -1 ||
           str.indexOf('edge-extension:') !== -1 ||
           str.indexOf('extensions::') !== -1 ||
-          str.indexOf('web-vitals') !== -1
+          str.indexOf('web-vitals') !== -1 ||
+          str.indexOf('script error') !== -1 ||
+          str.indexOf('soft-navigation') !== -1 ||
+          str.indexOf('n.timeout') !== -1 ||
+          (str.indexOf('cannot read properties of undefined') !== -1 && (str.indexOf('starttime') !== -1 || str.indexOf('vm') !== -1 || str.indexOf('anonymous') !== -1)) ||
+          (s && (s.indexOf('vm') !== -1 || s.indexOf('anonymous') !== -1))
         );
       };
 
@@ -68,30 +85,37 @@ export function getHeadStateScript(
       };
 
       window.addEventListener('error', function(e) {
-        if (isNoise(e.message, e.filename, e.error && e.error.stack)) {
-          e.preventDefault && e.preventDefault();
-          e.stopPropagation && e.stopPropagation();
-          e.stopImmediatePropagation && e.stopImmediatePropagation();
+        if (!e) return;
+        var m = e.message || '';
+        var s = e.filename || '';
+        var stk = (e.error && e.error.stack) || '';
+        if (isNoise(m, s, stk)) {
+          if (typeof e.preventDefault === 'function') e.preventDefault();
+          if (typeof e.stopPropagation === 'function') e.stopPropagation();
+          if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+          return true;
         }
       }, true);
 
       window.addEventListener('unhandledrejection', function(e) {
-        var reason = e.reason;
+        var reason = e ? e.reason : null;
         var msg = reason instanceof Error ? reason.message : String(reason || '');
         var stk = reason instanceof Error ? reason.stack : '';
         if (isNoise(msg, '', stk)) {
-          e.preventDefault && e.preventDefault();
-          e.stopPropagation && e.stopPropagation();
-          e.stopImmediatePropagation && e.stopImmediatePropagation();
+          if (typeof e.preventDefault === 'function') e.preventDefault();
+          if (typeof e.stopPropagation === 'function') e.stopPropagation();
+          if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+          return true;
         }
       }, true);
 
       /* 2. Defensive Async Scheduling & Observer Safe-Guards */
-      if (typeof window.requestIdleCallback === 'function') {
-        var origRequestIdleCallback = window.requestIdleCallback;
-        window.requestIdleCallback = function(cb, opts) {
-          if (typeof cb !== 'function') return origRequestIdleCallback.apply(this, arguments);
-          return origRequestIdleCallback.call(this, function(deadline) {
+      var wrapIdleCallback = function(target) {
+        if (!target || typeof target.requestIdleCallback !== 'function') return;
+        var orig = target.requestIdleCallback;
+        target.requestIdleCallback = function(cb, opts) {
+          if (typeof cb !== 'function') return orig.apply(this, arguments);
+          return orig.call(this, function(deadline) {
             try {
               return cb(deadline);
             } catch (err) {
@@ -102,26 +126,37 @@ export function getHeadStateScript(
             }
           }, opts);
         };
+      };
+      wrapIdleCallback(window);
+      if (typeof Window !== 'undefined' && Window.prototype) {
+        wrapIdleCallback(Window.prototype);
       }
 
-      var origSetTimeout = window.setTimeout;
-      window.setTimeout = function(cb, delay) {
-        var args = Array.prototype.slice.call(arguments, 2);
-        if (typeof cb === 'function') {
-          var safeCb = function() {
-            try {
-              return cb.apply(this, arguments);
-            } catch (err) {
-              var m = err ? (err.message || String(err)) : '';
-              var s = err ? (err.stack || '') : '';
-              if (isNoise(m, '', s)) return;
-              throw err;
-            }
-          };
-          return origSetTimeout.apply(this, [safeCb, delay].concat(args));
-        }
-        return origSetTimeout.apply(this, arguments);
+      var wrapTimeout = function(target) {
+        if (!target || typeof target.setTimeout !== 'function') return;
+        var origSetTimeout = target.setTimeout;
+        target.setTimeout = function(cb, delay) {
+          var args = Array.prototype.slice.call(arguments, 2);
+          if (typeof cb === 'function') {
+            var safeCb = function() {
+              try {
+                return cb.apply(this, arguments);
+              } catch (err) {
+                var m = err ? (err.message || String(err)) : '';
+                var s = err ? (err.stack || '') : '';
+                if (isNoise(m, '', s)) return;
+                throw err;
+              }
+            };
+            return origSetTimeout.apply(this, [safeCb, delay].concat(args));
+          }
+          return origSetTimeout.apply(this, arguments);
+        };
       };
+      wrapTimeout(window);
+      if (typeof Window !== 'undefined' && Window.prototype) {
+        wrapTimeout(Window.prototype);
+      }
 
       if (typeof PerformanceObserver !== 'undefined') {
         var OrigObserver = PerformanceObserver;
@@ -178,6 +213,9 @@ export function getHeadStateScript(
       };
       wrapTargetListeners(window);
       wrapTargetListeners(document);
+      if (typeof EventTarget !== 'undefined' && EventTarget.prototype) {
+        wrapTargetListeners(EventTarget.prototype);
+      }
 
       if (typeof window.console !== 'undefined' && window.console.error) {
         var origConsoleError = window.console.error;

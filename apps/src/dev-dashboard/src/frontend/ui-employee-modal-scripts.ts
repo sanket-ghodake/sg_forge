@@ -1,16 +1,39 @@
 /**
  * @forge/dev-dashboard - Employee Flyout & Hierarchy Modal Handlers (2026 LTS)
- * Astryx Form Processing, Validation, and Scoped Hierarchy Rendering.
-  * @requirements [HLR-UI-401] [LLR-UI-001]
+ * Astryx Form Processing, Real-Time Validation, Dynamic Preview, and Scoped Hierarchy Rendering.
+ * @requirements [HLR-UI-401] [LLR-UI-001] [LLR-AUTH-008] [LLR-AUTH-009]
  */
+
+import { astryxIcons } from '@forge/ui';
 
 export function getEmployeeModalScripts(): string {
   return `
-    function openAddEmployeeModal() {
+    function updateEmployeeLivePreview() {
+      const name = (document.getElementById('emp-form-name')?.value || '').trim();
+      const email = (document.getElementById('emp-form-email')?.value || '').trim();
+      const title = (document.getElementById('emp-form-title')?.value || '').trim();
+
+      const avatarEl = document.getElementById('emp-live-avatar');
+      const nameEl = document.getElementById('emp-live-name');
+      const detailsEl = document.getElementById('emp-live-details');
+
+      if (avatarEl) {
+        const initials = name ? name.split(' ').filter(Boolean).map(n => n[0]).slice(0, 2).join('').toUpperCase() : '?';
+        avatarEl.textContent = initials || '?';
+      }
+      if (nameEl) nameEl.textContent = name || 'New Member Profile';
+      if (detailsEl) {
+        const titleText = title || 'Job Title';
+        const emailText = email || 'work-email@domain.internal';
+        detailsEl.textContent = titleText + ' • ' + emailText;
+      }
+    }
+
+    async function openAddEmployeeModal() {
       const modal = document.getElementById('modal-employee-flyout');
       if (!modal) return;
 
-      document.getElementById('modal-employee-title').textContent = '➕ Add New Employee Profile';
+      document.getElementById('modal-employee-title').textContent = 'Add New Employee Profile';
       document.getElementById('emp-form-id').value = '';
       document.getElementById('emp-form-name').value = '';
       const emailInput = document.getElementById('emp-form-email');
@@ -24,27 +47,60 @@ export function getEmployeeModalScripts(): string {
       document.getElementById('emp-form-role').value = 'roles/employee';
       document.getElementById('emp-form-status').value = 'ACTIVE';
 
+      updateEmployeeLivePreview();
+
+      if (typeof renderDepartmentDropdown === 'function') {
+        renderDepartmentDropdown();
+      }
+
+      // Auto-fetch real eligible managers from database
       const mgrSelect = document.getElementById('emp-form-manager');
       if (mgrSelect) {
-        let opts = '<option value="">(None / Top Level)</option>';
-        for (const e of (employeeData.items || [])) {
-          opts += '<option value="' + e.id + '">' + (e.display_name || 'Unnamed') + ' (' + (e.job_title || 'Employee') + ')</option>';
-        }
-        mgrSelect.innerHTML = opts;
+        mgrSelect.innerHTML = '<option value="">(Loading eligible managers...)</option>';
+        fetch(apiBase + '/api/employees/managers')
+          .then(r => r.json())
+          .then(data => {
+            let opts = '<option value="">(None / Top Level)</option>';
+            const list = (data.status === 'ok' && data.managers) ? data.managers : (employeeData.items || []);
+            for (const m of list) {
+              opts += '<option value="' + m.id + '">' + (m.display_name || 'Unnamed') + ' (' + (m.job_title || 'Lead') + ')' + (m.department_name ? ' — ' + m.department_name : '') + '</option>';
+            }
+            mgrSelect.innerHTML = opts;
+          })
+          .catch(() => {
+            let opts = '<option value="">(None / Top Level)</option>';
+            for (const e of (employeeData.items || [])) {
+              opts += '<option value="' + e.id + '">' + (e.display_name || 'Unnamed') + ' (' + (e.job_title || 'Employee') + ')</option>';
+            }
+            mgrSelect.innerHTML = opts;
+          });
+      }
+
+      // Auto-preview next sequential EID from database
+      const codeInput = document.getElementById('emp-form-code');
+      if (codeInput) {
+        fetch(apiBase + '/api/org-setup/eid/preview', { method: 'POST' })
+          .then(r => r.json())
+          .then(json => {
+            if (json.eid && !codeInput.value) {
+              codeInput.value = json.eid;
+            }
+          })
+          .catch(() => {});
       }
 
       modal.classList.add('open');
       modal.style.display = 'flex';
     }
 
-    function openEditEmployeeModal(userId) {
+    async function openEditEmployeeModal(userId) {
       const modal = document.getElementById('modal-employee-flyout');
       if (!modal) return;
 
       const emp = (employeeData.items || []).find(i => i.id === userId);
       if (!emp) return;
 
-      document.getElementById('modal-employee-title').textContent = '✏️ Edit Profile: ' + (emp.display_name || '');
+      document.getElementById('modal-employee-title').textContent = 'Edit Profile: ' + (emp.display_name || '');
       document.getElementById('emp-form-id').value = emp.id;
       document.getElementById('emp-form-name').value = emp.display_name || '';
       const emailInput = document.getElementById('emp-form-email');
@@ -58,16 +114,42 @@ export function getEmployeeModalScripts(): string {
       document.getElementById('emp-form-role').value = (emp.roles && emp.roles[0]) || 'roles/employee';
       document.getElementById('emp-form-status').value = emp.status || 'ACTIVE';
 
+      updateEmployeeLivePreview();
+
+      if (typeof renderDepartmentDropdown === 'function') {
+        renderDepartmentDropdown();
+        if (emp.org_node_id) {
+          const deptSelect = document.getElementById('emp-form-dept');
+          if (deptSelect) deptSelect.value = emp.org_node_id;
+        }
+      }
+
       const mgrSelect = document.getElementById('emp-form-manager');
       if (mgrSelect) {
-        let opts = '<option value="">(None / Top Level)</option>';
-        for (const e of (employeeData.items || [])) {
-          if (e.id !== userId) {
-            const sel = e.id === emp.manager_id ? ' selected' : '';
-            opts += '<option value="' + e.id + '"' + sel + '>' + (e.display_name || 'Unnamed') + ' (' + (e.job_title || 'Employee') + ')</option>';
-          }
-        }
-        mgrSelect.innerHTML = opts;
+        mgrSelect.innerHTML = '<option value="">(Loading eligible managers...)</option>';
+        fetch(apiBase + '/api/employees/managers')
+          .then(r => r.json())
+          .then(data => {
+            let opts = '<option value="">(None / Top Level)</option>';
+            const list = (data.status === 'ok' && data.managers) ? data.managers : (employeeData.items || []);
+            for (const m of list) {
+              if (m.id !== userId) {
+                const sel = m.id === emp.manager_id ? ' selected' : '';
+                opts += '<option value="' + m.id + '"' + sel + '>' + (m.display_name || 'Unnamed') + ' (' + (m.job_title || 'Lead') + ')' + (m.department_name ? ' — ' + m.department_name : '') + '</option>';
+              }
+            }
+            mgrSelect.innerHTML = opts;
+          })
+          .catch(() => {
+            let opts = '<option value="">(None / Top Level)</option>';
+            for (const e of (employeeData.items || [])) {
+              if (e.id !== userId) {
+                const sel = e.id === emp.manager_id ? ' selected' : '';
+                opts += '<option value="' + e.id + '"' + sel + '>' + (e.display_name || 'Unnamed') + ' (' + (e.job_title || 'Employee') + ')</option>';
+              }
+            }
+            mgrSelect.innerHTML = opts;
+          });
       }
 
       modal.classList.add('open');
@@ -86,6 +168,9 @@ export function getEmployeeModalScripts(): string {
 
     async function saveEmployeeForm(event) {
       if (event) event.preventDefault();
+      const submitBtn = document.getElementById('btn-save-employee');
+      const origBtnHtml = submitBtn ? submitBtn.innerHTML : 'Save Member Profile';
+
       const id = document.getElementById('emp-form-id').value;
       const name = document.getElementById('emp-form-name').value.trim();
       const email = document.getElementById('emp-form-email').value.trim();
@@ -97,6 +182,11 @@ export function getEmployeeModalScripts(): string {
       const status = document.getElementById('emp-form-status').value;
 
       try {
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite;margin-right:6px;"></span> Saving...';
+        }
+
         if (!id) {
           const res = await fetch(\`\${apiBase}/api/employees\`, {
             method: 'POST',
@@ -113,8 +203,8 @@ export function getEmployeeModalScripts(): string {
             }),
           });
           const json = await res.json();
-          if (json.status !== 'ok') throw new Error(json.error || 'Failed to create employee');
-          showAstryxToast('success', 'Created employee "' + name + '" successfully');
+          if (json.status !== 'ok' && !res.ok) throw new Error(json.error || json.detail || 'Failed to create employee');
+          showAstryxToast('success', 'Created member "' + name + '" successfully');
         } else {
           const res = await fetch(\`\${apiBase}/api/employees/update\`, {
             method: 'POST',
@@ -131,13 +221,18 @@ export function getEmployeeModalScripts(): string {
             }),
           });
           const json = await res.json();
-          if (json.status !== 'ok') throw new Error(json.error || 'Failed to update employee');
-          showAstryxToast('success', 'Updated employee "' + name + '" successfully');
+          if (json.status !== 'ok' && !res.ok) throw new Error(json.error || json.detail || 'Failed to update employee');
+          showAstryxToast('success', 'Updated member "' + name + '" successfully');
         }
         closeEmployeeModal();
         loadEmployees();
       } catch (err) {
         showAstryxToast('error', err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = origBtnHtml;
+        }
       }
     }
 
@@ -161,11 +256,12 @@ export function getEmployeeModalScripts(): string {
 
     async function openHierarchyModal(userId) {
       const modal = document.getElementById('modal-hierarchy-view');
+      const container = document.getElementById('hierarchy-content-box');
       if (!modal || !container) return;
 
       modal.classList.add('open');
       modal.style.display = 'flex';
-      container.innerHTML = '<div style="padding: 2.5rem; text-align: center; color: var(--forge-text-muted); display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"><div style="font-size: 1.5rem;">⏳</div><div>Loading interactive reporting hierarchy...</div></div>';
+      container.innerHTML = '<div style="padding: 2.5rem; text-align: center; color: var(--forge-text-muted); display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"><div style="display:inline-block;width:24px;height:24px;border:2px solid var(--forge-primary);border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite;"></div><div>Loading interactive reporting hierarchy...</div></div>';
 
       try {
         const res = await fetch(\`\${apiBase}/api/employees/hierarchy?userId=\${encodeURIComponent(userId)}\`);
@@ -181,10 +277,10 @@ export function getEmployeeModalScripts(): string {
         // Top Navigation Bar
         html += '<div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid var(--forge-border); flex-wrap: wrap; gap: 0.5rem;">' +
           '<div style="font-size: 0.76rem; color: var(--forge-text-muted); display: flex; align-items: center; gap: 0.35rem;">' +
-            '<span>🏢 Organization</span> &rsaquo; <span>Reporting Hierarchy</span>' +
+            '<span style="display:inline-flex;align-items:center;gap:0.25rem;">' + \`${astryxIcons.building}\` + ' Organization</span> &rsaquo; <span>Reporting Hierarchy</span>' +
           '</div>' +
-          '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.2rem 0.55rem;" onclick="closeHierarchyModal(); setOrgFocus(\\\'' + u.id + '\\\');">' +
-            '🌳 Full Org Studio &rarr;' +
+          '<button class="astryx-btn btn-outline" style="font-size: 0.72rem; padding: 0.2rem 0.55rem; display:inline-flex;align-items:center;gap:0.35rem;" onclick="closeHierarchyModal(); setOrgFocus(\\\'' + u.id + '\\\');">' +
+            \`\${astryxIcons.topology}\` + ' Full Org Studio &rarr;' +
           '</button>' +
         '</div>';
 
@@ -192,7 +288,7 @@ export function getEmployeeModalScripts(): string {
         if (json.managementChain && json.managementChain.length > 0) {
           json.managementChain.forEach((m, idx) => {
             const mInitials = (m.display_name || 'MG').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-            const levelLabel = idx === json.managementChain.length - 1 ? '👔 Direct Manager' : '🏢 Level ' + (idx + 1) + ' Executive';
+            const levelLabel = idx === json.managementChain.length - 1 ? 'Direct Manager' : 'Level ' + (idx + 1) + ' Executive';
             html += '<div class="org-tree-modal-step">' +
               '<div class="org-tree-modal-person-card" onclick="openHierarchyModal(\\\'' + m.id + '\\\')" title="Click to view ' + m.display_name + '\\\'s hierarchy">' +
                 '<div class="emp-avatar" style="width: 38px; height: 38px; font-size: 0.82rem;">' + mInitials + '</div>' +
@@ -214,20 +310,20 @@ export function getEmployeeModalScripts(): string {
             '<div class="emp-avatar" style="width: 48px; height: 48px; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(62,207,142,0.25);">' + uInitials + '</div>' +
             '<div style="flex: 1; min-width: 0;">' +
               '<div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem;">' +
-                '<span class="status-badge" style="background: var(--forge-primary-bg); color: var(--forge-primary); border: 1px solid rgba(62, 207, 142, 0.3); font-size: 0.65rem; padding: 0.05rem 0.4rem;"><span class="status-pulse-dot active" style="margin-right: 3px;"></span>★ FOCUSED MEMBER</span>' +
+                '<span class="status-badge" style="background: var(--forge-primary-bg); color: var(--forge-primary); border: 1px solid rgba(62, 207, 142, 0.3); font-size: 0.65rem; padding: 0.05rem 0.4rem;"><span class="status-pulse-dot active" style="margin-right: 3px;"></span>FOCUSED MEMBER</span>' +
               '</div>' +
               '<div style="font-weight: 800; color: var(--forge-text-main); font-size: 1.08rem; letter-spacing: -0.01em;">' + (u.display_name || 'Unnamed') + '</div>' +
               '<div style="font-size: 0.78rem; color: var(--forge-text-muted); margin-top: 0.1rem;">' + (u.job_title || 'Employee') + '</div>' +
               '<div style="font-size: 0.72rem; color: var(--forge-text-muted); font-family: monospace; margin-top: 0.15rem;">' + u.email + '</div>' +
               '<div style="display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.5rem;">' +
                 uRoles +
-                (u.department_name ? '<span class="astryx-badge" style="background: var(--forge-bg-card);">🏢 ' + u.department_name + '</span>' : '') +
+                (u.department_name ? '<span class="astryx-badge" style="background: var(--forge-bg-card); display:inline-flex;align-items:center;gap:0.25rem;">' + \`${astryxIcons.building}\` + ' ' + u.department_name + '</span>' : '') +
               '</div>' +
             '</div>' +
           '</div>' +
           '<div style="display: flex; gap: 0.4rem; justify-content: flex-end; margin-top: 0.85rem; padding-top: 0.65rem; border-top: 1px solid var(--forge-border);">' +
-            '<button class="astryx-btn btn-outline" style="padding: 0.22rem 0.55rem; font-size: 0.72rem;" onclick="closeHierarchyModal(); openEmployeeDrawer(\\\'' + u.id + '\\\');">👤 Profile Drawer</button>' +
-            '<button class="astryx-btn btn-primary" style="padding: 0.22rem 0.55rem; font-size: 0.72rem;" onclick="closeHierarchyModal(); setOrgFocus(\\\'' + u.id + '\\\');">🌳 View in Org Chart</button>' +
+            '<button class="astryx-btn btn-outline" style="padding: 0.22rem 0.55rem; font-size: 0.72rem;" onclick="closeHierarchyModal(); openEmployeeDrawer(\\\'' + u.id + '\\\');">Profile Drawer</button>' +
+            '<button class="astryx-btn btn-primary" style="padding: 0.22rem 0.55rem; font-size: 0.72rem;" onclick="closeHierarchyModal(); setOrgFocus(\\\'' + u.id + '\\\');">View in Org Chart</button>' +
           '</div>' +
         '</div>';
 
@@ -272,5 +368,24 @@ export function getEmployeeModalScripts(): string {
         modal.style.display = 'none';
       }
     }
+
+    async function openAddDepartmentFromMemberModal() {
+      window._addingDeptFromMemberModal = true;
+      if (typeof openAddDepartmentModal === 'function') {
+        await openAddDepartmentModal();
+        const deptModal = document.getElementById('modal-org-department');
+        if (deptModal) deptModal.style.zIndex = '3500';
+      }
+    }
+
+    window.openAddEmployeeModal = openAddEmployeeModal;
+    window.openEditEmployeeModal = openEditEmployeeModal;
+    window.closeEmployeeModal = closeEmployeeModal;
+    window.updateEmployeeLivePreview = updateEmployeeLivePreview;
+    window.saveEmployeeForm = saveEmployeeForm;
+    window.revokeEmployeeSessions = revokeEmployeeSessions;
+    window.openHierarchyModal = openHierarchyModal;
+    window.closeHierarchyModal = closeHierarchyModal;
+    window.openAddDepartmentFromMemberModal = openAddDepartmentFromMemberModal;
   `;
 }

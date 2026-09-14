@@ -12,29 +12,52 @@ export function getDropdownScripts(): string {
 
       function positionDropdown(trigger, menu) {
         if (!trigger || !menu) return;
+
+        // Escapes all outer overflow clipping (modals, cards, tables) by portaling to body
+        if (menu.parentNode !== document.body) {
+          document.body.appendChild(menu);
+        }
+
+        menu.style.position = 'fixed';
+        menu.style.zIndex = '999999';
+        menu.style.display = 'flex';
         menu.classList.remove('drop-up', 'align-right');
 
         const rect = trigger.getBoundingClientRect();
-        const menuHeight = menu.offsetHeight || 220;
-        const menuWidth = menu.offsetWidth || 220;
         const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
         const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+
+        const menuHeight = menu.offsetHeight || 220;
+        const menuWidth = Math.max(rect.width, Math.min(360, menu.offsetWidth || rect.width));
 
         // Vertical collision check: Flip upwards if opening down would clip bottom edge
         const spaceBelow = viewportHeight - rect.bottom;
         const spaceAbove = rect.top;
-        if (spaceBelow < menuHeight + 10 && spaceAbove > spaceBelow) {
+        const shouldDropUp = spaceBelow < (menuHeight + 12) && spaceAbove > spaceBelow;
+
+        if (shouldDropUp) {
           menu.classList.add('drop-up');
+          menu.style.top = 'auto';
+          menu.style.bottom = Math.max(8, viewportHeight - rect.top + 4) + 'px';
+          menu.style.maxHeight = Math.min(280, Math.max(100, spaceAbove - 16)) + 'px';
+        } else {
+          menu.style.top = Math.max(8, rect.bottom + 4) + 'px';
+          menu.style.bottom = 'auto';
+          menu.style.maxHeight = Math.min(280, Math.max(100, spaceBelow - 16)) + 'px';
         }
 
         // Horizontal collision check: Align to right if overflowing right edge
         if (rect.left + menuWidth > viewportWidth - 16) {
           menu.classList.add('align-right');
+          menu.style.left = 'auto';
+          menu.style.right = Math.max(8, viewportWidth - rect.right) + 'px';
+        } else {
+          menu.style.left = Math.max(8, rect.left) + 'px';
+          menu.style.right = 'auto';
         }
 
-        // Clamp max-height to guaranteed visible viewport space
-        const maxH = Math.min(280, Math.max(120, viewportHeight - 60));
-        menu.style.maxHeight = maxH + 'px';
+        menu.style.minWidth = Math.min(rect.width, viewportWidth - 24) + 'px';
+        menu.style.maxWidth = Math.min(380, viewportWidth - 24) + 'px';
       }
 
       function enhanceSelect(selectEl) {
@@ -50,9 +73,10 @@ export function getDropdownScripts(): string {
         wrapper.className = 'astryx-custom-select-wrap';
         if (selectEl.id) wrapper.dataset.forSelect = selectEl.id;
 
-        // Copy style attributes if needed (e.g. max-width)
+        // Copy layout attributes
         if (selectEl.style.maxWidth) wrapper.style.maxWidth = selectEl.style.maxWidth;
         if (selectEl.style.width) wrapper.style.width = selectEl.style.width;
+        if (selectEl.style.flex) wrapper.style.flex = selectEl.style.flex;
 
         const trigger = document.createElement('button');
         trigger.type = 'button';
@@ -62,6 +86,10 @@ export function getDropdownScripts(): string {
 
         const labelSpan = document.createElement('span');
         labelSpan.className = 'astryx-custom-select-label';
+        labelSpan.style.whiteSpace = 'nowrap';
+        labelSpan.style.overflow = 'hidden';
+        labelSpan.style.textOverflow = 'ellipsis';
+        labelSpan.style.minWidth = '0';
 
         trigger.appendChild(labelSpan);
         trigger.insertAdjacentHTML('beforeend', CHEVRON_SVG);
@@ -71,7 +99,8 @@ export function getDropdownScripts(): string {
         menu.setAttribute('role', 'listbox');
 
         wrapper.appendChild(trigger);
-        wrapper.appendChild(menu);
+        wrapper._astryxMenu = menu;
+        menu._astryxWrapper = wrapper;
 
         selectEl.parentNode.insertBefore(wrapper, selectEl.nextSibling);
 
@@ -90,6 +119,10 @@ export function getDropdownScripts(): string {
 
             const textSpan = document.createElement('span');
             textSpan.textContent = opt.text;
+            textSpan.style.whiteSpace = 'nowrap';
+            textSpan.style.overflow = 'hidden';
+            textSpan.style.textOverflow = 'ellipsis';
+            textSpan.style.minWidth = '0';
             item.appendChild(textSpan);
 
             const checkSpan = document.createElement('span');
@@ -101,8 +134,7 @@ export function getDropdownScripts(): string {
               e.stopPropagation();
               selectEl.value = opt.value;
               labelSpan.textContent = opt.text;
-              wrapper.classList.remove('open');
-              trigger.setAttribute('aria-expanded', 'false');
+              closeAllAstryxDropdowns();
 
               // Dispatch change event to trigger existing app handlers
               selectEl.dispatchEvent(new Event('change', { bubbles: true }));
@@ -144,6 +176,9 @@ export function getDropdownScripts(): string {
           const tr = el.querySelector('.astryx-custom-select-trigger');
           if (tr) tr.setAttribute('aria-expanded', 'false');
         });
+        document.querySelectorAll('.astryx-custom-select-menu').forEach(m => {
+          m.style.display = 'none';
+        });
       }
 
       window.astryxPositionDropdown = positionDropdown;
@@ -154,7 +189,7 @@ export function getDropdownScripts(): string {
       };
 
       document.addEventListener('click', (e) => {
-        if (!e.target.closest('.astryx-custom-select-wrap')) {
+        if (!e.target.closest('.astryx-custom-select-wrap') && !e.target.closest('.astryx-custom-select-menu')) {
           closeAllAstryxDropdowns();
         }
       });
@@ -165,12 +200,31 @@ export function getDropdownScripts(): string {
         }
       });
 
+      // Recalculate on scroll across containers (modals, drawers, tables)
+      window.addEventListener('scroll', () => {
+        const openWrap = document.querySelector('.astryx-custom-select-wrap.open');
+        if (openWrap) {
+          const tr = openWrap.querySelector('.astryx-custom-select-trigger');
+          const me = openWrap._astryxMenu;
+          if (tr && me && me.style.display !== 'none') {
+            const rect = tr.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > (window.innerHeight || document.documentElement.clientHeight)) {
+              closeAllAstryxDropdowns();
+            } else {
+              positionDropdown(tr, me);
+            }
+          }
+        }
+      }, true);
+
       window.addEventListener('resize', () => {
         const openWrap = document.querySelector('.astryx-custom-select-wrap.open');
         if (openWrap) {
           const tr = openWrap.querySelector('.astryx-custom-select-trigger');
-          const me = openWrap.querySelector('.astryx-custom-select-menu');
-          positionDropdown(tr, me);
+          const me = openWrap._astryxMenu;
+          if (tr && me && me.style.display !== 'none') {
+            positionDropdown(tr, me);
+          }
         }
       });
 

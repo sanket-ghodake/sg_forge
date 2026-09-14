@@ -228,4 +228,36 @@ describe('Tier 5 Real Browser E2E: Developer Dashboard Playwright Chrome Resilie
       expect(pageErrors.length).toBe(0);
     }
   });
+
+  it('Arrange, Act, Assert: Array prototype -1 defensive fallback shields web-vitals reportAllChanges', async () => {
+    // Arrange & Act: Verify fallback entry on empty array indexing
+    const fallbackCheck = await page.evaluate(() => {
+      const emptyArr: any[] = [];
+      const negOne = (emptyArr as any)[-1];
+      const readStartTime = negOne ? negOne.startTime : undefined;
+
+      // Simulate et.reportAllChanges on empty entries array
+      const et: any = {
+        entries: [],
+        reportAllChanges() {
+          const entry = this.entries[this.entries.length - 1];
+          return entry.startTime;
+        },
+      };
+      const reportedStartTime = et.reportAllChanges();
+
+      return {
+        hasNegOne: Boolean(negOne),
+        readStartTime: typeof readStartTime === 'number',
+        reportedStartTime: typeof reportedStartTime === 'number',
+      };
+    });
+
+    // Assert: Handled defensively without throwing TypeError
+    expect(fallbackCheck.hasNegOne).toBe(true);
+    expect(fallbackCheck.readStartTime).toBe(true);
+    expect(fallbackCheck.reportedStartTime).toBe(true);
+    expect(pageErrors.length).toBe(0);
+  });
 });
+

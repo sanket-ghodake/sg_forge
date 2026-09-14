@@ -1,12 +1,16 @@
 {
   "timestamp": "2026-09-06T21:45:00.000Z",
-  "totalExportedSymbols": 697,
-  "documentedSymbols": 594,
-  "symbolCoveragePercent": 85.2,
-  "totalRequirements": 72,
-  "implementedRequirements": 72,
-  "verifiedRequirements": 72,
-  "orphanRequirements": [],
+  "totalExportedSymbols": 734,
+  "documentedSymbols": 625,
+  "symbolCoveragePercent": 85.1,
+  "totalRequirements": 76,
+  "implementedRequirements": 73,
+  "verifiedRequirements": 73,
+  "orphanRequirements": [
+    "LLR-AUTH-008",
+    "LLR-PORTAL-001",
+    "HLR-AUTH-103"
+  ],
   "symbols": [
     {
       "name": "UserRole",
@@ -336,7 +340,7 @@
       "name": "REGISTERED_PORTAL_APPS",
       "kind": "variable",
       "file": "apps/src/portal/src/frontend/ui-apps-data.ts",
-      "line": 139,
+      "line": 152,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -348,7 +352,7 @@
       "name": "MARKETPLACE_APPS",
       "kind": "variable",
       "file": "apps/src/portal/src/frontend/ui-apps-data.ts",
-      "line": 144,
+      "line": 157,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -576,7 +580,7 @@
       "name": "getPortalClientScript",
       "kind": "function",
       "file": "apps/src/portal/src/frontend/ui-scripts.ts",
-      "line": 10,
+      "line": 11,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -727,6 +731,22 @@
         "LLR-UI-001"
       ],
       "missingRequirementFiles": []
+    },
+    {
+      "name": "getBatchImportClientScript",
+      "kind": "function",
+      "file": "apps/src/portal/src/frontend/ui-batch-scripts.ts",
+      "line": 7,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-004",
+        "LLR-PORTAL-005",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": [
+        "HLR-AUTH-004",
+        "LLR-PORTAL-005"
+      ]
     },
     {
       "name": "renderProfileView",
@@ -957,7 +977,7 @@
       "missingRequirementFiles": []
     },
     {
-      "name": "createApiToken",
+      "name": "getPendingAppAccessRequests",
       "kind": "function",
       "file": "apps/src/portal/src/backend/inbox-service.ts",
       "line": 399,
@@ -969,10 +989,34 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "decideAppAccessRequest",
+      "kind": "function",
+      "file": "apps/src/portal/src/backend/inbox-service.ts",
+      "line": 413,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-PORTAL-201",
+        "LLR-UI-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "createApiToken",
+      "kind": "function",
+      "file": "apps/src/portal/src/backend/inbox-service.ts",
+      "line": 466,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-PORTAL-201",
+        "LLR-UI-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "getUserApiTokens",
       "kind": "function",
       "file": "apps/src/portal/src/backend/inbox-service.ts",
-      "line": 420,
+      "line": 485,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -984,7 +1028,7 @@
       "name": "revokeApiToken",
       "kind": "function",
       "file": "apps/src/portal/src/backend/inbox-service.ts",
-      "line": 430,
+      "line": 492,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -996,7 +1040,7 @@
       "name": "startPortalServer",
       "kind": "function",
       "file": "apps/src/portal/src/server.ts",
-      "line": 43,
+      "line": 47,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -1893,7 +1937,7 @@
       "name": "handleGetOrgTree",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 122,
+      "line": 124,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1905,7 +1949,7 @@
       "name": "handleListEmployees",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 141,
+      "line": 143,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1917,7 +1961,7 @@
       "name": "handleGetEmployee",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 162,
+      "line": 164,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1929,7 +1973,7 @@
       "name": "handleCreateEmployee",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 177,
+      "line": 179,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1941,7 +1985,7 @@
       "name": "handleUpdateEmployee",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 205,
+      "line": 207,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1953,7 +1997,7 @@
       "name": "handleRevokeEmployee",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 236,
+      "line": 238,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1965,7 +2009,7 @@
       "name": "handleBatchImport",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 265,
+      "line": 267,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1977,7 +2021,7 @@
       "name": "handleBulkAction",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 295,
+      "line": 308,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -1989,7 +2033,31 @@
       "name": "handleExportEmployees",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-org-handlers.ts",
-      "line": 325,
+      "line": 338,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-101",
+        "LLR-AUTH-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleGetManagers",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-handlers.ts",
+      "line": 403,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-101",
+        "LLR-AUTH-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleBindAppPolicy",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-handlers.ts",
+      "line": 417,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -2340,6 +2408,114 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "handleGetOrgSetup",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 49,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleUpdateOrgProfile",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 83,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleUpdateEidConfig",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 122,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleGetNextEid",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 161,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handlePreviewEid",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 191,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleUpsertNodeType",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 210,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleDeleteNodeType",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 245,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleUpsertNode",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 267,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleDeleteNode",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-org-setup-handlers.ts",
+      "line": 332,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "BatchImportRecord",
       "kind": "interface",
       "file": "apps/src/auth/src/backend/employee-import.ts",
@@ -2368,6 +2544,18 @@
       "kind": "function",
       "file": "apps/src/auth/src/backend/employee-import.ts",
       "line": 42,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-DB-005"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "parseEmployeeCsv",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/employee-import.ts",
+      "line": 252,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -2558,7 +2746,7 @@
       "name": "employeeController",
       "kind": "variable",
       "file": "apps/src/auth/src/backend/employee-controller.ts",
-      "line": 458,
+      "line": 487,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -2632,7 +2820,7 @@
       "name": "startAuthServer",
       "kind": "function",
       "file": "apps/src/auth/src/server.ts",
-      "line": 50,
+      "line": 63,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -2686,7 +2874,7 @@
       "name": "closeAuthDb",
       "kind": "function",
       "file": "apps/src/auth/src/db/db.ts",
-      "line": 209,
+      "line": 222,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-302",
@@ -2926,6 +3114,31 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "getOrgSetupModalsHtml",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/frontend/ui-org-setup-modals.ts",
+      "line": 14,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getEmployeeFlyoutModalHtml",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-modals.ts",
+      "line": 13,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "renderHostTab",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-renderer-host.ts",
@@ -2941,6 +3154,18 @@
       "name": "renderHighAvailabilitySuite",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-renderer-ha.ts",
+      "line": 13,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getEmployeeTableScripts",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-table-scripts.ts",
       "line": 13,
       "hasDoc": true,
       "requirements": [
@@ -3001,12 +3226,9 @@
       "name": "getEmployeeDrawerAndTreeScripts",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-employee-drawer-scripts.ts",
-      "line": 7,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-UI-401",
-        "LLR-UI-001"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
@@ -3025,7 +3247,7 @@
       "name": "getModalsHtml",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-modals.ts",
-      "line": 13,
+      "line": 15,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -3061,7 +3283,7 @@
       "name": "renderEmployeesTab",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-renderer-employees.ts",
-      "line": 12,
+      "line": 13,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -3153,15 +3375,25 @@
       "missingRequirementFiles": []
     },
     {
-      "name": "getEmployeeStyles",
+      "name": "getOrgSetupScripts",
       "kind": "function",
-      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-styles.ts",
+      "file": "apps/src/dev-dashboard/src/frontend/ui-org-setup-scripts.ts",
       "line": 7,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
-        "LLR-UI-001"
+        "LLR-UI-001",
+        "LLR-AUTH-009"
       ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getEmployeeStyles",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-styles.ts",
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
@@ -3213,6 +3445,18 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "getEmployeeTableStyles",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-table-styles.ts",
+      "line": 8,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-UI-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "getHostStyles",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-host-styles.ts",
@@ -3228,7 +3472,16 @@
       "name": "getEmployeeModalScripts",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/frontend/ui-employee-modal-scripts.ts",
-      "line": 7,
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getEmployeeDashboardScripts",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts",
+      "line": 11,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -3237,10 +3490,10 @@
       "missingRequirementFiles": []
     },
     {
-      "name": "getEmployeeDashboardScripts",
+      "name": "renderEmployeeTableSubTab",
       "kind": "function",
-      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts",
-      "line": 9,
+      "file": "apps/src/dev-dashboard/src/frontend/ui-employee-table.ts",
+      "line": 13,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -3431,7 +3684,7 @@
       "name": "handleApiRequest",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/backend/api-handlers.ts",
-      "line": 17,
+      "line": 18,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
@@ -3491,11 +3744,24 @@
       "name": "handleDevEmployeeApi",
       "kind": "function",
       "file": "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts",
-      "line": 21,
+      "line": 22,
       "hasDoc": true,
       "requirements": [
         "HLR-DEV-501",
         "LLR-SUB-002"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleDevOrgSetupApi",
+      "kind": "function",
+      "file": "apps/src/dev-dashboard/src/backend/api-org-setup-routes.ts",
+      "line": 23,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-DEV-501",
+        "LLR-SUB-002",
+        "LLR-AUTH-009"
       ],
       "missingRequirementFiles": []
     },
@@ -4438,7 +4704,7 @@
       "name": "OrgTreeResponseDto",
       "kind": "interface",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 33,
+      "line": 23,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4450,7 +4716,7 @@
       "name": "EmployeeListItemDto",
       "kind": "interface",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 42,
+      "line": 29,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4462,7 +4728,7 @@
       "name": "ListEmployeesResponseDto",
       "kind": "interface",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 65,
+      "line": 39,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4474,7 +4740,7 @@
       "name": "resolveAuthBaseUrl",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 77,
+      "line": 51,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4486,7 +4752,7 @@
       "name": "fetchOrgTree",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 112,
+      "line": 86,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4498,7 +4764,7 @@
       "name": "fetchEmployeesList",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 143,
+      "line": 117,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4510,7 +4776,7 @@
       "name": "fetchEmployeeHierarchy",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 177,
+      "line": 151,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4522,7 +4788,7 @@
       "name": "createEmployeeApi",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 199,
+      "line": 173,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4534,7 +4800,7 @@
       "name": "updateEmployeeApi",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 237,
+      "line": 211,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4546,7 +4812,7 @@
       "name": "revokeEmployeeSessionsApi",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 267,
+      "line": 241,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4558,7 +4824,7 @@
       "name": "batchImportEmployeesApi",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 296,
+      "line": 270,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4570,7 +4836,7 @@
       "name": "bulkActionEmployeesApi",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 326,
+      "line": 300,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4582,7 +4848,7 @@
       "name": "fetchOrgDirectory",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 356,
+      "line": 330,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4594,7 +4860,7 @@
       "name": "getScopedHierarchy",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 374,
+      "line": 348,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4606,7 +4872,7 @@
       "name": "getMyHierarchy",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 400,
+      "line": 374,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4618,7 +4884,7 @@
       "name": "isManagerOf",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 429,
+      "line": 403,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4630,7 +4896,7 @@
       "name": "fetchAuditLogs",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 446,
+      "line": 420,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4642,7 +4908,31 @@
       "name": "fetchUserSessions",
       "kind": "function",
       "file": "apps/src/sdk/src/directory-client.ts",
-      "line": 469,
+      "line": 443,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-DB-005"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "fetchManagersList",
+      "kind": "function",
+      "file": "apps/src/sdk/src/directory-client.ts",
+      "line": 462,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-DB-005"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "bindAppPolicyApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/directory-client.ts",
+      "line": 478,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -4743,6 +5033,141 @@
       "requirements": [
         "HLR-SDK-303",
         "LLR-SDK-004"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "OrgNodeTypeDto",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 10,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "OrgDepartmentNodeDto",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 18,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "OrgSetupDataDto",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 34,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "fetchOrgSetupData",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 74,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "updateOrgProfileApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 95,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "updateOrgEidConfigApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 125,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "generateNextEidApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 148,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "previewNextEidApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 167,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "upsertOrgNodeTypeApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 185,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "deleteOrgNodeTypeApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 208,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "upsertOrgNodeApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 227,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "deleteOrgNodeApi",
+      "kind": "function",
+      "file": "apps/src/sdk/src/org-setup-client.ts",
+      "line": 250,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-009"
       ],
       "missingRequirementFiles": []
     },
@@ -7379,6 +7804,21 @@
       ]
     },
     {
+      "name": "runCliImport",
+      "kind": "function",
+      "file": "scripts/import-employees.ts",
+      "line": 19,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-004",
+        "LLR-PORTAL-005"
+      ],
+      "missingRequirementFiles": [
+        "HLR-AUTH-004",
+        "LLR-PORTAL-005"
+      ]
+    },
+    {
       "name": "GatewayConfig",
       "kind": "interface",
       "file": "scripts/docker-resolver.ts",
@@ -8479,6 +8919,7 @@
         "scripts/sync-ignores.ts:245#syncAllIgnores"
       ],
       "verifiedIn": [
+        "apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts",
         "scripts/test/run-sh.test.ts"
       ]
     },
@@ -8503,30 +8944,33 @@
         "apps/src/auth/src/frontend/login-view.ts:14#renderLoginHtml",
         "apps/src/dev-dashboard/src/frontend/ui-tools-scripts.ts:7#getToolsDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-dropdown-scripts.ts:7#getDropdownScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-org-setup-modals.ts:14#getOrgSetupModalsHtml",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-modals.ts:13#getEmployeeFlyoutModalHtml",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-host.ts:13#renderHostTab",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-ha.ts:13#renderHighAvailabilitySuite",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-table-scripts.ts:13#getEmployeeTableScripts",
         "apps/src/dev-dashboard/src/frontend/ui-issues-scripts.ts:7#getIssuesDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer.ts:23#renderDashboardHtml",
         "apps/src/dev-dashboard/src/frontend/ui-services-styles.ts:7#getServicesStyles",
         "apps/src/dev-dashboard/src/frontend/ui-apps-scripts.ts:13#getAppsDashboardScripts",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-drawer-scripts.ts:7#getEmployeeDrawerAndTreeScripts",
         "apps/src/dev-dashboard/src/frontend/ui-apps-modal-scripts.ts:8#getAppsModalScripts",
-        "apps/src/dev-dashboard/src/frontend/ui-modals.ts:13#getModalsHtml",
+        "apps/src/dev-dashboard/src/frontend/ui-modals.ts:15#getModalsHtml",
         "apps/src/dev-dashboard/src/frontend/ui-styles.ts:21#getDashboardStyles",
         "apps/src/dev-dashboard/src/frontend/ui-dropdown-styles.ts:7#getDropdownStyles",
-        "apps/src/dev-dashboard/src/frontend/ui-renderer-employees.ts:12#renderEmployeesTab",
+        "apps/src/dev-dashboard/src/frontend/ui-renderer-employees.ts:13#renderEmployeesTab",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-overview.ts:12#renderOverviewTab",
         "apps/src/dev-dashboard/src/frontend/ui-overview-scripts.ts:7#getOverviewDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-traffic-scripts.ts:7#getTrafficDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-employee-import-scripts.ts:7#getEmployeeImportScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-apps.ts:13#getAppsTabHtml",
         "apps/src/dev-dashboard/src/frontend/ui-overview-styles.ts:7#getOverviewStyles",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-styles.ts:7#getEmployeeStyles",
+        "apps/src/dev-dashboard/src/frontend/ui-org-setup-scripts.ts:7#getOrgSetupScripts",
         "apps/src/dev-dashboard/src/frontend/ui-scripts.ts:18#getDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-apps-styles.ts:8#getAppsStyles",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-table-styles.ts:8#getEmployeeTableStyles",
         "apps/src/dev-dashboard/src/frontend/ui-host-styles.ts:7#getHostStyles",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-modal-scripts.ts:7#getEmployeeModalScripts",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts:9#getEmployeeDashboardScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts:11#getEmployeeDashboardScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-table.ts:13#renderEmployeeTableSubTab",
         "apps/src/dev-dashboard/src/frontend/ui-host-scripts.ts:7#getHostDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-issues.ts:12#renderIssuesTab",
         "apps/src/dev-dashboard/src/frontend/ui-traffic-styles.ts:7#getTrafficStyles",
@@ -8556,6 +9000,7 @@
         "apps/src/docs/test/unit/astryx-theme.test.ts",
         "apps/src/docs/test/unit/landing-page.test.ts",
         "apps/src/docs/test/security/astryx-compliance.test.ts",
+        "apps/src/dev-dashboard/test/unit/org-setup.test.ts",
         "apps/src/dev-dashboard/test/e2e/devcenter-browser-resilience.pw.test.ts",
         "apps/src/ui/test/e2e/ui-bundle-integrity.test.ts"
       ]
@@ -8574,8 +9019,8 @@
         "apps/src/portal/src/frontend/ui-apps-scripts.ts:8#getAppsClientScript",
         "apps/src/portal/src/frontend/ui-apps-data.ts:14#MicroAppItem",
         "apps/src/portal/src/frontend/ui-apps-data.ts:85#getPortalApps",
-        "apps/src/portal/src/frontend/ui-apps-data.ts:139#REGISTERED_PORTAL_APPS",
-        "apps/src/portal/src/frontend/ui-apps-data.ts:144#MARKETPLACE_APPS",
+        "apps/src/portal/src/frontend/ui-apps-data.ts:152#REGISTERED_PORTAL_APPS",
+        "apps/src/portal/src/frontend/ui-apps-data.ts:157#MARKETPLACE_APPS",
         "apps/src/portal/src/frontend/ui-modals.ts:13#renderPortalModals",
         "apps/src/portal/src/frontend/ui-styles.ts:12#getPortalCustomStyles",
         "apps/src/portal/src/frontend/page-cards.ts:22#PageDefinition",
@@ -8593,13 +9038,14 @@
         "apps/src/portal/src/frontend/layout-header.ts:12#HeaderUserContext",
         "apps/src/portal/src/frontend/layout-header.ts:26#renderPortalHeader",
         "apps/src/portal/src/frontend/ui-canvas-views.ts:7#getCanvasViewsScript",
-        "apps/src/portal/src/frontend/ui-scripts.ts:10#getPortalClientScript",
+        "apps/src/portal/src/frontend/ui-scripts.ts:11#getPortalClientScript",
         "apps/src/portal/src/frontend/ui-command-palette.ts:7#renderCommandPalette",
         "apps/src/portal/src/frontend/ui-admin-org.ts:12#renderAdminOrgView",
         "apps/src/portal/src/frontend/ui-admin-audit.ts:12#AuditEntry",
         "apps/src/portal/src/frontend/ui-admin-audit.ts:26#SAMPLE_AUDIT_LOGS",
         "apps/src/portal/src/frontend/ui-admin-audit.ts:32#renderAdminAuditView",
         "apps/src/portal/src/frontend/ui-admin-settings.ts:13#renderAdminSettingsView",
+        "apps/src/portal/src/frontend/ui-batch-scripts.ts:7#getBatchImportClientScript",
         "apps/src/portal/src/frontend/ui-renderer-profile.ts:39#renderProfileView",
         "apps/src/landing/src/server.ts:42#resolveLandingMode",
         "apps/src/landing/src/server.ts:53#renderLandingHtml",
@@ -8616,30 +9062,33 @@
         "apps/src/auth/src/frontend/login-view.ts:14#renderLoginHtml",
         "apps/src/dev-dashboard/src/frontend/ui-tools-scripts.ts:7#getToolsDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-dropdown-scripts.ts:7#getDropdownScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-org-setup-modals.ts:14#getOrgSetupModalsHtml",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-modals.ts:13#getEmployeeFlyoutModalHtml",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-host.ts:13#renderHostTab",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-ha.ts:13#renderHighAvailabilitySuite",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-table-scripts.ts:13#getEmployeeTableScripts",
         "apps/src/dev-dashboard/src/frontend/ui-issues-scripts.ts:7#getIssuesDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer.ts:23#renderDashboardHtml",
         "apps/src/dev-dashboard/src/frontend/ui-services-styles.ts:7#getServicesStyles",
         "apps/src/dev-dashboard/src/frontend/ui-apps-scripts.ts:13#getAppsDashboardScripts",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-drawer-scripts.ts:7#getEmployeeDrawerAndTreeScripts",
         "apps/src/dev-dashboard/src/frontend/ui-apps-modal-scripts.ts:8#getAppsModalScripts",
-        "apps/src/dev-dashboard/src/frontend/ui-modals.ts:13#getModalsHtml",
+        "apps/src/dev-dashboard/src/frontend/ui-modals.ts:15#getModalsHtml",
         "apps/src/dev-dashboard/src/frontend/ui-styles.ts:21#getDashboardStyles",
         "apps/src/dev-dashboard/src/frontend/ui-dropdown-styles.ts:7#getDropdownStyles",
-        "apps/src/dev-dashboard/src/frontend/ui-renderer-employees.ts:12#renderEmployeesTab",
+        "apps/src/dev-dashboard/src/frontend/ui-renderer-employees.ts:13#renderEmployeesTab",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-overview.ts:12#renderOverviewTab",
         "apps/src/dev-dashboard/src/frontend/ui-overview-scripts.ts:7#getOverviewDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-traffic-scripts.ts:7#getTrafficDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-employee-import-scripts.ts:7#getEmployeeImportScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-apps.ts:13#getAppsTabHtml",
         "apps/src/dev-dashboard/src/frontend/ui-overview-styles.ts:7#getOverviewStyles",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-styles.ts:7#getEmployeeStyles",
+        "apps/src/dev-dashboard/src/frontend/ui-org-setup-scripts.ts:7#getOrgSetupScripts",
         "apps/src/dev-dashboard/src/frontend/ui-scripts.ts:18#getDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-apps-styles.ts:8#getAppsStyles",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-table-styles.ts:8#getEmployeeTableStyles",
         "apps/src/dev-dashboard/src/frontend/ui-host-styles.ts:7#getHostStyles",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-modal-scripts.ts:7#getEmployeeModalScripts",
-        "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts:9#getEmployeeDashboardScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-scripts.ts:11#getEmployeeDashboardScripts",
+        "apps/src/dev-dashboard/src/frontend/ui-employee-table.ts:13#renderEmployeeTableSubTab",
         "apps/src/dev-dashboard/src/frontend/ui-host-scripts.ts:7#getHostDashboardScripts",
         "apps/src/dev-dashboard/src/frontend/ui-renderer-issues.ts:12#renderIssuesTab",
         "apps/src/dev-dashboard/src/frontend/ui-traffic-styles.ts:7#getTrafficStyles",
@@ -8661,6 +9110,7 @@
       ],
       "verifiedIn": [
         "apps/src/docs/test/unit/astryx-theme.test.ts",
+        "apps/src/dev-dashboard/test/unit/org-setup.test.ts",
         "apps/src/dev-dashboard/test/e2e/devcenter-browser-resilience.pw.test.ts",
         "apps/src/ui/test/contracts/theme-tokens-schema.test.ts"
       ]
@@ -8760,7 +9210,7 @@
         "apps/src/auth/src/db/db.ts:25#resolveAuthDataDir",
         "apps/src/auth/src/db/db.ts:35#getAuthDb",
         "apps/src/auth/src/db/db.ts:50#initAuthSchema",
-        "apps/src/auth/src/db/db.ts:209#closeAuthDb",
+        "apps/src/auth/src/db/db.ts:222#closeAuthDb",
         "apps/src/auth/src/db/seed.ts:18#DEFAULT_PASSWORD",
         "apps/src/auth/src/db/seed.ts:24#seedAuthDatabase",
         "apps/src/auth/src/db/schema.ts:7#OrganizationRecord",
@@ -8864,8 +9314,8 @@
         "apps/src/portal/src/frontend/ui-apps-scripts.ts:8#getAppsClientScript",
         "apps/src/portal/src/frontend/ui-apps-data.ts:14#MicroAppItem",
         "apps/src/portal/src/frontend/ui-apps-data.ts:85#getPortalApps",
-        "apps/src/portal/src/frontend/ui-apps-data.ts:139#REGISTERED_PORTAL_APPS",
-        "apps/src/portal/src/frontend/ui-apps-data.ts:144#MARKETPLACE_APPS",
+        "apps/src/portal/src/frontend/ui-apps-data.ts:152#REGISTERED_PORTAL_APPS",
+        "apps/src/portal/src/frontend/ui-apps-data.ts:157#MARKETPLACE_APPS",
         "apps/src/portal/src/frontend/ui-modals.ts:13#renderPortalModals",
         "apps/src/portal/src/frontend/ui-styles.ts:12#getPortalCustomStyles",
         "apps/src/portal/src/frontend/page-cards.ts:22#PageDefinition",
@@ -8884,7 +9334,7 @@
         "apps/src/portal/src/frontend/layout-header.ts:12#HeaderUserContext",
         "apps/src/portal/src/frontend/layout-header.ts:26#renderPortalHeader",
         "apps/src/portal/src/frontend/ui-canvas-views.ts:7#getCanvasViewsScript",
-        "apps/src/portal/src/frontend/ui-scripts.ts:10#getPortalClientScript",
+        "apps/src/portal/src/frontend/ui-scripts.ts:11#getPortalClientScript",
         "apps/src/portal/src/frontend/ui-command-palette.ts:7#renderCommandPalette",
         "apps/src/portal/src/frontend/ui-renderer-inbox-widgets.ts:13#CompanyEventItem",
         "apps/src/portal/src/frontend/ui-renderer-inbox-widgets.ts:25#getDynamicCompanyEvents",
@@ -8916,14 +9366,19 @@
         "apps/src/portal/src/backend/inbox-service.ts:326#createAppAccessRequest",
         "apps/src/portal/src/backend/inbox-service.ts:361#getUserAppAccessRequests",
         "apps/src/portal/src/backend/inbox-service.ts:388#cancelAppAccessRequest",
-        "apps/src/portal/src/backend/inbox-service.ts:399#createApiToken",
-        "apps/src/portal/src/backend/inbox-service.ts:420#getUserApiTokens",
-        "apps/src/portal/src/backend/inbox-service.ts:430#revokeApiToken",
-        "apps/src/portal/src/server.ts:43#startPortalServer",
+        "apps/src/portal/src/backend/inbox-service.ts:399#getPendingAppAccessRequests",
+        "apps/src/portal/src/backend/inbox-service.ts:413#decideAppAccessRequest",
+        "apps/src/portal/src/backend/inbox-service.ts:466#createApiToken",
+        "apps/src/portal/src/backend/inbox-service.ts:485#getUserApiTokens",
+        "apps/src/portal/src/backend/inbox-service.ts:492#revokeApiToken",
+        "apps/src/portal/src/server.ts:47#startPortalServer",
         "apps/src/portal/src/index.ts:13#portalService"
       ],
       "verifiedIn": [
-        "apps/src/portal/test/integration/portal-api-endpoints.test.ts"
+        "apps/src/portal/test/unit/app-policy-evaluator.test.ts",
+        "apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts",
+        "apps/src/portal/test/integration/portal-api-endpoints.test.ts",
+        "apps/src/portal/test/integration/app-access-decision.test.ts"
       ]
     },
     "HLR-PORTAL-202": {
@@ -8936,7 +9391,8 @@
         "apps/src/sdk/src/client-bridge.ts:21#ForgeClient"
       ],
       "verifiedIn": [
-        "apps/src/portal/test/security/portal-rbac-security.test.ts"
+        "apps/src/portal/test/security/portal-rbac-security.test.ts",
+        "apps/src/portal/test/security/app-idor-penetration.test.ts"
       ]
     },
     "LLR-SUB-006": {
@@ -8945,7 +9401,7 @@
       "docFile": "apps/src/docs/src/content/docs/features/portal-spa.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:49#PostMessageEvent",
-        "apps/src/portal/src/server.ts:43#startPortalServer",
+        "apps/src/portal/src/server.ts:47#startPortalServer",
         "apps/src/portal/src/index.ts:13#portalService",
         "apps/src/sdk/src/client-bridge.ts:12#ForgeClientOptions",
         "apps/src/sdk/src/client-bridge.ts:21#ForgeClient"
@@ -9034,7 +9490,7 @@
       "type": "SR",
       "docFile": "apps/src/docs/src/content/docs/features/auth-session.mdx",
       "implementedIn": [
-        "apps/src/auth/src/server.ts:50#startAuthServer"
+        "apps/src/auth/src/server.ts:63#startAuthServer"
       ],
       "verifiedIn": [
         "apps/src/auth/test/integration/auth-flow.test.ts"
@@ -9067,15 +9523,17 @@
         "apps/src/auth/src/backend/api-handlers.ts:428#handleGetMySessions",
         "apps/src/auth/src/backend/api-handlers.ts:440#handleRevokeOtherSessions",
         "apps/src/auth/src/backend/api-handlers.ts:471#handleGetTelemetryLogs",
-        "apps/src/auth/src/backend/api-org-handlers.ts:122#handleGetOrgTree",
-        "apps/src/auth/src/backend/api-org-handlers.ts:141#handleListEmployees",
-        "apps/src/auth/src/backend/api-org-handlers.ts:162#handleGetEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:177#handleCreateEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:205#handleUpdateEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:236#handleRevokeEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:265#handleBatchImport",
-        "apps/src/auth/src/backend/api-org-handlers.ts:295#handleBulkAction",
-        "apps/src/auth/src/backend/api-org-handlers.ts:325#handleExportEmployees",
+        "apps/src/auth/src/backend/api-org-handlers.ts:124#handleGetOrgTree",
+        "apps/src/auth/src/backend/api-org-handlers.ts:143#handleListEmployees",
+        "apps/src/auth/src/backend/api-org-handlers.ts:164#handleGetEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:179#handleCreateEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:207#handleUpdateEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:238#handleRevokeEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:267#handleBatchImport",
+        "apps/src/auth/src/backend/api-org-handlers.ts:308#handleBulkAction",
+        "apps/src/auth/src/backend/api-org-handlers.ts:338#handleExportEmployees",
+        "apps/src/auth/src/backend/api-org-handlers.ts:403#handleGetManagers",
+        "apps/src/auth/src/backend/api-org-handlers.ts:417#handleBindAppPolicy",
         "apps/src/auth/src/backend/session-manager.ts:17#AUTH_SECURITY_BOUNDS",
         "apps/src/auth/src/backend/session-manager.ts:38#ResolvedSessionLifetimes",
         "apps/src/auth/src/backend/session-manager.ts:74#resolveSessionLifetimes",
@@ -9098,7 +9556,7 @@
         "apps/src/auth/src/backend/crypto.ts:268#getPublicJwks",
         "apps/src/auth/src/backend/audit-session-controller.ts:24#handleGetAuditLogs",
         "apps/src/auth/src/backend/audit-session-controller.ts:57#handleGetUserSessions",
-        "apps/src/auth/src/server.ts:50#startAuthServer",
+        "apps/src/auth/src/server.ts:63#startAuthServer",
         "apps/src/auth/test/e2e/playwright/auth-journey.pw.ts:13#authPlaywrightJourney",
         "apps/src/sdk/src/auth-guard.ts:19#createInternalServiceToken",
         "apps/src/sdk/src/auth-guard.ts:84#verifySessionToken",
@@ -9144,7 +9602,7 @@
         "apps/src/auth/src/backend/crypto.ts:268#getPublicJwks",
         "apps/src/auth/src/backend/audit-session-controller.ts:24#handleGetAuditLogs",
         "apps/src/auth/src/backend/audit-session-controller.ts:57#handleGetUserSessions",
-        "apps/src/auth/src/server.ts:50#startAuthServer",
+        "apps/src/auth/src/server.ts:63#startAuthServer",
         "apps/src/sdk/src/crypto.ts:25#resolveDataEncryptionKey",
         "apps/src/sdk/src/crypto.ts:39#deriveKey256",
         "apps/src/sdk/src/crypto.ts:136#generateCryptographicKey",
@@ -9278,7 +9736,7 @@
     "HLR-AUTH-102": {
       "id": "HLR-AUTH-102",
       "type": "HLR",
-      "docFile": "apps/src/docs/src/content/docs/hlr/HLR-AUTH-102_RBAC_GUARDS.mdx",
+      "docFile": "apps/src/docs/src/content/docs/features/employee-onboarding.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:11#UserRole",
         "apps/src/types/src/index.ts:73#AppAccessPolicy",
@@ -9301,41 +9759,80 @@
         "apps/src/auth/src/backend/rate-limiter.ts:77#recordFailedAttempt",
         "apps/src/auth/src/backend/rate-limiter.ts:93#resetAttempts",
         "apps/src/auth/src/backend/rate-limiter.ts:102#clearAllRateLimits",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:49#handleGetOrgSetup",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:83#handleUpdateOrgProfile",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:122#handleUpdateEidConfig",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:161#handleGetNextEid",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:191#handlePreviewEid",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:210#handleUpsertNodeType",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:245#handleDeleteNodeType",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:267#handleUpsertNode",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:332#handleDeleteNode",
         "apps/src/auth/src/backend/employee-import.ts:17#BatchImportRecord",
         "apps/src/auth/src/backend/employee-import.ts:32#BatchImportOptions",
         "apps/src/auth/src/backend/employee-import.ts:42#executeBatchImport",
+        "apps/src/auth/src/backend/employee-import.ts:252#parseEmployeeCsv",
         "apps/src/auth/src/backend/employee-controller.ts:19#sanitizeCsvField",
         "apps/src/auth/src/backend/employee-controller.ts:32#EmployeeListItem",
         "apps/src/auth/src/backend/employee-controller.ts:58#EmployeeController",
-        "apps/src/auth/src/backend/employee-controller.ts:458#employeeController",
+        "apps/src/auth/src/backend/employee-controller.ts:487#employeeController",
         "apps/src/auth/src/backend/iam-engine.ts:12#EvaluatedIamContext",
         "apps/src/auth/src/backend/iam-engine.ts:21#evaluateUserPermissions",
         "apps/src/auth/src/backend/iam-engine.ts:56#hasPermission",
         "apps/src/dev-dashboard/src/db/db.ts:97#AuditLogRecord",
         "apps/src/sdk/src/directory-client.ts:15#OrgTreeNodeDto",
-        "apps/src/sdk/src/directory-client.ts:33#OrgTreeResponseDto",
-        "apps/src/sdk/src/directory-client.ts:42#EmployeeListItemDto",
-        "apps/src/sdk/src/directory-client.ts:65#ListEmployeesResponseDto",
-        "apps/src/sdk/src/directory-client.ts:77#resolveAuthBaseUrl",
-        "apps/src/sdk/src/directory-client.ts:112#fetchOrgTree",
-        "apps/src/sdk/src/directory-client.ts:143#fetchEmployeesList",
-        "apps/src/sdk/src/directory-client.ts:177#fetchEmployeeHierarchy",
-        "apps/src/sdk/src/directory-client.ts:199#createEmployeeApi",
-        "apps/src/sdk/src/directory-client.ts:237#updateEmployeeApi",
-        "apps/src/sdk/src/directory-client.ts:267#revokeEmployeeSessionsApi",
-        "apps/src/sdk/src/directory-client.ts:296#batchImportEmployeesApi",
-        "apps/src/sdk/src/directory-client.ts:326#bulkActionEmployeesApi",
-        "apps/src/sdk/src/directory-client.ts:356#fetchOrgDirectory",
-        "apps/src/sdk/src/directory-client.ts:374#getScopedHierarchy",
-        "apps/src/sdk/src/directory-client.ts:400#getMyHierarchy",
-        "apps/src/sdk/src/directory-client.ts:429#isManagerOf",
-        "apps/src/sdk/src/directory-client.ts:446#fetchAuditLogs",
-        "apps/src/sdk/src/directory-client.ts:469#fetchUserSessions",
+        "apps/src/sdk/src/directory-client.ts:23#OrgTreeResponseDto",
+        "apps/src/sdk/src/directory-client.ts:29#EmployeeListItemDto",
+        "apps/src/sdk/src/directory-client.ts:39#ListEmployeesResponseDto",
+        "apps/src/sdk/src/directory-client.ts:51#resolveAuthBaseUrl",
+        "apps/src/sdk/src/directory-client.ts:86#fetchOrgTree",
+        "apps/src/sdk/src/directory-client.ts:117#fetchEmployeesList",
+        "apps/src/sdk/src/directory-client.ts:151#fetchEmployeeHierarchy",
+        "apps/src/sdk/src/directory-client.ts:173#createEmployeeApi",
+        "apps/src/sdk/src/directory-client.ts:211#updateEmployeeApi",
+        "apps/src/sdk/src/directory-client.ts:241#revokeEmployeeSessionsApi",
+        "apps/src/sdk/src/directory-client.ts:270#batchImportEmployeesApi",
+        "apps/src/sdk/src/directory-client.ts:300#bulkActionEmployeesApi",
+        "apps/src/sdk/src/directory-client.ts:330#fetchOrgDirectory",
+        "apps/src/sdk/src/directory-client.ts:348#getScopedHierarchy",
+        "apps/src/sdk/src/directory-client.ts:374#getMyHierarchy",
+        "apps/src/sdk/src/directory-client.ts:403#isManagerOf",
+        "apps/src/sdk/src/directory-client.ts:420#fetchAuditLogs",
+        "apps/src/sdk/src/directory-client.ts:443#fetchUserSessions",
+        "apps/src/sdk/src/directory-client.ts:462#fetchManagersList",
+        "apps/src/sdk/src/directory-client.ts:478#bindAppPolicyApi",
+        "apps/src/sdk/src/org-setup-client.ts:74#fetchOrgSetupData",
+        "apps/src/sdk/src/org-setup-client.ts:95#updateOrgProfileApi",
+        "apps/src/sdk/src/org-setup-client.ts:125#updateOrgEidConfigApi",
+        "apps/src/sdk/src/org-setup-client.ts:148#generateNextEidApi",
+        "apps/src/sdk/src/org-setup-client.ts:167#previewNextEidApi",
+        "apps/src/sdk/src/org-setup-client.ts:185#upsertOrgNodeTypeApi",
+        "apps/src/sdk/src/org-setup-client.ts:208#deleteOrgNodeTypeApi",
+        "apps/src/sdk/src/org-setup-client.ts:227#upsertOrgNodeApi",
+        "apps/src/sdk/src/org-setup-client.ts:250#deleteOrgNodeApi",
         "apps/src/sdk/src/auth-guard.ts:143#authGuard"
       ],
       "verifiedIn": [
-        "apps/src/auth/test/security/employee-rbac.test.ts"
+        "apps/src/auth/test/security/employee-rbac.test.ts",
+        "apps/src/dev-dashboard/test/e2e/org-setup-journey.test.ts",
+        "apps/src/dev-dashboard/test/security/org-setup-security.test.ts",
+        "apps/src/dev-dashboard/test/integration/org-setup-pipeline.test.ts",
+        "apps/src/dev-dashboard/test/contracts/org-setup-contract.test.ts"
       ]
+    },
+    "LLR-AUTH-008": {
+      "id": "LLR-AUTH-008",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/features/employee-onboarding.mdx",
+      "implementedIn": [],
+      "verifiedIn": []
+    },
+    "LLR-PORTAL-001": {
+      "id": "LLR-PORTAL-001",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/features/employee-onboarding.mdx",
+      "implementedIn": [],
+      "verifiedIn": []
     },
     "HLR-SDK-301": {
       "id": "HLR-SDK-301",
@@ -9573,15 +10070,17 @@
         "apps/src/auth/src/backend/api-handlers.ts:428#handleGetMySessions",
         "apps/src/auth/src/backend/api-handlers.ts:440#handleRevokeOtherSessions",
         "apps/src/auth/src/backend/api-handlers.ts:471#handleGetTelemetryLogs",
-        "apps/src/auth/src/backend/api-org-handlers.ts:122#handleGetOrgTree",
-        "apps/src/auth/src/backend/api-org-handlers.ts:141#handleListEmployees",
-        "apps/src/auth/src/backend/api-org-handlers.ts:162#handleGetEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:177#handleCreateEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:205#handleUpdateEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:236#handleRevokeEmployee",
-        "apps/src/auth/src/backend/api-org-handlers.ts:265#handleBatchImport",
-        "apps/src/auth/src/backend/api-org-handlers.ts:295#handleBulkAction",
-        "apps/src/auth/src/backend/api-org-handlers.ts:325#handleExportEmployees",
+        "apps/src/auth/src/backend/api-org-handlers.ts:124#handleGetOrgTree",
+        "apps/src/auth/src/backend/api-org-handlers.ts:143#handleListEmployees",
+        "apps/src/auth/src/backend/api-org-handlers.ts:164#handleGetEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:179#handleCreateEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:207#handleUpdateEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:238#handleRevokeEmployee",
+        "apps/src/auth/src/backend/api-org-handlers.ts:267#handleBatchImport",
+        "apps/src/auth/src/backend/api-org-handlers.ts:308#handleBulkAction",
+        "apps/src/auth/src/backend/api-org-handlers.ts:338#handleExportEmployees",
+        "apps/src/auth/src/backend/api-org-handlers.ts:403#handleGetManagers",
+        "apps/src/auth/src/backend/api-org-handlers.ts:417#handleBindAppPolicy",
         "apps/src/auth/src/backend/iam-engine.ts:12#EvaluatedIamContext",
         "apps/src/auth/src/backend/iam-engine.ts:21#evaluateUserPermissions",
         "apps/src/auth/src/backend/iam-engine.ts:56#hasPermission",
@@ -9642,12 +10141,13 @@
         "apps/src/dev-dashboard/src/backend/host-controller.ts:42#HostDiagnosticsReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:88#HighAvailabilityReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:306#hostController",
-        "apps/src/dev-dashboard/src/backend/api-handlers.ts:17#handleApiRequest",
+        "apps/src/dev-dashboard/src/backend/api-handlers.ts:18#handleApiRequest",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:16#DevSessionRecord",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:28#DevDashboardAuthManager",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:182#devAuthManager",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:188#handleDevAuthApi",
-        "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:21#handleDevEmployeeApi",
+        "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:22#handleDevEmployeeApi",
+        "apps/src/dev-dashboard/src/backend/api-org-setup-routes.ts:23#handleDevOrgSetupApi",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:24#detectHostMemoryAndVirtualization",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:115#LogEntry",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:131#SystemVitals",
@@ -9699,7 +10199,7 @@
         "apps/src/auth/src/db/db.ts:25#resolveAuthDataDir",
         "apps/src/auth/src/db/db.ts:35#getAuthDb",
         "apps/src/auth/src/db/db.ts:50#initAuthSchema",
-        "apps/src/auth/src/db/db.ts:209#closeAuthDb",
+        "apps/src/auth/src/db/db.ts:222#closeAuthDb",
         "apps/src/auth/src/db/seed.ts:18#DEFAULT_PASSWORD",
         "apps/src/auth/src/db/seed.ts:24#seedAuthDatabase",
         "apps/src/auth/src/db/schema.ts:7#OrganizationRecord",
@@ -9977,12 +10477,13 @@
         "apps/src/dev-dashboard/src/backend/host-controller.ts:42#HostDiagnosticsReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:88#HighAvailabilityReport",
         "apps/src/dev-dashboard/src/backend/host-controller.ts:306#hostController",
-        "apps/src/dev-dashboard/src/backend/api-handlers.ts:17#handleApiRequest",
+        "apps/src/dev-dashboard/src/backend/api-handlers.ts:18#handleApiRequest",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:16#DevSessionRecord",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:28#DevDashboardAuthManager",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:182#devAuthManager",
         "apps/src/dev-dashboard/src/backend/auth-session.ts:188#handleDevAuthApi",
-        "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:21#handleDevEmployeeApi",
+        "apps/src/dev-dashboard/src/backend/api-employee-handlers.ts:22#handleDevEmployeeApi",
+        "apps/src/dev-dashboard/src/backend/api-org-setup-routes.ts:23#handleDevOrgSetupApi",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:24#detectHostMemoryAndVirtualization",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:115#LogEntry",
         "apps/src/dev-dashboard/src/backend/telemetry.ts:131#SystemVitals",
@@ -10002,6 +10503,48 @@
         "forge-apps/app-template/test/contracts/health-schema.test.ts"
       ]
     },
+    "LLR-AUTH-009": {
+      "id": "LLR-AUTH-009",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/llr/LLR-AUTH-009_ORGANIZATION_STRUCTURE_AND_SETUP.mdx",
+      "implementedIn": [
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:49#handleGetOrgSetup",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:83#handleUpdateOrgProfile",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:122#handleUpdateEidConfig",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:161#handleGetNextEid",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:191#handlePreviewEid",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:210#handleUpsertNodeType",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:245#handleDeleteNodeType",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:267#handleUpsertNode",
+        "apps/src/auth/src/backend/api-org-setup-handlers.ts:332#handleDeleteNode",
+        "apps/src/dev-dashboard/src/frontend/ui-org-setup-modals.ts:14#getOrgSetupModalsHtml",
+        "apps/src/dev-dashboard/src/frontend/ui-org-setup-scripts.ts:7#getOrgSetupScripts",
+        "apps/src/dev-dashboard/src/backend/api-org-setup-routes.ts:23#handleDevOrgSetupApi",
+        "apps/src/sdk/src/org-setup-client.ts:74#fetchOrgSetupData",
+        "apps/src/sdk/src/org-setup-client.ts:95#updateOrgProfileApi",
+        "apps/src/sdk/src/org-setup-client.ts:125#updateOrgEidConfigApi",
+        "apps/src/sdk/src/org-setup-client.ts:148#generateNextEidApi",
+        "apps/src/sdk/src/org-setup-client.ts:167#previewNextEidApi",
+        "apps/src/sdk/src/org-setup-client.ts:185#upsertOrgNodeTypeApi",
+        "apps/src/sdk/src/org-setup-client.ts:208#deleteOrgNodeTypeApi",
+        "apps/src/sdk/src/org-setup-client.ts:227#upsertOrgNodeApi",
+        "apps/src/sdk/src/org-setup-client.ts:250#deleteOrgNodeApi"
+      ],
+      "verifiedIn": [
+        "apps/src/dev-dashboard/test/unit/org-setup.test.ts",
+        "apps/src/dev-dashboard/test/e2e/org-setup-journey.test.ts",
+        "apps/src/dev-dashboard/test/security/org-setup-security.test.ts",
+        "apps/src/dev-dashboard/test/integration/org-setup-pipeline.test.ts",
+        "apps/src/dev-dashboard/test/contracts/org-setup-contract.test.ts"
+      ]
+    },
+    "HLR-AUTH-103": {
+      "id": "HLR-AUTH-103",
+      "type": "HLR",
+      "docFile": "apps/src/docs/src/content/docs/llr/LLR-AUTH-009_ORGANIZATION_STRUCTURE_AND_SETUP.mdx",
+      "implementedIn": [],
+      "verifiedIn": []
+    },
     "LLR-DB-005": {
       "id": "LLR-DB-005",
       "type": "LLR",
@@ -10020,34 +10563,41 @@
         "apps/src/auth/src/backend/employee-import.ts:17#BatchImportRecord",
         "apps/src/auth/src/backend/employee-import.ts:32#BatchImportOptions",
         "apps/src/auth/src/backend/employee-import.ts:42#executeBatchImport",
+        "apps/src/auth/src/backend/employee-import.ts:252#parseEmployeeCsv",
         "apps/src/auth/src/backend/employee-controller.ts:19#sanitizeCsvField",
         "apps/src/auth/src/backend/employee-controller.ts:32#EmployeeListItem",
         "apps/src/auth/src/backend/employee-controller.ts:58#EmployeeController",
-        "apps/src/auth/src/backend/employee-controller.ts:458#employeeController",
+        "apps/src/auth/src/backend/employee-controller.ts:487#employeeController",
         "apps/src/dev-dashboard/src/db/db.ts:97#AuditLogRecord",
         "apps/src/sdk/src/directory-client.ts:15#OrgTreeNodeDto",
-        "apps/src/sdk/src/directory-client.ts:33#OrgTreeResponseDto",
-        "apps/src/sdk/src/directory-client.ts:42#EmployeeListItemDto",
-        "apps/src/sdk/src/directory-client.ts:65#ListEmployeesResponseDto",
-        "apps/src/sdk/src/directory-client.ts:77#resolveAuthBaseUrl",
-        "apps/src/sdk/src/directory-client.ts:112#fetchOrgTree",
-        "apps/src/sdk/src/directory-client.ts:143#fetchEmployeesList",
-        "apps/src/sdk/src/directory-client.ts:177#fetchEmployeeHierarchy",
-        "apps/src/sdk/src/directory-client.ts:199#createEmployeeApi",
-        "apps/src/sdk/src/directory-client.ts:237#updateEmployeeApi",
-        "apps/src/sdk/src/directory-client.ts:267#revokeEmployeeSessionsApi",
-        "apps/src/sdk/src/directory-client.ts:296#batchImportEmployeesApi",
-        "apps/src/sdk/src/directory-client.ts:326#bulkActionEmployeesApi",
-        "apps/src/sdk/src/directory-client.ts:356#fetchOrgDirectory",
-        "apps/src/sdk/src/directory-client.ts:374#getScopedHierarchy",
-        "apps/src/sdk/src/directory-client.ts:400#getMyHierarchy",
-        "apps/src/sdk/src/directory-client.ts:429#isManagerOf",
-        "apps/src/sdk/src/directory-client.ts:446#fetchAuditLogs",
-        "apps/src/sdk/src/directory-client.ts:469#fetchUserSessions",
+        "apps/src/sdk/src/directory-client.ts:23#OrgTreeResponseDto",
+        "apps/src/sdk/src/directory-client.ts:29#EmployeeListItemDto",
+        "apps/src/sdk/src/directory-client.ts:39#ListEmployeesResponseDto",
+        "apps/src/sdk/src/directory-client.ts:51#resolveAuthBaseUrl",
+        "apps/src/sdk/src/directory-client.ts:86#fetchOrgTree",
+        "apps/src/sdk/src/directory-client.ts:117#fetchEmployeesList",
+        "apps/src/sdk/src/directory-client.ts:151#fetchEmployeeHierarchy",
+        "apps/src/sdk/src/directory-client.ts:173#createEmployeeApi",
+        "apps/src/sdk/src/directory-client.ts:211#updateEmployeeApi",
+        "apps/src/sdk/src/directory-client.ts:241#revokeEmployeeSessionsApi",
+        "apps/src/sdk/src/directory-client.ts:270#batchImportEmployeesApi",
+        "apps/src/sdk/src/directory-client.ts:300#bulkActionEmployeesApi",
+        "apps/src/sdk/src/directory-client.ts:330#fetchOrgDirectory",
+        "apps/src/sdk/src/directory-client.ts:348#getScopedHierarchy",
+        "apps/src/sdk/src/directory-client.ts:374#getMyHierarchy",
+        "apps/src/sdk/src/directory-client.ts:403#isManagerOf",
+        "apps/src/sdk/src/directory-client.ts:420#fetchAuditLogs",
+        "apps/src/sdk/src/directory-client.ts:443#fetchUserSessions",
+        "apps/src/sdk/src/directory-client.ts:462#fetchManagersList",
+        "apps/src/sdk/src/directory-client.ts:478#bindAppPolicyApi",
         "apps/src/sdk/src/crypto.ts:126#createBlindIndex"
       ],
       "verifiedIn": [
-        "apps/src/auth/test/unit/employee-controller.test.ts"
+        "apps/src/auth/test/unit/employee-controller.test.ts",
+        "apps/src/dev-dashboard/test/e2e/org-setup-journey.test.ts",
+        "apps/src/dev-dashboard/test/security/org-setup-security.test.ts",
+        "apps/src/dev-dashboard/test/integration/org-setup-pipeline.test.ts",
+        "apps/src/dev-dashboard/test/contracts/org-setup-contract.test.ts"
       ]
     },
     "LLR-UI-003": {
@@ -10085,9 +10635,11 @@
         "apps/src/portal/src/backend/inbox-service.ts:326#createAppAccessRequest",
         "apps/src/portal/src/backend/inbox-service.ts:361#getUserAppAccessRequests",
         "apps/src/portal/src/backend/inbox-service.ts:388#cancelAppAccessRequest",
-        "apps/src/portal/src/backend/inbox-service.ts:399#createApiToken",
-        "apps/src/portal/src/backend/inbox-service.ts:420#getUserApiTokens",
-        "apps/src/portal/src/backend/inbox-service.ts:430#revokeApiToken",
+        "apps/src/portal/src/backend/inbox-service.ts:399#getPendingAppAccessRequests",
+        "apps/src/portal/src/backend/inbox-service.ts:413#decideAppAccessRequest",
+        "apps/src/portal/src/backend/inbox-service.ts:466#createApiToken",
+        "apps/src/portal/src/backend/inbox-service.ts:485#getUserApiTokens",
+        "apps/src/portal/src/backend/inbox-service.ts:492#revokeApiToken",
         "apps/src/ui/src/toast.ts:11#getAstryxToastScript",
         "apps/src/ui/src/styles/overlays.ts:9#getOverlayStyles"
       ],
@@ -10114,7 +10666,7 @@
         "apps/src/auth/src/db/db.ts:25#resolveAuthDataDir",
         "apps/src/auth/src/db/db.ts:35#getAuthDb",
         "apps/src/auth/src/db/db.ts:50#initAuthSchema",
-        "apps/src/auth/src/db/db.ts:209#closeAuthDb",
+        "apps/src/auth/src/db/db.ts:222#closeAuthDb",
         "apps/src/auth/src/db/seed.ts:18#DEFAULT_PASSWORD",
         "apps/src/auth/src/db/seed.ts:24#seedAuthDatabase",
         "apps/src/auth/src/db/schema.ts:7#OrganizationRecord",

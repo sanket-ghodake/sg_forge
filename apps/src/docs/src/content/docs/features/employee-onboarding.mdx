@@ -1,0 +1,83 @@
+---
+title: Universal Employee Onboarding & Delegated App Access
+description: Comprehensive operational guide for single member invites, batch CSV ingestion, line-manager hierarchy, and delegated per-app access requests.
+---
+
+import DiagramEmbed from '../../../components/DiagramEmbed.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Real-World Identity Adoption Without Policy Sprawl"
+  analogy="In enterprise organizations, department names are messy, titles vary, and strict role hierarchies rarely fit reality. SG Forge decouples user profile data from access control, using a resilient hybrid policy model combined with delegated approval queues."
+  impact="Allows instant HRIS CSV imports, eliminates zombie access, and gives department leads self-service delegated control over who gets access to their tools."
+/>
+
+<TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+<TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-AUTH-008" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-PORTAL-001" type="LLR" status="verified" />
+
+## 1. Real-World Architecture: The Hybrid Model
+
+Rather than forcing organizations to clean up messy titles or construct fragile boolean ABAC rules, SG Forge employs a 3-layer hybrid access model:
+
+1. **Baseline Department & Role Access**: Standard tools are mapped to broad teams (e.g. Finance, Engineering, Operations).
+2. **Delegated App Safety Valve**: Any employee can discover restricted apps in the Marketplace and click **Request Access** with a justification reason.
+3. **Manager / Admin Approval**: The request routes directly to the employee's line manager and IT compliance inbox. Once approved, an atomic IAM binding is created and access is instantaneously granted.
+
+---
+
+## 2. Onboarding Team Members
+
+### Option A: Single Member Invitation
+Administrators and department leads can invite individual colleagues directly from the Portal Admin Suite:
+1. Navigate to **Admin Suite** -> **Team Members** -> click **Invite Member**.
+2. Provide **Work Email**, **Full Name**, **Job Title**, **Division**, and select their **Reporting Line Manager**.
+3. Choose an initial role (`Standard Employee`, `Department Lead / Manager`, or `Organization Admin`).
+4. Click **Send Invitation**. The employee is created in the central identity database with forced initial password reset.
+
+### Option B: Batch CSV Ingestion (Web UI)
+1. Click **Batch Ingest CSV** in the Team Members toolbar.
+2. Upload an export file from your HRIS (Workday, BambooHR, Google Workspace) or paste raw CSV text.
+3. Click **Dry Run Validate** to review valid counts and syntax warnings before any database commits.
+4. Click **Import Roster** to commit the records atomically.
+
+```csv
+display_name,email,job_title,department,manager_email,role
+Elena Rostova,elena@forge.internal,Chief Revenue Officer,Executive,,roles/admin
+Marcus Thorne,marcus@forge.internal,VP Enterprise Sales,Sales,elena@forge.internal,roles/manager
+Aria Sterling,aria@forge.internal,Account Executive,Sales,marcus@forge.internal,roles/employee
+```
+
+### Option C: Headless CLI Ingestion
+For automated CI/CD pipelines, nightly HRIS synchronizations, or air-gapped terminal administration:
+
+```bash
+# Dry run verification without writing to database
+rtk bun scripts/import-employees.ts data/roster.csv --dry-run
+
+# Commit real batch import
+rtk bun scripts/import-employees.ts data/roster.csv
+```
+
+---
+
+## 3. Delegated App Access Workflow
+
+```
+[Employee] ──(Discovers restricted app in Hub)──> [Click 'Request Access']
+   │
+   ├──> Submits Business Justification & Project Notes
+   │
+[Pending Inbox Queue] ──(Notifies Manager & Admin)──> [Reviews Justification]
+   │
+   ├──> [DECISION: Approve] ──> Central IAM Binding Created ──> App Promoted to Active Dock
+   │
+   └──> [DECISION: Reject]  ──> Real-Time Toast & Notification Delivered to Requester
+```
+
+### Anti-Self-Approval Security Invariant
+To prevent horizontal and vertical privilege escalation, the access decision engine strictly enforces **Anti-Self-Approval**:
+- An administrator or department lead cannot approve an access request that was submitted under their own user account.
+- Dual authorization or another designated administrator must approve requests for elevated access.

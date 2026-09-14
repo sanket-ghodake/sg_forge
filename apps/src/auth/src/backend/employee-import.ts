@@ -243,3 +243,93 @@ export function executeBatchImport(
     dryRun: !!options.dryRun,
   };
 }
+
+/**
+ * parseEmployeeCsv
+ * Flexible CSV parser supporting multiple standard HRIS header permutations.
+ * @requirements [HLR-AUTH-102] [LLR-DB-005]
+ */
+export function parseEmployeeCsv(csvText: string): {
+  records: BatchImportRecord[];
+  errors: Array<{ row: number; error: string }>;
+} {
+  const lines = csvText.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0);
+  if (lines.length < 2) {
+    return { records: [], errors: [{ row: 1, error: 'CSV must contain at least a header row and one data row' }] };
+  }
+
+  const rawHeaders = lines[0].split(',').map((h) => h.replace(/^["']|["']$/g, '').trim().toLowerCase());
+  const headerMap: Record<string, number> = {};
+  rawHeaders.forEach((h, idx) => {
+    headerMap[h] = idx;
+  });
+
+  const getCol = (aliases: string[]): number => {
+    for (const a of aliases) {
+      if (headerMap[a] !== undefined) return headerMap[a];
+    }
+    return -1;
+  };
+
+  const nameIdx = getCol(['display_name', 'name', 'full_name', 'employee_name']);
+  const emailIdx = getCol(['email', 'work_email', 'user_email']);
+  const titleIdx = getCol(['job_title', 'title', 'role_title', 'position']);
+  const deptIdx = getCol(['department', 'dept', 'division', 'team']);
+  const managerIdx = getCol(['manager_email', 'manager', 'reports_to']);
+  const roleIdx = getCol(['role', 'iam_role', 'permission_role']);
+  const codeIdx = getCol(['employee_code', 'emp_id', 'code']);
+
+  if (emailIdx === -1) {
+    return { records: [], errors: [{ row: 1, error: 'CSV is missing mandatory email column' }] };
+  }
+
+  const records: BatchImportRecord[] = [];
+  const errors: Array<{ row: number; error: string }> = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const rowNum = i + 1;
+    const values: string[] = [];
+    let cur = '';
+    let inQuotes = false;
+    for (const c of lines[i]) {
+      if (c === '"' || c === "'") {
+        inQuotes = !inQuotes;
+      } else if (c === ',' && !inQuotes) {
+        values.push(cur.trim());
+        cur = '';
+      } else {
+        cur += c;
+      }
+    }
+    values.push(cur.trim());
+
+    const getVal = (idx: number): string => (idx >= 0 && idx < values.length ? values[idx].replace(/^["']|["']$/g, '').trim() : '');
+
+    let email = getVal(emailIdx);
+    // Anti-Formula Injection defense: strip formula prefix if present
+    if (/^[=+\-@\t\r]/.test(email)) {
+      email = email.replace(/^[=+\-@\t\r]+/, '');
+    }
+
+    if (!email || !email.includes('@')) {
+      errors.push({ row: rowNum, error: `Invalid or missing email at row ${rowNum}` });
+      continue;
+    }
+
+    let name = nameIdx >= 0 ? getVal(nameIdx) : '';
+    if (!name) name = email.split('@')[0];
+
+    records.push({
+      display_name: name,
+      email: email.toLowerCase(),
+      job_title: titleIdx >= 0 ? getVal(titleIdx) || undefined : undefined,
+      department: deptIdx >= 0 ? getVal(deptIdx) || undefined : undefined,
+      manager_email: managerIdx >= 0 ? getVal(managerIdx).toLowerCase() || undefined : undefined,
+      role: roleIdx >= 0 ? getVal(roleIdx) || undefined : undefined,
+      employee_code: codeIdx >= 0 ? getVal(codeIdx) || undefined : undefined,
+      status: 'ACTIVE',
+    });
+  }
+
+  return { records, errors };
+}

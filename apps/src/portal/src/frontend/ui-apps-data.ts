@@ -82,7 +82,10 @@ function getCategoryIcon(category: string): string {
  * Dynamically discover and categorize all micro-apps from the service registry.
   * @requirements [HLR-PORTAL-201] [LLR-UI-001]
  */
-export function getPortalApps(userRoles: string[] = []): {
+export function getPortalApps(
+  userRoles: string[] = [],
+  userContext?: { department?: string; appBindings?: string[] }
+): {
   activeApps: MicroAppItem[];
   marketplaceApps: MicroAppItem[];
   allApps: MicroAppItem[];
@@ -96,6 +99,8 @@ export function getPortalApps(userRoles: string[] = []): {
   const allApps: MicroAppItem[] = [];
 
   const isAdmin = userRoles.some((r) => r.includes('admin') || r.includes('manager') || r.includes('lead'));
+  const userDept = (userContext?.department || '').toLowerCase();
+  const directGrants = new Set(userContext?.appBindings || []);
 
   for (const s of microAppServices) {
     const known = KNOWN_APP_METADATA[s.id] || {};
@@ -103,7 +108,15 @@ export function getPortalApps(userRoles: string[] = []): {
     
     // An app is restricted if its role requires specific admin privileges that the current user lacks
     const requiresAdmin = roleLower.includes('admin') || roleLower.includes('restricted') || roleLower.includes('super_admin');
-    const isRestricted = known.isRestricted !== undefined ? (known.isRestricted && !isAdmin) : (requiresAdmin && !isAdmin);
+    let isRestricted = known.isRestricted !== undefined ? (known.isRestricted && !isAdmin) : (requiresAdmin && !isAdmin);
+
+    // If user has direct approved policy binding, grant access immediately
+    if (directGrants.has(s.id)) {
+      isRestricted = false;
+    } else if (userDept && known.departmentOwner && known.departmentOwner.toLowerCase().includes(userDept)) {
+      isRestricted = false;
+    }
+
     const category = known.category || (s.category && !s.category.includes('Polyglot') ? s.category : 'Operations');
 
     const item: MicroAppItem = {

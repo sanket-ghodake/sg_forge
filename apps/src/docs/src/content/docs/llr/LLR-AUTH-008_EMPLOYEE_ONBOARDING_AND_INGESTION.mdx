@@ -1,0 +1,31 @@
+---
+title: LLR-AUTH-008 - Employee Onboarding & Batch Roster Ingestion
+description: Low-level requirement governing employee invite, CSV batch ingestion, line manager linking, and formula injection defense.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-008" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. **Individual Invitation**: Accept display name, email, job title, organizational division, reporting line manager ID, and initial IAM role.
+2. **CSV Roster Parsing**: Parse RFC 4180 CSV files with flexible aliases (`display_name`, `email`, `job_title`, `department`, `manager_email`, `role`).
+3. **Formula Injection Neutralization**: Strip leading formula control characters (`=`, `+`, `-`, `@`, `\t`, `\r`) from all input values before database insertion.
+4. **Line Manager Hierarchy Linking**: Automatically resolve manager emails to internal user IDs and establish directional line-manager edges in `auth_employee_relationships`.
+5. **Dry-Run Validation**: Support non-destructive pre-flight validation returning record counts, parsed departments, and row-level issues before commit.
+
+## 2. Safety & Verification Invariants
+
+* **Anti-Self-Approval Enforcement**: Managers and admins cannot approve their own requests.
+* **Privilege Escalation Prevention**: Non-super_admins are strictly forbidden from assigning `roles/super_admin`.
+* **Zero Host Alteration**: CLI execution strictly uses portable Bun wrapper `scripts/import-employees.ts`.
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/auth/src/backend/employee-import.ts`, `apps/src/auth/src/backend/employee-controller.ts`, `scripts/import-employees.ts`
+* **Verified in Test Suite**: `apps/src/portal/test/unit/app-policy-evaluator.test.ts`, `apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts`

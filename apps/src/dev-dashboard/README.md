@@ -32,6 +32,7 @@ Real-time platform telemetry, organization directory management, database diagno
 6. **3-Tier Traffic Scoping & Liveness Probe Exclusion**: Automated classification isolating synthetic health checks (`/health`, `/api/services`, `/api/overview/stats`) into `probe`, S2S sync into `mesh`, and authentic human visitors into `user` (default view) with instant UI switching (`[ 👤 End Users ]`, `[ 🌐 All Traffic ]`, `[ ⚙️ Internal & Probes ]`).
 7. **RFC 7807 Issue Center**: Deduplicated exception logs grouped by fingerprint with sanitized stack traces.
 8. **System Terminal Monitor**: Live output streamer inspecting server processes and container vitals.
+9. **Organization Setup & Dynamic Hierarchy Studio**: Multi-tenant corporate profile, dynamic hierarchy level tiers (Company, Division, Department, Team), parent-child organizational nodes with circular-reference defense, and deterministic sequential EID generation with live preview (`/api/org-setup/*`).
 
 ---
 

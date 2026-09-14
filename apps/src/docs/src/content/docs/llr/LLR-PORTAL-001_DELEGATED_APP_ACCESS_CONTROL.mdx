@@ -1,0 +1,31 @@
+---
+title: LLR-PORTAL-001 - Delegated App Access Control & Approval Workflows
+description: Low-level requirement governing app access requests, anti-self-approval invariants, manager review queues, and dynamic catalog gating.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-PORTAL-001" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. **Dynamic Catalog Segmentation**: Partition applications into active (directly launchable) and marketplace (restricted / requestable) based on role, department ownership, and approved policy bindings.
+2. **Access Request Submission**: Employee submits a justification reason and optional project notes, creating a `PENDING` request in `portal_app_access_requests`.
+3. **Pending Inbox Routing**: Department managers and organization administrators review incoming pending requests with full requester profile and justification details.
+4. **Delegated Decision & Binding**: Upon approval, update request to `APPROVED`, establish an IAM app-level policy binding via `@forge/sdk/directory-client.ts`, and deliver real-time in-app notification.
+5. **Anti-Self-Approval Enforcement**: Strictly block administrators and managers from approving their own access requests (`req.user_id === adminUserId`).
+
+## 2. Safety & Verification Invariants
+
+* **IDOR Protection**: Access request cancellation strictly validates `user_id` ownership (`res.changes > 0`).
+* **Zero Zombie Access**: Dynamic bindings link directly to central IAM policy tables for instant revocation upon employee offboarding.
+* **Smart Collision Detection**: Modals and dropdown selectors enforce viewport containment to guarantee 100% visibility.
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/portal/src/backend/inbox-service.ts`, `apps/src/portal/src/server.ts`, `apps/src/portal/src/frontend/ui-apps-data.ts`
+* **Verified in Test Suite**: `apps/src/portal/test/integration/app-access-decision.test.ts`, `apps/src/portal/test/security/app-idor-penetration.test.ts`

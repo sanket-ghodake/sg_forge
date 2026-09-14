@@ -8,6 +8,7 @@ import { hostController } from './host-controller';
 import { handleAppsApi } from './apps-controller';
 import { handleDevAuthApi } from './auth-session';
 import { handleDevEmployeeApi } from './api-employee-handlers';
+import { handleDevOrgSetupApi } from './api-org-setup-routes';
 import { handleAnalyticsApi } from './api-analytics-handlers';
 
 /**
@@ -423,6 +424,12 @@ export async function handleApiRequest(req: Request, url: URL): Promise<Response
   if (path.startsWith('/api/employees')) {
     const empRes = await handleDevEmployeeApi(path, req, url);
     if (empRes) return empRes;
+  }
+
+  // 19. Organization Setup APIs (Delegated to @forge/auth via SDK)
+  if (path.startsWith('/api/org-setup')) {
+    const orgRes = await handleDevOrgSetupApi(path, req, url);
+    if (orgRes) return orgRes;
   }
 
   return null;

@@ -13,52 +13,26 @@ import { createInternalServiceToken } from './auth-guard';
 
 /** @requirements [HLR-AUTH-102] [LLR-DB-005] */
 export interface OrgTreeNodeDto {
-  id: string;
-  name: string;
-  email: string;
-  title: string;
-  employeeCode?: string;
-  department: string;
-  division: string;
-  managerId: string | null;
-  level: number;
-  status: 'ONLINE' | 'BUSY' | 'AWAY' | 'OFFLINE';
-  directReportCount: number;
-  totalSubtreeCount: number;
-  hasMoreChildren: boolean;
-  children: OrgTreeNodeDto[];
+  id: string; name: string; email: string; title: string; employeeCode?: string;
+  department: string; division: string; managerId: string | null; level: number;
+  status: 'ONLINE' | 'BUSY' | 'AWAY' | 'OFFLINE'; directReportCount: number;
+  totalSubtreeCount: number; hasMoreChildren: boolean; children: OrgTreeNodeDto[];
 }
 
 /** @requirements [HLR-AUTH-102] [LLR-DB-005] */
 export interface OrgTreeResponseDto {
-  organizationName: string;
-  totalEmployees: number;
-  maxRenderedDepth: number;
-  divisions: Array<{ name: string; headCount: number }>;
-  root: OrgTreeNodeDto | null;
+  organizationName: string; totalEmployees: number; maxRenderedDepth: number;
+  divisions: Array<{ name: string; headCount: number }>; root: OrgTreeNodeDto | null;
 }
 
 /** @requirements [HLR-AUTH-102] [LLR-DB-005] */
 export interface EmployeeListItemDto {
-  id: string;
-  org_id: string;
-  email: string;
-  display_name: string;
-  principal_type: string;
-  status: string;
-  must_change_password: number;
-  token_version: number;
-  job_title: string | null;
-  employee_code: string | null;
-  org_node_id: string | null;
-  department_name: string | null;
-  department_path: string | null;
-  manager_id: string | null;
-  manager_name: string | null;
-  manager_email: string | null;
-  roles: string[];
-  created_at: number;
-  updated_at: number;
+  id: string; org_id: string; email: string; display_name: string;
+  principal_type: string; status: string; must_change_password: number;
+  token_version: number; job_title: string | null; employee_code: string | null;
+  org_node_id: string | null; department_name: string | null; department_path: string | null;
+  manager_id: string | null; manager_name: string | null; manager_email: string | null;
+  roles: string[]; created_at: number; updated_at: number;
 }
 
 /** @requirements [HLR-AUTH-102] [LLR-DB-005] */
@@ -296,7 +270,7 @@ export async function revokeEmployeeSessionsApi(
 export async function batchImportEmployeesApi(
   records: any[],
   importOptions: Record<string, any> = {},
-  options: { baseUrl?: string; headers?: Record<string, string> } = {}
+  options: { baseUrl?: string; headers?: Record<string, string>; csv_data?: string } = {}
 ) {
   const base = resolveAuthBaseUrl(options.baseUrl);
   const target = `${base}/api/v1/auth/org/employees/import`;
@@ -307,7 +281,7 @@ export async function batchImportEmployeesApi(
       Accept: 'application/json',
       ...(options.headers || {}),
     }),
-    body: JSON.stringify({ records, options: importOptions }),
+    body: JSON.stringify({ records, csv_data: options.csv_data, options: importOptions }),
     signal: AbortSignal.timeout(10000),
   });
 
@@ -480,3 +454,43 @@ export async function fetchUserSessions(options: {
   const json = (await res.json()) as any;
   return json.sessions || json.data || [];
 }
+
+/**
+ * Fetch organization managers list from the Auth service.
+ * @requirements [HLR-AUTH-102] [LLR-DB-005]
+ */
+export async function fetchManagersList(options: { baseUrl?: string; headers?: Record<string, string> } = {}): Promise<Array<{ id: string; display_name: string; email: string; job_title: string | null; department_name: string | null }>> {
+  const base = resolveAuthBaseUrl(options.baseUrl);
+  const target = `${base}/api/v1/auth/org/managers`;
+  const res = await fetch(target, {
+    headers: getInternalHeaders({ Accept: 'application/json', ...(options.headers || {}) }),
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!res.ok) return [];
+  const json = (await res.json()) as any;
+  return json.data || [];
+}
+
+/**
+ * Bind an approved user to an app policy scope in the Auth service.
+ * @requirements [HLR-AUTH-102] [LLR-DB-005]
+ */
+export async function bindAppPolicyApi(
+  payload: { userId: string; appId: string; orgId?: string; roleId?: string },
+  options: { baseUrl?: string; headers?: Record<string, string> } = {}
+) {
+  const base = resolveAuthBaseUrl(options.baseUrl);
+  const target = `${base}/api/v1/auth/iam/app-policy/bind`;
+  const res = await fetch(target, {
+    method: 'POST',
+    headers: getInternalHeaders({ 'Content-Type': 'application/json', Accept: 'application/json', ...(options.headers || {}) }),
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(5000),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: `HTTP ${res.status}` }));
+    throw new Error(err.detail || err.error || `Failed to bind app policy (HTTP ${res.status})`);
+  }
+  return await res.json();
+}
+

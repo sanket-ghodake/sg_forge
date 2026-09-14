@@ -31,12 +31,22 @@ export function renderPortalModals(): string {
             <input type="text" class="form-input" id="invite-name" placeholder="e.g. Jane Doe" style="width: 100%; box-sizing: border-box;" />
           </div>
           <div class="form-field" style="margin-top: 1rem;">
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--forge-text-muted); margin-bottom: 0.35rem; display: block;">Job Title / Role</label>
+            <input type="text" class="form-input" id="invite-title" placeholder="e.g. Senior Backend Engineer" style="width: 100%; box-sizing: border-box;" />
+          </div>
+          <div class="form-field" style="margin-top: 1rem;">
             <label style="font-size: 0.78rem; font-weight: 600; color: var(--forge-text-muted); margin-bottom: 0.35rem; display: block;">Organizational Division</label>
             <select class="astryx-select" id="invite-division" style="width: 100%; box-sizing: border-box;">
               <option value="Engineering">Engineering & Platform</option>
               <option value="Product">Product & Design</option>
               <option value="Finance">Finance & Operations</option>
               <option value="HR">People & HR Ops</option>
+            </select>
+          </div>
+          <div class="form-field" style="margin-top: 1rem;">
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--forge-text-muted); margin-bottom: 0.35rem; display: block;">Reporting Line Manager</label>
+            <select class="astryx-select" id="invite-manager" style="width: 100%; box-sizing: border-box;">
+              <option value="">-- No Direct Manager (Top-level) --</option>
             </select>
           </div>
           <div class="form-field" style="margin-top: 1rem;">
@@ -51,6 +61,38 @@ export function renderPortalModals(): string {
         <div class="astryx-modal-footer">
           <button class="astryx-btn btn-ghost" data-close-modal="modal-invite-member">Cancel</button>
           <button class="astryx-btn btn-primary" id="confirm-invite-btn">Send Invitation</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Batch Import CSV Modal -->
+    <div class="astryx-modal-backdrop" id="modal-batch-import" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="astryx-modal" style="max-width: 580px;">
+        <div class="astryx-modal-header">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div class="app-card-icon-box" style="width: 28px; height: 28px;">${astryxIcons.upload || ''}</div>
+            <h3 style="margin: 0;">Batch CSV Member Ingestion</h3>
+          </div>
+          <button class="astryx-modal-close" data-close-modal="modal-batch-import" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="astryx-modal-body">
+          <p style="font-size: 0.84rem; color: var(--forge-text-muted); margin-top: 0;">
+            Upload a standard CSV roster from your HRIS (BambooHR, Workday, Google Workspace).
+          </p>
+          <div style="padding: 0.75rem; background: var(--forge-bg-card); border: 1px solid var(--forge-border); border-radius: var(--forge-radius-sm); font-size: 0.75rem; margin-bottom: 1rem; color: var(--forge-text-subtle);">
+            <strong>Expected Headers:</strong> <code>display_name, email, job_title, department, manager_email, role</code>
+          </div>
+          <div class="form-field">
+            <label style="font-size: 0.78rem; font-weight: 600; color: var(--forge-text-muted); margin-bottom: 0.35rem; display: block;">Select CSV File or Paste Raw Text</label>
+            <input type="file" id="batch-csv-file-input" accept=".csv,text/csv" style="display: block; margin-bottom: 0.75rem; font-size: 0.8rem;" />
+            <textarea class="form-input" id="batch-csv-textarea" rows="5" placeholder="display_name,email,job_title,department,manager_email,role&#10;Alice Smith,alice@forge.internal,Staff Engineer,Engineering,,roles/manager" style="width: 100%; font-family: var(--forge-font-mono, monospace); font-size: 0.76rem; box-sizing: border-box;"></textarea>
+          </div>
+          <div id="batch-import-status-box" style="display: none; margin-top: 1rem; padding: 0.75rem; border-radius: var(--forge-radius-sm); font-size: 0.78rem;"></div>
+        </div>
+        <div class="astryx-modal-footer">
+          <button class="astryx-btn btn-ghost" data-close-modal="modal-batch-import">Cancel</button>
+          <button class="astryx-btn btn-outline" id="batch-dry-run-btn">Dry Run Validate</button>
+          <button class="astryx-btn btn-primary" id="confirm-batch-import-btn">Import Roster</button>
         </div>
       </div>
     </div>

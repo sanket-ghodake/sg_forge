@@ -1,0 +1,32 @@
+---
+title: LLR-AUTH-009 - Organization Structure, Dynamic Hierarchy & Sequential EID
+description: Low-level requirement governing multi-tenant organization profile management, dynamic hierarchy levels, tree-structured department nodes, and atomic sequential EID allocation.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-009" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-103" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. **Organization Profile & Brand Identity**: Manage corporate metadata (`name`, `slug`, `domain`, `timezone`, `contact_email`, `settings`) with multi-tenant isolation.
+2. **Dynamic Hierarchy Level Types**: Configurable organizational tiers (`Company`, `Division`, `Department`, `Team`, `Squad`, `Unit`) ordered by hierarchical depth rank.
+3. **Tree-Structured Organizational Nodes**: Parent-child relationship graph with materialized paths (`/company/engineering/platform`), circular dependency detection, and depth enforcement.
+4. **Deterministic Sequential EID Generation**: Configurable employee identification rules (`prefix`, `padding`, `counter`) supporting non-mutating preview (`/eid/preview`) and atomic transaction allocation (`/eid/next`).
+5. **Relational Integrity & Cascade Prevention**: Prohibit deletion of organizational nodes that have active child nodes or assigned employee profiles.
+
+## 2. Safety & Verification Invariants
+
+* **Multi-Tenant Isolation**: All operations strictly bounded by `organization_id` derived from session credentials.
+* **Anti-Circular Tree Validation**: Enforce that no node can be its own ancestor or descendant.
+* **Zero Dummy Data**: All tiers, nodes, and EID sequences are persisted in Turso `auth_organizations`, `auth_org_node_types`, and `auth_org_nodes`.
+* **Zero Host Alterations**: CLI and dashboard execution strictly operates through portable Bun wrappers and Astryx tokens.
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-103" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/auth/src/backend/api-org-setup-handlers.ts`, `apps/src/sdk/src/org-setup-client.ts`, `apps/src/dev-dashboard/src/backend/api-org-setup-routes.ts`, `apps/src/dev-dashboard/src/frontend/ui-renderer-employees.ts`, `apps/src/dev-dashboard/src/frontend/ui-org-setup-modals.ts`, `apps/src/dev-dashboard/src/frontend/ui-org-setup-scripts.ts`
+* **Verified in Test Suite**: `apps/src/dev-dashboard/test/unit/org-setup.test.ts`, `apps/src/dev-dashboard/test/integration/org-setup-pipeline.test.ts`, `apps/src/dev-dashboard/test/security/org-setup-security.test.ts`, `apps/src/dev-dashboard/test/contracts/org-setup-contract.test.ts`, `apps/src/dev-dashboard/test/e2e/org-setup-journey.test.ts`

@@ -59,6 +59,18 @@ Central authentication, generic organizational hierarchy, GCP-style IAM policy e
 | `POST` | `/api/v1/auth/refresh` | Rotate refresh token |
 | `POST` | `/api/v1/auth/logout` | Revoke active session |
 | `GET` | `/api/v1/auth/directory` | Fetch org tree nodes & user directory |
+| `GET` | `/api/v1/auth/org/managers` | List eligible reporting line managers |
+| `POST` | `/api/v1/auth/org/employees/import` | Ingest batch CSV / JSON employee rosters |
+| `GET` | `/api/v1/auth/org/setup` | Retrieve organization identity, EID config, node types & hierarchy nodes |
+| `POST` | `/api/v1/auth/org/setup/profile` | Update organization profile and branding metadata |
+| `POST` | `/api/v1/auth/org/setup/eid-config` | Update sequential EID template, prefix & padding rules |
+| `POST` | `/api/v1/auth/org/setup/eid/next` | Atomically reserve next sequential employee ID |
+| `POST` | `/api/v1/auth/org/setup/eid/preview` | Preview formatted employee ID without state mutation |
+| `POST` | `/api/v1/auth/org/setup/node-types` | Upsert organizational hierarchy level type |
+| `DELETE`| `/api/v1/auth/org/setup/node-types` | Delete unassigned hierarchy level type |
+| `POST` | `/api/v1/auth/org/setup/nodes` | Upsert department / team / squad tree node |
+| `DELETE`| `/api/v1/auth/org/setup/nodes` | Delete empty leaf organizational tree node |
+| `POST` | `/api/v1/auth/iam/app-policy/bind` | Bind user to micro-app access policy scope |
 | `GET` | `/.well-known/jwks.json` | Public JWKS keys for offline verification |
 | `GET` | `/health` | Service health status |
 

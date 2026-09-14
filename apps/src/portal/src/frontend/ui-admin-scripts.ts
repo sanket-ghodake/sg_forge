@@ -41,15 +41,6 @@ export function getAdminClientScript(): string {
         });
       }
 
-      const batchImportTrigger = document.getElementById('batch-import-btn');
-      if (batchImportTrigger) {
-        batchImportTrigger.addEventListener('click', function() {
-          openModal('modal-invite-member');
-          if (window.astryxToast) {
-            window.astryxToast('Individual or batch invitation ready', 'info');
-          }
-        });
-      }
 
       document.querySelectorAll('[data-close-modal]').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -264,12 +255,16 @@ export function getAdminClientScript(): string {
         confirmInviteBtn.addEventListener('click', async function() {
           const emailInput = document.getElementById('invite-email');
           const nameInput = document.getElementById('invite-name');
+          const titleInput = document.getElementById('invite-title');
           const roleSelect = document.getElementById('invite-role');
           const divSelect = document.getElementById('invite-division');
+          const mgrSelect = document.getElementById('invite-manager');
           const email = emailInput ? emailInput.value.trim() : '';
           const name = nameInput ? nameInput.value.trim() : '';
+          const title = titleInput ? titleInput.value.trim() : '';
           const role = roleSelect ? roleSelect.value : 'roles/employee';
           const division = divSelect ? divSelect.value : 'General';
+          const managerId = mgrSelect ? mgrSelect.value : '';
 
           if (!email) {
             if (window.astryxToast) window.astryxToast('Please enter a valid work email', 'error');
@@ -281,7 +276,14 @@ export function getAdminClientScript(): string {
             const res = await fetch(endpoint, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-              body: JSON.stringify({ email: email, name: name, role: role, department_id: division })
+              body: JSON.stringify({
+                email: email,
+                name: name,
+                role: role,
+                department_id: division,
+                title: title || undefined,
+                manager_id: managerId || undefined
+              })
             });
             const data = await res.json();
             if (!res.ok) {
@@ -293,6 +295,7 @@ export function getAdminClientScript(): string {
             }
             if (emailInput) emailInput.value = '';
             if (nameInput) nameInput.value = '';
+            if (titleInput) titleInput.value = '';
             loadAdminMembers();
           } catch(err) {
             if (window.astryxToast) {
@@ -483,6 +486,9 @@ export function getAdminClientScript(): string {
         if (e && e.detail === 'admin-members') loadAdminMembers();
         if (e && e.detail === 'admin-org') loadAdminOrgTree();
         if (e && e.detail === 'admin-audit') loadAdminAuditLogs();
+      });
+      window.addEventListener('admin-members-updated', function() {
+        loadAdminMembers();
       });
     })();
   `;

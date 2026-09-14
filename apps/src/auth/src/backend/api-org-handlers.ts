@@ -3,8 +3,10 @@
  * Handles live org tree, employee lifecycle CRUD, batch import, and RBAC enforcement.
  */
 
+import { randomBytes } from 'node:crypto';
 import { createLogger } from '@forge/sdk';
 import { employeeController, sanitizeCsvField } from './employee-controller';
+import { parseEmployeeCsv } from './employee-import';
 import { getOrgTree } from './org-tree-service';
 import { verifyJwt, hashToken } from './crypto';
 import { getAuthDb } from '../db/db';
@@ -275,12 +277,23 @@ export async function handleBatchImport(req: Request): Promise<Response> {
 
   try {
     const body: any = await req.json().catch(() => null);
-    if (!body || !Array.isArray(body.records)) {
-      return problem('Bad Request', 'Invalid payload: records array is required', 400);
+    let records = body?.records;
+    let parseErrors: Array<{ row: number; error: string }> = [];
+    if (body?.csv_data && typeof body.csv_data === 'string') {
+      const parsed = parseEmployeeCsv(body.csv_data);
+      records = parsed.records;
+      parseErrors = parsed.errors;
+    }
+    if (!body || !Array.isArray(records)) {
+      return problem('Bad Request', 'Invalid payload: records array or csv_data is required', 400);
     }
 
     const actorId = auth.userId || 'devcenter-admin';
-    const summary = employeeController.batchImport(body.records, body.options || {}, actorId, ip);
+    const summary = employeeController.batchImport(records, body.options || {}, actorId, ip);
+    if (parseErrors.length > 0) {
+      summary.errors = [...parseErrors, ...(summary.errors || [])];
+      summary.invalid = (summary.invalid || 0) + parseErrors.length;
+    }
     return Response.json({ ok: true, status: 'ok', summary });
   } catch (err: any) {
     logger.error('Bulk import failed:', err);
@@ -382,3 +395,61 @@ export function handleExportEmployees(req: Request): Response {
     return problem('Internal Server Error', err?.message || 'Export failed', 500);
   }
 }
+
+/**
+ * Handle GET /api/v1/auth/org/managers
+ * @requirements [HLR-AUTH-101] [LLR-AUTH-003]
+ */
+export function handleGetManagers(req: Request): Response {
+  try {
+    const managers = employeeController.listManagers();
+    return Response.json({ ok: true, status: 'ok', data: managers });
+  } catch (err: any) {
+    logger.error('Failed to list managers:', err);
+    return problem('Internal Server Error', err?.message || 'Failed to list managers', 500);
+  }
+}
+
+/**
+ * Handle POST /api/v1/auth/iam/app-policy/bind
+ * @requirements [HLR-AUTH-101] [LLR-AUTH-003]
+ */
+export async function handleBindAppPolicy(req: Request): Promise<Response> {
+  const auth = extractAuthContext(req);
+
+  if (!auth.isAuthenticated) {
+    return problem('Unauthorized', 'Authentication required to bind app policy', 401);
+  }
+  if (!hasAdminRole(auth.roles)) {
+    return problem('Forbidden', 'Insufficient permissions. Requires administrative role.', 403);
+  }
+
+  try {
+    const body: any = await req.json().catch(() => null);
+    if (!body || !body.userId || !body.appId) {
+      return problem('Bad Request', 'userId and appId are required', 400);
+    }
+
+    const db = getAuthDb();
+    const bindingId = `bind-${randomBytes(6).toString('hex')}`;
+    const orgRow: any = db.query('SELECT id FROM auth_organizations WHERE id = ?').get(body.orgId) || db.query('SELECT id FROM auth_organizations LIMIT 1;').get();
+    const orgId = orgRow ? orgRow.id : 'org-sg-forge-global';
+    const roleRow: any = db.query('SELECT id FROM auth_iam_roles WHERE id = ?').get(body.roleId) || db.query("SELECT id FROM auth_iam_roles WHERE id = 'roles/employee' LIMIT 1;").get();
+    const roleId = roleRow ? roleRow.id : 'roles/employee';
+    const cleanAppId = body.appId.replace(/^apps\//, '');
+    const resourceScope = `apps/${cleanAppId}`;
+    const now = Date.now();
+
+    db.run(
+      `INSERT INTO auth_iam_policy_bindings (id, org_id, principal_id, role_id, resource_scope, created_at)
+       VALUES (?, ?, ?, ?, ?, ?);`,
+      [bindingId, orgId, body.userId, roleId, resourceScope, now]
+    );
+
+    return Response.json({ ok: true, status: 'ok', bindingId, resourceScope }, { status: 201 });
+  } catch (err: any) {
+    logger.error('Failed to bind app policy:', err);
+    return problem('Bad Request', err?.message || 'Failed to bind app policy', 400);
+  }
+}
+
