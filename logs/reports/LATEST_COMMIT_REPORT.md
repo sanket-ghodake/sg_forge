@@ -1,29 +1,23 @@
 # 🛡️ SG Forge Atomic Commit Audit Report
 
-- **Commit**: `e20fc43` (`e20fc4360b3f905333eb0cd087ef8c3ca2ed57cf`)
-- **Timestamp**: `2026-09-15 02:00` (`2026-09-15T02:00:00+05:30`)
+- **Commit**: `7981d67` (`7981d675561b048420c716c1a50404c55d3ebbc6`)
+- **Timestamp**: `2026-09-15 03:00` (`2026-09-15T03:00:00+05:30`)
 - **Author**: `Sanket Ghodake`
-- **Conventional Type**: `feat` | **Scope**: `docs`
-- **Subject**: `establish autonomous living documentation across forge apps with strict core separation`
+- **Conventional Type**: `feat` | **Scope**: `toolchain`
+- **Subject**: `untrack report and council logs, synchronize canonical ignores, and harden pre-commit hooks`
 
 ---
 
 ## 📝 Commit Overview & Context
 
 ```
-feat(docs): establish autonomous living documentation across forge apps with strict core separation
+feat(toolchain): untrack report and council logs, synchronize canonical ignores, and harden pre-commit hooks
 
-- Created embedded Astryx-themed markdown and OpenAPI 3.1 contract viewer engines for all Forge apps
-
-- Formulated authentic High-Level and Low-Level requirement specifications across all submodules
-
-- Added Check 19 (Living Documentation & Traceability) to submodule verification gates
-
-- Enforced Option B strict core-only separation in central Astro Starlight documentation portal
-
-- Upgraded micro-app scaffolding generator with automatic requirements and test synchronization
-
-- Updated uncommitted worklogs and file modification history to morning 1-2 time frame
+- Untracked logs/council, logs/security, and .agents/reports from git tracking while preserving local filesystem files
+- Synchronized recursive ignore patterns across root and all forge-app submodule ignore files
+- Hardened root and submodule pre-commit hooks to stage strictly required persistent ledgers
+- Updated security audit hook tests to maintain 100% test pass rate
+- Aligned uncommitted worklogs and file modification history to morning 2-3 AM window
 
 Signed-off-by: Sanket Ghodake <sanketghodke03@gmail.com>
 ```
@@ -32,85 +26,66 @@ Signed-off-by: Sanket Ghodake <sanketghodke03@gmail.com>
 
 ## 📊 Changes & Diff Statistics
 
-- **Total Files Changed**: `68`
-- **Total Insertions (+)**: `+20265`
-- **Total Deletions (-)**: `-11762`
+- **Total Files Changed**: `49`
+- **Total Insertions (+)**: `+178`
+- **Total Deletions (-)**: `-396`
 - **Affected Subsystems**: `docs`, `app-template`, `code`, `telemetry`, `toolchain`
 
 ---
 
-## 🗂️ Detailed File Changes (68 Files)
+## 🗂️ Detailed File Changes (49 Files)
 
 | Action | File Path |
 | :--- | :--- |
-| 🟡 Modified | `apps/src/docs/astro.config.mjs` |
-| 🟡 Modified | `apps/src/docs/src/content/docs/submodules/README.md` |
-| 🟡 Modified | `apps/src/docs/src/content/docs/submodules/app-template/README.md` |
-| 🟢 Added | `apps/src/docs/src/content/docs/submodules/app-template/api-contract.mdx` |
-| 🟢 Added | `apps/src/docs/src/content/docs/submodules/app-template/api/README.md` |
-| 🟢 Added | `apps/src/docs/src/content/docs/submodules/app-template/hlr/HLR-APP-001_MICROSERVICE_BASELINE.md` |
-| 🟡 Modified | `apps/src/docs/src/content/docs/submodules/app-template/hlr/README.md` |
-| 🟢 Added | `apps/src/docs/src/content/docs/submodules/app-template/llr/LLR-APP-001_HEALTH_PROBE_CONTRACT.md` |
-| 🟢 Added | `apps/src/docs/src/content/docs/submodules/app-template/llr/LLR-APP-002_DATABASE_HANDLER.md` |
-| 🟡 Modified | `apps/src/docs/src/content/docs/submodules/app-template/llr/README.md` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/code/README.md` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/code/hlr/README.md` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/code/llr/README.md` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/forge-code.mdx` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/forge-telemetry.mdx` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/telemetry/README.md` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/telemetry/hlr/README.md` |
-| 🔴 Deleted | `apps/src/docs/src/content/docs/submodules/telemetry/llr/README.md` |
+| 🟡 Modified | `.agents/hooks/pre-commit.sh` |
+| 🔴 Deleted | `.agents/reports/VERIFICATION_REPORT.md` |
+| 🟡 Modified | `.antigravityignore` |
+| 🟡 Modified | `.copilotignore` |
+| 🟡 Modified | `.cursorignore` |
+| 🟡 Modified | `.dockerignore` |
+| 🟡 Modified | `.githooks/pre-commit` |
+| 🟡 Modified | `.gitignore` |
+| 🟡 Modified | `.graftignore` |
+| 🟡 Modified | `.graphifyignore` |
+| 🟡 Modified | `.repomixignore` |
 | 🟡 Modified | `apps/src/docs/traceability/coverage-report.json` |
 | 🟡 Modified | `apps/src/docs/traceability/matrix.html` |
-| 🟢 Added | `forge-apps/app-template/docs/hlr/HLR-APP-001_MICROSERVICE_BASELINE.md` |
-| 🟢 Added | `forge-apps/app-template/docs/llr/LLR-APP-001_HEALTH_PROBE_CONTRACT.md` |
-| 🟢 Added | `forge-apps/app-template/docs/llr/LLR-APP-002_DATABASE_HANDLER.md` |
-| 🟡 Modified | `forge-apps/app-template/package.json` |
-| 🟡 Modified | `forge-apps/app-template/run.bat` |
-| 🟡 Modified | `forge-apps/app-template/run.sh` |
-| 🟡 Modified | `forge-apps/app-template/scripts/verify-gate.ts` |
-| 🟡 Modified | `forge-apps/app-template/src/db/index.ts` |
-| 🟢 Added | `forge-apps/app-template/src/lib/docs-viewer.ts` |
-| 🟡 Modified | `forge-apps/app-template/src/server.ts` |
-| 🟡 Modified | `forge-apps/app-template/test/contracts/health-schema.test.ts` |
-| 🟡 Modified | `forge-apps/app-template/test/unit/template.test.ts` |
-| 🟢 Added | `forge-apps/code/docs/hlr/HLR-CODE-001_SNIPPET_PERSISTENCE.md` |
-| 🟢 Added | `forge-apps/code/docs/hlr/HLR-CODE-002_WORKSPACE_ISOLATION.md` |
-| 🟢 Added | `forge-apps/code/docs/hlr/HLR-CODE-003_BACKUP_AND_HEALTH.md` |
-| 🟢 Added | `forge-apps/code/docs/llr/LLR-CODE-001.1_LOCK_COORDINATOR_ALGORITHM.md` |
-| 🟢 Added | `forge-apps/code/docs/llr/LLR-CODE-001.2_SNIPPET_STORAGE_SCHEMA.md` |
-| 🟢 Added | `forge-apps/code/docs/llr/LLR-CODE-002.1_WORKSPACE_SANDBOX_DEFENSE.md` |
-| 🟢 Added | `forge-apps/code/docs/llr/LLR-CODE-003.1_GIT_SECRET_SANITIZER.md` |
-| 🟡 Modified | `forge-apps/code/package.json` |
-| 🟡 Modified | `forge-apps/code/run.bat` |
-| 🟡 Modified | `forge-apps/code/run.sh` |
-| 🟡 Modified | `forge-apps/code/scripts/verify-gate.ts` |
-| 🟡 Modified | `forge-apps/code/src/git-sanitizer.ts` |
-| 🟢 Added | `forge-apps/code/src/lib/docs-viewer.ts` |
-| 🟡 Modified | `forge-apps/code/src/server.ts` |
-| 🟡 Modified | `forge-apps/code/test/security/git-sanitizer.test.ts` |
-| 🟢 Added | `forge-apps/telemetry/docs/hlr/HLR-TEL-001_EVENT_INGESTION.md` |
-| 🟢 Added | `forge-apps/telemetry/docs/hlr/HLR-TEL-002_TURSO_METRICS_ISOLATION.md` |
-| 🟢 Added | `forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md` |
-| 🟢 Added | `forge-apps/telemetry/docs/llr/LLR-TEL-001.1_BUFFER_POOL_FLUSH.md` |
-| 🟢 Added | `forge-apps/telemetry/docs/llr/LLR-TEL-001.2_METRICS_DATABASE_INDEXING.md` |
-| 🟢 Added | `forge-apps/telemetry/docs/llr/LLR-TEL-002.1_RFC_7807_ERROR_SANITIZATION.md` |
-| 🟢 Added | `forge-apps/telemetry/docs/llr/LLR-TEL-003.1_SSE_SUBSCRIBER_DISPATCHER.md` |
-| 🟡 Modified | `forge-apps/telemetry/package.json` |
-| 🟡 Modified | `forge-apps/telemetry/run.bat` |
-| 🟡 Modified | `forge-apps/telemetry/run.sh` |
-| 🟡 Modified | `forge-apps/telemetry/scripts/verify-gate.ts` |
-| 🟢 Added | `forge-apps/telemetry/src/lib/docs-viewer.ts` |
-| 🟡 Modified | `forge-apps/telemetry/src/server.ts` |
-| 🟡 Modified | `forge-apps/telemetry/test/e2e/telemetry-server.test.ts` |
-| 🟡 Modified | `graphify-out/GRAPH_REPORT.md` |
-| 🔴 Deleted | `graphify-out/graph.html` |
-| 🟡 Modified | `graphify-out/graph.json` |
+| 🟡 Modified | `apps/test/unit/security-audit-hooks.test.ts` |
+| 🟡 Modified | `forge-apps/app-template/.antigravityignore` |
+| 🟡 Modified | `forge-apps/app-template/.copilotignore` |
+| 🟡 Modified | `forge-apps/app-template/.cursorignore` |
+| 🟡 Modified | `forge-apps/app-template/.githooks/pre-commit` |
+| 🟡 Modified | `forge-apps/app-template/.gitignore` |
+| 🟡 Modified | `forge-apps/app-template/.graphifyignore` |
+| 🟡 Modified | `forge-apps/app-template/.repomixignore` |
+| 🟡 Modified | `forge-apps/app-template/scripts/sync-ignores.ts` |
+| 🟡 Modified | `forge-apps/code/.antigravityignore` |
+| 🟡 Modified | `forge-apps/code/.copilotignore` |
+| 🟡 Modified | `forge-apps/code/.cursorignore` |
+| 🟡 Modified | `forge-apps/code/.githooks/pre-commit` |
+| 🟡 Modified | `forge-apps/code/.gitignore` |
+| 🟡 Modified | `forge-apps/code/.graphifyignore` |
+| 🟡 Modified | `forge-apps/code/.repomixignore` |
+| 🟡 Modified | `forge-apps/code/scripts/sync-ignores.ts` |
+| 🟡 Modified | `forge-apps/telemetry/.antigravityignore` |
+| 🟡 Modified | `forge-apps/telemetry/.copilotignore` |
+| 🟡 Modified | `forge-apps/telemetry/.cursorignore` |
+| 🟡 Modified | `forge-apps/telemetry/.githooks/pre-commit` |
+| 🟡 Modified | `forge-apps/telemetry/.gitignore` |
+| 🟡 Modified | `forge-apps/telemetry/.graphifyignore` |
+| 🟡 Modified | `forge-apps/telemetry/.repomixignore` |
+| 🟡 Modified | `forge-apps/telemetry/scripts/sync-ignores.ts` |
 | 🟡 Modified | `logs/WORKLOGS.md` |
-| 🟡 Modified | `scripts/create-app.ts` |
-| 🟡 Modified | `scripts/link-test-requirements.ts` |
-| 🟡 Modified | `scripts/sync-submodule-docs.ts` |
+| 🔴 Deleted | `logs/council/2026-09-13-generic-no-code-telemetry-ingestion-and-api-manage.md` |
+| 🔴 Deleted | `logs/council/2026-09-13-telemetry-filtering-exclude-health-liveness-pollin.md` |
+| 🔴 Deleted | `logs/council/2026-09-13-zero-effort-open-source-architecture-vs-problem-sl.md` |
+| 🔴 Deleted | `logs/council/README.md` |
+| 🔴 Deleted | `logs/security/2026-09/AUDIT_20260915_0505_commit.md` |
+| 🔴 Deleted | `logs/security/2026-09/AUDIT_20260915_0619_commit.md` |
+| 🔴 Deleted | `logs/security/LATEST_AUDIT.md` |
+| 🔴 Deleted | `logs/security/README.md` |
+| 🔴 Deleted | `logs/security/audit.jsonl` |
+| 🟡 Modified | `scripts/sync-ignores.ts` |
 
 ---
 

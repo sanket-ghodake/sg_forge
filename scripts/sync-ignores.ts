@@ -46,6 +46,12 @@ export const MANDATORY_EXCLUSIONS = [
   '*.sqlite3',
   'logs/*.log',
   '**/logs/*.log',
+  'logs/council/',
+  '**/logs/council/',
+  'logs/security/',
+  '**/logs/security/',
+  '.agents/reports/',
+  '**/.agents/reports/',
   'scratch/',
   'repomix-output.xml',
   '.coverage',
@@ -325,6 +331,12 @@ backups/db/
 logs/*.log
 **/logs/*.log
 *.log
+logs/council/
+**/logs/council/
+logs/security/
+**/logs/security/
+.agents/reports/
+**/.agents/reports/
 scratch/
 .system_generated/
 *.swp
@@ -364,12 +376,11 @@ proxy/errors/*.html
 `;
 
   // 2. Write to each root ignore file
-  // Non-Git toolchains exclude report/security logs to prevent Docker/AST/AI context bloat,
+  // Non-Git toolchains exclude commit report logs to prevent Docker/AST/AI context bloat,
   // while Git intentionally tracks them for historical compliance and audit trails.
   const nonGitExclusions = `
 # 8. Non-Git Toolchain Exclusions (Tracked in Git, excluded from Docker/AI/AST)
 logs/reports/
-logs/security/
 `;
 
   for (const file of ROOT_IGNORE_FILES) {

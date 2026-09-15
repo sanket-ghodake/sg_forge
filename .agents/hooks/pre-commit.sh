@@ -20,8 +20,8 @@ if ! "$BUN_BIN" run "$REPO_ROOT/scripts/verify-gate.ts"; then
     exit 1
 fi
 
-# Automatically stage updated Graphify outputs, regenerated CycloneDX SBOM, and security audit logs if git staging is active
+# Automatically stage updated Graphify outputs and regenerated CycloneDX SBOM if git staging is active
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    git add "$REPO_ROOT/graphify-out/graph.json" "$REPO_ROOT/graphify-out/graph.html" "$REPO_ROOT/graphify-out/GRAPH_REPORT.md" "$REPO_ROOT/graphify-out/manifest.json" "$REPO_ROOT/docs/security/sbom/cyclonedx-sbom.json" "$REPO_ROOT/logs/security" 2>/dev/null || true
+    git add "$REPO_ROOT/graphify-out/graph.json" "$REPO_ROOT/graphify-out/graph.html" "$REPO_ROOT/graphify-out/GRAPH_REPORT.md" "$REPO_ROOT/graphify-out/manifest.json" "$REPO_ROOT/docs/security/sbom/cyclonedx-sbom.json" 2>/dev/null || true
 fi
 

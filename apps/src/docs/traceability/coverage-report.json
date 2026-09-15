@@ -9149,7 +9149,7 @@
       "name": "ROOT_IGNORE_FILES",
       "kind": "variable",
       "file": "scripts/sync-ignores.ts",
-      "line": 76,
+      "line": 82,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9163,7 +9163,7 @@
       "name": "MANDATORY_ATTRIBUTES",
       "kind": "variable",
       "file": "scripts/sync-ignores.ts",
-      "line": 89,
+      "line": 95,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9177,7 +9177,7 @@
       "name": "ValidationResult",
       "kind": "interface",
       "file": "scripts/sync-ignores.ts",
-      "line": 135,
+      "line": 141,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9191,7 +9191,7 @@
       "name": "validateIgnores",
       "kind": "function",
       "file": "scripts/sync-ignores.ts",
-      "line": 148,
+      "line": 154,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9205,7 +9205,7 @@
       "name": "syncAllIgnores",
       "kind": "function",
       "file": "scripts/sync-ignores.ts",
-      "line": 245,
+      "line": 251,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9360,11 +9360,11 @@
         "scripts/ast-complexity.ts:61#analyzeFileComplexity",
         "scripts/ast-complexity.ts:121#runComplexityAudit",
         "scripts/sync-ignores.ts:18#MANDATORY_EXCLUSIONS",
-        "scripts/sync-ignores.ts:76#ROOT_IGNORE_FILES",
-        "scripts/sync-ignores.ts:89#MANDATORY_ATTRIBUTES",
-        "scripts/sync-ignores.ts:135#ValidationResult",
-        "scripts/sync-ignores.ts:148#validateIgnores",
-        "scripts/sync-ignores.ts:245#syncAllIgnores"
+        "scripts/sync-ignores.ts:82#ROOT_IGNORE_FILES",
+        "scripts/sync-ignores.ts:95#MANDATORY_ATTRIBUTES",
+        "scripts/sync-ignores.ts:141#ValidationResult",
+        "scripts/sync-ignores.ts:154#validateIgnores",
+        "scripts/sync-ignores.ts:251#syncAllIgnores"
       ],
       "verifiedIn": [
         "apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts",
@@ -9646,11 +9646,11 @@
         "scripts/ast-complexity.ts:61#analyzeFileComplexity",
         "scripts/ast-complexity.ts:121#runComplexityAudit",
         "scripts/sync-ignores.ts:18#MANDATORY_EXCLUSIONS",
-        "scripts/sync-ignores.ts:76#ROOT_IGNORE_FILES",
-        "scripts/sync-ignores.ts:89#MANDATORY_ATTRIBUTES",
-        "scripts/sync-ignores.ts:135#ValidationResult",
-        "scripts/sync-ignores.ts:148#validateIgnores",
-        "scripts/sync-ignores.ts:245#syncAllIgnores"
+        "scripts/sync-ignores.ts:82#ROOT_IGNORE_FILES",
+        "scripts/sync-ignores.ts:95#MANDATORY_ATTRIBUTES",
+        "scripts/sync-ignores.ts:141#ValidationResult",
+        "scripts/sync-ignores.ts:154#validateIgnores",
+        "scripts/sync-ignores.ts:251#syncAllIgnores"
       ],
       "verifiedIn": [
         "apps/src/docs/test/unit/token-ledger.test.ts",

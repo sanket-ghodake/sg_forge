@@ -77,6 +77,12 @@ backups/db/
 logs/*.log
 **/logs/*.log
 *.log
+logs/council/
+**/logs/council/
+logs/security/
+**/logs/security/
+.agents/reports/
+**/.agents/reports/
 scratch/
 .system_generated/
 *.swp

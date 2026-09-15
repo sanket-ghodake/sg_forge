@@ -3,7 +3,7 @@
  * SG Forge 2026 Engineering Standards (Enterprise Engineering Baseline)
  *
  * Verifies that:
- * 1. Pre-commit hooks (.git/hooks/pre-commit and .agents/hooks/pre-commit.sh) stage logs/security.
+ * 1. Pre-commit hooks (.git/hooks/pre-commit and .agents/hooks/pre-commit.sh) do not stage ignored logs/security.
  * 2. Post-commit hooks (.git/hooks/post-commit and .agents/hooks/post-commit.sh) detect and auto-amend logs/security.
  * 3. Centralized security audit logger supports 'commit' mode and maintains structured records.
  * 4. Commit reports in logs/reports/ integrate security audit references.
@@ -17,7 +17,7 @@ import { recordSecurityAudit } from '../../../scripts/log-security-audit';
 const REPO_ROOT = process.cwd();
 
 describe('Security Audit Git Hook & Ledger Integration (3A Pattern)', () => {
-  it('verifies .git/hooks/pre-commit stages logs/security automatically', () => {
+  it('verifies .git/hooks/pre-commit does not stage ignored logs/security', () => {
     // Arrange
     const hookPath = join(REPO_ROOT, '.git', 'hooks', 'pre-commit');
     expect(existsSync(hookPath)).toBe(true);
@@ -26,11 +26,10 @@ describe('Security Audit Git Hook & Ledger Integration (3A Pattern)', () => {
     const content = readFileSync(hookPath, 'utf8');
 
     // Assert
-    expect(content).toContain('git add');
-    expect(content).toContain('"$REPO_ROOT/logs/security"');
+    expect(content).not.toContain('"$REPO_ROOT/logs/security"');
   });
 
-  it('verifies .agents/hooks/pre-commit.sh stages logs/security automatically', () => {
+  it('verifies .agents/hooks/pre-commit.sh does not stage ignored logs/security', () => {
     // Arrange
     const hookPath = join(REPO_ROOT, '.agents', 'hooks', 'pre-commit.sh');
     expect(existsSync(hookPath)).toBe(true);
@@ -39,8 +38,7 @@ describe('Security Audit Git Hook & Ledger Integration (3A Pattern)', () => {
     const content = readFileSync(hookPath, 'utf8');
 
     // Assert
-    expect(content).toContain('git add');
-    expect(content).toContain('"$REPO_ROOT/logs/security"');
+    expect(content).not.toContain('"$REPO_ROOT/logs/security"');
   });
 
   it('verifies .git/hooks/post-commit operates in clean read-only zero-generation mode', () => {

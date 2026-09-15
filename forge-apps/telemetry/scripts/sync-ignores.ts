@@ -40,6 +40,10 @@ backups/db/*
 logs/*.log
 logs/*.jsonl.bak
 logs/token-ledger-backup.jsonl
+logs/council/
+logs/security/
+logs/reports/
+.agents/reports/
 
 # AI Context, Token & Compression Tooling
 .graftignore
