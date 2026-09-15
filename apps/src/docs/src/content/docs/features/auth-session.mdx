@@ -1,6 +1,6 @@
 ---
 title: Auth Engine & Session Lifecycle
-description: Visual specifications for zero-trust authentication, sliding window session renewal, inactivity timeouts, and token replay defense.
+description: Visual specifications for zero-trust authentication, sliding window session renewal, inactivity timeouts, return URL state preservation, and real-time cross-tab logout synchronization.
 ---
 
 import DiagramEmbed from '../../../components/DiagramEmbed.astro';
@@ -9,14 +9,16 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
 
 <ExecutiveCard 
   title="Zero-Trust Sliding Session & Cryptographic Defense"
-  analogy="Like a secure badge access system in high-security environments, credentials are valid only for a brief window. If a user steps away, the session safely locks. If anyone attempts to replay a stolen badge token, the system instantly invalidates the session."
-  impact="Protects enterprise workloads from token theft, session hijacking, replay attacks, and credential stuffing."
+  analogy="Like a secure badge access system in high-security environments, credentials are valid only for a brief window. If a user steps away, the session safely locks. If anyone attempts to replay a stolen badge token, the system instantly invalidates the session. And if a user logs out on any device or tab, every other open tab instantly locks — no refresh required."
+  impact="Protects enterprise workloads from token theft, session hijacking, replay attacks, credential stuffing, and stale authenticated browser tabs."
 />
 
 <TraceabilityBadge reqId="SR-AUTH-001" type="SR" status="verified" />
 <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
 <TraceabilityBadge reqId="LLR-AUTH-001" type="LLR" status="verified" />
 <TraceabilityBadge reqId="LLR-AUTH-002" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-AUTH-010" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-AUTH-011" type="LLR" status="verified" />
 
 ## 1. Authentication & Session Lifecycle Overview
 
@@ -25,7 +27,7 @@ The SG Forge Authentication Engine operates inside the core air-gap zone (`core-
 <DiagramEmbed 
   diagram="auth-session" 
   title="Zero-Trust Authentication & Sliding Session Lifecycle" 
-  caption="Visual lifecycle from login credential verification, sliding window refresh, inactivity timeout, to token replay defense."
+  caption="Visual lifecycle from login credential verification, sliding window refresh, inactivity timeout, cross-tab logout synchronization, and return URL state restoration."
 />
 
 ## 2. Invariants & Security Specifications
@@ -42,3 +44,20 @@ The SG Forge Authentication Engine operates inside the core air-gap zone (`core-
 ### Invariant 3: Zero Credential Exposure
 * All authentication cookies are marked `HttpOnly`, preventing client-side JavaScript from accessing session tokens.
 * Cross-Site Request Forgery (CSRF) is neutralized through strict origin verification and SameSite cookie policies.
+
+### Invariant 4: Return URL State Preservation on Inactivity Logout
+* When a session expires (via inactivity timeout or 401 response detection), the current page URL is captured and encoded as `?return_url=<encoded-path>` in the auth login redirect.
+* On successful re-authentication, the user is automatically returned to the exact application and view they were working in — zero work state loss after an inactivity timeout.
+* The `forge_return_url` key in `sessionStorage` is consumed and removed after a single use to prevent stale replays on subsequent login sessions.
+* The multi-step first-time password setup flow also threads `return_url` through all intermediate pages, ensuring continuity even for onboarding users.
+
+<TraceabilityBadge reqId="LLR-AUTH-010" type="LLR" status="verified" />
+
+### Invariant 5: Real-Time Cross-Tab Logout Synchronization
+* Logout events initiated in any browser tab (Portal sign-out button or automatic HTTP 401 detection) are instantly broadcast to all other open tabs via two parallel channels:
+  - **`BroadcastChannel('forge_auth_channel')`**: delivers a `{ type: 'LOGOUT' }` message to all same-origin tabs within milliseconds, without requiring a page refresh.
+  - **`localStorage` key `forge_logout_event`**: serves as a universal cross-browser fallback via the `storage` event, which fires in all other tabs that did not write the value.
+* All Portal tabs **and** all open Forge App tabs (open in separate browser tabs) receive the signal simultaneously and redirect to the login page, each preserving their own current URL via `?return_url`.
+* A `fetch()` interceptor installed at boot time in every app automatically detects HTTP 401 responses and emits the cross-tab logout signal — Forge Apps running in separate tabs are never left in a stale authenticated state even without manual refresh.
+
+<TraceabilityBadge reqId="LLR-AUTH-011" type="LLR" status="verified" />

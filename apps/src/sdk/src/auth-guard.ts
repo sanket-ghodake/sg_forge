@@ -173,7 +173,12 @@ export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGua
 
   const returnTarget = `${targetPath}${url.search || ''}`;
   const returnUrlParam = encodeURIComponent(returnTarget || '/portal');
-  const loginRedirectUrl = `/auth/login?return_url=${returnUrlParam}`;
+  const baseRedirect = options.redirectTo || '/auth/login';
+  const loginRedirectUrl = baseRedirect.includes('return_url=')
+    ? baseRedirect
+    : baseRedirect.includes('?')
+      ? `${baseRedirect}&return_url=${returnUrlParam}`
+      : `${baseRedirect}?return_url=${returnUrlParam}`;
 
   // 4. Token extraction (Cookie -> Authorization Bearer)
   const cookieHeader = req.headers.get('cookie') || '';

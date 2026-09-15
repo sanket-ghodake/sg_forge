@@ -66,7 +66,7 @@ export function getAppsRequestsScript(): string {
         } else if (req && req.status === 'APPROVED') {
           slot.innerHTML = detailsBtn +
             '<span class="astryx-badge badge-online" style="margin-left: 0.25rem;">Approved</span>' +
-            '<a href="' + escapeHtml(launchHref) + '" class="astryx-btn btn-sm btn-primary app-launch-action">Launch</a>';
+            '<a href="' + escapeHtml(launchHref) + '" class="astryx-btn btn-sm btn-primary app-launch-action" target="_blank" rel="noopener noreferrer">Launch</a>';
         } else if (req && (req.status === 'REJECTED' || req.status === 'DECLINED')) {
           slot.innerHTML = detailsBtn +
             '<span class="astryx-badge" style="background: var(--forge-error-bg); color: var(--forge-error); margin-left: 0.25rem;">Declined</span>' +
@@ -76,7 +76,7 @@ export function getAppsRequestsScript(): string {
             '<button class="astryx-btn btn-sm btn-primary request-access-btn" data-app-name="' + escapeHtml(targetApp ? targetApp.name : appId) + '" data-app-id="' + escapeHtml(appId) + '" data-approval="' + escapeHtml(targetApp ? (targetApp.approvalType || 'Manager Approval') : 'Manager Approval') + '">Request Access</button>';
         } else {
           slot.innerHTML = detailsBtn +
-            '<a href="' + escapeHtml(launchHref) + '" class="astryx-btn btn-sm btn-primary app-launch-action">Launch</a>';
+            '<a href="' + escapeHtml(launchHref) + '" class="astryx-btn btn-sm btn-primary app-launch-action" target="_blank" rel="noopener noreferrer">Launch</a>';
         }
       });
     }
@@ -152,7 +152,7 @@ export function getAppsRequestsScript(): string {
               '</div>' +
               '<div class="app-card-actions">' +
                 '<button class="astryx-btn btn-sm btn-ghost open-app-info-btn" data-info-id="' + escapeHtml(clean) + '" data-astryx-tooltip="App Details">Details</button>' +
-                '<a href="' + escapeHtml(app.ingressPath || ('/apps/' + clean)) + '" class="astryx-btn btn-sm btn-primary app-launch-action" target="_self">' +
+                '<a href="' + escapeHtml(app.ingressPath || ('/apps/' + clean)) + '" class="astryx-btn btn-sm btn-primary app-launch-action" target="_blank" rel="noopener noreferrer">' +
                   '<span>Open</span>' +
                   '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' +
                 '</a>' +
@@ -229,7 +229,7 @@ export function getAppsRequestsScript(): string {
                 var targetApp = findAppById(r.appId);
                 var launchHref = targetApp ? targetApp.ingressPath : '/apps/' + r.appId;
                 actionBtns = '<button class="astryx-btn btn-sm btn-ghost view-req-details-btn" data-req-id="' + safeId + '">Details</button>' +
-                  '<a href="' + escapeHtml(launchHref) + '" class="astryx-btn btn-sm btn-primary" style="height: 28px; padding: 0 0.65rem; font-size: 0.74rem;">Launch</a>';
+                  '<a href="' + escapeHtml(launchHref) + '" class="astryx-btn btn-sm btn-primary" target="_blank" rel="noopener noreferrer" style="height: 28px; padding: 0 0.65rem; font-size: 0.74rem;">Launch</a>';
               } else {
                 statusBadge = '<span class="astryx-badge" style="background: var(--forge-error-bg); color: var(--forge-error); border: 1px solid var(--forge-border);">Declined</span>';
                 actionBtns = '<button class="astryx-btn btn-sm btn-ghost view-req-details-btn" data-req-id="' + safeId + '">Details</button>';

@@ -81,6 +81,14 @@ export function getDashboardScripts(): string {
 
     window.handleDevLogout = async function() {
       try {
+        localStorage.setItem('forge_logout_event', String(Date.now()));
+        if (typeof BroadcastChannel !== 'undefined') {
+          var bc = new BroadcastChannel('forge_auth_channel');
+          bc.postMessage({ type: 'LOGOUT', timestamp: Date.now() });
+          bc.close();
+        }
+      } catch(e) {}
+      try {
         await fetch(apiBase + '/api/auth/logout', { method: 'POST' });
         try { sessionStorage.removeItem('forge:devcenter:token'); } catch(e) {}
         window.location.reload();

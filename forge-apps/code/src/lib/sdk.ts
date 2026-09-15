@@ -199,13 +199,27 @@ export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGua
   const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
   const effectiveToken = token || bearerToken;
 
+  // Construct direct-jump return URL (accounting for Caddy gateway prefix)
+  const ingressPrefix = req.headers.get('x-forwarded-prefix') || '';
+  const targetPath = ingressPrefix
+    ? `${ingressPrefix}${url.pathname === '/' ? '' : url.pathname}`
+    : url.pathname;
+
+  const returnTarget = `${targetPath}${url.search || ''}`;
+  const returnUrlParam = encodeURIComponent(returnTarget || '/portal');
+
   const authBase = process.env.AUTH_SERVICE_URL?.trim().replace(/\/+$/, '') || '';
-  const defaultRedirect = options.redirectTo || (authBase ? `${authBase}/login` : '/auth/login');
+  const baseRedirect = options.redirectTo || (authBase ? `${authBase}/login` : '/auth/login');
+  const loginRedirectUrl = baseRedirect.includes('return_url=')
+    ? baseRedirect
+    : baseRedirect.includes('?')
+      ? `${baseRedirect}&return_url=${returnUrlParam}`
+      : `${baseRedirect}?return_url=${returnUrlParam}`;
 
   if (!effectiveToken) {
     return {
       authenticated: false,
-      response: Response.redirect(defaultRedirect, 302),
+      response: Response.redirect(loginRedirectUrl, 302),
     };
   }
 
@@ -242,7 +256,7 @@ export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGua
 
   return {
     authenticated: false,
-    response: Response.redirect(defaultRedirect, 302),
+    response: Response.redirect(loginRedirectUrl, 302),
   };
 }
 

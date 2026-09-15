@@ -229,7 +229,7 @@ export function renderPortalModals(): string {
         </div>
         <div class="astryx-modal-footer">
           <button class="astryx-btn btn-ghost" data-close-modal="modal-app-details">Close</button>
-          <a id="app-details-action-btn" href="#" class="astryx-btn btn-primary" target="_self">Open Application</a>
+          <a id="app-details-action-btn" href="#" class="astryx-btn btn-primary" target="_blank" rel="noopener noreferrer">Open Application</a>
         </div>
       </div>
     </div>

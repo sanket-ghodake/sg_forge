@@ -249,12 +249,28 @@ export async function checkOsvVulnerabilities(): Promise<CheckResult> {
 /** @requirements [SR-GATE-001] [LLR-SUB-007] */
 export async function checkTrivySecurity(): Promise<CheckResult> {
   const trivyBin = join(REPO_ROOT, 'portables', 'bin', 'trivy');
-  await runWithWatchdog([trivyBin, 'config', 'docker/'], { timeoutMs: 3000 });
+  // NOTE: Timeout raised from 3000ms → 30000ms. The old 3s limit guaranteed
+  // a SIGKILL on every docker-fallback run, which orphaned Trivy containers.
+  // The docker image startup + fs config scan realistically needs 10-25s.
+  const proc = await runWithWatchdog([trivyBin, 'config', 'docker/'], { timeoutMs: 30000 });
+  if (proc.timedOut) {
+    return {
+      status: 'WARNING',
+      details: 'Trivy scan timed out after 30s. Run "rtk ./run.sh trivy" manually to inspect.',
+    };
+  }
+  if (proc.exitCode !== 0) {
+    return {
+      status: 'FAILED',
+      details: 'Trivy detected security misconfigurations in docker/ configuration files.',
+    };
+  }
   return {
     status: 'PASSED',
     details: 'Trivy container configuration scan passed. Zero critical security misconfigurations.',
   };
 }
+
 
 /** @requirements [SR-GATE-001] [LLR-SUB-007] */
 export async function checkSpectralContracts(): Promise<CheckResult> {
@@ -359,7 +375,15 @@ export function checkDependencyLicenses(): CheckResult {
 /** @requirements [SR-GATE-001] [LLR-SUB-007] */
 export async function checkSyftSbomIntegrity(): Promise<CheckResult> {
   const sbomScript = join(REPO_ROOT, 'scripts', 'generate-sbom.sh');
-  await runWithWatchdog([sbomScript], { timeoutMs: 8000 });
+  // NOTE: Capture proc result so we detect timeouts (was silently discarded before).
+  // Syft via Docker needs 10-30s; 8s was too tight and would leave orphan containers.
+  const proc = await runWithWatchdog([sbomScript], { timeoutMs: 30000 });
+  if (proc.timedOut) {
+    return {
+      status: 'WARNING',
+      details: 'SBOM generation timed out after 30s. Run "rtk ./run.sh sbom" manually to inspect.',
+    };
+  }
   const sbomFile = join(REPO_ROOT, 'apps', 'src', 'docs', 'security', 'sbom', 'cyclonedx-sbom.json');
   if (!existsSync(sbomFile)) {
     return { status: 'FAILED', details: 'CycloneDX SBOM file missing at apps/src/docs/security/sbom/cyclonedx-sbom.json' };

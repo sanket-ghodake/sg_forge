@@ -1,0 +1,50 @@
+---
+title: LLR-AUTH-011 - Real-Time Cross-Tab Session Logout Synchronization
+description: Low-level requirement defining how logout events initiated in any browser tab or Forge App are instantly propagated to all other open tabs via BroadcastChannel and localStorage fallback.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-011" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-AUTH-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-AUTH-010" type="LLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+### Logout Event Emitter (any tab that triggers logout)
+1. When the user clicks "Sign Out" or when a `fetch()` intercept receives an HTTP 401 response:
+   - Write `localStorage.setItem('forge_logout_event', String(Date.now()))` to trigger cross-origin storage events.
+   - If `BroadcastChannel` is supported, open `new BroadcastChannel('forge_auth_channel')`, post `{ type: 'LOGOUT', timestamp: Date.now() }`, and close the channel.
+2. Execute the local tab logout: clear `sessionStorage`, call `POST /api/v1/auth/logout` (fire-and-forget), redirect to `/auth/login?return_url=<current-path>`.
+
+### Logout Event Receiver (all other open tabs — Portal, Forge Apps, Docs)
+1. On page load (inside inline head `<script>`), register two listeners if the current path is not `/auth/login`:
+   - **`BroadcastChannel` listener**: `authBc.onmessage = (ev) => { if (ev.data.type === 'LOGOUT') onCrossTabLogout(); }` on channel `forge_auth_channel`.
+   - **`storage` event listener**: `window.addEventListener('storage', (ev) => { if (ev.key === 'forge_logout_event' && ev.newValue) onCrossTabLogout(); })` as a cross-origin tab fallback (storage events fire in all same-origin tabs _except_ the one that wrote).
+2. `onCrossTabLogout()` clears `sessionStorage` and redirects to `/auth/login?return_url=<current-path>` preserving the app state URL (see LLR-AUTH-010).
+
+### Fetch Interceptor (automatic 401 detection in all tabs)
+1. Wrap `window.fetch` at app boot time: on any non-login response with `status === 401`, emit both `localStorage` and `BroadcastChannel` logout signals, then call `onCrossTabLogout()`.
+2. The fetch wrapper is installed in: Portal head-script, all `@forge/ui` apps, and all Forge App submodule `ui.ts` inline head scripts.
+
+## 2. Safety & Verification Invariants
+
+* **`BroadcastChannel` name must be the fixed constant `'forge_auth_channel'`** across all apps for reliable synchronization.
+* **`localStorage` key `'forge_logout_event'`** serves as a cross-browser fallback; value must be a millisecond epoch timestamp (prevents duplicate triggers on same-value writes).
+* **Receivers must guard against duplicate invocations** — after the first logout redirect is triggered, listeners need not be removed because navigation destroys the page context.
+* **The fetch interceptor must not intercept responses from `/auth/login` itself** to prevent infinite redirect chains.
+* **`BroadcastChannel` instances must be closed after postMessage** to release browser resources.
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+* **Implemented in Source**:
+  - `apps/src/ui/src/state/head-script.ts` — Core platform inline head guard (section 5)
+  - `apps/src/portal/src/frontend/ui-scripts.ts` — Portal Sign Out button emitter (section 8)
+  - `forge-apps/app-template/src/lib/ui.ts` — App-template submodule inline guard
+  - `forge-apps/code/src/lib/ui.ts` — Code Workspace submodule inline guard
+  - `forge-apps/telemetry/src/lib/ui.ts` — Telemetry submodule inline guard
+* **Verified in Test Suite**: `forge-apps/*/test/security/auth-gate.test.ts`

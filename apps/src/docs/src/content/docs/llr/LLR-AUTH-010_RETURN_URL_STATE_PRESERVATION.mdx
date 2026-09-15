@@ -1,0 +1,39 @@
+---
+title: LLR-AUTH-010 - Return URL State Preservation on Inactivity Logout
+description: Low-level requirement governing how the current application URL is preserved across inactivity-triggered session expiry and restored after successful re-authentication.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-010" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-AUTH-002" type="LLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. When a Forge App or Portal detects a session expiry (HTTP 401 response or cross-tab logout signal), capture the current URL: `window.location.pathname + window.location.search`.
+2. Redirect the browser to `/auth/login?return_url=<encoded-current-url>`.
+3. The Auth login view reads `?return_url` from query params on mount; if present, stores it in `sessionStorage` under key `forge_return_url` and uses it as the post-login redirect target.
+4. On successful authentication, the login completion handler reads `forge_return_url` from `sessionStorage` (fallback: `/portal`) and navigates the user back to their original destination.
+5. After redirection, `forge_return_url` is removed from `sessionStorage` to prevent stale replay on future logins.
+6. The `set-password-view.ts` first-time password flow also threads `return_url` through query parameters, maintaining continuity across multi-step onboarding.
+
+## 2. Safety & Verification Invariants
+
+* **`return_url` must be URL-encoded** before appending to the auth redirect to prevent open-redirect injection.
+* **`sessionStorage` key `forge_return_url` must be cleared after consumption** (single-use).
+* **Fallback must always be `/portal`** — never an empty string or external URL.
+* **Auth login view must not redirect back to `/auth/login` itself** (prevents infinite redirect loops).
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+* **Implemented in Source**:
+  - `apps/src/auth/src/server.ts` — `?return_url` query param extraction (line 349)
+  - `apps/src/auth/src/frontend/login-view.ts` — `forge_return_url` sessionStorage write and post-login redirect
+  - `apps/src/auth/src/frontend/set-password-view.ts` — `return_url` threading through password setup flow
+  - `apps/src/ui/src/state/head-script.ts` — inline cross-tab logout redirect with `?return_url`
+  - `forge-apps/*/src/lib/ui.ts` — Forge App submodule inline auth guard with `?return_url` encoding
+* **Verified in Test Suite**: `forge-apps/*/test/security/auth-gate.test.ts`

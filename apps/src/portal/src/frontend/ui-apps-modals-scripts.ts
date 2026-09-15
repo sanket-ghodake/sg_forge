@@ -191,6 +191,8 @@ export function getAppsModalsScript(): string {
           if (href && (!app || !app.isRestricted)) {
             dActionBtn.textContent = 'Open Application';
             dActionBtn.setAttribute('href', href);
+            dActionBtn.setAttribute('target', '_blank');
+            dActionBtn.setAttribute('rel', 'noopener noreferrer');
             dActionBtn.style.display = 'inline-flex';
           } else {
             dActionBtn.style.display = 'none';

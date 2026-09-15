@@ -1,0 +1,39 @@
+---
+title: LLR-PORTAL-002 - New-Tab App Launcher with noopener noreferrer Security
+description: Low-level requirement governing how Portal app cards and command palette entries open Forge App URLs in isolated new browser tabs with proper security attributes.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-PORTAL-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-PORTAL-001" type="LLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Every app launch anchor rendered by the Portal (pinned favorites, active app grid, marketplace cards, approved app request cards, app detail modal) must carry the attributes `target="_blank" rel="noopener noreferrer"`.
+2. Dynamic app cards rendered client-side via `ui-apps-scripts.ts`, `ui-apps-requests-scripts.ts`, and `ui-renderer-apps.ts` must set these attributes when constructing the HTML string for each launch link.
+3. Command palette search result items that open an app must use `window.open(ingressPath, '_blank', 'noopener,noreferrer')` instead of `window.location.href` assignment.
+4. The app detail modal "Open Application" anchor (`#app-details-action-btn`) must have `target="_blank" rel="noopener noreferrer"` applied both in the static HTML template and in the dynamic `setAttribute` call when the modal is populated with app data.
+5. App ingress paths used as `href` values must be escaped through `escapeHtml()` before injection into HTML strings to prevent XSS.
+
+## 2. Safety & Verification Invariants
+
+* **`rel="noopener noreferrer"` is mandatory** on all `target="_blank"` anchors — prevents the opened tab from accessing the Portal window via `window.opener`, and suppresses the `Referer` header for cross-origin navigations.
+* **`window.open` calls must pass `'noopener,noreferrer'` as the third argument** for programmatic launches (command palette) — same security guarantees without an anchor element.
+* **Portal navigation state is fully preserved** — since Forge Apps open in a new tab, the Portal SPA view state, scroll position, and active section remain intact in the original tab.
+* **Ingress path must be derived from the app registry** (`app.ingressPath` from `/api/v1/portal/apps`) — never constructed from unvalidated user input.
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+* **Implemented in Source**:
+  - `apps/src/portal/src/frontend/ui-renderer-apps.ts` — Pinned favorites (L98) and active app grid (L158, L216)
+  - `apps/src/portal/src/frontend/ui-apps-scripts.ts` — Dynamic pinned dock cards (L111)
+  - `apps/src/portal/src/frontend/ui-apps-requests-scripts.ts` — Request cards and marketplace launch buttons (L69, L79, L155, L232)
+  - `apps/src/portal/src/frontend/ui-modals.ts` — App detail modal "Open Application" anchor (L232)
+  - `apps/src/portal/src/frontend/ui-apps-modals-scripts.ts` — Modal populate handler setAttribute (L194)
+  - `apps/src/portal/src/frontend/ui-scripts.ts` — Command palette `window.open` (L335)
+* **Verified in Test Suite**: `apps/src/portal/test/unit/`, `apps/src/portal/test/security/`

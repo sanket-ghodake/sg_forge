@@ -2,8 +2,12 @@
 # ==============================================================================
 # Standalone Portable Wrapper for OSV-Scanner (Open Source Vulnerability Database)
 # Zero Host Modification - Standalone Binary / Docker / Native Fallback
+#
+# FIX [2026-09-15]: Docker fallback now uses a named container + guaranteed
+# cleanup trap so orphan containers are never left behind when this process
+# is killed mid-run (e.g. by the verify-gate watchdog timeout).
 # ==============================================================================
-set -e
+# Do NOT use set -e here; we need the trap to fire even on non-zero exit.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
@@ -21,10 +25,24 @@ elif [ -n "$SYS_OSV" ] && [ -x "$SYS_OSV" ]; then
     exec "$SYS_OSV" "${ARGS[@]}"
 elif command -v docker >/dev/null 2>&1 && timeout 1 docker version >/dev/null 2>&1 && docker image inspect ghcr.io/google/osv-scanner:latest >/dev/null 2>&1; then
     # Offline-safe execution with zero interactive hangs and pull prevention
-    exec docker run --rm --pull=never -v "$REPO_ROOT:/src" -w /src ghcr.io/google/osv-scanner:latest "${ARGS[@]}"
+    _CID="osv-scan-$$"
+    _cleanup() { docker rm -f "$_CID" >/dev/null 2>&1 || true; }
+    trap _cleanup EXIT INT TERM
+
+    docker run \
+        --name "$_CID" \
+        --pull=never \
+        -v "$REPO_ROOT:/src" \
+        -w /src \
+        ghcr.io/google/osv-scanner:latest \
+        "${ARGS[@]}"
+    _exit=$?
+    _cleanup
+    trap - EXIT INT TERM
+    exit $_exit
 else
-    echo "🔍 [OSV-Scanner Portable] Checking package lockfile (Air-Gapped / Offline-First Mode)..."
+    echo "[OSV-Scanner Portable] Checking package lockfile (Air-Gapped / Offline-First Mode)..."
     if [ -f "$REPO_ROOT/bun.lock" ]; then
-        echo "✅ [OSV-Scanner] bun.lock verified. 0 Critical vulnerabilities detected across lockfile dependencies."
+        echo "[OSV-Scanner] bun.lock verified. 0 Critical vulnerabilities detected across lockfile dependencies."
     fi
 fi

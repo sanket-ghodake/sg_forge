@@ -264,6 +264,45 @@ export function getHeadStateScript(
       }`
           : ''
       }
+
+      /* 5. Real-Time Cross-Tab Session Synchronization */
+      try {
+        if (!window.location.pathname.startsWith('/auth/login') && !window.location.pathname.startsWith('/login')) {
+          var onCrossTabLogout = function() {
+            try { sessionStorage.clear(); } catch(e) {}
+            var curr = window.location.pathname + window.location.search;
+            window.location.href = '/auth/login?return_url=' + encodeURIComponent(curr);
+          };
+          if (typeof BroadcastChannel !== 'undefined') {
+            var authBc = new BroadcastChannel('forge_auth_channel');
+            authBc.onmessage = function(ev) {
+              if (ev && ev.data && ev.data.type === 'LOGOUT') onCrossTabLogout();
+            };
+          }
+          window.addEventListener('storage', function(ev) {
+            if (ev && ev.key === 'forge_logout_event' && ev.newValue) onCrossTabLogout();
+          });
+          if (typeof window.fetch === 'function') {
+            var origFetch = window.fetch;
+            window.fetch = function() {
+              return origFetch.apply(this, arguments).then(function(res) {
+                if (res && res.status === 401 && !window.location.pathname.startsWith('/auth/login')) {
+                  try {
+                    localStorage.setItem('forge_logout_event', String(Date.now()));
+                    if (typeof BroadcastChannel !== 'undefined') {
+                      var bc = new BroadcastChannel('forge_auth_channel');
+                      bc.postMessage({ type: 'LOGOUT', timestamp: Date.now() });
+                      bc.close();
+                    }
+                  } catch(e) {}
+                  onCrossTabLogout();
+                }
+                return res;
+              });
+            };
+          }
+        }
+      } catch(e) {}
     } catch(err) {}
   })();`.replace(/\s+/g, ' ').trim();
 

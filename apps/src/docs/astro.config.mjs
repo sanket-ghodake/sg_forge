@@ -62,7 +62,7 @@ export default defineConfig({
           label: 'Core Capabilities',
           items: [
             { label: 'Auth Engine & Session Lifecycle', slug: 'features/auth-session' },
-            { label: 'Portal SPA & Sandboxing', slug: 'features/portal-spa' },
+            { label: 'Portal SPA, App Launcher & Sandboxing', slug: 'features/portal-spa' },
             { label: 'Portal Canvas & Command Palette', slug: 'features/portal-modules' },
             { label: 'Astryx UI & Viewports', slug: 'features/astryx-ui' },
             { label: 'Client State & Storage Engine', slug: 'features/client-state' },

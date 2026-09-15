@@ -95,7 +95,7 @@ export function renderAppsView(userContextOrAdmin: boolean | string[] | HeaderUs
           </div>
           <div class="pinned-apps-dock" id="pinned-apps-dock">
             ${activeApps.filter(a => a.isPinned).map(app => `
-              <a href="${app.ingressPath}" class="pinned-dock-card" data-app-id="${app.id}">
+              <a href="${app.ingressPath}" class="pinned-dock-card" data-app-id="${app.id}" target="_blank" rel="noopener noreferrer">
                 <div class="dock-card-icon">${app.iconSvg}</div>
                 <div class="dock-card-info">
                   <span class="dock-card-title">${app.name}</span>
@@ -155,7 +155,7 @@ export function renderAppsView(userContextOrAdmin: boolean | string[] | HeaderUs
                   <button class="astryx-btn btn-sm btn-ghost open-app-info-btn" data-info-id="${app.id}" data-astryx-tooltip="App Details">
                     Details
                   </button>
-                  <a href="${app.ingressPath}" class="astryx-btn btn-sm btn-primary app-launch-action" target="_self">
+                  <a href="${app.ingressPath}" class="astryx-btn btn-sm btn-primary app-launch-action" target="_blank" rel="noopener noreferrer">
                     <span>Open</span>
                     <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                   </a>
@@ -213,7 +213,7 @@ export function renderAppsView(userContextOrAdmin: boolean | string[] | HeaderUs
                     Details
                   </button>
                   ${hasAccess ? `
-                    <a href="${app.ingressPath}" class="astryx-btn btn-sm btn-primary app-launch-action" target="_self">
+                    <a href="${app.ingressPath}" class="astryx-btn btn-sm btn-primary app-launch-action" target="_blank" rel="noopener noreferrer">
                       <span>Launch</span>
                       <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </a>

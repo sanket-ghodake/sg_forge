@@ -108,7 +108,7 @@ export function getAppsClientScript(): string {
               var icon = card.querySelector('.app-card-icon-box') ? card.querySelector('.app-card-icon-box').innerHTML : '';
               var launchLink = card.querySelector('.app-launch-action') ? card.querySelector('.app-launch-action').getAttribute('href') : '#';
               
-              cardsHtml += '<a href="' + escapeHtml(launchLink) + '" class="pinned-dock-card" data-app-id="' + escapeHtml(id) + '">' +
+              cardsHtml += '<a href="' + escapeHtml(launchLink) + '" class="pinned-dock-card" data-app-id="' + escapeHtml(id) + '" target="_blank" rel="noopener noreferrer">' +
                 '<div class="dock-card-icon">' + icon + '</div>' +
                 '<div class="dock-card-info">' +
                   '<span class="dock-card-title">' + escapeHtml(name) + '</span>' +

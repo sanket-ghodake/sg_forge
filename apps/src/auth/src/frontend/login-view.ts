@@ -164,6 +164,7 @@ export function renderLoginHtml(returnUrl: string = '/portal'): string {
         }
 
         if (data.status === 'SUCCESS') {
+          try { localStorage.removeItem('forge_logout_event'); } catch(e) {}
           showAlert('Authentication successful. Redirecting...', false);
           setTimeout(function() {
             window.location.href = returnUrl;

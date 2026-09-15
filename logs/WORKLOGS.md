@@ -77,3 +77,9 @@
 2026-09-15 02:27 | Detailed UI tabs, Supabase sidebar, user journeys, and modular code architecture for Goal Center
 2026-09-15 02:38 | Untrack logs/council, logs/security, and .agents/reports from git tracking and sync canonical ignores
 2026-09-15 02:49 | Audit and configure git tracking and ignore governance across forge-apps submodules
+2026-09-15 19:40 | Preserve Forge App state on inactivity logout & open Portal apps in new tab
+2026-09-15 20:56 | Implement real-time cross-tab session logout synchronization across Portal and Forge Apps
+2026-09-15 21:31 | Update engineering standards and architecture documentation for return_url state preservation, new-tab app launcher, and cross-tab logout synchronization
+2026-09-15 21:50 | Fix Trivy orphan container leak: named-container+trap cleanup in portables/bin/trivy wrapper + raise checkTrivySecurity timeout 3s→30s with proper timedOut/exitCode handling
+2026-09-15 21:52 | Update engineering docs with LLR-AUTH-010, LLR-AUTH-011, LLR-PORTAL-002 for return_url preservation, cross-tab logout sync, and new-tab app launcher
+2026-09-15 21:56 | Fix orphan container leak across all 4 docker-fallback wrappers (syft/k6/osv-scanner/schemathesis): exec→named-container+trap; fix checkSyftSbomIntegrity discarded proc result + timeout 8s→30s

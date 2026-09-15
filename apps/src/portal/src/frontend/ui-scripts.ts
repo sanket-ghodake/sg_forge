@@ -332,7 +332,7 @@ export function getPortalClientScript(): string {
             var isExt = row.getAttribute('data-external') === 'true';
             if (target) {
               if (isExt) {
-                window.location.href = target;
+                window.open(target, '_blank', 'noopener,noreferrer');
               } else {
                 switchView(target, true);
               }
@@ -371,8 +371,17 @@ export function getPortalClientScript(): string {
       if (logoutBtn) {
         logoutBtn.addEventListener('click', async function() {
           try {
+            localStorage.setItem('forge_logout_event', String(Date.now()));
+            if (typeof BroadcastChannel !== 'undefined') {
+              var bc = new BroadcastChannel('forge_auth_channel');
+              bc.postMessage({ type: 'LOGOUT', timestamp: Date.now() });
+              bc.close();
+            }
+          } catch(e) {}
+          try {
             await fetch('/api/v1/auth/logout', { method: 'POST' });
           } catch(e) {}
+          try { sessionStorage.clear(); } catch(e) {}
           window.location.href = '/auth/login?return_url=/portal';
         });
       }

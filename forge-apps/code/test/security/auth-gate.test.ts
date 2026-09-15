@@ -8,13 +8,18 @@ import { createInternalServiceToken } from '../../src/lib/sdk';
 import { startCodeServer } from '../../src/server';
 
 describe('Tier 3 Security: Code Workstation Zero-Trust Auth Gate', () => {
-  it('Arrange, Act, Assert: blocks unauthenticated requests with 302 redirect to /auth/login', async () => {
+  it('Arrange, Act, Assert: blocks unauthenticated requests with 302 redirect to /auth/login preserving return_url', async () => {
     const server = startCodeServer(0);
 
     try {
-      const res = await fetch(`http://localhost:${server.port}/`, { redirect: 'manual' });
+      const res = await fetch(`http://localhost:${server.port}/editor?file=main.ts`, {
+        headers: { 'x-forwarded-prefix': '/apps/code' },
+        redirect: 'manual',
+      });
       expect(res.status).toBe(302);
-      expect(res.headers.get('location')).toContain('/auth/login');
+      const location = res.headers.get('location') || '';
+      expect(location).toContain('/auth/login?return_url=');
+      expect(decodeURIComponent(location)).toContain('/apps/code/editor?file=main.ts');
     } finally {
       server.stop();
     }

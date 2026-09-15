@@ -54,4 +54,13 @@ describe('Tier 1 Unit: Dynamic Micro-Apps Discovery & Role Segmentation', () => 
     expect(adminView).toContain('admin-apps-table');
     expect(adminView).toContain('/apps/telemetry');
   });
+
+  it('renders all app launch links with target="_blank" rel="noopener noreferrer"', () => {
+    // Arrange & Act
+    const viewHtml = renderAppsView(['roles/employee']);
+
+    // Assert: Launch links use target="_blank" and rel="noopener noreferrer"
+    expect(viewHtml).toContain('target="_blank" rel="noopener noreferrer"');
+    expect(viewHtml).not.toContain('target="_self"');
+  });
 });
