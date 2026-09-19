@@ -29,6 +29,8 @@ Independent, polyglot, sandboxed micro-frontends running in Docker containers wi
    - Every micro-app maintains its own isolated `logs/` directory with structured JSON logging (`createLogger`) and automatic PII redaction.
 5. **1-Command Scaffolding**:
    - Scaffold a new microservice instantly using `rtk bun scripts/create-app.ts <app-name>`.
+6. **Zero-Friction Developer Integration**:
+   - For a complete step-by-step tutorial without looking into source code, see the **[Forge Apps Developer Integration Guide](../apps/src/docs/src/content/docs/submodules/developer-guide.mdx)**.
 
 ---
 

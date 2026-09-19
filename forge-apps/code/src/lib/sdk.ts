@@ -7,6 +7,7 @@
 import { Database } from 'bun:sqlite';
 import { existsSync, mkdirSync, appendFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash, createPrivateKey, createPublicKey, sign, verify } from 'node:crypto';
 import type { AuthGuardOptions, AuthGuardResult, AuthUser, ScopedHierarchyResponse } from './types';
 
 // ==============================================================================
@@ -152,12 +153,64 @@ export function createSafeHandler(
 // ==============================================================================
 // 4. Standalone Zero-Trust Auth Guard
 // ==============================================================================
+const DEFAULT_DEV_SECRET = 'dev-portable-secret-key-that-is-at-least-32-characters-long';
+let cachedPubKey: any = null;
+
+/**
+ * isSafeEgressUrl
+ * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ */
+export function isSafeEgressUrl(targetUrl: string): boolean {
+  try {
+    const url = new URL(targetUrl);
+    const host = url.hostname.toLowerCase();
+    if (host === '169.254.169.254' || host === 'metadata.google.internal') return false;
+    if (process.env.NODE_ENV === 'production' && (host === 'localhost' || host === '127.0.0.1' || host === '::1')) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * getVerificationPublicKey
+ * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ */
+export function getVerificationPublicKey(): any {
+  if (cachedPubKey) return cachedPubKey;
+  const explicitPub = process.env.AUTH_PUBLIC_KEY;
+  if (explicitPub) {
+    try {
+      cachedPubKey = createPublicKey(explicitPub);
+      return cachedPubKey;
+    } catch {}
+  }
+  const secret = process.env.JWT_SECRET || DEFAULT_DEV_SECRET;
+  const seed = createHash('sha256').update(secret).digest();
+  const pkcs8Der = Buffer.concat([
+    Buffer.from('302e020100300506032b657004220420', 'hex'),
+    seed,
+  ]);
+  const privKey = createPrivateKey({ key: pkcs8Der, format: 'der', type: 'pkcs8' });
+  cachedPubKey = createPublicKey(privKey);
+  return cachedPubKey;
+}
+
 /**
  * createInternalServiceToken
  * @requirements [HLR-CODE-701] [LLR-SUB-003]
  */
 export function createInternalServiceToken(roles: string[] = ['roles/employee'], userId: string = 'usr_test'): string {
-  const header = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64url');
+  const secret = process.env.JWT_SECRET || DEFAULT_DEV_SECRET;
+  const seed = createHash('sha256').update(secret).digest();
+  const pkcs8Der = Buffer.concat([
+    Buffer.from('302e020100300506032b657004220420', 'hex'),
+    seed,
+  ]);
+  const privKey = createPrivateKey({ key: pkcs8Der, format: 'der', type: 'pkcs8' });
+  const now = Math.floor(Date.now() / 1000);
+  const kid = `forge-key-${seed.subarray(0, 4).toString('hex')}`;
+  const header = Buffer.from(JSON.stringify({ alg: 'EdDSA', typ: 'JWT', kid })).toString('base64url');
   const payload = Buffer.from(
     JSON.stringify({
       sub: userId,
@@ -165,10 +218,70 @@ export function createInternalServiceToken(roles: string[] = ['roles/employee'],
       email: `${userId}@forge.internal`,
       displayName: 'Test User',
       roles,
-      exp: Math.floor(Date.now() / 1000) + 3600,
+      iat: now,
+      exp: now + 3600,
     })
   ).toString('base64url');
-  return `${header}.${payload}.sig`;
+  const data = `${header}.${payload}`;
+  const sig = sign(null, Buffer.from(data), privKey).toString('base64url');
+  return `${data}.${sig}`;
+}
+
+/**
+ * createServiceAccountToken
+ * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ */
+export function createServiceAccountToken(serviceId: string, scopes: string[] = ['*']): string {
+  const secret = process.env.JWT_SECRET || DEFAULT_DEV_SECRET;
+  const seed = createHash('sha256').update(secret).digest();
+  const pkcs8Der = Buffer.concat([
+    Buffer.from('302e020100300506032b657004220420', 'hex'),
+    seed,
+  ]);
+  const privKey = createPrivateKey({ key: pkcs8Der, format: 'der', type: 'pkcs8' });
+  const now = Math.floor(Date.now() / 1000);
+  const kid = `forge-key-${seed.subarray(0, 4).toString('hex')}`;
+  const header = Buffer.from(JSON.stringify({ alg: 'EdDSA', typ: 'JWT', kid })).toString('base64url');
+  const payload = Buffer.from(
+    JSON.stringify({
+      sub: `service:${serviceId}`,
+      userId: `svc_${serviceId}`,
+      email: `${serviceId}@service.forge.internal`,
+      displayName: `Service Account: ${serviceId}`,
+      principal_type: 'SERVICE',
+      roles: ['roles/service_worker'],
+      permissions: scopes,
+      iat: now,
+      exp: now + 300,
+    })
+  ).toString('base64url');
+  const data = `${header}.${payload}`;
+  const sig = sign(null, Buffer.from(data), privKey).toString('base64url');
+  return `${data}.${sig}`;
+}
+
+/**
+ * verifySessionToken
+ * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ */
+export function verifySessionToken(token: string): { valid: boolean; payload?: any; error?: string } {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return { valid: false, error: 'Malformed token structure' };
+    const [headerB64, payloadB64, sigB64] = parts;
+    const data = `${headerB64}.${payloadB64}`;
+    const pubKey = getVerificationPublicKey();
+    const isValid = verify(null, Buffer.from(data), pubKey, Buffer.from(sigB64, 'base64url'));
+    if (!isValid) return { valid: false, error: 'Invalid token signature' };
+    const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp && payload.exp < now) {
+      return { valid: false, error: 'Session token expired' };
+    }
+    return { valid: true, payload };
+  } catch (err: any) {
+    return { valid: false, error: err?.message || 'Token verification failed' };
+  }
 }
 
 /**
@@ -216,48 +329,74 @@ export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGua
       ? `${baseRedirect}&return_url=${returnUrlParam}`
       : `${baseRedirect}?return_url=${returnUrlParam}`;
 
+  const isApiRequest = url.pathname.startsWith('/api/') || (req.headers.get('accept') || '').includes('application/json');
+
   if (!effectiveToken) {
+    if (isApiRequest) {
+      return {
+        authenticated: false,
+        response: Response.json(
+          { type: 'https://tools.ietf.org/html/rfc7807', title: 'Unauthorized', status: 401, detail: 'Authentication token missing' },
+          { status: 401, headers: { 'Content-Type': 'application/problem+json' } }
+        ),
+      };
+    }
     return {
       authenticated: false,
       response: Response.redirect(loginRedirectUrl, 302),
     };
   }
 
-  // Parse JWT token payload
-  try {
-    const parts = effectiveToken.split('.');
-    if (parts.length >= 2) {
-      const payloadJson = Buffer.from(parts[1], 'base64url').toString('utf8');
-      const payload = JSON.parse(payloadJson);
-
-      const user: AuthUser = {
-        id: payload.sub || payload.userId || 'user-1',
-        email: payload.email || 'user@forge.internal',
-        displayName: payload.displayName || payload.name || 'Authorized User',
-        roles: Array.isArray(payload.roles) ? payload.roles : ['roles/employee'],
-        principalType: payload.principal_type || payload.principalType || 'EMPLOYEE',
-        department: payload.department || 'Engineering',
-        orgId: payload.orgId || 'org-internal',
+  // Cryptographic Signature Verification
+  const { valid, payload, error } = verifySessionToken(effectiveToken);
+  if (!valid || !payload) {
+    if (isApiRequest) {
+      return {
+        authenticated: false,
+        response: Response.json(
+          { type: 'https://tools.ietf.org/html/rfc7807', title: 'Unauthorized', status: 401, detail: error || 'Invalid session signature' },
+          { status: 401, headers: { 'Content-Type': 'application/problem+json' } }
+        ),
       };
-
-      if (options.requiredRoles && options.requiredRoles.length > 0) {
-        const hasRole = options.requiredRoles.some((r) => user.roles.includes(r) || user.roles.includes('roles/super_admin'));
-        if (!hasRole) {
-          return {
-            authenticated: false,
-            response: new Response('403 Forbidden: Insufficient clearance for this micro-app', { status: 403 }),
-          };
-        }
-      }
-
-      return { authenticated: true, user };
     }
-  } catch {}
+    return {
+      authenticated: false,
+      response: Response.redirect(loginRedirectUrl, 302),
+    };
+  }
 
-  return {
-    authenticated: false,
-    response: Response.redirect(loginRedirectUrl, 302),
+  const user: AuthUser = {
+    id: payload.sub || payload.userId || 'user-1',
+    email: payload.email || 'user@forge.internal',
+    displayName: payload.displayName || payload.name || 'Authorized User',
+    roles: Array.isArray(payload.roles) ? payload.roles : ['roles/employee'],
+    principalType: payload.principal_type || payload.principalType || 'EMPLOYEE',
+    department: payload.department || 'Engineering',
+    orgId: payload.orgId || 'org-internal',
   };
+
+  if (options.requiredRoles && options.requiredRoles.length > 0) {
+    const hasRole = options.requiredRoles.some((r) => user.roles.includes(r) || user.roles.includes('roles/super_admin'));
+    if (!hasRole) {
+      if (isApiRequest) {
+        return {
+          authenticated: false,
+          user,
+          response: Response.json(
+            { type: 'https://tools.ietf.org/html/rfc7807', title: 'Forbidden', status: 403, detail: 'Insufficient clearance for this micro-app' },
+            { status: 403, headers: { 'Content-Type': 'application/problem+json' } }
+          ),
+        };
+      }
+      return {
+        authenticated: false,
+        user,
+        response: new Response('403 Forbidden: Insufficient clearance for this micro-app', { status: 403 }),
+      };
+    }
+  }
+
+  return { authenticated: true, user };
 }
 
 // ==============================================================================

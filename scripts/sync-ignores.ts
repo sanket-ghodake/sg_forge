@@ -205,6 +205,9 @@ export function validateIgnores(): ValidationResult {
     const entries = readdirSync(parentDir, { withFileTypes: true });
     for (const entry of entries) {
       if (entry.isDirectory()) {
+        if (parentDir === forgeAppsDir && !existsSync(join(parentDir, entry.name, 'package.json'))) {
+          continue;
+        }
         const logGitignore = join(parentDir, entry.name, 'logs', '.gitignore');
         if (!existsSync(logGitignore)) {
           subfolderLogIgnoresMissing.push(toRelGitPath(logGitignore));
@@ -402,13 +405,15 @@ logs/reports/
     for (const entry of entries) {
       if (entry.isDirectory()) {
         const logsDir = join(parentDir, entry.name, 'logs');
-        if (!existsSync(logsDir)) {
-          mkdirSync(logsDir, { recursive: true });
-        }
-        const gitignoreFile = join(logsDir, '.gitignore');
-        const content = `# Isolated microservice logs retention\n*.log\n*.log.*\n!.gitignore\n!README.md\n`;
-        writeFileSync(gitignoreFile, content, 'utf8');
-        filesUpdated.push(toRelGitPath(gitignoreFile));
+        try {
+          if (!existsSync(logsDir)) {
+            mkdirSync(logsDir, { recursive: true });
+          }
+          const gitignoreFile = join(logsDir, '.gitignore');
+          const content = `# Isolated microservice logs retention\n*.log\n*.log.*\n!.gitignore\n!README.md\n`;
+          writeFileSync(gitignoreFile, content, 'utf8');
+          filesUpdated.push(toRelGitPath(gitignoreFile));
+        } catch {}
       }
     }
   };

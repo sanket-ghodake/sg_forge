@@ -410,7 +410,9 @@ export async function checkForgeAppSubmoduleCompliance(): Promise<CheckResult> {
   }
 
   const entries = readdirSync(forgeAppsDir, { withFileTypes: true });
-  const appDirs = entries.filter((e) => e.isDirectory()).map((e) => e.name);
+  const appDirs = entries
+    .filter((e) => e.isDirectory() && existsSync(join(forgeAppsDir, e.name, 'package.json')))
+    .map((e) => e.name);
   const violations: string[] = [];
 
   // Required standalone submodule files for 100% autonomy

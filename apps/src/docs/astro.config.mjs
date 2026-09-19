@@ -77,6 +77,7 @@ export default defineConfig({
             { label: 'Developer Operations Dashboard', slug: 'tools/dev-dashboard' },
             { label: 'Developer CLI & Toolchain', slug: 'tools/cli-toolchain' },
             { label: 'Security & Strix Audit Workflows', slug: 'security/audit-workflows' },
+            { label: 'Forge Apps API Security Audit (10/10)', slug: 'security/forge-apps-api-audit' },
             { label: 'Disaster Recovery & Backups', slug: 'operations/backup-recovery' },
             { label: 'Deployment & Quickstart Guide', slug: 'operations/deployment-quickstart' },
             { label: 'Branding, Logos & White-Labeling', slug: 'operations/branding-and-logos' },
@@ -87,6 +88,7 @@ export default defineConfig({
           label: 'Autonomous Submodules',
           items: [
             { label: 'Submodule Governance', slug: 'submodules/architecture' },
+            { label: 'Developer Integration Guide', slug: 'submodules/developer-guide' },
             { label: 'Declarative .env Ingress Registry', slug: 'submodules/env-app-registry' },
             { label: 'Ingress & Troubleshooting', slug: 'submodules/troubleshooting' },
             {

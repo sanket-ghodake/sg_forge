@@ -482,7 +482,6 @@ export function getDashboardScripts(): string {
 
     initDrawerResize('service-drawer', 'service-drawer-resizer', 'forge:service_drawer_w', 540);
     initDrawerResize('emp-profile-drawer', 'emp-drawer-resizer', 'forge:emp_drawer_w', 560);
-
     // 🧹 Clean Any Errant Browser Autofill Credentials on Startup
     function sanitizeSearchInputs() {
       const s = document.getElementById('services-search-input');
@@ -495,8 +494,6 @@ export function getDashboardScripts(): string {
         l.value = '';
       }
     }
-    setTimeout(sanitizeSearchInputs, 50);
-    setTimeout(sanitizeSearchInputs, 300);
-    setTimeout(sanitizeSearchInputs, 1000);
+    [50, 300, 1000].forEach((ms) => setTimeout(sanitizeSearchInputs, ms));
   `;
 }

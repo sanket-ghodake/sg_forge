@@ -1,0 +1,243 @@
+---
+title: Forge Apps Developer Integration Guide
+description: Complete, zero-friction developer integration guide for building, securing, and integrating autonomous Forge Apps without looking into monorepo source code.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Autonomous Forge Apps Developer Integration Guide"
+  analogy="Building a Forge App is like developing an app for an app store: you are given clear, authenticated APIs, zero-latency user identity, and an isolated database without having to understand or inspect the central operating system source code."
+  impact="Empowers developers to scaffold, develop, test, and release independent micro-frontends with 100% plug-and-play velocity."
+/>
+
+<TraceabilityBadge reqId="SR-SUB-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-PORTAL-201" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-001" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-003" type="LLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-004" type="LLR" status="verified" />
+
+## 1. Zero-Friction Scaffolding (1 Command)
+
+To create a brand-new Forge App microservice from anywhere in the platform, run:
+
+```bash
+rtk bun scripts/create-app.ts <app-name>
+```
+
+**What this automatically generates:**
+* Autonomous directory at `forge-apps/<app-name>/`.
+* Pre-configured dedicated Turso (libSQL/SQLite) database at `data/<app-name>.db`.
+* Next available port assignment (e.g. `:8091`).
+* Isolated 5-tier test suites (`unit`, `integration`, `security`, `contracts`, `e2e`).
+* Standalone `run.sh` toolchain with zero host dependencies.
+
+---
+
+## 2. 1-Line Declarative Ingress (`.env`)
+
+Register your app in `.env` at the repository root:
+
+```env
+APP_<ID>="<Display Name>|<Port>|<Ingress Path>|<Category>|<Access Role>|[Container Name]"
+```
+
+### Example:
+```env
+APP_BILLING="Billing & Invoicing|8091|/apps/billing|Finance|Employee / Admin|app-billing"
+```
+
+Synchronize the reverse proxy gateway:
+```bash
+rtk ./run.sh sync-proxy
+```
+
+Your app is now instantly routed at `http://localhost:8080/apps/billing/` and visible in the **Workspace Portal Apps & Tools Hub**!
+
+---
+
+## 3. Zero-Latency User Identity Extraction
+
+When an employee opens your Forge App, their session is already authenticated via the ambient `forge_session` cookie or `Authorization: Bearer` header.
+
+### Protecting Endpoints with `authGuard`:
+In your app's `src/server.ts`:
+
+```typescript
+import { authGuard } from './lib/sdk';
+
+// Inside your HTTP request handler:
+const auth = authGuard(req, {
+  appName: 'Billing & Invoicing',
+  requiredRoles: ['roles/employee'], // or ['roles/admin']
+});
+
+if (!auth.authenticated) {
+  return auth.response!; // Automatically handles JSON RFC 7807 401 or login redirect
+}
+
+// 0-Latency, In-Memory verified user profile:
+const { id, email, displayName, roles, department, orgId } = auth.user;
+```
+
+---
+
+## 4. Complete Central APIs Catalog
+
+Forge Apps can query Central Portal and Central Auth endpoints to access organizational data and governance:
+
+### Core Identity & Hierarchy APIs (Auth Service)
+| Endpoint | Method | Purpose | Auth & Defense |
+| :--- | :---: | :--- | :--- |
+| `/api/v1/auth/users/scoped-hierarchy` | `GET` | Caller's management chain and direct reports | Session Token / In-Memory sub |
+| `/api/v1/auth/employees` | `GET` | Full employee roster (directory) | Administrative or Service token |
+| `/api/v1/auth/org/tree` | `GET` | Complete organization reporting tree | Session Token |
+| `/api/v1/auth/jwks.json` | `GET` | Ed25519 public key distribution | Public endpoint |
+
+### Portal Data & Member APIs (Portal Service)
+| Endpoint | Method | Purpose | Auth & Defense |
+| :--- | :---: | :--- | :--- |
+| `/api/v1/portal/canvas/tree` | `GET` | Org canvas visualization tree | 60 req/min rate limit |
+| `/api/v1/portal/members` | `GET` | Employee directory with **PII masking** | Non-admin: masked email & stripped salary |
+| `/api/v1/portal/members/invite` | `POST` | Invites a new team member | CSRF protected, Admin role only |
+| `/api/v1/portal/members/import` | `POST` | Batch CSV ingestion | CSRF protected, Formula injection defense |
+| `/api/v1/portal/tokens` | `GET` / `POST` | Issues and lists personal API tokens | Scoped to caller's `user_id` |
+| `/api/v1/portal/tokens/revoke` | `POST` | Revokes an active API token | IDOR scoped |
+
+### Application Governance APIs
+| Endpoint | Method | Purpose | Auth & Defense |
+| :--- | :---: | :--- | :--- |
+| `/api/v1/portal/apps` | `GET` | List active and marketplace apps | Role-filtered catalog |
+| `/api/v1/portal/apps/requests` | `GET` / `POST` | Submit or inspect access requests | Scoped to user's `org_id` & `user_id` |
+| `/api/v1/portal/apps/requests/cancel` | `POST` | Cancels own pending request | Anti-IDOR ownership validation |
+| `/api/v1/portal/apps/requests/pending`| `GET` | Queue of requests awaiting approval | Manager / Admin RBAC check |
+| `/api/v1/portal/apps/requests/decide` | `POST` | Approves or rejects access request | Anti-Self-Approval validation |
+
+---
+
+## 5. Calling Central APIs: Code Examples
+
+### Pattern A: Client-Side (Browser JavaScript)
+Since your micro-app runs on the same domain (`/apps/<app-name>/`), the browser automatically attaches cookies and session state:
+
+```javascript
+// Fetch company members (automatically PII-masked for employees)
+const res = await fetch('/api/v1/portal/members');
+const { data: members } = await res.json();
+
+// Fetch reporting hierarchy
+const hierRes = await fetch('/api/v1/auth/users/scoped-hierarchy');
+const { managementChain, directReports } = await hierRes.json();
+```
+
+### Pattern B: Server-to-Server with User Context
+Forward the user's incoming credentials from your Forge App backend:
+
+```typescript
+export async function fetchOrgDirectory(incomingReq: Request) {
+  const cookie = incomingReq.headers.get('cookie') || '';
+  const authorization = incomingReq.headers.get('authorization') || '';
+  const gateway = process.env.GATEWAY_URL || 'http://host.docker.internal:8080';
+
+  const res = await fetch(`${gateway}/api/v1/portal/members`, {
+    headers: {
+      Accept: 'application/json',
+      'X-Forge-Action': '1', // Bypasses CSRF validation for programmatic API callers
+      ...(cookie ? { Cookie: cookie } : {}),
+      ...(authorization ? { Authorization: authorization } : {}),
+    },
+    signal: AbortSignal.timeout(5000),
+  });
+
+  return await res.json();
+}
+```
+
+### Pattern C: Machine-to-Machine (Daemon / Service Account)
+For background collectors, cron jobs, or workers that run without an interactive user:
+
+```typescript
+import { createServiceAccountToken } from './lib/sdk';
+
+// Generate a signed, time-bound M2M token
+const m2mToken = createServiceAccountToken('billing-daemon', ['members:read', 'metrics:push']);
+
+const res = await fetch('http://host.docker.internal:8080/api/v1/portal/members', {
+  headers: {
+    Authorization: `Bearer ${m2mToken}`,
+    'X-Forge-Action': '1',
+  },
+});
+```
+
+---
+
+## 6. Submodule Security & SSRF Protection
+
+All Forge App SDKs include zero-trust utilities in `src/lib/sdk.ts`:
+
+### 1. Safe Egress Shield (`isSafeEgressUrl`)
+Always sanitize remote webhooks, links, or API calls to prevent SSRF and cloud metadata theft:
+
+```typescript
+import { isSafeEgressUrl } from './lib/sdk';
+
+const targetWebhook = reqBody.webhookUrl;
+if (!isSafeEgressUrl(targetWebhook)) {
+  return Response.json({ error: 'Blocked: target destination is not permitted' }, { status: 400 });
+}
+await fetch(targetWebhook, { ... });
+```
+
+### 2. Cryptographic Token Verification (`verifySessionToken`)
+Verify Ed25519 token signatures locally without a network round-trip:
+
+```typescript
+import { verifySessionToken } from './lib/sdk';
+
+const result = verifySessionToken(tokenString);
+if (!result.valid) {
+  console.error('Invalid signature or expired token:', result.error);
+}
+```
+
+---
+
+## 7. Subpath & Asset Routing Golden Rules
+
+When running behind Caddy, your micro-app receives requests with its subpath prefix stripped. Follow these 3 rules:
+
+1. **Include HTML Base Href**:
+   ```html
+   <base href="/apps/billing/">
+   ```
+2. **Never Use Leading-Slash Asset Paths**:
+   - ❌ `<img src="/images/logo.png">` *(Resolves to domain root 404)*
+   - ✅ `<img src="./images/logo.png">` or `<img src="images/logo.png">`
+3. **Dynamic Fetch Base for Local APIs**:
+   ```javascript
+   const apiBase = window.location.pathname.endsWith('/') 
+     ? window.location.pathname 
+     : window.location.pathname + '/';
+   fetch(apiBase + 'health');
+   ```
+
+---
+
+## 8. Autonomous Development & Quality Gates
+
+Each Forge App possesses its own local developer CLI:
+
+```bash
+cd forge-apps/<app-name>
+
+# Local live watch development
+./run.sh dev
+
+# Execute 5-Tier test suite
+./run.sh test
+
+# Verify all pre-commit quality gates
+./run.sh verify
+```

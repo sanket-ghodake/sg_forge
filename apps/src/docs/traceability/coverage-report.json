@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-09-15T16:21:00.000Z",
-  "totalExportedSymbols": 775,
-  "documentedSymbols": 654,
-  "symbolCoveragePercent": 84.4,
+  "totalExportedSymbols": 791,
+  "documentedSymbols": 669,
+  "symbolCoveragePercent": 84.6,
   "totalRequirements": 84,
   "implementedRequirements": 79,
   "verifiedRequirements": 78,
@@ -126,7 +126,7 @@
       "name": "OrgNodeSummary",
       "kind": "interface",
       "file": "apps/src/types/src/index.ts",
-      "line": 113,
+      "line": 114,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -138,7 +138,7 @@
       "name": "EmployeeSummary",
       "kind": "interface",
       "file": "apps/src/types/src/index.ts",
-      "line": 125,
+      "line": 126,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -150,7 +150,7 @@
       "name": "ManagerChainEntry",
       "kind": "interface",
       "file": "apps/src/types/src/index.ts",
-      "line": 141,
+      "line": 142,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -162,7 +162,7 @@
       "name": "ScopedHierarchyResponse",
       "kind": "interface",
       "file": "apps/src/types/src/index.ts",
-      "line": 155,
+      "line": 156,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -174,7 +174,7 @@
       "name": "OrgDirectoryResponse",
       "kind": "interface",
       "file": "apps/src/types/src/index.ts",
-      "line": 171,
+      "line": 172,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -1347,10 +1347,61 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "validateMutatingRequest",
+      "kind": "function",
+      "file": "apps/src/portal/src/backend/security-middleware.ts",
+      "line": 18,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-PORTAL-201",
+        "SR-SEC-001"
+      ],
+      "missingRequirementFiles": [
+        "SR-SEC-001"
+      ]
+    },
+    {
+      "name": "checkPortalRateLimit",
+      "kind": "function",
+      "file": "apps/src/portal/src/backend/security-middleware.ts",
+      "line": 97,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-PORTAL-201",
+        "SR-SEC-001"
+      ],
+      "missingRequirementFiles": [
+        "SR-SEC-001"
+      ]
+    },
+    {
+      "name": "resetRateLimitBuckets",
+      "kind": "function",
+      "file": "apps/src/portal/src/backend/security-middleware.ts",
+      "line": 143,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "sanitizeEmployeeDirectory",
+      "kind": "function",
+      "file": "apps/src/portal/src/backend/security-middleware.ts",
+      "line": 153,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-PORTAL-201",
+        "SR-SEC-001"
+      ],
+      "missingRequirementFiles": [
+        "SR-SEC-001"
+      ]
+    },
+    {
       "name": "startPortalServer",
       "kind": "function",
       "file": "apps/src/portal/src/server.ts",
-      "line": 49,
+      "line": 50,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -6664,7 +6715,7 @@
       "name": "StandaloneLogger",
       "kind": "class",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 19,
+      "line": 20,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6676,7 +6727,7 @@
       "name": "createLogger",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 74,
+      "line": 75,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6688,7 +6739,7 @@
       "name": "getDatabaseClient",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 85,
+      "line": 86,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6700,7 +6751,31 @@
       "name": "createSafeHandler",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 113,
+      "line": 114,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-301",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "isSafeEgressUrl",
+      "kind": "function",
+      "file": "forge-apps/app-template/src/lib/sdk.ts",
+      "line": 163,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-301",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getVerificationPublicKey",
+      "kind": "function",
+      "file": "forge-apps/app-template/src/lib/sdk.ts",
+      "line": 179,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6712,7 +6787,31 @@
       "name": "createInternalServiceToken",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 159,
+      "line": 203,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-301",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "createServiceAccountToken",
+      "kind": "function",
+      "file": "forge-apps/app-template/src/lib/sdk.ts",
+      "line": 234,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-301",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "verifySessionToken",
+      "kind": "function",
+      "file": "forge-apps/app-template/src/lib/sdk.ts",
+      "line": 267,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6724,7 +6823,7 @@
       "name": "authGuard",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 178,
+      "line": 291,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6736,7 +6835,7 @@
       "name": "loadBrandConfig",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 270,
+      "line": 409,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6748,7 +6847,7 @@
       "name": "getScopedHierarchy",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 281,
+      "line": 420,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6760,7 +6859,7 @@
       "name": "redactSensitiveData",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 307,
+      "line": 446,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -7046,7 +7145,7 @@
       "name": "StandaloneLogger",
       "kind": "class",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 19,
+      "line": 20,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7058,7 +7157,7 @@
       "name": "createLogger",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 74,
+      "line": 75,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7070,7 +7169,7 @@
       "name": "getDatabaseClient",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 85,
+      "line": 86,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7082,7 +7181,31 @@
       "name": "createSafeHandler",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 113,
+      "line": 114,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-TEL-801",
+        "LLR-SUB-004"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "isSafeEgressUrl",
+      "kind": "function",
+      "file": "forge-apps/telemetry/src/lib/sdk.ts",
+      "line": 163,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-TEL-801",
+        "LLR-SUB-004"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getVerificationPublicKey",
+      "kind": "function",
+      "file": "forge-apps/telemetry/src/lib/sdk.ts",
+      "line": 179,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7094,7 +7217,31 @@
       "name": "createInternalServiceToken",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 159,
+      "line": 203,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-TEL-801",
+        "LLR-SUB-004"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "createServiceAccountToken",
+      "kind": "function",
+      "file": "forge-apps/telemetry/src/lib/sdk.ts",
+      "line": 234,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-TEL-801",
+        "LLR-SUB-004"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "verifySessionToken",
+      "kind": "function",
+      "file": "forge-apps/telemetry/src/lib/sdk.ts",
+      "line": 267,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7106,7 +7253,7 @@
       "name": "authGuard",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 178,
+      "line": 291,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7118,7 +7265,7 @@
       "name": "loadBrandConfig",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 270,
+      "line": 409,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7130,7 +7277,7 @@
       "name": "getScopedHierarchy",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 281,
+      "line": 420,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7142,7 +7289,7 @@
       "name": "redactSensitiveData",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 307,
+      "line": 446,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7768,7 +7915,7 @@
       "name": "StandaloneLogger",
       "kind": "class",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 19,
+      "line": 20,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7780,7 +7927,7 @@
       "name": "createLogger",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 74,
+      "line": 75,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7792,7 +7939,7 @@
       "name": "getDatabaseClient",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 85,
+      "line": 86,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7804,7 +7951,31 @@
       "name": "createSafeHandler",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 113,
+      "line": 114,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-CODE-701",
+        "LLR-SUB-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "isSafeEgressUrl",
+      "kind": "function",
+      "file": "forge-apps/code/src/lib/sdk.ts",
+      "line": 163,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-CODE-701",
+        "LLR-SUB-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getVerificationPublicKey",
+      "kind": "function",
+      "file": "forge-apps/code/src/lib/sdk.ts",
+      "line": 179,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7816,7 +7987,31 @@
       "name": "createInternalServiceToken",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 159,
+      "line": 203,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-CODE-701",
+        "LLR-SUB-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "createServiceAccountToken",
+      "kind": "function",
+      "file": "forge-apps/code/src/lib/sdk.ts",
+      "line": 234,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-CODE-701",
+        "LLR-SUB-003"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "verifySessionToken",
+      "kind": "function",
+      "file": "forge-apps/code/src/lib/sdk.ts",
+      "line": 267,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7828,7 +8023,7 @@
       "name": "authGuard",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 178,
+      "line": 291,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7840,7 +8035,7 @@
       "name": "loadBrandConfig",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 270,
+      "line": 409,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7852,7 +8047,7 @@
       "name": "getScopedHierarchy",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 281,
+      "line": 420,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -7864,7 +8059,7 @@
       "name": "redactSensitiveData",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 307,
+      "line": 446,
       "hasDoc": true,
       "requirements": [
         "HLR-CODE-701",
@@ -8677,7 +8872,7 @@
       "name": "checkSystemTraceability",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 508,
+      "line": 510,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9207,7 +9402,7 @@
       "name": "syncAllIgnores",
       "kind": "function",
       "file": "scripts/sync-ignores.ts",
-      "line": 251,
+      "line": 254,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9251,12 +9446,17 @@
       "type": "SR",
       "docFile": "apps/src/docs/src/content/docs/operations/deployment-quickstart.mdx",
       "implementedIn": [
+        "apps/src/portal/src/backend/security-middleware.ts:18#validateMutatingRequest",
+        "apps/src/portal/src/backend/security-middleware.ts:97#checkPortalRateLimit",
+        "apps/src/portal/src/backend/security-middleware.ts:153#sanitizeEmployeeDirectory",
         "apps/src/sdk/src/security-headers.ts:11#AIR_GAPPED_CSP",
         "apps/src/sdk/src/security-headers.ts:29#AIR_GAPPED_SECURITY_HEADERS",
         "apps/src/sdk/src/security-headers.ts:44#applySecurityHeaders"
       ],
       "verifiedIn": [
-        "apps/test/security/air-gap-compliance.test.ts"
+        "apps/test/e2e/playwright/security-10-defense.test.ts",
+        "apps/test/security/air-gap-compliance.test.ts",
+        "forge-apps/telemetry/test/security/auth-gate.test.ts"
       ]
     },
     "HLR-NET-001": {
@@ -9336,7 +9536,7 @@
         "scripts/verify-checks.ts:307#checkDependencyLicenses",
         "scripts/verify-checks.ts:376#checkSyftSbomIntegrity",
         "scripts/verify-checks.ts:406#checkForgeAppSubmoduleCompliance",
-        "scripts/verify-checks.ts:508#checkSystemTraceability",
+        "scripts/verify-checks.ts:510#checkSystemTraceability",
         "scripts/sync-submodule-docs.ts:113#syncSubmoduleDocs",
         "scripts/brand-lock.ts:31#getLockStatus",
         "scripts/brand-lock.ts:46#setLock",
@@ -9366,7 +9566,7 @@
         "scripts/sync-ignores.ts:95#MANDATORY_ATTRIBUTES",
         "scripts/sync-ignores.ts:141#ValidationResult",
         "scripts/sync-ignores.ts:154#validateIgnores",
-        "scripts/sync-ignores.ts:251#syncAllIgnores"
+        "scripts/sync-ignores.ts:254#syncAllIgnores"
       ],
       "verifiedIn": [
         "apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts",
@@ -9622,7 +9822,7 @@
         "scripts/verify-checks.ts:307#checkDependencyLicenses",
         "scripts/verify-checks.ts:376#checkSyftSbomIntegrity",
         "scripts/verify-checks.ts:406#checkForgeAppSubmoduleCompliance",
-        "scripts/verify-checks.ts:508#checkSystemTraceability",
+        "scripts/verify-checks.ts:510#checkSystemTraceability",
         "scripts/sync-submodule-docs.ts:113#syncSubmoduleDocs",
         "scripts/brand-lock.ts:31#getLockStatus",
         "scripts/brand-lock.ts:46#setLock",
@@ -9652,7 +9852,7 @@
         "scripts/sync-ignores.ts:95#MANDATORY_ATTRIBUTES",
         "scripts/sync-ignores.ts:141#ValidationResult",
         "scripts/sync-ignores.ts:154#validateIgnores",
-        "scripts/sync-ignores.ts:251#syncAllIgnores"
+        "scripts/sync-ignores.ts:254#syncAllIgnores"
       ],
       "verifiedIn": [
         "apps/src/docs/test/unit/token-ledger.test.ts",
@@ -9859,7 +10059,10 @@
         "apps/src/portal/src/backend/app-governance-service.ts:313#updateAppPolicy",
         "apps/src/portal/src/backend/app-governance-service.ts:381#getLiveAppGovernanceData",
         "apps/src/portal/src/backend/app-governance-routes.ts:44#handleAppGovernanceRoutes",
-        "apps/src/portal/src/server.ts:49#startPortalServer",
+        "apps/src/portal/src/backend/security-middleware.ts:18#validateMutatingRequest",
+        "apps/src/portal/src/backend/security-middleware.ts:97#checkPortalRateLimit",
+        "apps/src/portal/src/backend/security-middleware.ts:153#sanitizeEmployeeDirectory",
+        "apps/src/portal/src/server.ts:50#startPortalServer",
         "apps/src/portal/src/index.ts:13#portalService"
       ],
       "verifiedIn": [
@@ -9868,7 +10071,8 @@
         "apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts",
         "apps/src/portal/test/integration/portal-api-endpoints.test.ts",
         "apps/src/portal/test/integration/app-access-governance-audit.test.ts",
-        "apps/src/portal/test/integration/app-access-decision.test.ts"
+        "apps/src/portal/test/integration/app-access-decision.test.ts",
+        "apps/test/e2e/playwright/security-10-defense.test.ts"
       ]
     },
     "HLR-AUTH-102": {
@@ -9880,11 +10084,11 @@
         "apps/src/types/src/index.ts:73#AppAccessPolicy",
         "apps/src/types/src/index.ts:91#AuthGuardResult",
         "apps/src/types/src/index.ts:101#AuthGuardOptions",
-        "apps/src/types/src/index.ts:113#OrgNodeSummary",
-        "apps/src/types/src/index.ts:125#EmployeeSummary",
-        "apps/src/types/src/index.ts:141#ManagerChainEntry",
-        "apps/src/types/src/index.ts:155#ScopedHierarchyResponse",
-        "apps/src/types/src/index.ts:171#OrgDirectoryResponse",
+        "apps/src/types/src/index.ts:114#OrgNodeSummary",
+        "apps/src/types/src/index.ts:126#EmployeeSummary",
+        "apps/src/types/src/index.ts:142#ManagerChainEntry",
+        "apps/src/types/src/index.ts:156#ScopedHierarchyResponse",
+        "apps/src/types/src/index.ts:172#OrgDirectoryResponse",
         "apps/src/auth/src/backend/security-headers.ts:7#SECURITY_HEADERS",
         "apps/src/auth/src/backend/security-headers.ts:22#applySecurityHeaders",
         "apps/src/auth/src/backend/hierarchy.ts:16#getScopedHierarchyData",
@@ -10005,7 +10209,7 @@
       "docFile": "apps/src/docs/src/content/docs/features/portal-spa.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:49#PostMessageEvent",
-        "apps/src/portal/src/server.ts:49#startPortalServer",
+        "apps/src/portal/src/server.ts:50#startPortalServer",
         "apps/src/portal/src/index.ts:13#portalService",
         "apps/src/sdk/src/client-bridge.ts:12#ForgeClientOptions",
         "apps/src/sdk/src/client-bridge.ts:21#ForgeClient"
@@ -10378,15 +10582,19 @@
         "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
         "forge-apps/app-template/src/server.ts:111#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
-        "forge-apps/app-template/src/lib/sdk.ts:19#StandaloneLogger",
-        "forge-apps/app-template/src/lib/sdk.ts:74#createLogger",
-        "forge-apps/app-template/src/lib/sdk.ts:85#getDatabaseClient",
-        "forge-apps/app-template/src/lib/sdk.ts:113#createSafeHandler",
-        "forge-apps/app-template/src/lib/sdk.ts:159#createInternalServiceToken",
-        "forge-apps/app-template/src/lib/sdk.ts:178#authGuard",
-        "forge-apps/app-template/src/lib/sdk.ts:270#loadBrandConfig",
-        "forge-apps/app-template/src/lib/sdk.ts:281#getScopedHierarchy",
-        "forge-apps/app-template/src/lib/sdk.ts:307#redactSensitiveData",
+        "forge-apps/app-template/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/app-template/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/app-template/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/app-template/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/app-template/src/lib/sdk.ts:163#isSafeEgressUrl",
+        "forge-apps/app-template/src/lib/sdk.ts:179#getVerificationPublicKey",
+        "forge-apps/app-template/src/lib/sdk.ts:203#createInternalServiceToken",
+        "forge-apps/app-template/src/lib/sdk.ts:234#createServiceAccountToken",
+        "forge-apps/app-template/src/lib/sdk.ts:267#verifySessionToken",
+        "forge-apps/app-template/src/lib/sdk.ts:291#authGuard",
+        "forge-apps/app-template/src/lib/sdk.ts:409#loadBrandConfig",
+        "forge-apps/app-template/src/lib/sdk.ts:420#getScopedHierarchy",
+        "forge-apps/app-template/src/lib/sdk.ts:446#redactSensitiveData",
         "forge-apps/app-template/src/lib/types.ts:7#AuthUser",
         "forge-apps/app-template/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/app-template/src/lib/types.ts:33#AuthGuardResult",
@@ -10457,15 +10665,19 @@
         "forge-apps/code/src/db/schema.ts:7#ProjectRecord",
         "forge-apps/code/src/db/schema.ts:24#ProjectMemberRecord",
         "forge-apps/code/src/db/schema.ts:39#ActiveSessionRecord",
-        "forge-apps/code/src/lib/sdk.ts:19#StandaloneLogger",
-        "forge-apps/code/src/lib/sdk.ts:74#createLogger",
-        "forge-apps/code/src/lib/sdk.ts:85#getDatabaseClient",
-        "forge-apps/code/src/lib/sdk.ts:113#createSafeHandler",
-        "forge-apps/code/src/lib/sdk.ts:159#createInternalServiceToken",
-        "forge-apps/code/src/lib/sdk.ts:178#authGuard",
-        "forge-apps/code/src/lib/sdk.ts:270#loadBrandConfig",
-        "forge-apps/code/src/lib/sdk.ts:281#getScopedHierarchy",
-        "forge-apps/code/src/lib/sdk.ts:307#redactSensitiveData",
+        "forge-apps/code/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/code/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/code/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/code/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/code/src/lib/sdk.ts:163#isSafeEgressUrl",
+        "forge-apps/code/src/lib/sdk.ts:179#getVerificationPublicKey",
+        "forge-apps/code/src/lib/sdk.ts:203#createInternalServiceToken",
+        "forge-apps/code/src/lib/sdk.ts:234#createServiceAccountToken",
+        "forge-apps/code/src/lib/sdk.ts:267#verifySessionToken",
+        "forge-apps/code/src/lib/sdk.ts:291#authGuard",
+        "forge-apps/code/src/lib/sdk.ts:409#loadBrandConfig",
+        "forge-apps/code/src/lib/sdk.ts:420#getScopedHierarchy",
+        "forge-apps/code/src/lib/sdk.ts:446#redactSensitiveData",
         "forge-apps/code/src/lib/types.ts:7#AuthUser",
         "forge-apps/code/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/code/src/lib/types.ts:33#AuthGuardResult",
@@ -10497,15 +10709,19 @@
         "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
         "forge-apps/telemetry/src/server.ts:116#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
-        "forge-apps/telemetry/src/lib/sdk.ts:19#StandaloneLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:74#createLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:85#getDatabaseClient",
-        "forge-apps/telemetry/src/lib/sdk.ts:113#createSafeHandler",
-        "forge-apps/telemetry/src/lib/sdk.ts:159#createInternalServiceToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:178#authGuard",
-        "forge-apps/telemetry/src/lib/sdk.ts:270#loadBrandConfig",
-        "forge-apps/telemetry/src/lib/sdk.ts:281#getScopedHierarchy",
-        "forge-apps/telemetry/src/lib/sdk.ts:307#redactSensitiveData",
+        "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/telemetry/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/telemetry/src/lib/sdk.ts:163#isSafeEgressUrl",
+        "forge-apps/telemetry/src/lib/sdk.ts:179#getVerificationPublicKey",
+        "forge-apps/telemetry/src/lib/sdk.ts:203#createInternalServiceToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:234#createServiceAccountToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:267#verifySessionToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:291#authGuard",
+        "forge-apps/telemetry/src/lib/sdk.ts:409#loadBrandConfig",
+        "forge-apps/telemetry/src/lib/sdk.ts:420#getScopedHierarchy",
+        "forge-apps/telemetry/src/lib/sdk.ts:446#redactSensitiveData",
         "forge-apps/telemetry/src/lib/types.ts:7#AuthUser",
         "forge-apps/telemetry/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/telemetry/src/lib/types.ts:33#AuthGuardResult",
@@ -10515,7 +10731,8 @@
         "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup"
       ],
       "verifiedIn": [
-        "forge-apps/telemetry/test/e2e/telemetry-server.test.ts"
+        "forge-apps/telemetry/test/e2e/telemetry-server.test.ts",
+        "forge-apps/telemetry/test/security/auth-gate.test.ts"
       ]
     },
     "HLR-HUB-601": {
@@ -10808,19 +11025,23 @@
     "LLR-SUB-001": {
       "id": "LLR-SUB-001",
       "type": "LLR",
-      "docFile": "apps/src/docs/src/content/docs/submodules/architecture.mdx",
+      "docFile": "apps/src/docs/src/content/docs/security/forge-apps-api-audit.mdx",
       "implementedIn": [
         "forge-apps/app-template/src/server.ts:111#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
-        "forge-apps/app-template/src/lib/sdk.ts:19#StandaloneLogger",
-        "forge-apps/app-template/src/lib/sdk.ts:74#createLogger",
-        "forge-apps/app-template/src/lib/sdk.ts:85#getDatabaseClient",
-        "forge-apps/app-template/src/lib/sdk.ts:113#createSafeHandler",
-        "forge-apps/app-template/src/lib/sdk.ts:159#createInternalServiceToken",
-        "forge-apps/app-template/src/lib/sdk.ts:178#authGuard",
-        "forge-apps/app-template/src/lib/sdk.ts:270#loadBrandConfig",
-        "forge-apps/app-template/src/lib/sdk.ts:281#getScopedHierarchy",
-        "forge-apps/app-template/src/lib/sdk.ts:307#redactSensitiveData",
+        "forge-apps/app-template/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/app-template/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/app-template/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/app-template/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/app-template/src/lib/sdk.ts:163#isSafeEgressUrl",
+        "forge-apps/app-template/src/lib/sdk.ts:179#getVerificationPublicKey",
+        "forge-apps/app-template/src/lib/sdk.ts:203#createInternalServiceToken",
+        "forge-apps/app-template/src/lib/sdk.ts:234#createServiceAccountToken",
+        "forge-apps/app-template/src/lib/sdk.ts:267#verifySessionToken",
+        "forge-apps/app-template/src/lib/sdk.ts:291#authGuard",
+        "forge-apps/app-template/src/lib/sdk.ts:409#loadBrandConfig",
+        "forge-apps/app-template/src/lib/sdk.ts:420#getScopedHierarchy",
+        "forge-apps/app-template/src/lib/sdk.ts:446#redactSensitiveData",
         "forge-apps/app-template/src/lib/types.ts:7#AuthUser",
         "forge-apps/app-template/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/app-template/src/lib/types.ts:33#AuthGuardResult",
@@ -10833,8 +11054,117 @@
         "forge-apps/code/src/lib/icons.ts:8#icons"
       ],
       "verifiedIn": [
+        "apps/test/e2e/playwright/security-10-defense.test.ts",
         "scripts/test/create-app.test.ts",
         "forge-apps/code/test/unit/lock-coordinator.test.ts"
+      ]
+    },
+    "LLR-SUB-003": {
+      "id": "LLR-SUB-003",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/security/forge-apps-api-audit.mdx",
+      "implementedIn": [
+        "forge-apps/code/src/vscode-bridge.ts:28#getVsCodeTargetUrl",
+        "forge-apps/code/src/vscode-bridge.ts:40#checkVsCodeHealth",
+        "forge-apps/code/src/vscode-bridge.ts:78#ensureVsCodeDaemon",
+        "forge-apps/code/src/vscode-bridge.ts:164#stopVsCodeDaemon",
+        "forge-apps/code/src/server.ts:47#startCodeServer",
+        "forge-apps/code/src/server.ts:272#startTemplateServer",
+        "forge-apps/code/src/network-auditor.ts:15#NetworkDirection",
+        "forge-apps/code/src/network-auditor.ts:21#NetworkLogRecord",
+        "forge-apps/code/src/network-auditor.ts:51#sanitizeUrl",
+        "forge-apps/code/src/network-auditor.ts:70#recordNetworkEvent",
+        "forge-apps/code/src/network-auditor.ts:103#auditIngressCall",
+        "forge-apps/code/src/network-auditor.ts:131#ingestBrowserTelemetry",
+        "forge-apps/code/src/git-sanitizer.ts:17#validateRepoPath",
+        "forge-apps/code/src/git-sanitizer.ts:54#discardRepoModifications",
+        "forge-apps/code/src/db/index.ts:14#codeDb",
+        "forge-apps/code/src/db/index.ts:92#listProjects",
+        "forge-apps/code/src/db/index.ts:124#getProjectById",
+        "forge-apps/code/src/db/index.ts:132#getProjectBySlug",
+        "forge-apps/code/src/db/index.ts:140#createProject",
+        "forge-apps/code/src/db/index.ts:164#deleteProject",
+        "forge-apps/code/src/db/index.ts:175#getProjectMembers",
+        "forge-apps/code/src/db/index.ts:183#addProjectMember",
+        "forge-apps/code/src/db/index.ts:208#removeProjectMember",
+        "forge-apps/code/src/db/index.ts:217#getUserProjectRole",
+        "forge-apps/code/src/db/index.ts:228#getActiveSession",
+        "forge-apps/code/src/db/index.ts:236#upsertActiveSession",
+        "forge-apps/code/src/db/index.ts:274#deleteActiveSession",
+        "forge-apps/code/src/db/schema.ts:7#ProjectRecord",
+        "forge-apps/code/src/db/schema.ts:24#ProjectMemberRecord",
+        "forge-apps/code/src/db/schema.ts:39#ActiveSessionRecord",
+        "forge-apps/code/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/code/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/code/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/code/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/code/src/lib/sdk.ts:163#isSafeEgressUrl",
+        "forge-apps/code/src/lib/sdk.ts:179#getVerificationPublicKey",
+        "forge-apps/code/src/lib/sdk.ts:203#createInternalServiceToken",
+        "forge-apps/code/src/lib/sdk.ts:234#createServiceAccountToken",
+        "forge-apps/code/src/lib/sdk.ts:267#verifySessionToken",
+        "forge-apps/code/src/lib/sdk.ts:291#authGuard",
+        "forge-apps/code/src/lib/sdk.ts:409#loadBrandConfig",
+        "forge-apps/code/src/lib/sdk.ts:420#getScopedHierarchy",
+        "forge-apps/code/src/lib/sdk.ts:446#redactSensitiveData",
+        "forge-apps/code/src/lib/types.ts:7#AuthUser",
+        "forge-apps/code/src/lib/types.ts:21#AuthGuardOptions",
+        "forge-apps/code/src/lib/types.ts:33#AuthGuardResult",
+        "forge-apps/code/src/lib/types.ts:43#ScopedHierarchyResponse",
+        "forge-apps/code/src/lib/types.ts:62#ProblemDetails",
+        "forge-apps/code/src/session-coordinator.ts:25#ClaimResult",
+        "forge-apps/code/src/session-coordinator.ts:41#subscribeToProjectEvents",
+        "forge-apps/code/src/session-coordinator.ts:55#broadcastProjectEvent",
+        "forge-apps/code/src/session-coordinator.ts:86#checkSessionHealth",
+        "forge-apps/code/src/session-coordinator.ts:133#claimSession",
+        "forge-apps/code/src/session-coordinator.ts:171#requestTakeover",
+        "forge-apps/code/src/session-coordinator.ts:213#respondToTakeover",
+        "forge-apps/code/src/session-coordinator.ts:259#leaveSession",
+        "forge-apps/code/src/session-coordinator.ts:275#recordHeartbeat",
+        "forge-apps/code/src/ui/catalog.ts:16#renderCatalogHtml",
+        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml",
+        "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
+        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
+      ],
+      "verifiedIn": [
+        "forge-apps/code/test/security/git-sanitizer.test.ts"
+      ]
+    },
+    "LLR-SUB-004": {
+      "id": "LLR-SUB-004",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/security/forge-apps-api-audit.mdx",
+      "implementedIn": [
+        "apps/src/dev-dashboard/src/frontend/ui-renderer-login.ts:15#renderDevLoginHtml",
+        "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
+        "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
+        "apps/src/sdk/src/logger.ts:119#ForgeLogger",
+        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer",
+        "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
+        "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/telemetry/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/telemetry/src/lib/sdk.ts:163#isSafeEgressUrl",
+        "forge-apps/telemetry/src/lib/sdk.ts:179#getVerificationPublicKey",
+        "forge-apps/telemetry/src/lib/sdk.ts:203#createInternalServiceToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:234#createServiceAccountToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:267#verifySessionToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:291#authGuard",
+        "forge-apps/telemetry/src/lib/sdk.ts:409#loadBrandConfig",
+        "forge-apps/telemetry/src/lib/sdk.ts:420#getScopedHierarchy",
+        "forge-apps/telemetry/src/lib/sdk.ts:446#redactSensitiveData",
+        "forge-apps/telemetry/src/lib/types.ts:7#AuthUser",
+        "forge-apps/telemetry/src/lib/types.ts:21#AuthGuardOptions",
+        "forge-apps/telemetry/src/lib/types.ts:33#AuthGuardResult",
+        "forge-apps/telemetry/src/lib/types.ts:43#ScopedHierarchyResponse",
+        "forge-apps/telemetry/src/lib/types.ts:62#ProblemDetails",
+        "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
+        "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup"
+      ],
+      "verifiedIn": [
+        "forge-apps/telemetry/test/e2e/telemetry-server.test.ts",
+        "forge-apps/telemetry/test/security/auth-gate.test.ts"
       ]
     },
     "LLR-SDK-001": {
@@ -10983,11 +11313,11 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/llr/LLR-DB-005_TENANT_ISOLATION_QUERY_FILTERI.mdx",
       "implementedIn": [
-        "apps/src/types/src/index.ts:113#OrgNodeSummary",
-        "apps/src/types/src/index.ts:125#EmployeeSummary",
-        "apps/src/types/src/index.ts:141#ManagerChainEntry",
-        "apps/src/types/src/index.ts:155#ScopedHierarchyResponse",
-        "apps/src/types/src/index.ts:171#OrgDirectoryResponse",
+        "apps/src/types/src/index.ts:114#OrgNodeSummary",
+        "apps/src/types/src/index.ts:126#EmployeeSummary",
+        "apps/src/types/src/index.ts:142#ManagerChainEntry",
+        "apps/src/types/src/index.ts:156#ScopedHierarchyResponse",
+        "apps/src/types/src/index.ts:172#OrgDirectoryResponse",
         "apps/src/auth/src/backend/hierarchy.ts:16#getScopedHierarchyData",
         "apps/src/auth/src/backend/org-tree-service.ts:17#OrgTreeNode",
         "apps/src/auth/src/backend/org-tree-service.ts:38#OrgTreeResponse",
@@ -11137,73 +11467,6 @@
         "apps/src/sdk/test/unit/browser-bridge.test.ts"
       ]
     },
-    "LLR-SUB-003": {
-      "id": "LLR-SUB-003",
-      "type": "LLR",
-      "docFile": "apps/src/docs/src/content/docs/llr/LLR-SUB-003_SANDBOXED_FILESYSTEM_PATH_TRAV.mdx",
-      "implementedIn": [
-        "forge-apps/code/src/vscode-bridge.ts:28#getVsCodeTargetUrl",
-        "forge-apps/code/src/vscode-bridge.ts:40#checkVsCodeHealth",
-        "forge-apps/code/src/vscode-bridge.ts:78#ensureVsCodeDaemon",
-        "forge-apps/code/src/vscode-bridge.ts:164#stopVsCodeDaemon",
-        "forge-apps/code/src/server.ts:47#startCodeServer",
-        "forge-apps/code/src/server.ts:272#startTemplateServer",
-        "forge-apps/code/src/network-auditor.ts:15#NetworkDirection",
-        "forge-apps/code/src/network-auditor.ts:21#NetworkLogRecord",
-        "forge-apps/code/src/network-auditor.ts:51#sanitizeUrl",
-        "forge-apps/code/src/network-auditor.ts:70#recordNetworkEvent",
-        "forge-apps/code/src/network-auditor.ts:103#auditIngressCall",
-        "forge-apps/code/src/network-auditor.ts:131#ingestBrowserTelemetry",
-        "forge-apps/code/src/git-sanitizer.ts:17#validateRepoPath",
-        "forge-apps/code/src/git-sanitizer.ts:54#discardRepoModifications",
-        "forge-apps/code/src/db/index.ts:14#codeDb",
-        "forge-apps/code/src/db/index.ts:92#listProjects",
-        "forge-apps/code/src/db/index.ts:124#getProjectById",
-        "forge-apps/code/src/db/index.ts:132#getProjectBySlug",
-        "forge-apps/code/src/db/index.ts:140#createProject",
-        "forge-apps/code/src/db/index.ts:164#deleteProject",
-        "forge-apps/code/src/db/index.ts:175#getProjectMembers",
-        "forge-apps/code/src/db/index.ts:183#addProjectMember",
-        "forge-apps/code/src/db/index.ts:208#removeProjectMember",
-        "forge-apps/code/src/db/index.ts:217#getUserProjectRole",
-        "forge-apps/code/src/db/index.ts:228#getActiveSession",
-        "forge-apps/code/src/db/index.ts:236#upsertActiveSession",
-        "forge-apps/code/src/db/index.ts:274#deleteActiveSession",
-        "forge-apps/code/src/db/schema.ts:7#ProjectRecord",
-        "forge-apps/code/src/db/schema.ts:24#ProjectMemberRecord",
-        "forge-apps/code/src/db/schema.ts:39#ActiveSessionRecord",
-        "forge-apps/code/src/lib/sdk.ts:19#StandaloneLogger",
-        "forge-apps/code/src/lib/sdk.ts:74#createLogger",
-        "forge-apps/code/src/lib/sdk.ts:85#getDatabaseClient",
-        "forge-apps/code/src/lib/sdk.ts:113#createSafeHandler",
-        "forge-apps/code/src/lib/sdk.ts:159#createInternalServiceToken",
-        "forge-apps/code/src/lib/sdk.ts:178#authGuard",
-        "forge-apps/code/src/lib/sdk.ts:270#loadBrandConfig",
-        "forge-apps/code/src/lib/sdk.ts:281#getScopedHierarchy",
-        "forge-apps/code/src/lib/sdk.ts:307#redactSensitiveData",
-        "forge-apps/code/src/lib/types.ts:7#AuthUser",
-        "forge-apps/code/src/lib/types.ts:21#AuthGuardOptions",
-        "forge-apps/code/src/lib/types.ts:33#AuthGuardResult",
-        "forge-apps/code/src/lib/types.ts:43#ScopedHierarchyResponse",
-        "forge-apps/code/src/lib/types.ts:62#ProblemDetails",
-        "forge-apps/code/src/session-coordinator.ts:25#ClaimResult",
-        "forge-apps/code/src/session-coordinator.ts:41#subscribeToProjectEvents",
-        "forge-apps/code/src/session-coordinator.ts:55#broadcastProjectEvent",
-        "forge-apps/code/src/session-coordinator.ts:86#checkSessionHealth",
-        "forge-apps/code/src/session-coordinator.ts:133#claimSession",
-        "forge-apps/code/src/session-coordinator.ts:171#requestTakeover",
-        "forge-apps/code/src/session-coordinator.ts:213#respondToTakeover",
-        "forge-apps/code/src/session-coordinator.ts:259#leaveSession",
-        "forge-apps/code/src/session-coordinator.ts:275#recordHeartbeat",
-        "forge-apps/code/src/ui/catalog.ts:16#renderCatalogHtml",
-        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml",
-        "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
-      ],
-      "verifiedIn": [
-        "forge-apps/code/test/security/git-sanitizer.test.ts"
-      ]
-    },
     "LLR-SDK-003": {
       "id": "LLR-SDK-003",
       "type": "LLR",
@@ -11298,38 +11561,6 @@
       ],
       "verifiedIn": [
         "forge-apps/code/test/integration/code-server.test.ts"
-      ]
-    },
-    "LLR-SUB-004": {
-      "id": "LLR-SUB-004",
-      "type": "LLR",
-      "docFile": "apps/src/docs/src/content/docs/llr/LLR-SUB-004_ROLLING_5MB_TELEMETRY_LOG_ROTA.mdx",
-      "implementedIn": [
-        "apps/src/dev-dashboard/src/frontend/ui-renderer-login.ts:15#renderDevLoginHtml",
-        "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
-        "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
-        "apps/src/sdk/src/logger.ts:119#ForgeLogger",
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer",
-        "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
-        "forge-apps/telemetry/src/lib/sdk.ts:19#StandaloneLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:74#createLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:85#getDatabaseClient",
-        "forge-apps/telemetry/src/lib/sdk.ts:113#createSafeHandler",
-        "forge-apps/telemetry/src/lib/sdk.ts:159#createInternalServiceToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:178#authGuard",
-        "forge-apps/telemetry/src/lib/sdk.ts:270#loadBrandConfig",
-        "forge-apps/telemetry/src/lib/sdk.ts:281#getScopedHierarchy",
-        "forge-apps/telemetry/src/lib/sdk.ts:307#redactSensitiveData",
-        "forge-apps/telemetry/src/lib/types.ts:7#AuthUser",
-        "forge-apps/telemetry/src/lib/types.ts:21#AuthGuardOptions",
-        "forge-apps/telemetry/src/lib/types.ts:33#AuthGuardResult",
-        "forge-apps/telemetry/src/lib/types.ts:43#ScopedHierarchyResponse",
-        "forge-apps/telemetry/src/lib/types.ts:62#ProblemDetails",
-        "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup"
-      ],
-      "verifiedIn": [
-        "forge-apps/telemetry/test/e2e/telemetry-server.test.ts"
       ]
     },
     "LLR-DB-006": {

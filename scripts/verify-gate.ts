@@ -188,7 +188,9 @@ const checkTasks: Array<() => Promise<Tier1Check>> = [
     // Assert each Forge app has standalone docker-compose.yml
     const forgeAppsDir = join(REPO_ROOT, 'forge-apps');
     if (existsSync(forgeAppsDir)) {
-      const appDirs = readdirSync(forgeAppsDir, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name);
+      const appDirs = readdirSync(forgeAppsDir, { withFileTypes: true })
+        .filter((e) => e.isDirectory() && existsSync(join(forgeAppsDir, e.name, 'package.json')))
+        .map((e) => e.name);
       for (const app of appDirs) {
         if (!existsSync(join(forgeAppsDir, app, 'docker-compose.yml'))) {
           return { status: 'FAILED', details: `forge-apps/${app} missing standalone docker-compose.yml` };

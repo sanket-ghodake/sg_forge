@@ -104,6 +104,7 @@ export interface AuthGuardOptions {
   publicPaths?: string[];
   appName?: string;
   appId?: string;
+  redirectTo?: string;
 }
 
 /**

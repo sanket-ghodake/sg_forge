@@ -54,4 +54,47 @@ describe('Tier 3 Security: Code Workstation Zero-Trust Auth Gate', () => {
       server.stop();
     }
   });
+
+  it('Arrange, Act, Assert: rejects forged token signature with 302 redirect', async () => {
+    const server = startCodeServer(0);
+    const token = createInternalServiceToken(['roles/employee'], 'usr_code_tester');
+    const parts = token.split('.');
+    const forgedToken = `${parts[0]}.${parts[1]}.invalidSignatureBase64String`;
+
+    try {
+      const res = await fetch(`http://localhost:${server.port}/`, {
+        headers: { Cookie: `forge_session=${forgedToken}` },
+        redirect: 'manual',
+      });
+      expect(res.status).toBe(302);
+      expect(res.headers.get('location')).toContain('/auth/login');
+    } finally {
+      server.stop();
+    }
+  });
+
+  it('Arrange, Act, Assert: returns RFC 7807 401 for forged token on JSON API requests', async () => {
+    const server = startCodeServer(0);
+    const parts = createInternalServiceToken(['roles/employee'], 'usr_tampered').split('.');
+    const tamperedPayload = Buffer.from(
+      JSON.stringify({ sub: 'usr_hacked', roles: ['roles/super_admin'], exp: Math.floor(Date.now() / 1000) + 3600 })
+    ).toString('base64url');
+    const forgedToken = `${parts[0]}.${tamperedPayload}.${parts[2]}`;
+
+    try {
+      const res = await fetch(`http://localhost:${server.port}/api/projects`, {
+        headers: {
+          Cookie: `forge_session=${forgedToken}`,
+          Accept: 'application/json',
+        },
+      });
+      expect(res.status).toBe(401);
+      const json: any = await res.json();
+      expect(json.title).toBe('Unauthorized');
+      expect(json.detail).toContain('signature');
+    } finally {
+      server.stop();
+    }
+  });
 });
+

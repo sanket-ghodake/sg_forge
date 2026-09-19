@@ -38,6 +38,7 @@ import {
   revokeApiToken,
 } from './backend/inbox-service';
 import { handleAppGovernanceRoutes } from './backend/app-governance-routes';
+import { validateMutatingRequest, checkPortalRateLimit, sanitizeEmployeeDirectory } from './backend/security-middleware';
 
 const PORT = Number(process.env.PORTAL_PORT || process.env.PORT || 3001);
 const logger = createLogger('portal-service');
@@ -101,6 +102,9 @@ export function startPortalServer(port: number = PORT) {
       return auth.response!;
     }
 
+    const csrfRes = validateMutatingRequest(req);
+    if (csrfRes) return csrfRes;
+
     const userRoles = auth.user?.roles || [];
     const isAdmin = userRoles.some((r: string) => r.includes('admin') || r.includes('manager'));
     const isSuperAdmin = userRoles.some((r: string) => r.includes('super_admin'));
@@ -114,6 +118,8 @@ export function startPortalServer(port: number = PORT) {
 
     // JSON API Endpoints for dynamic hydration
     if (url.pathname === '/api/v1/portal/canvas/tree' || url.pathname === '/portal/api/v1/portal/canvas/tree') {
+      const rl = checkPortalRateLimit(`tree:${auth.user!.id}`, 60, 60);
+      if (rl) return rl;
       try {
         const maxDepth = url.searchParams.get('max_depth') ? Number(url.searchParams.get('max_depth')) : 10;
         const rootId = url.searchParams.get('root_id') || undefined;
@@ -229,6 +235,8 @@ export function startPortalServer(port: number = PORT) {
         return Response.json({ ok: true, data: tokens });
       }
       if (req.method === 'POST') {
+        const rl = checkPortalRateLimit(`tok:${auth.user!.id}`, 10, 60);
+        if (rl) return rl;
         try {
           const body = await req.json();
           const result = createApiToken(auth.user!.id, body.name || 'Personal Developer Token');
@@ -279,9 +287,11 @@ export function startPortalServer(port: number = PORT) {
     }
 
     if (url.pathname === '/api/v1/portal/members' || url.pathname === '/portal/api/v1/portal/members') {
+      const rl = checkPortalRateLimit(`mem:${auth.user!.id}`, 60, 60);
+      if (rl) return rl;
       try {
         const empData = await fetchEmployeesList({ limit: 500, headers: forwardHeaders });
-        const members = (empData.items || []).map((m: any) => ({
+        const rawMembers = (empData.items || []).map((m: any) => ({
           id: m.id,
           name: m.display_name,
           email: m.email,
@@ -292,7 +302,7 @@ export function startPortalServer(port: number = PORT) {
           avatarInitial: m.display_name ? m.display_name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase() : '--',
           roles: m.roles || [],
         }));
-        return Response.json({ ok: true, data: members });
+        return Response.json({ ok: true, data: sanitizeEmployeeDirectory(rawMembers, userRoles) });
       } catch (err: any) {
         logger.error('Failed to fetch members list from Auth service:', err);
         return Response.json({ ok: false, error: err?.message || 'Failed to fetch members' }, { status: 500 });
