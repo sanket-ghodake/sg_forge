@@ -111,21 +111,8 @@ case "$CMD" in
         "$REPO_ROOT/portables/bin/graft" "$@"
         ;;
 
-    tokens|codeburn)
-        ACTION="${1:-}"
-        case "$ACTION" in
-            tui)
-                shift || true
-                "$REPO_ROOT/portables/bin/codeburn" "$@"
-                ;;
-            sync)
-                shift || true
-                $PORTABLE_BUN run "$REPO_ROOT/scripts/sync-tokens.ts" "$@"
-                ;;
-            *)
-                $PORTABLE_BUN run "$REPO_ROOT/scripts/display-tokens.ts" "$@"
-                ;;
-        esac
+    tokens|tokscale)
+        "$REPO_ROOT/portables/bin/tokscale" "$@"
         ;;
 
     headroom)

@@ -304,7 +304,19 @@ const checkTasks: Array<() => Promise<Tier1Check>> = [
     const lastLine = lines[lines.length - 1];
     const dateRegex = /^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}\s+\|\s+.+$/;
     if (!dateRegex.test(lastLine)) return { status: 'WARNING', details: `Last line format mismatch: '${lastLine.slice(0, 40)}...'` };
-    return { status: 'PASSED', details: 'Worklog and structured JSONL ledger format validated.' };
+
+    // Synchronize latest AI token ledger monotonically before pre-commit staging
+    const ledgerPath = join(REPO_ROOT, 'logs', 'token-ledger.jsonl');
+    try {
+      const { getAllRepoEntries, syncTokensToLedger } = require('./tokscale-runner');
+      const { entries } = getAllRepoEntries(false);
+      syncTokensToLedger(entries, ledgerPath);
+    } catch {
+      // Non-blocking fallback
+    }
+    if (!existsSync(ledgerPath)) return { status: 'WARNING', details: 'logs/token-ledger.jsonl not found.' };
+
+    return { status: 'PASSED', details: 'Worklog and structured JSONL token ledger validated & synchronized.' };
   }),
 
   // 14. Astryx UI & Token Compliance

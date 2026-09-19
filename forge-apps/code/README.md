@@ -56,7 +56,7 @@ Operates with 100% autonomy through `./run.sh` (or `run.bat` on Windows):
 ./run.sh graft callers <symbol>  # Trace call hierarchies within submodule
 ./run.sh graft blast             # Audit working tree blast radius
 
-# Lifetime AI Spend & Token Tracking (CodeBurn)
+# Lifetime AI Spend & Token Tracking (Tokscale)
 ./run.sh tokens              # Display submodule lifetime token and spend dashboard
 ./run.sh tokens sync         # Ingest current session tokens into logs/token-ledger.jsonl
 ./run.sh tokens tui          # Launch interactive terminal TUI dashboard

@@ -144,19 +144,7 @@ case "$CMD" in
     exec "$DIR/portables/bin/graft" "$@"
     ;;
   tokens)
-    SUB_CMD="${1:-dashboard}"
-    shift || true
-    case "$SUB_CMD" in
-      sync)
-        exec "$BUN_BIN" run scripts/sync-tokens.ts "$@"
-        ;;
-      tui)
-        exec "$DIR/portables/bin/codeburn" "$@"
-        ;;
-      dashboard|*)
-        exec "$BUN_BIN" run scripts/display-tokens.ts "$@"
-        ;;
-    esac
+    exec "$DIR/portables/bin/tokscale" "$@"
     ;;
   headroom)
     exec "$DIR/portables/bin/headroom" "$@"

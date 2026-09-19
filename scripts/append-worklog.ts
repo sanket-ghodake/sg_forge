@@ -71,6 +71,15 @@ export function appendWorklog(summary: string): void {
   const updatedContent = `${existing}\n${newEntry}\n`;
   writeFileSync(WORKLOGS_PATH, updatedContent, 'utf8');
 
+  // Synchronize latest AI token metrics monotonically to logs/token-ledger.jsonl
+  try {
+    const { getAllRepoEntries, syncTokensToLedger } = require('./tokscale-runner');
+    const { entries } = getAllRepoEntries(false);
+    syncTokensToLedger(entries);
+  } catch {
+    // Non-blocking if tokscale runner is not available
+  }
+
   console.log(`\n📜 [Worklog Updated] Appended to logs/WORKLOGS.md:`);
   console.log(`   └─ ${newEntry}\n`);
 }

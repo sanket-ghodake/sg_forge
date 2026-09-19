@@ -48,8 +48,8 @@ logs/reports/
 # AI Context, Token & Compression Tooling
 .graftignore
 /graft/
-.codeburn/
-codeburn-*.json
+.tokscale/
+tokscale-*.json
 .headroom/
 headroom-*.json
 graphify-out/cache/
@@ -75,7 +75,7 @@ data
 .env.*
 !.env.example
 /graft
-.codeburn
+.tokscale
 .headroom
 `;
 

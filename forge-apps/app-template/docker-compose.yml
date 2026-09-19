@@ -3,7 +3,7 @@
 # Invariant: internal: true -> ZERO outbound internet egress. Inbound via proxy.
 # Usage: docker compose up --build -d
 # ==============================================================================
-name: forge-app-template
+name: forge-template
 
 networks:
   # 1. Isolated Application Network (Strict Air-Gap: No default gateway to internet)
@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-app-template-dev
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-template-dev
     ports:
       - "${PORT:-8099}:${PORT:-8099}"
     env_file:

@@ -91,16 +91,16 @@ scratch/
 .DS_Store
 Thumbs.db
 
-# 7. Graphify, Graft, CodeBurn & Headroom Transient Backups & Context Caches
+# 7. Graphify, Graft, Tokscale & Headroom Transient Backups & Context Caches
 graphify-out/cache/
 graphify-out/.graphify_*
 graphify-out/20*/
 graphify-out/manifest.json
 /graft/
 **/.graft
-.codeburn/
-codeburn-*.json
-codeburn-*.csv
+.tokscale/
+tokscale-*.json
+tokscale-*.csv
 .headroom/
 headroom-*.json
 

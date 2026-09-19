@@ -46,7 +46,7 @@ Operates with 100% autonomy through `./run.sh` (or `run.bat` on Windows):
 ./run.sh graft callers <symbol>  # Trace call hierarchies within submodule
 ./run.sh graft blast             # Audit working tree blast radius
 
-# Lifetime AI Spend & Token Tracking (CodeBurn)
+# Lifetime AI Spend & Token Tracking (Tokscale)
 ./run.sh tokens              # Display submodule lifetime token and spend dashboard
 ./run.sh tokens sync         # Ingest current session tokens into logs/token-ledger.jsonl
 ./run.sh tokens tui          # Launch interactive terminal TUI dashboard
@@ -67,7 +67,7 @@ Operates with 100% autonomy through `./run.sh` (or `run.bat` on Windows):
 ```text
 forge-apps/telemetry/
 ├── README.md                      # Service documentation & code metrics
-├── portables/bin/                 # Self-resolving CLI wrappers (rtk, graft, codeburn, headroom)
+├── portables/bin/                 # Self-resolving CLI wrappers (rtk, graft, tokscale, headroom)
 ├── scripts/
 │   ├── verify-gate.ts             # 18-check quality gate
 │   ├── sync-ignores.ts            # Ignore synchronization
@@ -93,6 +93,6 @@ forge-apps/telemetry/
 
 * **Gateway Routing**: Exposed under `/apps/telemetry/` via Caddy with canonical 308 trailing slash redirection.
 * **Asset & API Paths**: Uses HTML `<base href="/apps/telemetry/">` and dynamic `apiBase` so that `health` and `api/logs/browser` resolve correctly under the subpath namespace without hitting domain root.
-* **Standalone Docker**: Run `./run.sh up` to auto-bootstrap the `${FORGE_APPS_NETWORK:-ag_forge_apps_net}` network.
+* **Standalone Docker**: Run `./run.sh up` to auto-bootstrap the `${FORGE_APPS_NETWORK:-forge_apps_net}` network.
 * **Standalone Bare Metal**: Run `./run.sh dev` to start locally on port 8087 without Docker.
 

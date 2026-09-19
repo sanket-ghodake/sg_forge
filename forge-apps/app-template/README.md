@@ -36,7 +36,7 @@ This template operates with 100% autonomy through `./run.sh` (or `run.bat` on Wi
 ./run.sh graft callers <symbol>  # Trace call hierarchies within submodule
 ./run.sh graft blast             # Audit working tree blast radius
 
-# Lifetime AI Spend & Token Tracking (CodeBurn)
+# Lifetime AI Spend & Token Tracking (Tokscale)
 ./run.sh tokens              # Display submodule lifetime token and spend dashboard
 ./run.sh tokens sync         # Ingest current session tokens into logs/token-ledger.jsonl
 ./run.sh tokens tui          # Launch interactive terminal TUI dashboard
@@ -58,12 +58,11 @@ This template operates with 100% autonomy through `./run.sh` (or `run.bat` on Wi
 forge-apps/app-template/
 ├── README.md                      # Template documentation & code metrics
 ├── package.json                   # Dependencies & package manifest
-├── portables/bin/                 # Self-resolving CLI wrappers (rtk, graft, codeburn, headroom)
+├── portables/bin/                 # Self-resolving CLI wrappers (rtk, graft, tokscale, headroom)
 ├── scripts/
 │   ├── verify-gate.ts             # 18-check quality gate
 │   ├── sync-ignores.ts            # Ignore synchronization
-│   ├── sync-tokens.ts             # Token ledger synchronizer
-│   ├── display-tokens.ts          # Token dashboard renderer
+│   ├── tokscale-runner.ts         # Scoped Tokscale analytics runner
 │   ├── headroom-runner.ts         # Context compression engine
 │   └── append-worklog.ts          # Atomic worklog appender
 ├── src/
@@ -112,7 +111,7 @@ fetch(apiBase + 'health').then(r => r.json());
 ### 4. Docker Network (`FORGE_APPS_NETWORK`)
 Standalone execution (`./run.sh up`) auto-bootstraps the network. If using raw Docker Compose, run:
 ```bash
-docker network create ${FORGE_APPS_NETWORK:-ag_forge_apps_net} || true
+docker network create ${FORGE_APPS_NETWORK:-forge_apps_net} || true
 docker compose up -d
 ```
 

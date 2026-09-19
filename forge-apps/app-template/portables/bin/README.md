@@ -18,7 +18,7 @@ This directory contains standalone, self-resolving POSIX executable wrappers for
 | `lizard` | Cyclomatic code complexity scanner | [lizard](https://github.com/terryyin/lizard) |
 | `scc` | Source code lines and metrics counter | [scc](https://github.com/boyter/scc) |
 | `graft` | Code context and symbol dependency graph engine | [@nanonets/graft](https://github.com/trailhq/Graft) |
-| `codeburn` | AI token and lifetime spend tracker | [getagentseal/codeburn](https://github.com/getagentseal/codeburn) |
+| `tokscale` | AI token and spend analytics tracker across IDEs | [junhoyeo/tokscale](https://github.com/junhoyeo/tokscale) |
 | `headroom` | Context and prompt compression engine | [headroomlabs-ai/headroom](https://github.com/headroomlabs-ai/headroom) |
 | `council` | Council of AI multi-agent decision framework | [Silotech](https://github.com/Silotech) |
 

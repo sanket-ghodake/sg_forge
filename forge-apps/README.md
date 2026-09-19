@@ -36,11 +36,11 @@ Independent, polyglot, sandboxed micro-frontends running in Docker containers wi
 
 ## 🛠️ Developer Deployment & Troubleshooting Guide
 
-### 1. Docker Gateway Network Missing (`ag_forge_apps_net`)
+### 1. Docker Gateway Network Missing (`forge_apps_net`)
 * **Symptom**: `network ... declared as external, but could not be found` when running standalone `docker compose up`.
 * **Fix**: Run via submodule toolchain `./run.sh up`, or auto-bootstrap the network in one command:
   ```bash
-  docker network create ${FORGE_APPS_NETWORK:-ag_forge_apps_net} || true
+  docker network create ${FORGE_APPS_NETWORK:-forge_apps_net} || true
   ```
 * **Runtime Mesh Control**: Set `FORGE_APPS_NETWORK="my_mesh"` in `.env` to customize the network name across all composes.
 

@@ -43,7 +43,7 @@ Before writing code, running commands, or staging changes in this microservice:
 - **Testing**: Bun Test (`./run.sh test`)
 - **Quality Gate**: Pre-commit quality gate (`./run.sh verify`)
 - **Code Context**: Graft (`./run.sh graft`)
-- **Spend Tracking**: CodeBurn & Lifetime Ledger (`./run.sh tokens`)
+- **Spend Tracking**: Tokscale & Lifetime Ledger (`./run.sh tokens`)
 - **Context Compression**: Headroom (`./run.sh headroom`)
 - **Hooks**: Versioned Git hooks in `.githooks/` activated via `./run.sh setup-hooks`
 
@@ -53,8 +53,8 @@ Before writing code, running commands, or staging changes in this microservice:
 ```text
 .
 ├── .agents/                    # Autonomous AI agent rules & skills
-│   ├── rules/                  # Domain rules (core, security, testing, graft, codeburn, headroom)
-│   └── skills/                 # Tool workflows (graft, codeburn, headroom)
+│   ├── rules/                  # Domain rules (core, security, testing, graft, tokscale, headroom)
+│   └── skills/                 # Tool workflows (graft, tokscale, headroom)
 ├── .githooks/                  # Pre-commit gate & post-commit logger
 ├── docker/
 │   └── Dockerfile              # Standalone build (context: .)
@@ -63,13 +63,12 @@ Before writing code, running commands, or staging changes in this microservice:
 │   ├── WORKLOGS.md             # Submodule conversation worklog
 │   ├── commits.jsonl           # Ground-truth commit ledger
 │   └── token-ledger.jsonl      # Lifetime token & spend ledger
-├── portables/bin/              # Self-resolving CLI wrappers (rtk, graft, codeburn, headroom)
+├── portables/bin/              # Self-resolving CLI wrappers (rtk, graft, tokscale, headroom)
 ├── scripts/
 │   ├── verify-gate.ts          # Standalone 18-check quality gate
 │   ├── log-commit.ts           # Ground-truth commit extractor
 │   ├── sync-ignores.ts         # Ignore synchronization
-│   ├── sync-tokens.ts          # Token ledger synchronizer
-│   ├── display-tokens.ts       # Token dashboard renderer
+│   ├── tokscale-runner.ts          # Token ledger synchronizer
 │   ├── headroom-runner.ts      # Context compression runner
 │   ├── council-runner.ts       # Council of AI decision runner
 │   └── append-worklog.ts       # Atomic worklog appender
@@ -90,7 +89,7 @@ Before writing code, running commands, or staging changes in this microservice:
 - **Security & Air-Gap**: [`.agents/rules/security.md`](file:///.agents/rules/security.md)
 - **5-Tier Testing Rigor**: [`.agents/rules/testing.md`](file:///.agents/rules/testing.md)
 - **Code Context Graph (Graft)**: [`.agents/rules/graft.md`](file:///.agents/rules/graft.md)
-- **Lifetime Token Ledger (CodeBurn)**: [`.agents/rules/codeburn.md`](file:///.agents/rules/codeburn.md)
+- **Lifetime Token Ledger (Tokscale)**: [`.agents/rules/tokscale.md`](file:///.agents/rules/tokscale.md)
 - **Context Compression (Headroom)**: [`.agents/rules/headroom.md`](file:///.agents/rules/headroom.md)
 - **Council of AI Decision Framework**: [`.agents/rules/council.md`](file:///.agents/rules/council.md)
 - **RTK Token Optimization**: [`.agents/rules/rtk.md`](file:///.agents/rules/rtk.md)

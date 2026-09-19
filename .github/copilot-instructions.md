@@ -125,7 +125,7 @@ Before writing code, running commands, or staging/committing changes, verify:
 - **Graphify Knowledge Graph**: [`.agents/rules/graphify.md`](file:///.agents/rules/graphify.md)
 - **Graft Code Context Graph**: [`.agents/rules/graft.md`](file:///.agents/rules/graft.md)
 - **RTK Token Optimization**: [`.agents/rules/rtk.md`](file:///.agents/rules/rtk.md)
-- **CodeBurn Lifetime Token Ledger**: [`.agents/rules/codeburn.md`](file:///.agents/rules/codeburn.md)
+- **Tokscale Lifetime Token Ledger**: [`.agents/rules/tokscale.md`](file:///.agents/rules/tokscale.md)
 - **Headroom Context Compression**: [`.agents/rules/headroom.md`](file:///.agents/rules/headroom.md)
 - **Council of AI Decision Framework**: [`.agents/rules/council.md`](file:///.agents/rules/council.md)
 - **Microservice Observability & Logs**: [`.agents/rules/observability.md`](file:///.agents/rules/observability.md)

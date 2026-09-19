@@ -52,7 +52,7 @@ function show_help() {
     echo "  benchmark [url]       Run Autocannon HTTP latency benchmark (<2ms target)"
     echo "  pack                  Run Repomix token-compressed AI context packager"
     echo "  graft [cmd]           Run Graft code context graph (build, ask, callers, skeleton, map)"
-    echo "  tokens [tui|sync]     Inspect lifetime repo AI token spend & cost ledger (CodeBurn)"
+    echo "  tokens [sync|history|tui] Inspect lifetime repo AI token spend & cost ledger (Tokscale)"
     echo "  headroom [cmd]        Run Headroom context compression engine (status, compress, proxy, stats)"
     echo "  council [topic]       Run Council of AI multi-agent decision & review framework"
     echo ""

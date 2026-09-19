@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-09-15T16:21:00.000Z",
-  "totalExportedSymbols": 791,
+  "totalExportedSymbols": 835,
   "documentedSymbols": 669,
-  "symbolCoveragePercent": 84.6,
+  "symbolCoveragePercent": 80.1,
   "totalRequirements": 84,
   "implementedRequirements": 79,
   "verifiedRequirements": 79,
@@ -7001,10 +7001,82 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "TokscaleEntry",
+      "kind": "interface",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TokscaleReport",
+      "kind": "interface",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 22,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "TokenLedgerEntry",
       "kind": "interface",
-      "file": "forge-apps/app-template/scripts/sync-tokens.ts",
-      "line": 11,
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 28,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getLedgerKey",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 37,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getRepoWorkspaces",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 44,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "filterEntriesByWorkspace",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 81,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "fetchRawTokscaleReport",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 116,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "loadAntigravityDesktopSessions",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 148,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "formatNumber",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 220,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -7012,17 +7084,44 @@
     {
       "name": "readLedger",
       "kind": "function",
-      "file": "forge-apps/app-template/scripts/sync-tokens.ts",
-      "line": 26,
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 227,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
     },
     {
-      "name": "syncCurrentSession",
+      "name": "syncTokensToLedger",
       "kind": "function",
-      "file": "forge-apps/app-template/scripts/sync-tokens.ts",
-      "line": 42,
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 239,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getAllRepoEntries",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 302,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderReport",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 354,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderHistory",
+      "kind": "function",
+      "file": "forge-apps/app-template/scripts/tokscale-runner.ts",
+      "line": 427,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -7432,10 +7531,82 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "TokscaleEntry",
+      "kind": "interface",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TokscaleReport",
+      "kind": "interface",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 22,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "TokenLedgerEntry",
       "kind": "interface",
-      "file": "forge-apps/telemetry/scripts/sync-tokens.ts",
-      "line": 11,
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 28,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getLedgerKey",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 37,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getRepoWorkspaces",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 44,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "filterEntriesByWorkspace",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 81,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "fetchRawTokscaleReport",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 116,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "loadAntigravityDesktopSessions",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 148,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "formatNumber",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 220,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -7443,17 +7614,44 @@
     {
       "name": "readLedger",
       "kind": "function",
-      "file": "forge-apps/telemetry/scripts/sync-tokens.ts",
-      "line": 26,
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 227,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
     },
     {
-      "name": "syncCurrentSession",
+      "name": "syncTokensToLedger",
       "kind": "function",
-      "file": "forge-apps/telemetry/scripts/sync-tokens.ts",
-      "line": 42,
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 239,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getAllRepoEntries",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 302,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderReport",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 354,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderHistory",
+      "kind": "function",
+      "file": "forge-apps/telemetry/scripts/tokscale-runner.ts",
+      "line": 427,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -8334,10 +8532,82 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "TokscaleEntry",
+      "kind": "interface",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TokscaleReport",
+      "kind": "interface",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 22,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "TokenLedgerEntry",
       "kind": "interface",
-      "file": "forge-apps/code/scripts/sync-tokens.ts",
-      "line": 11,
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 28,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getLedgerKey",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 37,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getRepoWorkspaces",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 44,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "filterEntriesByWorkspace",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 81,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "fetchRawTokscaleReport",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 116,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "loadAntigravityDesktopSessions",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 148,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "formatNumber",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 220,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -8345,17 +8615,44 @@
     {
       "name": "readLedger",
       "kind": "function",
-      "file": "forge-apps/code/scripts/sync-tokens.ts",
-      "line": 26,
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 227,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
     },
     {
-      "name": "syncCurrentSession",
+      "name": "syncTokensToLedger",
       "kind": "function",
-      "file": "forge-apps/code/scripts/sync-tokens.ts",
-      "line": 42,
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 239,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getAllRepoEntries",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 302,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderReport",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 354,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderHistory",
+      "kind": "function",
+      "file": "forge-apps/code/scripts/tokscale-runner.ts",
+      "line": 427,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -9040,6 +9337,132 @@
       ]
     },
     {
+      "name": "TokscaleEntry",
+      "kind": "interface",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 16,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TokscaleReport",
+      "kind": "interface",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 22,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "TokenLedgerEntry",
+      "kind": "interface",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 28,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getLedgerKey",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 37,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getRepoWorkspaces",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 44,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "filterEntriesByWorkspace",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 81,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "fetchRawTokscaleReport",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 116,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "loadAntigravityDesktopSessions",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 148,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "formatNumber",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 220,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "readLedger",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 227,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "syncTokensToLedger",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 239,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "getAllRepoEntries",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 302,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderReport",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 354,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderHistory",
+      "kind": "function",
+      "file": "scripts/tokscale-runner.ts",
+      "line": 427,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "installCaTrust",
       "kind": "function",
       "file": "scripts/trust-cert.ts",
@@ -9410,33 +9833,6 @@
       "missingRequirementFiles": [
         "SR-GATE-001"
       ]
-    },
-    {
-      "name": "TokenLedgerEntry",
-      "kind": "interface",
-      "file": "scripts/sync-tokens.ts",
-      "line": 11,
-      "hasDoc": false,
-      "requirements": [],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "readLedger",
-      "kind": "function",
-      "file": "scripts/sync-tokens.ts",
-      "line": 26,
-      "hasDoc": false,
-      "requirements": [],
-      "missingRequirementFiles": []
-    },
-    {
-      "name": "syncCurrentSession",
-      "kind": "function",
-      "file": "scripts/sync-tokens.ts",
-      "line": 42,
-      "hasDoc": false,
-      "requirements": [],
-      "missingRequirementFiles": []
     }
   ],
   "requirements": {
@@ -9855,6 +10251,7 @@
       ],
       "verifiedIn": [
         "apps/src/docs/test/unit/token-ledger.test.ts",
+        "apps/src/docs/test/unit/tokscale.test.ts",
         "scripts/test/run-sh.test.ts"
       ]
     },

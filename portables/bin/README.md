@@ -48,7 +48,7 @@ All binaries and scripts in this directory are self-resolving POSIX wrappers tha
 - **[`caveman`](../caveman)**: Ultra-compressed communication mode utility.
 - **[`graphify`](https://github.com/safishamsi/graphify)**: Macroscopic multimodal knowledge graph with community clustering and Obsidian export.
 - **[`graft`](https://github.com/trailhq/Graft)**: Microscopic code context graph for AI coding agents (symbol call trees, skeletons, blast radius).
-- **[`codeburn`](https://github.com/getagentseal/codeburn)**: Lifetime AI coding token & cost tracker across 41 tools and agents with persistent Git ledgering.
+- **[`tokscale`](https://github.com/junhoyeo/tokscale)**: AI coding token usage analytics and spend tracking across 30+ IDEs and tools with repository-isolated git ledgering.
 - **[`headroom`](https://github.com/headroomlabs-ai/headroom)**: Context and prompt compression engine (SmartCrusher, CodeCompressor, Kompress).
 - **[`council`](https://medium.com/@Silotech.xyz/the-council-of-ai-a-multi-agent-prompting-framework-for-better-decision-making-8e7569c10584)**: Council of AI multi-agent decision & RFC review framework (Marius Silo / Silotech.xyz).
 - **[`astryx`](../../apps/src/ui)**: Astryx design token validator and theme parity enforcer.

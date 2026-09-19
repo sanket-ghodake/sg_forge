@@ -168,9 +168,12 @@ export function createApp(options: CreateAppOptions): {
 
   // docker-compose.yml
   replaceInFile('docker-compose.yml', {
-    'forge-app-template': `forge-app-${appName}`,
+    'forge-template': `forge-${appName}`,
+    'forge-app-template': `forge-${appName}`,
     'app-airgap-net': `${appName}-airgap-net`,
-    'app-template': `app-${appName}`,
+    '-template-dev': `-${appName}-dev`,
+    '- app-template': `- app-${appName}`,
+    '- template': `- ${appName}`,
     '8099': `${allocatedPort}`,
   });
 

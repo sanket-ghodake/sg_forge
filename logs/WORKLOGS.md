@@ -95,3 +95,16 @@
 2026-09-19 12:27 | Publish timestamped Forge Apps API Security Audit Report (2026-09-19) and expanded Developer Integration Guide with complete API catalog
 2026-09-19 12:50 | feat(auth-bridge): selectively exclude central auth redirect bridge on Dev Center, Docs, Dev Hub, and public Forge Apps with 100% test pass
 2026-09-19 13:28 | refactor(orchestration): establish single-parameter root naming convention, purge legacy ag/sg docker resources, and harmonize container names
+2026-09-19 13:40 | Identified and documented token usage monitoring tools (CodeBurn, Token Ledger, RTK, Headroom)
+2026-09-19 13:46 | Clarified runtime execution triggers for RTK, Graphify, and Headroom
+2026-09-19 13:51 | Analyzed token tracking inaccuracies and identified open-source multi-IDE solutions (Tokscale, TokenTracker)
+2026-09-19 13:52 | fix(forge-apps): harmonize app-template and generator with root naming convention
+2026-09-19 13:56 | Tested Tokscale against local IDE sessions and mapped CodeBurn replacement architecture
+2026-09-19 14:01 | Authored detailed implementation plan to retire CodeBurn and integrate repository-scoped Tokscale
+2026-09-19 14:04 | Expanded Tokscale implementation plan to cover forge-apps/app-template and submodules (code, telemetry)
+2026-09-19 14:10 | Comprehensive audit of forge-apps and app-template run.sh commands and toolchain discrepancies
+2026-09-19 14:13 | Retired CodeBurn and completed standalone Tokscale integration with strict workspace isolation across root and forge-apps
+2026-09-19 14:36 | Integrated live Antigravity desktop IDE token ingestion into Tokscale runner with strict repository scoping
+2026-09-19 14:50 | Implemented Git-maintained monotonic token ledger reconciliation across root and all forge submodules
+2026-09-19 15:04 | Verified all 33 portable tools and Git-maintained Tokscale tracking flow across monorepo and submodules
+2026-09-19 15:06 | Tested and confirmed all run.sh token commands across root and submodules
