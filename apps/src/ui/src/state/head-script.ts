@@ -22,6 +22,8 @@ export interface HeadStateScriptOptions {
   enableServiceWorker?: boolean;
   /** Path to the service worker file. Defaults to '/sw.js' */
   swUrl?: string;
+  /** Whether to register the central auth redirect bridge and 401 fetch interceptor. Defaults to true. */
+  enableAuthRedirectBridge?: boolean;
 }
 
 /**
@@ -265,9 +267,11 @@ export function getHeadStateScript(
           : ''
       }
 
-      /* 5. Real-Time Cross-Tab Session Synchronization */
-      try {
-        if (!window.location.pathname.startsWith('/auth/login') && !window.location.pathname.startsWith('/login')) {
+      /* 5. Real-Time Cross-Tab Session Synchronization & Central Auth Bridge */
+      ${
+        options.enableAuthRedirectBridge !== false
+          ? `try {
+        if (!window.location.pathname.startsWith('/auth/login') && !window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/devcenter') && !window.location.pathname.startsWith('/gateway') && !window.location.pathname.startsWith('/docs')) {
           var onCrossTabLogout = function() {
             try { sessionStorage.clear(); } catch(e) {}
             var curr = window.location.pathname + window.location.search;
@@ -286,7 +290,7 @@ export function getHeadStateScript(
             var origFetch = window.fetch;
             window.fetch = function() {
               return origFetch.apply(this, arguments).then(function(res) {
-                if (res && res.status === 401 && !window.location.pathname.startsWith('/auth/login')) {
+                if (res && res.status === 401 && !window.location.pathname.startsWith('/auth/login') && !window.location.pathname.startsWith('/devcenter') && !window.location.pathname.startsWith('/gateway') && !window.location.pathname.startsWith('/docs')) {
                   try {
                     localStorage.setItem('forge_logout_event', String(Date.now()));
                     if (typeof BroadcastChannel !== 'undefined') {
@@ -302,7 +306,9 @@ export function getHeadStateScript(
             };
           }
         }
-      } catch(e) {}
+      } catch(e) {}`
+          : ''
+      }
     } catch(err) {}
   })();`.replace(/\s+/g, ' ').trim();
 

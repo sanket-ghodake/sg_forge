@@ -93,3 +93,4 @@
 2026-09-19 12:13 | Drafted comprehensive plan to elevate all Forge Apps and Portal APIs to 10/10 security
 2026-09-19 12:20 | Elevate all active Forge Apps and Portal APIs to 10/10 Zero-Trust defense with CSRF, PII masking, Ed25519 cryptographic tokens, and Playwright E2E suite
 2026-09-19 12:27 | Publish timestamped Forge Apps API Security Audit Report (2026-09-19) and expanded Developer Integration Guide with complete API catalog
+2026-09-19 12:50 | feat(auth-bridge): selectively exclude central auth redirect bridge on Dev Center, Docs, Dev Hub, and public Forge Apps with 100% test pass

@@ -24,7 +24,7 @@ function renderAppHtml(): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <base href="/apps/telemetry/">
   <title>${brand.name} - Telemetry Micro-App (Public)</title>
-  ${getHeadStateScript({ defaultTheme: 'dark' })}
+  ${getHeadStateScript({ defaultTheme: 'dark', enableAuthRedirectBridge: false })}
   <style>
     ${getAstryxStyles()}
   </style>

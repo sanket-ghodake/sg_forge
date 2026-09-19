@@ -21,7 +21,7 @@ export function renderDevLoginHtml(errorMessage: string = ''): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${brand.name} - Developer Dashboard Sign In</title>
-  ${getHeadStateScript({ defaultTheme: 'dark' })}
+  ${getHeadStateScript({ defaultTheme: 'dark', enableAuthRedirectBridge: false })}
   <style>
     ${getDashboardStyles()}
 

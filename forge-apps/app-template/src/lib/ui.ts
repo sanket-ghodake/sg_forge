@@ -7,7 +7,7 @@
 
 import { icons } from './icons';
 
-export function getHeadStateScript(options: { defaultTheme?: 'dark' | 'light' } = {}): string {
+export function getHeadStateScript(options: { defaultTheme?: 'dark' | 'light'; enableAuthRedirectBridge?: boolean } = {}): string {
   const theme = options.defaultTheme || 'dark';
   return `
     <script>
@@ -15,7 +15,7 @@ export function getHeadStateScript(options: { defaultTheme?: 'dark' | 'light' } 
         const theme = localStorage.getItem('forge_theme') || '${theme}';
         document.documentElement.setAttribute('data-theme', theme);
 
-        try {
+        ${options.enableAuthRedirectBridge !== false ? `try {
           if (!window.location.pathname.startsWith('/auth/login') && !window.location.pathname.startsWith('/login')) {
             var onCrossTabLogout = function() {
               try { sessionStorage.clear(); } catch(e) {}
@@ -51,7 +51,7 @@ export function getHeadStateScript(options: { defaultTheme?: 'dark' | 'light' } 
               };
             }
           }
-        } catch(e) {}
+        } catch(e) {}` : ''}
       })();
     </script>
   `;

@@ -36,7 +36,7 @@ export default defineConfig({
         },
         {
           tag: 'script',
-          content: getHeadStateScript({ defaultTheme: 'dark' }, false),
+          content: getHeadStateScript({ defaultTheme: 'dark', enableAuthRedirectBridge: false }, false),
         },
         {
           tag: 'script',

@@ -28,7 +28,12 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
 
 ### Fetch Interceptor (automatic 401 detection in all tabs)
 1. Wrap `window.fetch` at app boot time: on any non-login response with `status === 401`, emit both `localStorage` and `BroadcastChannel` logout signals, then call `onCrossTabLogout()`.
-2. The fetch wrapper is installed in: Portal head-script, all `@forge/ui` apps, and all Forge App submodule `ui.ts` inline head scripts.
+2. The fetch wrapper is installed in: Portal head-script, all `@forge/ui` apps, and Forge App submodules.
+
+### Selective Exclusion for Independent & Public Services (2026 LTS)
+1. **Unauthenticated / Public Services**: Public documentation (`/docs`), developer API test playgrounds (`/gateway`), and public micro-apps (e.g. `/apps/telemetry`) do not enforce central user sessions and must **exclude** the Central Auth Redirect Bridge to prevent spurious redirect ejection when exploring public endpoints.
+2. **Independently Authenticated Services**: Developer Dashboard / Dev Center (`/devcenter`) operates with an independent master-password operator session and must exclude the central user session bridge (`enableAuthRedirectBridge: false`).
+3. **Execution Control**: In `getHeadStateScript({ enableAuthRedirectBridge: false })`, section 5 (BroadcastChannel listeners, storage listeners, and 401 interceptors) is omitted entirely. Additionally, the default fetch wrapper excludes paths matching `/devcenter`, `/gateway`, and `/docs`.
 
 ## 2. Safety & Verification Invariants
 
@@ -36,15 +41,23 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
 * **`localStorage` key `'forge_logout_event'`** serves as a cross-browser fallback; value must be a millisecond epoch timestamp (prevents duplicate triggers on same-value writes).
 * **Receivers must guard against duplicate invocations** — after the first logout redirect is triggered, listeners need not be removed because navigation destroys the page context.
 * **The fetch interceptor must not intercept responses from `/auth/login` itself** to prevent infinite redirect chains.
+* **Exclusion paths (`/devcenter`, `/gateway`, `/docs`) must never trigger 401 redirects to `/auth/login`**, preventing disruption of operator or public exploration workflows.
 * **`BroadcastChannel` instances must be closed after postMessage** to release browser resources.
 
 ## 3. Bidirectional Traceability
 
 * **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
 * **Implemented in Source**:
-  - `apps/src/ui/src/state/head-script.ts` — Core platform inline head guard (section 5)
+  - `apps/src/ui/src/state/head-script.ts` — Core platform inline head guard (section 5) with `enableAuthRedirectBridge` option
   - `apps/src/portal/src/frontend/ui-scripts.ts` — Portal Sign Out button emitter (section 8)
+  - `apps/src/dev-dashboard/src/frontend/ui-renderer.ts` — Dev Center head script with `enableAuthRedirectBridge: false`
+  - `apps/src/dev-hub/src/frontend/hub-view.ts` — Developer Hub head script with `enableAuthRedirectBridge: false`
+  - `apps/src/docs/astro.config.mjs` — Docs head script with `enableAuthRedirectBridge: false`
+  - `forge-apps/telemetry/src/server.ts` — Public Telemetry micro-app with `enableAuthRedirectBridge: false`
+  - `forge-apps/telemetry/src/lib/ui.ts` — Telemetry submodule inline guard
   - `forge-apps/app-template/src/lib/ui.ts` — App-template submodule inline guard
   - `forge-apps/code/src/lib/ui.ts` — Code Workspace submodule inline guard
-  - `forge-apps/telemetry/src/lib/ui.ts` — Telemetry submodule inline guard
-* **Verified in Test Suite**: `forge-apps/*/test/security/auth-gate.test.ts`
+* **Verified in Test Suite**:
+  - `apps/src/ui/test/integration/auth-redirect-bridge.test.ts`
+  - `forge-apps/*/test/security/auth-gate.test.ts`
+

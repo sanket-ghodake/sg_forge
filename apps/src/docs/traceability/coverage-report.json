@@ -5,12 +5,11 @@
   "symbolCoveragePercent": 84.6,
   "totalRequirements": 84,
   "implementedRequirements": 79,
-  "verifiedRequirements": 78,
+  "verifiedRequirements": 79,
   "orphanRequirements": [
     "LLR-PORTAL-001",
     "LLR-PORTAL-002",
     "LLR-AUTH-010",
-    "LLR-AUTH-011",
     "HLR-AUTH-103"
   ],
   "symbols": [
@@ -6230,7 +6229,7 @@
       "name": "getHeadStateScript",
       "kind": "function",
       "file": "apps/src/ui/src/state/head-script.ts",
-      "line": 34,
+      "line": 36,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-403",
@@ -6963,7 +6962,7 @@
       "name": "handleDocsRoute",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/docs-viewer.ts",
-      "line": 291,
+      "line": 282,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -7393,7 +7392,7 @@
       "name": "handleDocsRoute",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/docs-viewer.ts",
-      "line": 291,
+      "line": 282,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -8163,7 +8162,7 @@
       "name": "handleDocsRoute",
       "kind": "function",
       "file": "forge-apps/code/src/lib/docs-viewer.ts",
-      "line": 291,
+      "line": 282,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -10459,7 +10458,9 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/features/auth-session.mdx",
       "implementedIn": [],
-      "verifiedIn": []
+      "verifiedIn": [
+        "apps/src/ui/test/integration/auth-redirect-bridge.test.ts"
+      ]
     },
     "HLR-UI-402": {
       "id": "HLR-UI-402",
@@ -10511,7 +10512,7 @@
         "apps/src/ui/src/state/types.ts:87#IStateStore",
         "apps/src/ui/src/state/types.ts:104#UrlStateOptions",
         "apps/src/ui/src/state/head-script.ts:14#HeadStateScriptOptions",
-        "apps/src/ui/src/state/head-script.ts:34#getHeadStateScript",
+        "apps/src/ui/src/state/head-script.ts:36#getHeadStateScript",
         "apps/src/ui/src/state/url-state.ts:21#getUrlParam",
         "apps/src/ui/src/state/url-state.ts:49#setUrlParam",
         "apps/src/ui/src/state/url-state.ts:79#createUrlState",
@@ -10555,7 +10556,8 @@
         "apps/src/ui/src/state/url-state.ts:79#createUrlState"
       ],
       "verifiedIn": [
-        "apps/src/ui/test/integration/state-sync.test.ts"
+        "apps/src/ui/test/integration/state-sync.test.ts",
+        "apps/src/ui/test/integration/auth-redirect-bridge.test.ts"
       ]
     },
     "LLR-AUTH-008": {
@@ -11605,7 +11607,7 @@
         "apps/src/sdk/src/service-worker.ts:118#getServiceWorkerRegistrationScript",
         "apps/src/sdk/src/service-worker.ts:141#handleServiceWorkerRequest",
         "apps/src/ui/src/state/head-script.ts:14#HeadStateScriptOptions",
-        "apps/src/ui/src/state/head-script.ts:34#getHeadStateScript"
+        "apps/src/ui/src/state/head-script.ts:36#getHeadStateScript"
       ],
       "verifiedIn": [
         "apps/src/ui/test/unit/header-tokens.test.ts"

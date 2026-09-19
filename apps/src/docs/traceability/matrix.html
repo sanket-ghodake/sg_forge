@@ -42,7 +42,7 @@
     <div class="metric-card"><div class="metric-val">84.6%</div><div class="metric-lbl">Symbol Coverage</div></div>
     <div class="metric-card"><div class="metric-val">84</div><div class="metric-lbl">Total Requirements</div></div>
     <div class="metric-card"><div class="metric-val">79</div><div class="metric-lbl">Implemented</div></div>
-    <div class="metric-card"><div class="metric-val">78</div><div class="metric-lbl">Verified in Tests</div></div>
+    <div class="metric-card"><div class="metric-val">79</div><div class="metric-lbl">Verified in Tests</div></div>
   </div>
   <table>
     <thead><tr><th>Requirement ID</th><th>Type</th><th>Specification Document</th><th>Implemented Code Symbols</th><th>Verification Tests</th><th>Status</th></tr></thead>
@@ -259,8 +259,8 @@
       <td><span class="type-pill">LLR</span></td>
       <td><code>apps/src/docs/src/content/docs/features/auth-session.mdx</code></td>
       <td><span class='muted'>None</span></td>
-      <td><span class='muted'>None</span></td>
-      <td><span class="status-pill orphan">ORPHAN</span></td>
+      <td><code>apps/src/ui/test/integration/auth-redirect-bridge.test.ts</code></td>
+      <td><span class="status-pill verified">VERIFIED</span></td>
     </tr>
 <tr>
       <td><strong>HLR-UI-402</strong></td>
@@ -282,7 +282,7 @@
       <td><strong>HLR-UI-403</strong></td>
       <td><span class="type-pill">HLR</span></td>
       <td><code>apps/src/docs/src/content/docs/features/client-state.mdx</code></td>
-      <td><code>apps/src/sdk/src/service-worker.ts:17#ServiceWorkerOptions</code><br><code>apps/src/sdk/src/service-worker.ts:27#DEFAULT_OFFLINE_URL</code><br><code>apps/src/sdk/src/service-worker.ts:33#DEFAULT_SW_VERSION</code><br><code>apps/src/sdk/src/service-worker.ts:39#DEFAULT_CACHE_NAME</code><br><code>apps/src/sdk/src/service-worker.ts:45#getServiceWorkerScript</code><br><code>apps/src/sdk/src/service-worker.ts:118#getServiceWorkerRegistrationScript</code><br><code>apps/src/sdk/src/service-worker.ts:141#handleServiceWorkerRequest</code><br><code>apps/src/ui/src/state/sync.ts:14#SyncMessage</code><br><code>apps/src/ui/src/state/sync.ts:25#SyncCallback</code><br><code>apps/src/ui/src/state/sync.ts:76#broadcastStateChange</code><br><code>apps/src/ui/src/state/sync.ts:99#subscribeCrossTab</code><br><code>apps/src/ui/src/state/types.ts:14#StorageType</code><br><code>apps/src/ui/src/state/types.ts:20#StateMigrationFn</code><br><code>apps/src/ui/src/state/types.ts:26#StateStoreOptions</code><br><code>apps/src/ui/src/state/types.ts:68#StateEnvelope</code><br><code>apps/src/ui/src/state/types.ts:81#StateChangeListener</code><br><code>apps/src/ui/src/state/types.ts:87#IStateStore</code><br><code>apps/src/ui/src/state/types.ts:104#UrlStateOptions</code><br><code>apps/src/ui/src/state/head-script.ts:14#HeadStateScriptOptions</code><br><code>apps/src/ui/src/state/head-script.ts:34#getHeadStateScript</code><br><code>apps/src/ui/src/state/url-state.ts:21#getUrlParam</code><br><code>apps/src/ui/src/state/url-state.ts:49#setUrlParam</code><br><code>apps/src/ui/src/state/url-state.ts:79#createUrlState</code><br><code>apps/src/ui/src/state/store.ts:18#buildStorageKey</code><br><code>apps/src/ui/src/state/store.ts:55#createStateStore</code></td>
+      <td><code>apps/src/sdk/src/service-worker.ts:17#ServiceWorkerOptions</code><br><code>apps/src/sdk/src/service-worker.ts:27#DEFAULT_OFFLINE_URL</code><br><code>apps/src/sdk/src/service-worker.ts:33#DEFAULT_SW_VERSION</code><br><code>apps/src/sdk/src/service-worker.ts:39#DEFAULT_CACHE_NAME</code><br><code>apps/src/sdk/src/service-worker.ts:45#getServiceWorkerScript</code><br><code>apps/src/sdk/src/service-worker.ts:118#getServiceWorkerRegistrationScript</code><br><code>apps/src/sdk/src/service-worker.ts:141#handleServiceWorkerRequest</code><br><code>apps/src/ui/src/state/sync.ts:14#SyncMessage</code><br><code>apps/src/ui/src/state/sync.ts:25#SyncCallback</code><br><code>apps/src/ui/src/state/sync.ts:76#broadcastStateChange</code><br><code>apps/src/ui/src/state/sync.ts:99#subscribeCrossTab</code><br><code>apps/src/ui/src/state/types.ts:14#StorageType</code><br><code>apps/src/ui/src/state/types.ts:20#StateMigrationFn</code><br><code>apps/src/ui/src/state/types.ts:26#StateStoreOptions</code><br><code>apps/src/ui/src/state/types.ts:68#StateEnvelope</code><br><code>apps/src/ui/src/state/types.ts:81#StateChangeListener</code><br><code>apps/src/ui/src/state/types.ts:87#IStateStore</code><br><code>apps/src/ui/src/state/types.ts:104#UrlStateOptions</code><br><code>apps/src/ui/src/state/head-script.ts:14#HeadStateScriptOptions</code><br><code>apps/src/ui/src/state/head-script.ts:36#getHeadStateScript</code><br><code>apps/src/ui/src/state/url-state.ts:21#getUrlParam</code><br><code>apps/src/ui/src/state/url-state.ts:49#setUrlParam</code><br><code>apps/src/ui/src/state/url-state.ts:79#createUrlState</code><br><code>apps/src/ui/src/state/store.ts:18#buildStorageKey</code><br><code>apps/src/ui/src/state/store.ts:55#createStateStore</code></td>
       <td><code>apps/src/ui/test/unit/browser-state.test.ts</code></td>
       <td><span class="status-pill verified">VERIFIED</span></td>
     </tr>
@@ -299,7 +299,7 @@
       <td><span class="type-pill">LLR</span></td>
       <td><code>apps/src/docs/src/content/docs/features/client-state.mdx</code></td>
       <td><code>apps/src/ui/src/state/types.ts:104#UrlStateOptions</code><br><code>apps/src/ui/src/state/url-state.ts:21#getUrlParam</code><br><code>apps/src/ui/src/state/url-state.ts:49#setUrlParam</code><br><code>apps/src/ui/src/state/url-state.ts:79#createUrlState</code></td>
-      <td><code>apps/src/ui/test/integration/state-sync.test.ts</code></td>
+      <td><code>apps/src/ui/test/integration/state-sync.test.ts</code><br><code>apps/src/ui/test/integration/auth-redirect-bridge.test.ts</code></td>
       <td><span class="status-pill verified">VERIFIED</span></td>
     </tr>
 <tr>
@@ -602,7 +602,7 @@
       <td><strong>LLR-UI-005</strong></td>
       <td><span class="type-pill">LLR</span></td>
       <td><code>apps/src/docs/src/content/docs/llr/LLR-UI-005_ZERO_FOUC_INLINE_HEAD_SHIELD_S.mdx</code></td>
-      <td><code>apps/src/sdk/src/service-worker.ts:17#ServiceWorkerOptions</code><br><code>apps/src/sdk/src/service-worker.ts:27#DEFAULT_OFFLINE_URL</code><br><code>apps/src/sdk/src/service-worker.ts:33#DEFAULT_SW_VERSION</code><br><code>apps/src/sdk/src/service-worker.ts:39#DEFAULT_CACHE_NAME</code><br><code>apps/src/sdk/src/service-worker.ts:45#getServiceWorkerScript</code><br><code>apps/src/sdk/src/service-worker.ts:118#getServiceWorkerRegistrationScript</code><br><code>apps/src/sdk/src/service-worker.ts:141#handleServiceWorkerRequest</code><br><code>apps/src/ui/src/state/head-script.ts:14#HeadStateScriptOptions</code><br><code>apps/src/ui/src/state/head-script.ts:34#getHeadStateScript</code></td>
+      <td><code>apps/src/sdk/src/service-worker.ts:17#ServiceWorkerOptions</code><br><code>apps/src/sdk/src/service-worker.ts:27#DEFAULT_OFFLINE_URL</code><br><code>apps/src/sdk/src/service-worker.ts:33#DEFAULT_SW_VERSION</code><br><code>apps/src/sdk/src/service-worker.ts:39#DEFAULT_CACHE_NAME</code><br><code>apps/src/sdk/src/service-worker.ts:45#getServiceWorkerScript</code><br><code>apps/src/sdk/src/service-worker.ts:118#getServiceWorkerRegistrationScript</code><br><code>apps/src/sdk/src/service-worker.ts:141#handleServiceWorkerRequest</code><br><code>apps/src/ui/src/state/head-script.ts:14#HeadStateScriptOptions</code><br><code>apps/src/ui/src/state/head-script.ts:36#getHeadStateScript</code></td>
       <td><code>apps/src/ui/test/unit/header-tokens.test.ts</code></td>
       <td><span class="status-pill verified">VERIFIED</span></td>
     </tr>

@@ -245,7 +245,6 @@ export function renderDocsHubHtml(appName: string, displayName: string, docsDir:
 
 export function renderOpenApiViewerHtml(displayName: string, openApiYamlPath: string): string {
   const yamlContent = existsSync(openApiYamlPath) ? readFileSync(openApiYamlPath, 'utf8') : '';
-  const escapedYaml = JSON.stringify(yamlContent);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -253,37 +252,29 @@ export function renderOpenApiViewerHtml(displayName: string, openApiYamlPath: st
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${displayName} - OpenAPI 3.1 Contract Explorer</title>
-  ${getHeadStateScript({ defaultTheme: 'dark' })}
-  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+  ${getHeadStateScript({ defaultTheme: 'dark', enableAuthRedirectBridge: false })}
   <style>
     ${getAstryxStyles()}
     body { margin: 0; background: var(--forge-bg-root); color: var(--forge-text-main); font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-    .topbar { display: none; }
-    .swagger-ui { filter: invert(88%) hue-rotate(180deg); }
-    .swagger-ui .wrapper { max-width: 1100px; padding: 24px; }
     .header-bar { background: var(--forge-bg-card); border-bottom: 1px solid var(--forge-border); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
     .header-bar h1 { margin: 0; font-size: 1.2rem; color: var(--forge-primary); font-weight: 700; }
     .header-bar a { color: var(--forge-text-muted); text-decoration: none; font-size: 0.85rem; }
     .header-bar a:hover { color: var(--forge-text-main); }
+    .spec-container { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; }
+    .spec-card { background: var(--forge-bg-card); border: 1px solid var(--forge-border); border-radius: 12px; padding: 1.5rem; overflow-x: auto; }
+    pre { margin: 0; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.6; color: var(--forge-text-main); white-space: pre-wrap; word-break: break-word; }
   </style>
 </head>
 <body>
   <div class="header-bar">
-    <h1>${displayName} - API Contract</h1>
+    <h1>${displayName} - OpenAPI 3.1 Contract</h1>
     <a href="../docs">&larr; Return to Docs Hub</a>
   </div>
-  <div id="swagger-ui"></div>
-  <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
-  <script>
-    window.onload = () => {
-      window.ui = SwaggerUIBundle({
-        spec: ${escapedYaml},
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [SwaggerUIBundle.presets.apis],
-      });
-    };
-  </script>
+  <div class="spec-container">
+    <div class="spec-card">
+      <pre><code>${yamlContent.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
+    </div>
+  </div>
 </body>
 </html>`;
 }

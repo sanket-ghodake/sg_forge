@@ -57,7 +57,7 @@ describe('Tier 1 Unit: Dynamic Micro-Apps Discovery & Role Segmentation', () => 
 
   it('renders all app launch links with target="_blank" rel="noopener noreferrer"', () => {
     // Arrange & Act
-    const viewHtml = renderAppsView(['roles/employee']);
+    const viewHtml = renderAppsView(['roles/employee', 'roles/admin']);
 
     // Assert: Launch links use target="_blank" and rel="noopener noreferrer"
     expect(viewHtml).toContain('target="_blank" rel="noopener noreferrer"');

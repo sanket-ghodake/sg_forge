@@ -31,7 +31,7 @@ export function renderDevHubHtml(): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${brand.name} - Developer Gateway & SDK Documentation</title>
-  ${getHeadStateScript({ defaultTheme: 'dark' })}
+  ${getHeadStateScript({ defaultTheme: 'dark', enableAuthRedirectBridge: false })}
   <script>
     (function() {
       try {
