@@ -11,8 +11,8 @@ if [ -z "$PORTABLE_BUN" ]; then
     source "$SCRIPT_DIR/env.sh"
 fi
 
-DEV_PROJECT="${COMPOSE_PROJECT_NAME}-dev"
-PROD_PROJECT="${COMPOSE_PROJECT_NAME}-prod"
+DEV_PROJECT="${COMPOSE_PROJECT_NAME:-${PROJECT_NAME:-forge}}-dev"
+PROD_PROJECT="${COMPOSE_PROJECT_NAME:-${PROJECT_NAME:-forge}}-prod"
 
 # Fallback Caddyfile creation from template if missing
 if [ ! -f "$REPO_ROOT/proxy/Caddyfile" ] && [ -f "$REPO_ROOT/proxy/Caddyfile.example" ]; then
@@ -24,7 +24,7 @@ fi
 # Discovers isolated forge-apps/*/docker-compose.yml based on active .env registry
 # ==============================================================================
 ensure_forge_network() {
-    local gateway_net="${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}"
+    local gateway_net="${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}_apps_net}"
     if ! docker network inspect "$gateway_net" >/dev/null 2>&1; then
         docker network create "$gateway_net" >/dev/null 2>&1 || true
     fi
@@ -48,7 +48,7 @@ start_forge_apps() {
             echo "📦 [${BRAND_NAME}] Starting standalone Forge App: $app_name ($env_mode)..."
             local build_flag=""
             [ "$env_mode" = "prod" ] && build_flag="--build"
-            docker compose -p "${CONTAINER_PREFIX:-ag}-app-${app_name}-${env_mode}" \
+            docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-${app_name}-${env_mode}" \
                 --env-file "$REPO_ROOT/.env" \
                 -f "$app_dir/docker-compose.yml" up -d $build_flag
         fi
@@ -60,7 +60,7 @@ start_forge_apps() {
     for app_name in $inactive_apps; do
         local app_dir="$REPO_ROOT/forge-apps/$app_name"
         if [ -d "$app_dir" ] && [ -f "$app_dir/docker-compose.yml" ]; then
-            docker compose -p "${CONTAINER_PREFIX:-ag}-app-${app_name}-${env_mode}" \
+            docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-${app_name}-${env_mode}" \
                 --env-file "$REPO_ROOT/.env" \
                 -f "$app_dir/docker-compose.yml" stop 2>/dev/null || true
         fi
@@ -81,10 +81,10 @@ stop_forge_apps() {
                 local clean_target="${specific_app#app-}"
                 [ "$app_name" != "$specific_app" ] && [ "$app_name" != "$clean_target" ] && continue
             fi
-            docker compose -p "${CONTAINER_PREFIX:-ag}-app-${app_name}-dev" \
+            docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-${app_name}-dev" \
                 --env-file "$REPO_ROOT/.env" \
                 -f "$app_dir/docker-compose.yml" down $v_flag --remove-orphans 2>/dev/null || true
-            docker compose -p "${CONTAINER_PREFIX:-ag}-app-${app_name}-prod" \
+            docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-${app_name}-prod" \
                 --env-file "$REPO_ROOT/.env" \
                 -f "$app_dir/docker-compose.yml" down $v_flag --remove-orphans 2>/dev/null || true
         fi
@@ -98,7 +98,7 @@ status_forge_apps() {
             local app_name
             app_name="$(basename "$app_dir")"
             [ "$app_name" = "app-template" ] && continue
-            docker compose -p "${CONTAINER_PREFIX:-ag}-app-${app_name}-${env_mode}" \
+            docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-${app_name}-${env_mode}" \
                 --env-file "$REPO_ROOT/.env" \
                 -f "$app_dir/docker-compose.yml" ps 2>/dev/null || true
         fi
@@ -224,10 +224,10 @@ case "$ACTION" in
                 docker build -f "$REPO_ROOT/apps/src/$TARGET_APP/docker/Dockerfile" -t "${CONTAINER_PREFIX}-$TARGET_APP" "$REPO_ROOT"
             elif [ -f "$REPO_ROOT/forge-apps/$CLEAN_APP/docker-compose.yml" ]; then
                 echo "🔨 Building image for forge-apps/$CLEAN_APP..."
-                docker compose -p "${CONTAINER_PREFIX:-ag}-app-$CLEAN_APP-prod" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$CLEAN_APP/docker-compose.yml" build
+                docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-$CLEAN_APP-prod" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$CLEAN_APP/docker-compose.yml" build
             elif [ -f "$REPO_ROOT/forge-apps/$TARGET_APP/docker-compose.yml" ]; then
                 echo "🔨 Building image for forge-apps/$TARGET_APP..."
-                docker compose -p "${CONTAINER_PREFIX:-ag}-app-$TARGET_APP-prod" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$TARGET_APP/docker-compose.yml" build
+                docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-$TARGET_APP-prod" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$TARGET_APP/docker-compose.yml" build
             else
                 echo "❌ Could not find Dockerfile or compose configuration for $TARGET_APP"
                 exit 1
@@ -244,7 +244,7 @@ case "$ACTION" in
                     app_name="$(basename "$app_dir")"
                     [ "$app_name" = "app-template" ] && continue
                     echo "🔨 Building standalone image for forge-apps/$app_name..."
-                    docker compose -p "${CONTAINER_PREFIX:-ag}-app-$app_name-prod" --env-file "$REPO_ROOT/.env" -f "$app_dir/docker-compose.yml" build
+                    docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-$app_name-prod" --env-file "$REPO_ROOT/.env" -f "$app_dir/docker-compose.yml" build
                 fi
             done
         fi
@@ -273,7 +273,7 @@ case "$ACTION" in
             CLEAN_SVC="${SVC#app-}"
             if [ -d "$REPO_ROOT/forge-apps/$CLEAN_SVC" ] && [ -f "$REPO_ROOT/forge-apps/$CLEAN_SVC/docker-compose.yml" ]; then
                 echo "🔄 [${BRAND_NAME}] Restarting standalone Forge App: $CLEAN_SVC..."
-                docker compose -p "${CONTAINER_PREFIX:-ag}-app-$CLEAN_SVC-dev" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$CLEAN_SVC/docker-compose.yml" restart
+                docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-$CLEAN_SVC-dev" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$CLEAN_SVC/docker-compose.yml" restart
             else
                 echo "🔄 [${BRAND_NAME}] Restarting service: $SVC..."
                 docker compose -p "$TARGET_PROJECT" --env-file "$REPO_ROOT/.env" -f "$TARGET_COMPOSE" --profile all --profile landing restart "$SVC"
@@ -289,7 +289,7 @@ case "$ACTION" in
                 if [ -d "$app_dir" ] && [ -f "$app_dir/docker-compose.yml" ]; then
                     app_name="$(basename "$app_dir")"
                     [ "$app_name" = "app-template" ] && continue
-                    docker compose -p "${CONTAINER_PREFIX:-ag}-app-$app_name-dev" --env-file "$REPO_ROOT/.env" -f "$app_dir/docker-compose.yml" restart 2>/dev/null || true
+                    docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-$app_name-dev" --env-file "$REPO_ROOT/.env" -f "$app_dir/docker-compose.yml" restart 2>/dev/null || true
                 fi
             done
         fi
@@ -329,7 +329,7 @@ case "$ACTION" in
         if [ -n "$SVC" ]; then
             CLEAN_SVC="${SVC#app-}"
             if [ -d "$REPO_ROOT/forge-apps/$CLEAN_SVC" ] && [ -f "$REPO_ROOT/forge-apps/$CLEAN_SVC/docker-compose.yml" ]; then
-                docker compose -p "${CONTAINER_PREFIX:-ag}-app-$CLEAN_SVC-dev" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$CLEAN_SVC/docker-compose.yml" logs --tail=100
+                docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-$CLEAN_SVC-dev" --env-file "$REPO_ROOT/.env" -f "$REPO_ROOT/forge-apps/$CLEAN_SVC/docker-compose.yml" logs --tail=100
             else
                 docker compose -p "$TARGET_PROJECT" --env-file "$REPO_ROOT/.env" -f "$TARGET_COMPOSE" --profile all logs --tail=100 "$SVC"
             fi
@@ -339,7 +339,7 @@ case "$ACTION" in
                 if [ -d "$app_dir" ] && [ -f "$app_dir/docker-compose.yml" ]; then
                     app_name="$(basename "$app_dir")"
                     [ "$app_name" = "app-template" ] && continue
-                    docker compose -p "${CONTAINER_PREFIX:-ag}-app-$app_name-dev" --env-file "$REPO_ROOT/.env" -f "$app_dir/docker-compose.yml" logs --tail=50 2>/dev/null || true
+                    docker compose -p "${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-$app_name-dev" --env-file "$REPO_ROOT/.env" -f "$app_dir/docker-compose.yml" logs --tail=50 2>/dev/null || true
                 fi
             done
         fi

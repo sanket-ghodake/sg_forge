@@ -47,7 +47,7 @@ else
 fi
 
 ensure_gateway_network() {
-  local net_name="${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}"
+  local net_name="${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}_apps_net}"
   if ! docker network inspect "$net_name" >/dev/null 2>&1; then
     echo "🌐 Creating standalone gateway network: $net_name..."
     docker network create "$net_name" >/dev/null 2>&1 || true

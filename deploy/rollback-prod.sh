@@ -17,10 +17,11 @@ BACKUP_DIR="$PROD_ROOT/backups"
 
 # Dynamically resolve configuration from .env
 if [ -f "$PROD_ROOT/.env" ]; then
+    PROJECT_NAME="$(grep -E '^PROJECT_NAME=' "$PROD_ROOT/.env" | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
     COMPOSE_PROJECT_NAME="$(grep -E '^COMPOSE_PROJECT_NAME=' "$PROD_ROOT/.env" | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
     PROD_HTTP_PORT="$(grep -E '^PROD_HTTP_PORT=' "$PROD_ROOT/.env" | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
 fi
-COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-ag_dashboard}"
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-${PROJECT_NAME:-forge}}"
 PROD_HTTP_PORT="${PROD_HTTP_PORT:-80}"
 
 log() {
@@ -75,7 +76,7 @@ fi
 
 # 3. Restart Production Containers with Stable Code
 log "🔄 [3/4] Re-launching production stack with verified images..."
-docker compose -p "${COMPOSE_PROJECT_NAME:-ag_dashboard}-prod" --env-file "$PROD_ROOT/.env" -f "$COMPOSE_FILE" --profile all up -d --build --remove-orphans
+docker compose -p "${COMPOSE_PROJECT_NAME:-forge}-prod" --env-file "$PROD_ROOT/.env" -f "$COMPOSE_FILE" --profile all up -d --build --remove-orphans
 
 # 4. Verify Gateway Health
 log "🩺 [4/4] Verifying production gateway health post-rollback..."

@@ -120,17 +120,17 @@ export function loadBrandConfig(envPath?: string): BrandConfig {
 
   const resolvedOrg =
     procOrgName ||
-    (procBrandName ? procBrandName : (diskOrgName || diskBrandName || 'AG Dashboard'));
+    (procBrandName ? procBrandName : (diskOrgName || diskBrandName || 'Forge Platform'));
   const resolvedBrand =
     procBrandName ||
-    (procOrgName ? procOrgName : (diskBrandName || diskOrgName || 'AG Dashboard'));
+    (procOrgName ? procOrgName : (diskBrandName || diskOrgName || 'Forge Platform'));
 
   const short =
     process.env.NEXT_PUBLIC_BRAND_SHORT ||
     process.env.BRAND_SHORT ||
     diskMap.NEXT_PUBLIC_BRAND_SHORT ||
     diskMap.BRAND_SHORT ||
-    'AG';
+    'FORGE';
 
   const tagline =
     process.env.NEXT_PUBLIC_BRAND_TAGLINE ||

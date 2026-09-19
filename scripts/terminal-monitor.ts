@@ -123,8 +123,9 @@ async function fetchClusterState(): Promise<any> {
         try {
           const item = JSON.parse(line);
           const name = item.Names || item.ID;
+          const prefix = process.env.CONTAINER_PREFIX || process.env.PROJECT_NAME || 'forge';
           // Filter to project containers
-          if (!name.includes('ag-') && !name.includes('forge')) continue;
+          if (!name.includes(prefix) && !name.includes('forge')) continue;
           const status = item.Status?.includes('Up') ? 'RUNNING' : 'STOPPED';
           const portMatch = item.Ports?.match(/:([0-9]+)->/);
           const port = portMatch ? Number(portMatch[1]) : 80;
@@ -132,7 +133,7 @@ async function fetchClusterState(): Promise<any> {
             name,
             status,
             port,
-            ingressPath: '/' + name.replace(/^ag-|-dev|-prod/g, ''),
+            ingressPath: '/' + name.replace(new RegExp(`^(${prefix}-|-dev|-prod)`, 'g'), ''),
             latencyMs: 1,
             cpuPercent: 0,
             memoryMb: 32,

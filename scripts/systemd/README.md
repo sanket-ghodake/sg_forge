@@ -6,7 +6,7 @@ This directory contains production systemd unit templates and automated installa
 
 ## 📁 Files
 
-- `sg-forge.service`: Systemd service unit definition configuring clean startup, graceful shutdown, and container dependency ordering.
+- `forge.service`: Systemd service unit definition configuring clean startup, graceful shutdown, and container dependency ordering.
 - `install-service.sh`: Automated 1-click installer that populates the repository working directory, registers the unit into `/etc/systemd/system/`, and enables boot autostart.
 
 ---
@@ -18,7 +18,7 @@ This directory contains production systemd unit templates and automated installa
 sudo bash scripts/systemd/install-service.sh
 
 # 2. Control service lifecycle
-sudo systemctl start sg-forge.service
-sudo systemctl status sg-forge.service
-sudo systemctl stop sg-forge.service
+sudo systemctl start forge.service
+sudo systemctl status forge.service
+sudo systemctl stop forge.service
 ```

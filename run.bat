@@ -19,9 +19,14 @@ if %ERRORLEVEL% NEQ 0 (
     )
 )
 
-set "COMPOSE_PROJECT_NAME=ag_dashboard"
+set "PROJECT_NAME=forge"
+set "COMPOSE_PROJECT_NAME=forge"
 if exist "%REPO_ROOT%.env" (
     for /f "usebackq tokens=1,* delims==" %%A in ("%REPO_ROOT%.env") do (
+        if "%%A"=="PROJECT_NAME" (
+            set "PROJECT_NAME=%%~B"
+            set "COMPOSE_PROJECT_NAME=%%~B"
+        )
         if "%%A"=="COMPOSE_PROJECT_NAME" (
             set "COMPOSE_PROJECT_NAME=%%~B"
         )

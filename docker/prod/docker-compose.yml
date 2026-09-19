@@ -1,32 +1,39 @@
 # ==============================================================================
-# AG Dashboard 2.0 - Production Docker Environment
-# 100% Dynamically Driven by .env parameters (COMPOSE_PROJECT_NAME, CONTAINER_PREFIX, DOCKER_NETWORK)
+# Forge Platform - Production Docker Environment
+# 100% Dynamically Driven by .env parameters (PROJECT_NAME, CONTAINER_PREFIX, DOCKER_NETWORK)
 # ==============================================================================
-name: ${COMPOSE_PROJECT_NAME:-ag_dashboard}-prod
+name: ${COMPOSE_PROJECT_NAME:-${PROJECT_NAME:-forge}}-prod
 
 networks:
   # 1. Host Ingress Network (Proxy & Host Gateway)
   ingress-net:
-    name: ${CONTAINER_PREFIX:-ag}_ingress_net_prod
+    name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}_ingress_net_prod
     driver: bridge
 
   # 2. Strict Air-Gapped Core Platform Network (internal: true -> ZERO outbound/egress)
   core-airgap-net:
-    name: ${CONTAINER_PREFIX:-ag}_core_airgap_net_prod
+    name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}_core_airgap_net_prod
     driver: bridge
     internal: true
 
   # 3. Forge Apps Network (Managed Egress / Autonomous Micro-Apps)
   forge-apps-net:
-    name: ${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}
+    name: ${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}_apps_net}
     driver: bridge
 
 volumes:
-  ag_caddy_data:
-  ag_caddy_config:
-  ag_prod_db_auth:
-  ag_prod_db_portal:
-  ag_prod_db_dev_dashboard:
+  caddy_data:
+    name: ${PROJECT_NAME:-forge}_caddy_data
+  caddy_config:
+    name: ${PROJECT_NAME:-forge}_caddy_config
+  prod_db_auth:
+    name: ${PROJECT_NAME:-forge}_prod_db_auth
+  prod_db_portal:
+    name: ${PROJECT_NAME:-forge}_prod_db_portal
+  prod_db_dev_dashboard:
+    name: ${PROJECT_NAME:-forge}_prod_db_dev_dashboard
+  prod_db_telemetry:
+    name: ${PROJECT_NAME:-forge}_prod_db_telemetry
 
 x-logging: &default-logging
   driver: json-file
@@ -38,7 +45,7 @@ services:
   # 🔀 Unified Reverse Proxy Gateway
   proxy:
     image: caddy:2-alpine
-    container_name: ${CONTAINER_PREFIX:-ag}-proxy-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-proxy-prod
     profiles: ["core", "apps", "monitoring", "all"]
     ports:
       - "${PROD_HTTP_PORT:-80}:${PROD_HTTP_PORT:-80}"
@@ -48,8 +55,8 @@ services:
       - ../../proxy/errors:/etc/caddy/errors:ro
       - ../../proxy/certs:/etc/caddy/certs:ro
       - ../../public:/etc/caddy/public:ro
-      - ag_caddy_data:/data
-      - ag_caddy_config:/config
+      - caddy_data:/data
+      - caddy_config:/config
     networks:
       - ingress-net
       - core-airgap-net
@@ -73,7 +80,7 @@ services:
     build:
       context: ../../
       dockerfile: apps/src/landing/docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-ag}-landing-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-landing-prod
     profiles: ["landing"]
     env_file:
       - ../../.env
@@ -103,7 +110,7 @@ services:
     build:
       context: ../../
       dockerfile: apps/src/portal/docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-ag}-portal-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-portal-prod
     profiles: ["core", "all"]
     env_file:
       - ../../.env
@@ -113,7 +120,7 @@ services:
       - AUTH_SERVICE_URL=http://auth:${AUTH_PORT:-3004}
       - NODE_ENV=production
     volumes:
-      - ag_prod_db_portal:/app/data
+      - prod_db_portal:/app/data
     networks:
       - core-airgap-net
     restart: always
@@ -135,7 +142,7 @@ services:
     build:
       context: ../../
       dockerfile: apps/src/dev-dashboard/docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-ag}-dev-dashboard-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-dev-dashboard-prod
     profiles: ["monitoring", "all"]
     env_file:
       - ../../.env
@@ -145,7 +152,7 @@ services:
       - AUTH_SERVICE_URL=http://auth:${AUTH_PORT:-3004}
       - NODE_ENV=production
     volumes:
-      - ag_prod_db_dev_dashboard:/app/data
+      - prod_db_dev_dashboard:/app/data
     networks:
       - core-airgap-net
     restart: always
@@ -167,7 +174,7 @@ services:
     build:
       context: ../../
       dockerfile: apps/src/dev-hub/docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-ag}-dev-hub-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-dev-hub-prod
     profiles: ["monitoring", "all"]
     env_file:
       - ../../.env
@@ -197,7 +204,7 @@ services:
     build:
       context: ../../
       dockerfile: apps/src/auth/docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-ag}-auth-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-auth-prod
     profiles: ["core", "all"]
     env_file:
       - ../../.env
@@ -206,7 +213,7 @@ services:
       - AUTH_PORT=${AUTH_PORT:-3004}
       - NODE_ENV=production
     volumes:
-      - ag_prod_db_auth:/app/data
+      - prod_db_auth:/app/data
     networks:
       - core-airgap-net
     restart: always
@@ -228,7 +235,7 @@ services:
     build:
       context: ../../
       dockerfile: apps/src/docs/docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-ag}-docs-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-docs-prod
     profiles: ["core", "all"]
     env_file:
       - ../../.env
@@ -256,7 +263,7 @@ services:
   # 🩺 Automated Container Health Monitor (Autoheal Watchdog)
   autoheal:
     image: willfarrell/autoheal:latest
-    container_name: ${CONTAINER_PREFIX:-ag}-autoheal-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-autoheal-prod
     profiles: ["monitoring", "all"]
     restart: always
     environment:
@@ -278,7 +285,7 @@ services:
   # 🛡️ Continuous Database Backup Engine (Hourly Automatic Snapshots & Integrity Check)
   db-backup:
     image: oven/bun:1.3-alpine
-    container_name: ${CONTAINER_PREFIX:-ag}-db-backup-prod
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-db-backup-prod
     profiles: ["monitoring", "all"]
     working_dir: /app
     env_file:
@@ -298,10 +305,10 @@ services:
       - ../../apps/src/ui:/app/apps/src/ui:ro
       - ../../scripts:/app/scripts:ro
       - ../../backups:/app/backups:rw
-      - ag_prod_db_auth:/app/data_sources/auth:ro
-      - ag_prod_db_portal:/app/data_sources/portal:ro
-      - ag_prod_db_dev_dashboard:/app/data_sources/dev_dashboard:ro
-      - ag_prod_db_telemetry:/app/data_sources/telemetry:ro
+      - prod_db_auth:/app/data_sources/auth:ro
+      - prod_db_portal:/app/data_sources/portal:ro
+      - prod_db_dev_dashboard:/app/data_sources/dev_dashboard:ro
+      - prod_db_telemetry:/app/data_sources/telemetry:ro
     command: ["bun", "scripts/backup-databases.ts", "--daemon"]
     networks:
       - core-airgap-net

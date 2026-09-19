@@ -13,7 +13,7 @@ networks:
 
   # 2. Reverse-Proxy Gateway Mesh (Inbound routing from Caddy proxy only)
   forge-gateway-net:
-    name: ${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-ag}_forge_apps_net}
+    name: ${FORGE_APPS_NETWORK:-${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}_apps_net}
     external: true
 
 services:
@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    container_name: ${CONTAINER_PREFIX:-ag}-app-telemetry-dev
+    container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-telemetry-dev
     ports:
       - "${PORT:-8087}:${PORT:-8087}"
     env_file:
@@ -39,6 +39,7 @@ services:
       telemetry-airgap-net:
       forge-gateway-net:
         aliases:
+          - telemetry
           - app-telemetry
     restart: unless-stopped
     stop_grace_period: 10s

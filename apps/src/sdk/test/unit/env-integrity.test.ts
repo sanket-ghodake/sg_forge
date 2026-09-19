@@ -69,9 +69,13 @@ describe('Tier 1 Unit: Environment & Service Registry Integrity', () => {
     const envKeys = parseEnvKeys(envPath);
     const exampleKeys = parseEnvKeys(examplePath);
 
-    // Act & Assert
-    expect(envKeys.has('PROJECT_NAME')).toBe(false);
-    expect(exampleKeys.has('PROJECT_NAME')).toBe(false);
+    // Act & Assert: Legacy ag/sg variables should not be present
+    expect(envKeys.has('AG_CONTAINER_PREFIX')).toBe(false);
+    expect(exampleKeys.has('AG_CONTAINER_PREFIX')).toBe(false);
+    expect(envKeys.has('SG_PROJECT_NAME')).toBe(false);
+    expect(exampleKeys.has('SG_PROJECT_NAME')).toBe(false);
+    expect(envKeys.has('PROJECT_NAME')).toBe(true);
+    expect(exampleKeys.has('PROJECT_NAME')).toBe(true);
   });
 
   it('Arrange, Act, Assert: verifies core standalone base ports match their APP_* registry entries', () => {

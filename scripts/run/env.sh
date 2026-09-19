@@ -45,6 +45,7 @@ fi
 
 # Dynamically resolve branding and container variables from .env
 if [ -f "$REPO_ROOT/.env" ]; then
+    PROJECT_NAME="$(grep -E '^PROJECT_NAME=' "$REPO_ROOT/.env" 2>/dev/null | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
     ENV_APP_ENV="$(grep -E '^APP_ENV=' "$REPO_ROOT/.env" 2>/dev/null | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
     BRAND_NAME="$(grep -E '^NEXT_PUBLIC_BRAND_NAME=' "$REPO_ROOT/.env" 2>/dev/null | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
     CONTAINER_PREFIX="$(grep -E '^CONTAINER_PREFIX=' "$REPO_ROOT/.env" 2>/dev/null | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
@@ -54,9 +55,10 @@ if [ -f "$REPO_ROOT/.env" ]; then
     LANDING_PORT="$(grep -E '^LANDING_PORT=' "$REPO_ROOT/.env" 2>/dev/null | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
 fi
 
-BRAND_NAME="${BRAND_NAME:-AG Dashboard}"
-CONTAINER_PREFIX="${CONTAINER_PREFIX:-ag}"
-COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-ag_dashboard}"
+PROJECT_NAME="${PROJECT_NAME:-forge}"
+BRAND_NAME="${BRAND_NAME:-Forge Platform}"
+CONTAINER_PREFIX="${CONTAINER_PREFIX:-${PROJECT_NAME}}"
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-${PROJECT_NAME}}"
 APP_ENV="${APP_ENV:-${ENV_APP_ENV:-${NODE_ENV:-development}}}"
 HTTP_PORT="${HTTP_PORT:-8080}"
 PROD_HTTP_PORT="${PROD_HTTP_PORT:-80}"

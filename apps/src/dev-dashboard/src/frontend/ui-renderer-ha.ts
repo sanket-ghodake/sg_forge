@@ -121,14 +121,14 @@ export function renderHighAvailabilitySuite(): string {
               <span class="ha-stage-num">STAGE 3</span>
               <span class="ha-badge-repo" data-tooltip-title="📦 REPO ENFORCED" data-astryx-tooltip="Invariant is 100% configured & enforced in repository code and docker-compose.yml. Zero manual host setup needed.">REPO ENFORCED</span>
             </div>
-            <span class="ha-status-badge ha-badge-success" id="ha-status-stage-3" data-tooltip-title="🟢 LOCKED: DATA PERSISTENCE" data-astryx-tooltip="Isolated Turso / SQLite databases are pinned to named Docker volumes (ag_prod_db_*) in WAL mode. Data is never lost on rebuilds.">
+            <span class="ha-status-badge ha-badge-success" id="ha-status-stage-3" data-tooltip-title="🟢 LOCKED: DATA PERSISTENCE" data-astryx-tooltip="Isolated Turso / SQLite databases are pinned to named Docker volumes (forge_prod_db_*) in WAL mode. Data is never lost on rebuilds.">
               <span class="ha-status-glow"></span> LOCKED
             </span>
           </div>
           <div class="ha-card-body">
             <h4 class="ha-card-heading">Data Volume & DB Persistence</h4>
             <div class="ha-telemetry-chips">
-              <span class="ha-chip" id="ha-chip-storage-free" data-tooltip-title="Volume Storage" data-astryx-tooltip="Named Docker volumes ag_prod_db_* mounted with WAL journaling.">💾 Dedicated Storage Active</span>
+              <span class="ha-chip" id="ha-chip-storage-free" data-tooltip-title="Volume Storage" data-astryx-tooltip="Named Docker volumes forge_prod_db_* mounted with WAL journaling.">💾 Dedicated Storage Active</span>
               <span class="ha-chip" data-tooltip-title="WAL Checkpointing" data-astryx-tooltip="SQLite Write-Ahead Logging active with auto-vacuum protection.">🛡️ WAL Checkpointed</span>
             </div>
           </div>
@@ -141,8 +141,8 @@ export function renderHighAvailabilitySuite(): string {
             <div class="ha-guide-inner">
               <div class="ha-guide-subhead">Inspect Named Volumes:</div>
               <div class="guide-code-box">
-                <code>docker volume ls --filter name=ag_prod_db</code>
-                <button class="guide-copy-btn" onclick="copyGuideCode(this, 'docker volume ls --filter name=ag_prod_db')">Copy</button>
+                <code>docker volume ls --filter name=forge_prod_db</code>
+                <button class="guide-copy-btn" onclick="copyGuideCode(this, 'docker volume ls --filter name=forge_prod_db')">Copy</button>
               </div>
               <div class="ha-guide-note">⚠️ <strong>Rule:</strong> Never use <code>docker compose down -v</code> in production as <code>-v</code> destroys volumes.</div>
             </div>

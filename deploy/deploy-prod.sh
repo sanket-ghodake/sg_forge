@@ -20,10 +20,11 @@ START_TIME="$(date +%s)"
 
 # Dynamically resolve configuration from .env
 if [ -f "$PROD_ROOT/.env" ]; then
+    PROJECT_NAME="$(grep -E '^PROJECT_NAME=' "$PROD_ROOT/.env" | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
     COMPOSE_PROJECT_NAME="$(grep -E '^COMPOSE_PROJECT_NAME=' "$PROD_ROOT/.env" | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
     PROD_HTTP_PORT="$(grep -E '^PROD_HTTP_PORT=' "$PROD_ROOT/.env" | head -n 1 | cut -d '=' -f2- | tr -d '"' | tr -d "'" || true)"
 fi
-COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-ag_dashboard}"
+COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-${PROJECT_NAME:-forge}}"
 PROD_HTTP_PORT="${PROD_HTTP_PORT:-80}"
 
 mkdir -p "$BACKUP_DIR" "$(dirname "$LOG_FILE")"
@@ -155,7 +156,7 @@ fi
 log "🔨 [4/6] Building updated container images in background..."
 log "   (Existing production containers continue serving traffic on Port 80 without blips)"
 
-BUILD_CMD="docker compose -p ${COMPOSE_PROJECT_NAME:-ag_dashboard}-prod --env-file $PROD_ROOT/.env -f $COMPOSE_FILE"
+BUILD_CMD="docker compose -p ${COMPOSE_PROJECT_NAME:-forge}-prod --env-file $PROD_ROOT/.env -f $COMPOSE_FILE"
 
 if [ "$REBUILD_ALL" = true ]; then
     if ! $BUILD_CMD --profile all build; then
