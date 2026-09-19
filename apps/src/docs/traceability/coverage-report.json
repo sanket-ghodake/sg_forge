@@ -4,7 +4,7 @@
   "documentedSymbols": 669,
   "symbolCoveragePercent": 80.1,
   "totalRequirements": 84,
-  "implementedRequirements": 79,
+  "implementedRequirements": 78,
   "verifiedRequirements": 79,
   "orphanRequirements": [
     "LLR-PORTAL-001",
@@ -7512,8 +7512,8 @@
       "line": 26,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7524,9 +7524,8 @@
       "line": 42,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004",
-        "HLR-TEL-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8513,8 +8512,8 @@
       "line": 26,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8525,9 +8524,8 @@
       "line": 42,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003",
-        "HLR-CODE-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -11001,6 +10999,10 @@
         "forge-apps/app-template/src/lib/types.ts:62#ProblemDetails",
         "forge-apps/app-template/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/app-template/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
+        "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
+        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup",
         "scripts/generate-proxy.ts:20#generateCaddyfile",
         "scripts/docker-resolver.ts:18#GatewayConfig",
         "scripts/docker-resolver.ts:32#TargetValidation",
@@ -11092,9 +11094,7 @@
         "forge-apps/code/src/session-coordinator.ts:259#leaveSession",
         "forge-apps/code/src/session-coordinator.ts:275#recordHeartbeat",
         "forge-apps/code/src/ui/catalog.ts:16#renderCatalogHtml",
-        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml",
-        "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
+        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml"
       ],
       "verifiedIn": [
         "forge-apps/code/test/e2e/server.test.ts"
@@ -11125,9 +11125,7 @@
         "forge-apps/telemetry/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/telemetry/src/lib/types.ts:33#AuthGuardResult",
         "forge-apps/telemetry/src/lib/types.ts:43#ScopedHierarchyResponse",
-        "forge-apps/telemetry/src/lib/types.ts:62#ProblemDetails",
-        "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup"
+        "forge-apps/telemetry/src/lib/types.ts:62#ProblemDetails"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/e2e/telemetry-server.test.ts",
@@ -11450,7 +11448,11 @@
         "forge-apps/app-template/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/app-template/scripts/backup-db.ts:42#executeMicroAppBackup",
         "forge-apps/telemetry/src/lib/icons.ts:8#icons",
-        "forge-apps/code/src/lib/icons.ts:8#icons"
+        "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
+        "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/code/src/lib/icons.ts:8#icons",
+        "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
+        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
       ],
       "verifiedIn": [
         "apps/test/e2e/playwright/security-10-defense.test.ts",
@@ -11521,9 +11523,7 @@
         "forge-apps/code/src/session-coordinator.ts:259#leaveSession",
         "forge-apps/code/src/session-coordinator.ts:275#recordHeartbeat",
         "forge-apps/code/src/ui/catalog.ts:16#renderCatalogHtml",
-        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml",
-        "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
+        "forge-apps/code/src/ui/workbench.ts:16#renderWorkbenchHtml"
       ],
       "verifiedIn": [
         "forge-apps/code/test/security/git-sanitizer.test.ts"
@@ -11557,9 +11557,7 @@
         "forge-apps/telemetry/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/telemetry/src/lib/types.ts:33#AuthGuardResult",
         "forge-apps/telemetry/src/lib/types.ts:43#ScopedHierarchyResponse",
-        "forge-apps/telemetry/src/lib/types.ts:62#ProblemDetails",
-        "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup"
+        "forge-apps/telemetry/src/lib/types.ts:62#ProblemDetails"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/e2e/telemetry-server.test.ts",
@@ -12048,8 +12046,7 @@
       "type": "HLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer",
-        "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup"
+        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/contracts/problem-json.test.ts"
@@ -12128,9 +12125,7 @@
       "id": "HLR-CODE-003",
       "type": "HLR",
       "docFile": "forge-apps/code/docs/hlr/HLR-CODE-003_BACKUP_AND_HEALTH.md",
-      "implementedIn": [
-        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
-      ],
+      "implementedIn": [],
       "verifiedIn": [
         "forge-apps/code/test/contracts/health-schema.test.ts"
       ]

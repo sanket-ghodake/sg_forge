@@ -18,7 +18,8 @@ if [ ${#ARGS[@]} -eq 0 ]; then
     ARGS=("--lockfile=bun.lock")
 fi
 
-SYS_OSV="$(which -a osv-scanner 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+CLEAN_PATH="$(echo "$PATH" | tr ':' '\n' | grep -v "portables/bin" | tr '\n' ':' | sed 's/:$//')"
+SYS_OSV="$(PATH="$CLEAN_PATH" which osv-scanner 2>/dev/null || true)"
 if [ -x "$LOCAL_OSV" ]; then
     exec "$LOCAL_OSV" "${ARGS[@]}"
 elif [ -n "$SYS_OSV" ] && [ -x "$SYS_OSV" ]; then

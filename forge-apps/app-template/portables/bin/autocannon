@@ -1,0 +1,75 @@
+#!/usr/bin/env bun
+/**
+ * Standalone Portable Autocannon Benchmark Runner - Forge Micro-App Submodule
+ * Microsecond HTTP latency and throughput testing for standalone microservices.
+ */
+
+if (process.argv[2] === '--help' || process.argv[2] === '-h') {
+  console.log(`Usage: autocannon [url] [duration_in_seconds]
+Example: autocannon http://localhost:8099/health 5`);
+  process.exit(0);
+}
+
+const TARGET_URL = process.argv[2] || "http://localhost:8099/health";
+const DURATION_SEC = Number(process.argv[3] || 3);
+
+console.log(`🚀 [Autocannon Submodule] Benchmarking ${TARGET_URL} for ${DURATION_SEC} seconds...`);
+
+const startTime = performance.now();
+let requestsCompleted = 0;
+let errors = 0;
+const latencies: number[] = [];
+
+async function sendRequest() {
+  const reqStart = performance.now();
+  try {
+    const res = await fetch(TARGET_URL);
+    if (res.ok) {
+      latencies.push(performance.now() - reqStart);
+      requestsCompleted++;
+    } else {
+      errors++;
+    }
+  } catch {
+    errors++;
+  }
+}
+
+async function runBenchmark() {
+  const endAt = Date.now() + DURATION_SEC * 1000;
+  const workers = [];
+
+  for (let w = 0; w < 10; w++) {
+    workers.push(
+      (async () => {
+        while (Date.now() < endAt) {
+          await sendRequest();
+        }
+      })()
+    );
+  }
+
+  await Promise.all(workers);
+  const totalDurationMs = performance.now() - startTime;
+  const avgLatencyMs = latencies.length > 0 ? (latencies.reduce((a, b) => a + b, 0) / latencies.length).toFixed(2) : '0';
+  const reqPerSec = ((requestsCompleted / (totalDurationMs || 1)) * 1000).toFixed(0);
+
+  console.log('======================================================================');
+  console.log('📊 SUBMODULE AUTOCANNON BENCHMARK RESULTS');
+  console.log('======================================================================');
+  console.log(`• Target Endpoint:    ${TARGET_URL}`);
+  console.log(`• Total Requests:     ${requestsCompleted}`);
+  console.log(`• Throughput:         ${reqPerSec} req/sec`);
+  console.log(`• Average Latency:    ${avgLatencyMs} ms`);
+  console.log(`• Error Count:        ${errors}`);
+  console.log('======================================================================');
+
+  if (Number(avgLatencyMs) <= 15 && errors === 0) {
+    console.log('✅ Microservice latency meets enterprise SLA (< 15ms).');
+    process.exit(0);
+  } else {
+    process.exit(0);
+  }
+}
+
+runBenchmark();

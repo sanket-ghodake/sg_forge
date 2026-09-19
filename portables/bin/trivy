@@ -18,7 +18,8 @@ if [ ${#ARGS[@]} -eq 0 ]; then
     ARGS=("fs" "--scanners" "config" "/src")
 fi
 
-SYS_TRIVY="$(which -a trivy 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+CLEAN_PATH="$(echo "$PATH" | tr ':' '\n' | grep -v "portables/bin" | tr '\n' ':' | sed 's/:$//')"
+SYS_TRIVY="$(PATH="$CLEAN_PATH" which trivy 2>/dev/null || true)"
 if [ -x "$LOCAL_TRIVY" ]; then
     exec "$LOCAL_TRIVY" "${ARGS[@]}"
 elif [ -n "$SYS_TRIVY" ] && [ -x "$SYS_TRIVY" ]; then

@@ -105,15 +105,28 @@ function syncSubmodules(): void {
         }
       }
 
-      // 8. Sync scripts parity (sync-ignores, verify-gate, etc.)
+      // 8. Sync scripts parity (all scripts from app-template)
       const scriptsDir = join(appPath, 'scripts');
       mkdirSync(scriptsDir, { recursive: true });
-      for (const s of ['sync-ignores.ts', 'verify-gate.ts']) {
-        const srcScript = join(TEMPLATE_DIR, 'scripts', s);
-        const destScript = join(scriptsDir, s);
-        if (existsSync(srcScript)) {
+      const templateScriptsDir = join(TEMPLATE_DIR, 'scripts');
+      if (existsSync(templateScriptsDir)) {
+        for (const s of readdirSync(templateScriptsDir)) {
+          const srcScript = join(templateScriptsDir, s);
+          const destScript = join(scriptsDir, s);
           copyFileSync(srcScript, destScript);
         }
+      }
+
+      // 8b. Sync package.json toolchain scripts
+      const pkgPath = join(appPath, 'package.json');
+      const templatePkgPath = join(TEMPLATE_DIR, 'package.json');
+      if (existsSync(pkgPath) && existsSync(templatePkgPath)) {
+        try {
+          const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+          const tPkg = JSON.parse(readFileSync(templatePkgPath, 'utf8'));
+          pkg.scripts = { ...pkg.scripts, ...tPkg.scripts };
+          writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
+        } catch {}
       }
 
       // 9. Sync run.sh & run.bat
@@ -176,12 +189,28 @@ function syncSubmodules(): void {
       }
     }
 
-    // Ensure data/ directory has README.md
+    // Ensure data/ directory has README.md and .gitignore
     const dataDir = join(appPath, 'data');
     mkdirSync(dataDir, { recursive: true });
     const dataReadme = join(dataDir, 'README.md');
     if (!existsSync(dataReadme) && existsSync(join(TEMPLATE_DIR, 'data', 'README.md'))) {
       copyFileSync(join(TEMPLATE_DIR, 'data', 'README.md'), dataReadme);
+    }
+    const dataGitignore = join(dataDir, '.gitignore');
+    if (!existsSync(dataGitignore) && existsSync(join(TEMPLATE_DIR, 'data', '.gitignore'))) {
+      copyFileSync(join(TEMPLATE_DIR, 'data', '.gitignore'), dataGitignore);
+    }
+
+    // Ensure logs/ directory has README.md and .gitignore
+    const logsDir = join(appPath, 'logs');
+    mkdirSync(logsDir, { recursive: true });
+    const logsReadme = join(logsDir, 'README.md');
+    if (!existsSync(logsReadme) && existsSync(join(TEMPLATE_DIR, 'logs', 'README.md'))) {
+      copyFileSync(join(TEMPLATE_DIR, 'logs', 'README.md'), logsReadme);
+    }
+    const logsGitignore = join(logsDir, '.gitignore');
+    if (!existsSync(logsGitignore) && existsSync(join(TEMPLATE_DIR, 'logs', '.gitignore'))) {
+      copyFileSync(join(TEMPLATE_DIR, 'logs', '.gitignore'), logsGitignore);
     }
 
     // Ensure backups/ directory has README.md if present

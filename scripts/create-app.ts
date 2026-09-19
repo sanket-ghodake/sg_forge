@@ -99,6 +99,8 @@ export function createApp(options: CreateAppOptions): {
       if (rel === 'backups' || rel.startsWith('backups/')) return false;
       if (rel === 'node_modules' || rel.startsWith('node_modules/')) return false;
       if (rel === 'logs/commits.jsonl' || rel === 'logs/WORKLOGS.md') return false;
+      if (rel.startsWith('logs/') && rel.endsWith('.log')) return false;
+      if (rel.endsWith('.db') || rel.endsWith('.db-wal') || rel.endsWith('.db-shm')) return false;
       if (rel.endsWith('.tsbuildinfo')) return false;
       return true;
     },

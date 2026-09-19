@@ -13,7 +13,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 LOCAL_SYFT="$REPO_ROOT/portables/syft/syft"
 
-SYS_SYFT="$(which -a syft 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+CLEAN_PATH="$(echo "$PATH" | tr ':' '\n' | grep -v "portables/bin" | tr '\n' ':' | sed 's/:$//')"
+SYS_SYFT="$(PATH="$CLEAN_PATH" which syft 2>/dev/null || true)"
 if [ -x "$LOCAL_SYFT" ]; then
     exec "$LOCAL_SYFT" "$@"
 elif [ -n "$SYS_SYFT" ] && [ -x "$SYS_SYFT" ]; then

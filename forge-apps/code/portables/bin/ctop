@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Wrapper for ctop (Container Top Dashboard)
+# Forge Micro-App Submodule - Enterprise Clean Architecture (2026 LTS)
+# ==============================================================================
+set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APP_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+LOCAL_BIN="$APP_ROOT/portables/ctop/ctop"
+PARENT_BIN="$APP_ROOT/../../portables/bin/ctop"
+SYS_CTOP="$(which -a ctop 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+
+if [ "$(uname -s)" = "Linux" ] && [ "$(uname -m)" = "x86_64" ] && [ -x "$LOCAL_BIN" ]; then
+    exec "$LOCAL_BIN" "$@"
+elif [ -x "$PARENT_BIN" ]; then
+    exec "$PARENT_BIN" "$@"
+elif [ -n "$SYS_CTOP" ] && [ -x "$SYS_CTOP" ]; then
+    exec "$SYS_CTOP" "$@"
+elif command -v docker >/dev/null 2>&1; then
+    echo "📊 [ctop Submodule] Monitoring containers via Docker stats..."
+    exec docker stats
+else
+    echo "❌ Docker or ctop not available." >&2
+    exit 1
+fi

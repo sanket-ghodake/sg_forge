@@ -10,5 +10,5 @@ data
 .env.*
 !.env.example
 /graft
-.codeburn
+.tokscale
 .headroom

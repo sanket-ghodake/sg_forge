@@ -7,12 +7,12 @@
 
 ---
 
-## ⚡ 1. PRE-FLIGHT & PRE-COMMIT VERIFICATION GATE (14 CHECKS)
+## ⚡ 1. PRE-FLIGHT & PRE-COMMIT VERIFICATION GATE (21 CHECKS)
 Before writing code, running commands, or staging changes in this microservice:
 1. [ ] **Command Execution via Submodule Runner**: Prefer `./run.sh test`, `./run.sh dev`, `./run.sh verify`, or prefix with `rtk` if installed.
-2. [ ] **Zero Monorepo Bleed**: All files, code, and dependencies MUST be self-contained within this repository. ZERO relative traversal imports to `../../apps/src/*` or central monorepo folders.
+2. [ ] **Zero Monorepo Bleed & 100% Autonomous Independence**: All files, code, tools, and dependencies MUST be self-contained within this repository. ZERO relative traversal imports to `../../apps/src/*` or central monorepo folders. Submodules can be cloned, built, tested, and deployed to external repositories or machines with zero dependency on the main SG Forge monorepo.
 3. [ ] **500-Line Soft File Cap**: Source files must remain cohesive and **$\le 500$ lines** ($\le 300$ lines ideal).
-4. [ ] **Modern Portable Design System (shadcn + Magic UI + Aceternity + Luxe) & Universal Zero-Browser-Defaults**: User interfaces MUST strictly use the modern self-contained design system fusing shadcn UI (foundations, forms, dialogs, tables), Magic UI (polished animations, micro-interactions, pulse beacons), Aceternity UI (cinematic hero sections, ambient glass cards, spot grids), and Luxe (high-craft developer typography, HUD cards) with 100% dark/light theme parity and 100% vector SVG icons (zero emojis anywhere in UI, tables, toasts, modals, badges, or scripts).
+4. [ ] **Modern Portable Design System (shadcn + Magic UI + Aceternity + Luxe) & Universal Zero-Browser-Defaults**: User interfaces MUST strictly use the modern self-contained design system fusing shadcn UI (foundations, forms, dialogs, tables), Magic UI (polished animations, micro-interactions, pulse beacons), Aceternity UI (cinematic hero sections, ambient glass cards, spot grids), and Luxe (high-craft developer typography, HUD cards) via `src/lib/ui.ts` with zero runtime dependencies. Universal 100% dark/light theme parity and 100% vector SVG icons (zero emojis anywhere in UI, tables, toasts, modals, badges, or scripts).
    - **ZERO BROWSER/OS DEFAULTS (STRICT ENFORCEMENT)**:
      - **Notifications & Alerts**: Raw browser `alert()`, `confirm()`, `prompt()` are STRICTLY FORBIDDEN. All notifications must use modern Astryx Toast overlays (`window.astryxToast.show/success/error/info`) with glassmorphic cards, slide-in physics, and SVG icons.
      - **Dropdowns & Selects**: Unstyled native OS `<select>` dropdowns are STRICTLY FORBIDDEN. Must use custom styled selectors with custom SVG chevron arrows (`appearance: none`), themed surface option lists, or custom floating popover menus with smart collision detection (auto-flip/shift/clamp).
@@ -29,10 +29,17 @@ Before writing code, running commands, or staging changes in this microservice:
 8. [ ] **Centralized Logging & RFC 7807 Error Boundaries**: Use local `createLogger` and `createSafeHandler` from `./src/lib/sdk`. Return RFC 7807 problem responses with trace IDs.
 9. [ ] **ABSOLUTE ZERO AUTO-COMMITS (HARD BLOCKED)**: AI agents are STRICTLY FORBIDDEN from running `git commit` unless the user explicitly types `"commit changes"` or `"git commit"` in the CURRENT prompt.
 10. [ ] **Per-Conversation Worklog Auto-Update**: At the end of every task, append strictly ONE line to `logs/WORKLOGS.md` (`YYYY-MM-DD HH:mm | <summary>`) via `./run.sh worklog "<summary>"`.
-11. [ ] **Lifetime Submodule Token Ledger**: Track session tokens and spend in `logs/token-ledger.jsonl` via `./run.sh tokens sync`.
+11. [ ] **Lifetime Submodule Token Ledger**: Track session tokens and spend in `logs/token-ledger.jsonl` via `./run.sh tokens sync` or `./run.sh tokens`.
 12. [ ] **Code Context & Dependency Graph (Graft)**: Inspect symbols and signatures via `./run.sh graft skeleton <file>` or `./run.sh graft callers <symbol>` before editing.
 13. [ ] **Context Compression (Headroom)**: Compress large payloads or logs before prompting via `./run.sh headroom compress <file>`.
 14. [ ] **System Traceability & Living Documentation**: Maintain colocated documentation in `docs/` (`docs/hlr/`, `docs/llr/`, `README.md`). All exported functions must carry `@requirements [LLR-...]` TSDoc tags. Local diagrams must use the `diagram-design` standard.
+15. [ ] **Code Quality & Linting**: Biome / Knip formatting and dead-code verification via `./run.sh lint` and `./run.sh deadcode`.
+16. [ ] **Secret Leak Detection**: Gitleaks air-gapped detection via `./run.sh secrets`.
+17. [ ] **Static Code Analysis**: Semgrep ruleset scan via `./run.sh semgrep`.
+18. [ ] **Shell Script Verification**: ShellCheck linter via `./run.sh shellcheck`.
+19. [ ] **Complexity & Function Line Cap**: Lizard complexity inspection (CCN <= 10, lines <= 60) via `./run.sh complexity`.
+20. [ ] **Container & Config Security (Trivy)**: Trivy container and configuration audit via `./run.sh trivy`.
+21. [ ] **Supply Chain & Vulnerability Audit (OSV-Scanner / Syft)**: OSV-Scanner dependency vulnerability inspection via `./run.sh vuln` and CycloneDX 1.5 SBOM generation via `./run.sh sbom`.
 
 ---
 
@@ -41,7 +48,11 @@ Before writing code, running commands, or staging changes in this microservice:
 - **Database**: Local Turso libSQL (`bun:sqlite`) in WAL mode
 - **Container**: Standalone Alpine-based container (`docker/Dockerfile`) with `context: .`
 - **Testing**: Bun Test (`./run.sh test`)
-- **Quality Gate**: Pre-commit quality gate (`./run.sh verify`)
+- **Quality Gate**: Pre-commit 21-gate quality verification (`./run.sh verify`)
+- **Security Scanners**: Trivy (`./run.sh trivy`), OSV-Scanner (`./run.sh vuln`), Gitleaks (`./run.sh secrets`), Semgrep (`./run.sh semgrep`), ShellCheck (`./run.sh shellcheck`)
+- **SBOM**: Syft CycloneDX 1.5 SBOM generator (`./run.sh sbom`)
+- **Quality & AST**: Biome (`./run.sh lint`), Knip (`./run.sh deadcode`), Lizard (`./run.sh complexity`), TypeScript (`./run.sh typecheck`), Type Coverage (`./portables/bin/type-coverage`)
+- **Diagnostics & Benchmarks**: System Doctor (`./run.sh doctor`), HTTP Benchmark (`./run.sh benchmark`), Accessibility (`./run.sh a11y`), Context Pack (`./run.sh pack`)
 - **Code Context**: Graft (`./run.sh graft`)
 - **Spend Tracking**: Tokscale & Lifetime Ledger (`./run.sh tokens`)
 - **Context Compression**: Headroom (`./run.sh headroom`)

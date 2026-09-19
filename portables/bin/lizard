@@ -9,7 +9,7 @@ else
   if [ -x "$PYTHON" ]; then
     exec "$PYTHON" -m lizard "$@"
   else
-    SYS_LIZARD="$(which -a lizard 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+    SYS_LIZARD="$(which -a lizard 2>/dev/null | grep -v "portables/bin" | head -n 1 || true)"
     if [ -n "$SYS_LIZARD" ] && [ -x "$SYS_LIZARD" ]; then
       exec "$SYS_LIZARD" "$@"
     else

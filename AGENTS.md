@@ -33,7 +33,7 @@ Before writing code, running commands, or staging/committing changes, verify:
 
 ---
 
-## 🛑 2. THE 13 NON-NEGOTIABLE ENGINEERING INVARIANTS (ENTERPRISE STANDARD)
+## 🛑 2. THE 14 NON-NEGOTIABLE ENGINEERING INVARIANTS (ENTERPRISE STANDARD)
 
 ### 1. Correctness, Grounding & "No Guessing"
 - **NEVER** hallucinate, assume, or invent APIs, database columns, schemas, external packages, or behaviors.
@@ -101,6 +101,12 @@ Before writing code, running commands, or staging/committing changes, verify:
 - **Trademark & Brand Neutrality**: AI agents are strictly forbidden from introducing third-party trademarked names (e.g. "Supabase", "Meta", "Google", "Vercel", "Apple", "Microsoft") into source code, variable names, component names, CSS classes, comments, or documentation as brand associations or "inspired by" without an explicit trademark disclaimer in `NOTICE`.
 - **Developer Certificate of Origin (DCO 1.1)**: All pull requests and external contributions MUST certify DCO 1.1 via `Signed-off-by:` trailers.
 - **Zero Corporate Work-for-Hire Bleed**: Agents must NEVER introduce corporate employee usernames, internal corporate domains (e.g. corporate VPN/intranet URLs), or machine-specific personal paths (`/home/...`) into the codebase.
+
+### 14. Submodule Toolchain Parity & Autonomous Independence Directive (Enterprise Standard)
+- **100% Autonomous Independence**: Every Forge app (`forge-apps/*`) and template (`forge-apps/app-template`) is an independent microservice capable of operating, building, testing, auditing, and being deployed standalone outside the SG Forge monorepo with zero required host installations.
+- **Toolchain & CLI Parity**: Submodules maintain full CLI parity with the core platform via dedicated, self-resolving POSIX & Windows wrappers in their own `portables/bin/` (`trivy`, `syft`, `osv-scanner`, `gitleaks`, `semgrep`, `shellcheck`, `biome`, `knip`, `lizard`, `type-coverage`, `tokscale`, `headroom`, `graft`, `council`, `rtk`).
+- **Automated Synchronization**: Whenever toolchains, runners (`run.sh`/`run.bat`), scripts, or security scanners are upgraded in the main repo or `app-template`, `rtk bun scripts/sync-submodules.ts` MUST be run to propagate updates across all active submodules.
+- **UI Engine Exception**: Core platform views strictly use Astryx (`@forge/ui`); autonomous Forge micro-apps strictly use the portable 4-library engine (**shadcn UI + Magic UI + Aceternity UI + Luxe**) via `src/lib/ui.ts` with zero central `@forge/*` dependencies.
 
 ---
 

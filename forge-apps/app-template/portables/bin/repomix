@@ -1,0 +1,56 @@
+#!/usr/bin/env bun
+/**
+ * Standalone Portable Repomix AI Context Packager - Forge Micro-App Submodule
+ * Packs microservice source code into a token-compressed XML bundle for AI agents.
+ */
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join, relative } from "node:path";
+
+const APP_ROOT = join(import.meta.dir, '..', '..');
+
+if (process.argv.includes('--version') || process.argv.includes('-v')) {
+  console.log("repomix v1.10.2 (submodule-portable)");
+  process.exit(0);
+}
+
+if (process.argv.includes('--help') || process.argv.includes('-h')) {
+  console.log("📦 [Repomix Portable] Submodule Context Codebase Packager (2026 LTS)");
+  console.log("Usage: repomix [output_file]");
+  console.log("Example: repomix submodule-pack.xml");
+  process.exit(0);
+}
+
+const OUTPUT_FILE = process.argv[2] || "submodule-pack.xml";
+console.log(`📦 [Repomix Portable] Packaging microservice context into ${OUTPUT_FILE}...`);
+
+function getAllCodeFiles(dir: string): string[] {
+  let files: string[] = [];
+  if (!existsSync(dir)) return files;
+  const entries = readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (!['node_modules', '.git', 'dist', 'portables', 'data', 'logs', '.cache'].includes(entry.name)) {
+        files = files.concat(getAllCodeFiles(fullPath));
+      }
+    } else if (['.ts', '.tsx', '.json', '.md', '.yml', '.yaml'].some(ext => entry.name.endsWith(ext))) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+const files = getAllCodeFiles(APP_ROOT);
+let outputXml = `<?xml version="1.0" encoding="UTF-8"?>\n<microservice name="forge-submodule">\n`;
+
+for (const file of files) {
+  const rel = relative(APP_ROOT, file);
+  const content = readFileSync(file, 'utf8');
+  outputXml += `  <file path="${rel}">\n<![CDATA[\n${content}\n]]>\n  </file>\n`;
+}
+
+outputXml += `</microservice>\n`;
+writeFileSync(join(APP_ROOT, OUTPUT_FILE), outputXml, 'utf8');
+
+console.log(`✅ [Repomix] Successfully packed ${files.length} submodule files into ${OUTPUT_FILE}.`);
+process.exit(0);

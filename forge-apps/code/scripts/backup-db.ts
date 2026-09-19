@@ -21,7 +21,7 @@ const RETENTION_HOURS = Math.max(1, Number(process.env.DB_BACKUP_RETENTION_HOURS
 
 /**
  * MicroAppBackupResult
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export interface MicroAppBackupResult {
   success: boolean;
@@ -37,7 +37,7 @@ export interface MicroAppBackupResult {
 
 /**
  * executeMicroAppBackup
- * @requirements [HLR-CODE-701] [LLR-SUB-003] [HLR-CODE-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function executeMicroAppBackup(): {
   manifestPath: string;

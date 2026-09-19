@@ -12,7 +12,19 @@
     "docs:coverage": "bun run scripts/verify-gate.ts",
     "backup": "bun run scripts/backup-db.ts",
     "compile": "bun build src/server.ts --target=bun --minify --sourcemap=none --outdir dist",
-    "build": "docker build -f docker/Dockerfile -t forge-app-code ."
+    "build": "docker build -f docker/Dockerfile -t forge-app-template .",
+    "lint": "./run.sh lint",
+    "deadcode": "./run.sh deadcode",
+    "secrets": "./run.sh secrets",
+    "semgrep": "./run.sh semgrep",
+    "shellcheck": "./run.sh shellcheck",
+    "complexity": "./run.sh complexity",
+    "typecheck": "./run.sh typecheck",
+    "trivy": "./run.sh trivy",
+    "vuln": "./run.sh vuln",
+    "sbom": "./run.sh sbom",
+    "doctor": "./run.sh doctor",
+    "clean": "./run.sh clean"
   },
   "dependencies": {},
   "devDependencies": {

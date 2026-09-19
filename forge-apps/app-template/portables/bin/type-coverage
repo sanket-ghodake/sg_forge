@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Standalone Portable Wrapper for Type Coverage & Strictness
+# Forge Micro-App Submodule - Enterprise Clean Architecture (2026 LTS)
+# ==============================================================================
+set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+APP_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+BUN_BIN="bun"
+[ -x "$APP_ROOT/../../portables/bun/bin/bun" ] && BUN_BIN="$APP_ROOT/../../portables/bun/bin/bun"
+[ -x "$APP_ROOT/portables/bun/bin/bun" ] && BUN_BIN="$APP_ROOT/portables/bun/bin/bun"
+
+LOCAL_TC="$APP_ROOT/node_modules/.bin/type-coverage"
+PARENT_TC="$APP_ROOT/../../node_modules/.bin/type-coverage"
+SYS_TC="$(which -a type-coverage 2>/dev/null | grep -v "$SCRIPT_DIR" | head -n 1 || true)"
+
+if [ -f "$LOCAL_TC" ]; then
+    exec "$BUN_BIN" run "$LOCAL_TC" "$@"
+elif [ -f "$PARENT_TC" ]; then
+    exec "$BUN_BIN" run "$PARENT_TC" "$@"
+elif [ -n "$SYS_TC" ] && [ -x "$SYS_TC" ]; then
+    exec "$SYS_TC" "$@"
+else
+    # 100% Autonomous Fallback: Offline TypeScript compiler strictness verification
+    echo "⚡ [type-coverage] Running strict TypeScript compiler check (tsc --noEmit)..."
+    exec "$BUN_BIN" x tsc --noEmit
+fi
