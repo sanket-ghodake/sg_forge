@@ -15,6 +15,7 @@ import { renderSecurityMatrixSection } from '../../src/frontend/sections/securit
 import { renderTestingSection } from '../../src/frontend/sections/testing-section';
 import { renderTokenMintSection } from '../../src/frontend/sections/token-mint-section';
 import { renderUiSection } from '../../src/frontend/sections/ui-section';
+import { renderApiCatalogSection } from '../../src/frontend/sections/api-catalog-section';
 
 describe('Tier 1 Unit: Modular Section HTML Renderers', () => {
   it('renders overview section with invariants and topology', () => {
@@ -136,4 +137,16 @@ describe('Tier 1 Unit: Modular Section HTML Renderers', () => {
     expect(html).toContain('Tier 5: E2E');
     expect(html).toContain('3A Pattern (Arrange, Act, Assert)');
   });
+
+  it('renders live API catalog section with OpenAPI endpoint specifications', () => {
+    // 1. Arrange & 2. Act
+    const html = renderApiCatalogSection();
+
+    // 3. Assert
+    expect(html).toContain('Live API Contract Explorer & Schema Registry');
+    expect(html).toContain('OpenAPI 3.1 Spec');
+    expect(html).toContain('/auth/api/v1/auth/me');
+    expect(html).toContain('Test in Sandbox');
+  });
 });
+

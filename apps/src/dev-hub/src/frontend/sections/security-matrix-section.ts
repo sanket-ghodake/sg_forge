@@ -1,18 +1,23 @@
 /**
  * @forge/dev-hub - RFC 7807 Problem Matrix & Security Standards Section
- * Astryx Design Standards (2026 LTS Baseline)
-  * @requirements [HLR-HUB-601] [LLR-SUB-005]
+ * Astryx Design Standards & Vector Icon Standards (2026 LTS Baseline)
+ * @requirements [HLR-HUB-601] [LLR-SUB-005]
  */
+
+import { astryxIcons } from '@forge/ui';
 
 export function renderSecurityMatrixSection(): string {
   return `
     <section id="section-security" class="hub-section">
       <div class="astryx-card" style="margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
           <div>
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0 0 0.25rem 0;">
-              🛡️ RFC 7807 Problem Matrix & ASVS 5.0 Security Invariants
-            </h2>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span style="color: var(--forge-primary); display: flex;">${astryxIcons.shield}</span>
+              <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0;">
+                RFC 7807 Problem Matrix & ASVS 5.0 Security Invariants
+              </h2>
+            </div>
             <span style="font-size: 0.85rem; color: var(--forge-text-muted);">
               Standard problem details (application/problem+json) and cryptographic defense boundaries.
             </span>

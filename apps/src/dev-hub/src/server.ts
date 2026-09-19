@@ -4,8 +4,9 @@
  * Astryx Enterprise Baseline (v2.0.0 LTS)
  */
 
-import { createLogger, createSafeHandler, handleBrandAssetRequest } from '@forge/sdk';
+import { createLogger, createSafeHandler, handleBrandAssetRequest, loadServiceRegistry } from '@forge/sdk';
 import { renderDevHubHtml } from './frontend/hub-view';
+import { PLATFORM_API_CATALOG } from './frontend/sections/api-catalog-section';
 
 const PORT = Number(process.env.DEV_HUB_PORT || process.env.PORT || 3003);
 const logger = createLogger('dev-hub');
@@ -22,6 +23,7 @@ export function startDevHubServer(port: number = PORT) {
     const assetRes = handleBrandAssetRequest(req);
     if (assetRes) return assetRes;
 
+    // 1. Dual-Probe Operational Healthcheck
     if (url.pathname.endsWith('/health')) {
       return Response.json({
         status: 'ok',
@@ -32,6 +34,25 @@ export function startDevHubServer(port: number = PORT) {
       });
     }
 
+    // 2. Automated Gateway API & Route Contracts Catalog Endpoint
+    if (url.pathname.endsWith('/api/gateway/catalog')) {
+      const services = loadServiceRegistry();
+      return Response.json({
+        status: 'ok',
+        service: 'dev-hub',
+        version: '2.0.0',
+        timestamp: new Date().toISOString(),
+        registeredServices: services,
+        apiContracts: PLATFORM_API_CATALOG,
+      }, {
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Cache-Control': 'no-cache',
+        },
+      });
+    }
+
+    // 3. Render High-Density Developer Console HTML View
     return new Response(renderDevHubHtml(), {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });

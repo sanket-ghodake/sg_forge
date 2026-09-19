@@ -1,18 +1,23 @@
 /**
  * @forge/dev-hub - Astryx UI System & Design Tokens Section
- * Astryx Design Standards (2026 LTS Baseline)
-  * @requirements [HLR-HUB-601] [LLR-SUB-005]
+ * Astryx Design Standards & Vector Icon Standards (2026 LTS Baseline)
+ * @requirements [HLR-HUB-601] [LLR-SUB-005]
  */
+
+import { astryxIcons } from '@forge/ui';
 
 export function renderUiSection(): string {
   return `
     <section id="section-ui" class="hub-section">
       <div class="astryx-card" style="margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
           <div>
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0 0 0.25rem 0;">
-              🎨 Astryx Design System (<code>@forge/ui</code>)
-            </h2>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span style="color: var(--forge-primary); display: flex;">${astryxIcons.sparkles}</span>
+              <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0;">
+                Astryx Design System (<code>@forge/ui</code>)
+              </h2>
+            </div>
             <span style="font-size: 0.85rem; color: var(--forge-text-muted);">
               Enterprise dark-mode aesthetic with glassmorphic cards, custom scrollbars, toast notifications, and zero browser defaults.
             </span>
@@ -59,31 +64,19 @@ export function renderUiSection(): string {
                 <td><code>--forge-border</code></td>
                 <td><span class="color-chip" style="background: var(--forge-border);"></span></td>
                 <td><code>Subtle Border</code></td>
-                <td>Subtle dividers, input borders, card borders</td>
+                <td>Card frames, section dividers, inputs</td>
               </tr>
               <tr>
                 <td><code>--forge-primary</code></td>
                 <td><span class="color-chip" style="background: var(--forge-primary);"></span></td>
-                <td><code>Emerald Primary</code></td>
-                <td>Astryx Emerald: primary buttons, success state</td>
+                <td><code>Primary Brand</code></td>
+                <td>Active states, primary CTA buttons, badges</td>
               </tr>
               <tr>
                 <td><code>--forge-accent</code></td>
                 <td><span class="color-chip" style="background: var(--forge-accent);"></span></td>
-                <td><code>Sapphire Accent</code></td>
-                <td>Sapphire Blue: links, info badges, focus rings</td>
-              </tr>
-              <tr>
-                <td><code>--forge-warning</code></td>
-                <td><span class="color-chip" style="background: var(--forge-warning);"></span></td>
-                <td><code>Amber Warning</code></td>
-                <td>Amber: warning badges, slow query indicators</td>
-              </tr>
-              <tr>
-                <td><code>--forge-danger</code></td>
-                <td><span class="color-chip" style="background: var(--forge-danger);"></span></td>
-                <td><code>Crimson Error</code></td>
-                <td>Crimson: errors, deletions, critical alerts</td>
+                <td><code>Accent Indigo</code></td>
+                <td>Micro-interactions, highlights, focus rings</td>
               </tr>
               <tr>
                 <td><code>--forge-text-main</code></td>
@@ -106,22 +99,22 @@ export function renderUiSection(): string {
           <h3 style="font-size: 1.1rem; color: var(--forge-text-main); margin: 0 0 0.5rem 0;">2. Zero Browser Defaults Policy & Viewport Containment</h3>
           <div class="zero-defaults-grid">
             <div class="zero-card">
-              <div class="zero-icon">📜</div>
+              <div class="zero-icon">${astryxIcons.fileText}</div>
               <h4>Slim Scrollbars</h4>
               <p>OS-native thick scrollbars are blocked. Must use <code>::-webkit-scrollbar</code> with <code>--forge-border</code> thumb.</p>
             </div>
             <div class="zero-card">
-              <div class="zero-icon">🍞</div>
+              <div class="zero-icon">${astryxIcons.bell}</div>
               <h4>Astryx Toasts</h4>
               <p>OS/browser dialog popups are forbidden. Must use Astryx Toast overlays with progress bars and pause on hover.</p>
             </div>
             <div class="zero-card">
-              <div class="zero-icon">🔽</div>
+              <div class="zero-icon">${astryxIcons.arrowDown}</div>
               <h4>Smart Glass Dropdowns</h4>
               <p>Unstyled selects replaced with custom Astryx glass dropdowns featuring smart collision detection (auto-flip/shift).</p>
             </div>
             <div class="zero-card">
-              <div class="zero-icon">🪟</div>
+              <div class="zero-icon">${astryxIcons.layers}</div>
               <h4>Backdrop Modals & Drawers</h4>
               <p>All dialogs render with z-index 3000, glass backdrop filter, and smooth scale transitions.</p>
             </div>
@@ -135,10 +128,22 @@ export function renderUiSection(): string {
             Test the live Astryx Toast notifications and select controls directly in this playground:
           </p>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
-            <button class="astryx-btn btn-primary" onclick="if(window.astryxToast) window.astryxToast('Service deployed successfully (200 OK)', 'success');">✅ Trigger Success Toast</button>
-            <button class="astryx-btn btn-outline" style="border-color: var(--forge-accent); color: var(--forge-accent);" onclick="if(window.astryxToast) window.astryxToast('Rate limit threshold reached (429)', 'error');">❌ Trigger Error Toast</button>
-            <button class="astryx-btn btn-outline" style="border-color: var(--forge-warning); color: var(--forge-warning);" onclick="if(window.astryxToast) window.astryxToast('Slow query latency detected (>50ms)', 'warning');">⚠️ Trigger Warning Toast</button>
-            <button class="astryx-btn btn-outline" onclick="if(window.astryxToast) window.astryxToast('Database checkpoint created', 'info');">ℹ️ Trigger Info Toast</button>
+            <button class="astryx-btn btn-primary" onclick="showAstryxToast('Service deployed successfully (200 OK)')">
+              <span>Trigger Success Toast</span>
+              <span style="margin-left: 0.35rem;">${astryxIcons.check}</span>
+            </button>
+            <button class="astryx-btn btn-outline" style="border-color: var(--forge-danger); color: var(--forge-danger);" onclick="showAstryxToast('Rate limit threshold reached (429)')">
+              <span>Trigger Error Toast</span>
+              <span style="margin-left: 0.35rem;">${astryxIcons.x}</span>
+            </button>
+            <button class="astryx-btn btn-outline" style="border-color: var(--forge-warning); color: var(--forge-warning);" onclick="showAstryxToast('Slow query latency detected (>50ms)')">
+              <span>Trigger Warning Toast</span>
+              <span style="margin-left: 0.35rem;">${astryxIcons.helpCircle}</span>
+            </button>
+            <button class="astryx-btn btn-outline" onclick="showAstryxToast('Database checkpoint created')">
+              <span>Trigger Info Toast</span>
+              <span style="margin-left: 0.35rem;">${astryxIcons.sparkles}</span>
+            </button>
           </div>
         </div>
 

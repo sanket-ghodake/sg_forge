@@ -4,15 +4,20 @@
   * @requirements [HLR-HUB-601] [LLR-SUB-005]
  */
 
+import { astryxIcons } from '@forge/ui';
+
 export function renderSdkSection(): string {
   return `
     <section id="section-sdk" class="hub-section">
       <div class="astryx-card" style="margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
           <div>
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0 0 0.25rem 0;">
-              📦 Forge Foundation SDK Reference (<code>@forge/sdk</code>)
-            </h2>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span style="color: var(--forge-primary); display: flex;">${astryxIcons.code}</span>
+              <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0;">
+                Forge Foundation SDK Reference (<code>@forge/sdk</code>)
+              </h2>
+            </div>
             <span style="font-size: 0.85rem; color: var(--forge-text-muted);">
               Universal standard library for logging, error boundaries, auth gates, hierarchy lookups, and iframe bridges.
             </span>

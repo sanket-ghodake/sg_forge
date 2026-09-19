@@ -1,8 +1,9 @@
 /**
  * @forge/dev-hub - Interactive API Sandbox & Polyglot Request Builder
- * Astryx Design Standards (2026 LTS Baseline)
+ * Astryx Design Standards & Vector Icon Standards (2026 LTS Baseline)
  */
 
+import { astryxIcons } from '@forge/ui';
 import { loadBrandConfig } from '@forge/sdk';
 
 /**
@@ -14,11 +15,14 @@ export function renderSandboxSection(): string {
   return `
     <section id="section-sandbox" class="hub-section">
       <div class="astryx-card" style="margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
           <div>
-            <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0 0 0.25rem 0;">
-              ⚡ Interactive Live API Sandbox & Polyglot Request Builder
-            </h2>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span style="color: var(--forge-primary); display: flex;">${astryxIcons.zap}</span>
+              <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--forge-text-main); margin: 0;">
+                Interactive Live API Sandbox & Polyglot Request Builder
+              </h2>
+            </div>
             <span style="font-size: 0.85rem; color: var(--forge-text-muted);">
               Dispatch live requests to ${brand.name} Gateway endpoints or generate instant code in multiple languages.
             </span>
@@ -33,6 +37,8 @@ export function renderSandboxSection(): string {
             <div class="astryx-select-wrapper">
               <select id="sandbox-endpoint-select" class="astryx-select" onchange="onEndpointSelectChange()">
                 <option value="/health">GET /health (Dev Hub Gateway Health)</option>
+                <option value="/api/health">GET /api/health (Gateway Operational Probe)</option>
+                <option value="/api/gateway/catalog">GET /api/gateway/catalog (Live Route Contracts)</option>
                 <option value="/auth/health">GET /auth/health (Auth Gateway Health)</option>
                 <option value="/portal/health">GET /portal/health (Workspace Portal Health)</option>
                 <option value="/auth/api/v1/auth/hierarchy/usr-alice-eng">GET /auth/api/v1/auth/hierarchy/usr-alice-eng (Scoped Hierarchy: Alice)</option>
@@ -44,7 +50,7 @@ export function renderSandboxSection(): string {
           </div>
 
           <div class="sandbox-url-row">
-            <span class="method-tag">GET</span>
+            <span class="method-tag method-get">GET</span>
             <input type="text" id="sandbox-url-input" class="astryx-input" value="/health" placeholder="/api/v1/..." oninput="updatePolyglotSnippets()" />
             <button id="sandbox-submit-btn" class="astryx-btn btn-primary" onclick="runSandboxRequest()">
               <span>Send Request</span>
@@ -67,9 +73,12 @@ export function renderSandboxSection(): string {
         </div>
 
         <!-- Polyglot Code Generator -->
-        <h3 style="font-size: 1.1rem; color: var(--forge-text-main); margin: 1.5rem 0 0.5rem 0;">
-          💻 Ready-to-Run Request Code Generator
-        </h3>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin: 1.5rem 0 0.5rem 0;">
+          <span style="color: var(--forge-primary); display: flex;">${astryxIcons.terminal}</span>
+          <h3 style="font-size: 1.1rem; color: var(--forge-text-main); margin: 0;">
+            Ready-to-Run Request Code Generator
+          </h3>
+        </div>
         <p style="font-size: 0.85rem; color: var(--forge-text-muted); margin-bottom: 0.75rem;">
           Auto-generated code for the active endpoint with cookies & headers:
         </p>
@@ -110,9 +119,12 @@ resp, err := http.DefaultClient.Do(req)</code></pre>
 
         <!-- Section 2: Header Simulator -->
         <div style="margin-top: 2rem; border-top: 1px solid var(--forge-border); padding-top: 1.5rem;">
-          <h3 style="font-size: 1.1rem; color: var(--forge-text-main); margin: 0 0 0.5rem 0;">
-            🔍 Injected Header Simulator
-          </h3>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="color: var(--forge-primary); display: flex;">${astryxIcons.search}</span>
+            <h3 style="font-size: 1.1rem; color: var(--forge-text-main); margin: 0;">
+              Injected Header Simulator
+            </h3>
+          </div>
           <p style="font-size: 0.85rem; color: var(--forge-text-muted); margin-bottom: 1rem;">
             Test how your microservice parses Gateway identity headers for a given simulated role:
           </p>

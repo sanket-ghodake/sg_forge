@@ -1,8 +1,9 @@
 /**
  * @forge/dev-hub - Overview & System Architecture Section
- * Astryx Design Standards (2026 LTS Baseline)
+ * Astryx Design Standards & Vector SVG Compliance (2026 LTS Baseline)
  */
 
+import { astryxIcons } from '@forge/ui';
 import { loadBrandConfig } from '@forge/sdk';
 
 /**
@@ -12,7 +13,7 @@ import { loadBrandConfig } from '@forge/sdk';
 export function renderOverviewSection(): string {
   const brand = loadBrandConfig();
   return `
-    <section id="section-overview" class="hub-section">
+    <section id="section-overview" class="hub-section active">
       <!-- Hero Banner -->
       <div class="astryx-card hero-card" style="margin-bottom: 2rem; position: relative; overflow: hidden;">
         <div class="hero-glow"></div>
@@ -21,18 +22,28 @@ export function renderOverviewSection(): string {
             <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem;">
               <span class="astryx-badge badge-pill">@forge/sdk v2.0.0 LTS</span>
               <span class="astryx-badge badge-online">Gateway Port 3003</span>
-              <span class="astryx-badge badge-pill">Astryx UI</span>
+              <span class="astryx-badge badge-pill">Astryx Console UI</span>
             </div>
-            <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--forge-text-main); margin: 0 0 0.75rem 0; letter-spacing: -0.02em;">
-              🚀 Developer Hub & SDK Playground
+            <h1 style="font-size: 1.85rem; font-weight: 800; color: var(--forge-text-main); margin: 0 0 0.75rem 0; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.6rem;">
+              <span style="color: var(--forge-primary); display: flex;">${astryxIcons.topology}</span>
+              <span>Developer Hub & SDK Playground</span>
             </h1>
             <p style="color: var(--forge-text-muted); line-height: 1.6; margin: 0 0 1.25rem 0; font-size: 0.95rem;">
               The centralized developer control plane for <strong>${brand.name}</strong> microservices. Access complete <strong>Forge SDK Contract</strong> specifications, <strong>Docker App Templates</strong>, Zero-Trust gateway headers, and an interactive live API sandbox.
             </p>
             <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-              <button class="astryx-btn btn-primary" onclick="switchTab('sandbox')">⚡ Launch API Sandbox</button>
-              <button class="astryx-btn btn-outline" onclick="switchTab('sdk')">📦 Explore @forge/sdk</button>
-              <button class="astryx-btn btn-outline" onclick="switchTab('gateway')">🔀 Gateway Routing Spec</button>
+              <button class="astryx-btn btn-primary" onclick="switchTab('sandbox')">
+                <span>Launch API Sandbox</span>
+                <span style="margin-left: 0.35rem;">${astryxIcons.zap}</span>
+              </button>
+              <button class="astryx-btn btn-outline" onclick="switchTab('sdk')">
+                <span>Explore @forge/sdk</span>
+                <span style="margin-left: 0.35rem;">${astryxIcons.code}</span>
+              </button>
+              <button class="astryx-btn btn-outline" onclick="switchTab('routes')">
+                <span>Route Matrix & Health</span>
+                <span style="margin-left: 0.35rem;">${astryxIcons.table}</span>
+              </button>
             </div>
           </div>
           <div class="quick-stats-box">
@@ -59,7 +70,10 @@ export function renderOverviewSection(): string {
       <!-- Quick Navigation Grid -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
         <div class="astryx-card" style="cursor: pointer;" onclick="switchTab('sdk')">
-          <h3 style="color: var(--forge-text-main); margin-bottom: 0.5rem; font-size: 1rem;">📦 Forge SDK Contract</h3>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="color: var(--forge-primary); display: flex;">${astryxIcons.code}</span>
+            <h3 style="color: var(--forge-text-main); margin: 0; font-size: 1rem;">Forge SDK Contract</h3>
+          </div>
           <p style="font-size: 0.85rem; color: var(--forge-text-muted); margin-bottom: 0.75rem;">
             PostMessage handshake protocol, Zero-Trust Auth Guard, and scoped token validation specifications.
           </p>
@@ -67,7 +81,10 @@ export function renderOverviewSection(): string {
         </div>
 
         <div class="astryx-card" style="cursor: pointer;" onclick="switchTab('scaffolding')">
-          <h3 style="color: var(--forge-text-main); margin-bottom: 0.5rem; font-size: 1rem;">🐳 Docker App Templates</h3>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="color: var(--forge-primary); display: flex;">${astryxIcons.layers}</span>
+            <h3 style="color: var(--forge-text-main); margin: 0; font-size: 1rem;">Docker App Templates</h3>
+          </div>
           <p style="font-size: 0.85rem; color: var(--forge-text-muted); margin-bottom: 0.75rem;">
             Lightweight boilerplates for Python (FastAPI), Go (Fiber), and TypeScript micro-apps.
           </p>
@@ -75,7 +92,10 @@ export function renderOverviewSection(): string {
         </div>
 
         <div class="astryx-card" style="cursor: pointer;" onclick="switchTab('sandbox')">
-          <h3 style="color: var(--forge-text-main); margin-bottom: 0.5rem; font-size: 1rem;">⚡ Interactive Sandbox</h3>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <span style="color: var(--forge-primary); display: flex;">${astryxIcons.zap}</span>
+            <h3 style="color: var(--forge-text-main); margin: 0; font-size: 1rem;">Interactive Sandbox</h3>
+          </div>
           <p style="font-size: 0.85rem; color: var(--forge-text-muted); margin-bottom: 0.75rem;">
             Execute live API requests and simulate injected Gateway identity headers.
           </p>
@@ -87,9 +107,12 @@ export function renderOverviewSection(): string {
       <div class="astryx-card" style="margin-bottom: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--forge-border); padding-bottom: 0.85rem; margin-bottom: 1.25rem;">
           <div>
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--forge-text-main); margin: 0 0 0.25rem 0;">
-              🏗️ Platform Architecture & Gateway Ingress Topology
-            </h2>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+              <span style="color: var(--forge-primary); display: flex;">${astryxIcons.topology}</span>
+              <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--forge-text-main); margin: 0;">
+                Platform Architecture & Gateway Ingress Topology
+              </h2>
+            </div>
             <span style="font-size: 0.82rem; color: var(--forge-text-muted);">
               Unified reverse proxy traffic distribution on ports 80 & 443 with Zero-Trust header propagation.
             </span>
@@ -99,7 +122,7 @@ export function renderOverviewSection(): string {
 
         <div class="topology-diagram">
           <div class="topo-node topo-client">
-            <span class="topo-icon">🌐</span>
+            <span class="topo-icon">${astryxIcons.globe}</span>
             <strong>Client Browser</strong>
             <span class="topo-sub">SPA / Micro-Apps</span>
           </div>
@@ -108,7 +131,7 @@ export function renderOverviewSection(): string {
             &rarr;
           </div>
           <div class="topo-node topo-proxy">
-            <span class="topo-icon">🔀</span>
+            <span class="topo-icon">${astryxIcons.table}</span>
             <strong>Caddy / Nginx Ingress</strong>
             <span class="topo-sub">SSL & Header Injection</span>
           </div>
@@ -145,9 +168,12 @@ export function renderOverviewSection(): string {
 
       <!-- Core 10 Invariants Summary Grid -->
       <div class="astryx-card" style="margin-bottom: 2rem;">
-        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--forge-text-main); margin: 0 0 1rem 0;">
-          🛡️ The 10 Non-Negotiable Engineering Invariants (Enterprise Standard)
-        </h2>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+          <span style="color: var(--forge-primary); display: flex;">${astryxIcons.shield}</span>
+          <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--forge-text-main); margin: 0;">
+            The 10 Non-Negotiable Engineering Invariants (Enterprise Standard)
+          </h2>
+        </div>
         <div class="invariants-grid">
           <div class="inv-card">
             <div class="inv-num">01</div>

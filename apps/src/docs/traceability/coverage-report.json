@@ -1,8 +1,8 @@
 {
   "timestamp": "2026-09-15T16:21:00.000Z",
-  "totalExportedSymbols": 835,
-  "documentedSymbols": 669,
-  "symbolCoveragePercent": 80.1,
+  "totalExportedSymbols": 838,
+  "documentedSymbols": 664,
+  "symbolCoveragePercent": 79.2,
   "totalRequirements": 84,
   "implementedRequirements": 78,
   "verifiedRequirements": 79,
@@ -6437,7 +6437,7 @@
       "name": "renderDevHubHtml",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/hub-view.ts",
-      "line": 26,
+      "line": 28,
       "hasDoc": true,
       "requirements": [
         "HLR-HUB-601",
@@ -6449,43 +6449,34 @@
       "name": "renderScaffoldingSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/scaffolding-section.ts",
-      "line": 7,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-HUB-601",
-        "LLR-SUB-005"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "renderSecurityMatrixSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/security-matrix-section.ts",
-      "line": 7,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-HUB-601",
-        "LLR-SUB-005"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "renderHealthMeshSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/health-mesh-section.ts",
-      "line": 7,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-HUB-601",
-        "LLR-SUB-005"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "renderGatewaySection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/gateway-section.ts",
-      "line": 12,
+      "line": 13,
       "hasDoc": true,
       "requirements": [
         "HLR-HUB-601",
@@ -6497,11 +6488,41 @@
       "name": "renderTokenMintSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/token-mint-section.ts",
-      "line": 7,
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "ApiEndpointDoc",
+      "kind": "interface",
+      "file": "apps/src/dev-hub/src/frontend/sections/api-catalog-section.ts",
+      "line": 13,
       "hasDoc": true,
       "requirements": [
-        "HLR-AUTH-101",
-        "LLR-AUTH-001"
+        "HLR-HUB-601",
+        "LLR-SUB-005"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "PLATFORM_API_CATALOG",
+      "kind": "variable",
+      "file": "apps/src/dev-hub/src/frontend/sections/api-catalog-section.ts",
+      "line": 31,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderApiCatalogSection",
+      "kind": "function",
+      "file": "apps/src/dev-hub/src/frontend/sections/api-catalog-section.ts",
+      "line": 178,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-HUB-601",
+        "LLR-SUB-005"
       ],
       "missingRequirementFiles": []
     },
@@ -6509,7 +6530,7 @@
       "name": "renderOverviewSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/overview-section.ts",
-      "line": 12,
+      "line": 13,
       "hasDoc": true,
       "requirements": [
         "HLR-HUB-601",
@@ -6521,7 +6542,7 @@
       "name": "renderSandboxSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/sandbox-section.ts",
-      "line": 12,
+      "line": 13,
       "hasDoc": true,
       "requirements": [
         "HLR-HUB-601",
@@ -6533,7 +6554,7 @@
       "name": "renderRegistryMatrixSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/registry-matrix-section.ts",
-      "line": 12,
+      "line": 28,
       "hasDoc": true,
       "requirements": [
         "HLR-HUB-601",
@@ -6545,43 +6566,34 @@
       "name": "renderTestingSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/testing-section.ts",
-      "line": 7,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-HUB-601",
-        "LLR-SUB-005"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "renderSdkSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/sdk-section.ts",
-      "line": 7,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-HUB-601",
-        "LLR-SUB-005"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "renderUiSection",
       "kind": "function",
       "file": "apps/src/dev-hub/src/frontend/sections/ui-section.ts",
-      "line": 7,
-      "hasDoc": true,
-      "requirements": [
-        "HLR-HUB-601",
-        "LLR-SUB-005"
-      ],
+      "line": 9,
+      "hasDoc": false,
+      "requirements": [],
       "missingRequirementFiles": []
     },
     {
       "name": "startDevHubServer",
       "kind": "function",
       "file": "apps/src/dev-hub/src/server.ts",
-      "line": 17,
+      "line": 18,
       "hasDoc": true,
       "requirements": [
         "HLR-HUB-601",
@@ -10763,8 +10775,7 @@
         "apps/src/auth/src/server.ts:64#startAuthServer",
         "apps/src/auth/test/e2e/playwright/auth-journey.pw.ts:13#authPlaywrightJourney",
         "apps/src/sdk/src/auth-guard.ts:19#createInternalServiceToken",
-        "apps/src/sdk/src/auth-guard.ts:84#verifySessionToken",
-        "apps/src/dev-hub/src/frontend/sections/token-mint-section.ts:7#renderTokenMintSection"
+        "apps/src/sdk/src/auth-guard.ts:84#verifySessionToken"
       ],
       "verifiedIn": [
         "apps/src/auth/test/unit/employee-password-service.test.ts",
@@ -10812,8 +10823,7 @@
         "apps/src/sdk/src/crypto.ts:39#deriveKey256",
         "apps/src/sdk/src/crypto.ts:136#generateCryptographicKey",
         "apps/src/sdk/src/auth-guard.ts:19#createInternalServiceToken",
-        "apps/src/sdk/src/auth-guard.ts:84#verifySessionToken",
-        "apps/src/dev-hub/src/frontend/sections/token-mint-section.ts:7#renderTokenMintSection"
+        "apps/src/sdk/src/auth-guard.ts:84#verifySessionToken"
       ],
       "verifiedIn": [
         "apps/src/auth/test/unit/crypto.test.ts"
@@ -11142,18 +11152,14 @@
         "apps/src/docs/src/index.ts:14#docsService",
         "apps/src/dev-hub/src/frontend/hub-styles.ts:7#getDevHubStyles",
         "apps/src/dev-hub/src/frontend/client-scripts.ts:7#getClientScripts",
-        "apps/src/dev-hub/src/frontend/hub-view.ts:26#renderDevHubHtml",
-        "apps/src/dev-hub/src/frontend/sections/scaffolding-section.ts:7#renderScaffoldingSection",
-        "apps/src/dev-hub/src/frontend/sections/security-matrix-section.ts:7#renderSecurityMatrixSection",
-        "apps/src/dev-hub/src/frontend/sections/health-mesh-section.ts:7#renderHealthMeshSection",
-        "apps/src/dev-hub/src/frontend/sections/gateway-section.ts:12#renderGatewaySection",
-        "apps/src/dev-hub/src/frontend/sections/overview-section.ts:12#renderOverviewSection",
-        "apps/src/dev-hub/src/frontend/sections/sandbox-section.ts:12#renderSandboxSection",
-        "apps/src/dev-hub/src/frontend/sections/registry-matrix-section.ts:12#renderRegistryMatrixSection",
-        "apps/src/dev-hub/src/frontend/sections/testing-section.ts:7#renderTestingSection",
-        "apps/src/dev-hub/src/frontend/sections/sdk-section.ts:7#renderSdkSection",
-        "apps/src/dev-hub/src/frontend/sections/ui-section.ts:7#renderUiSection",
-        "apps/src/dev-hub/src/server.ts:17#startDevHubServer",
+        "apps/src/dev-hub/src/frontend/hub-view.ts:28#renderDevHubHtml",
+        "apps/src/dev-hub/src/frontend/sections/gateway-section.ts:13#renderGatewaySection",
+        "apps/src/dev-hub/src/frontend/sections/api-catalog-section.ts:13#ApiEndpointDoc",
+        "apps/src/dev-hub/src/frontend/sections/api-catalog-section.ts:178#renderApiCatalogSection",
+        "apps/src/dev-hub/src/frontend/sections/overview-section.ts:13#renderOverviewSection",
+        "apps/src/dev-hub/src/frontend/sections/sandbox-section.ts:13#renderSandboxSection",
+        "apps/src/dev-hub/src/frontend/sections/registry-matrix-section.ts:28#renderRegistryMatrixSection",
+        "apps/src/dev-hub/src/server.ts:18#startDevHubServer",
         "apps/src/dev-hub/src/index.ts:6#devHubService"
       ],
       "verifiedIn": [
@@ -11942,18 +11948,14 @@
       "implementedIn": [
         "apps/src/dev-hub/src/frontend/hub-styles.ts:7#getDevHubStyles",
         "apps/src/dev-hub/src/frontend/client-scripts.ts:7#getClientScripts",
-        "apps/src/dev-hub/src/frontend/hub-view.ts:26#renderDevHubHtml",
-        "apps/src/dev-hub/src/frontend/sections/scaffolding-section.ts:7#renderScaffoldingSection",
-        "apps/src/dev-hub/src/frontend/sections/security-matrix-section.ts:7#renderSecurityMatrixSection",
-        "apps/src/dev-hub/src/frontend/sections/health-mesh-section.ts:7#renderHealthMeshSection",
-        "apps/src/dev-hub/src/frontend/sections/gateway-section.ts:12#renderGatewaySection",
-        "apps/src/dev-hub/src/frontend/sections/overview-section.ts:12#renderOverviewSection",
-        "apps/src/dev-hub/src/frontend/sections/sandbox-section.ts:12#renderSandboxSection",
-        "apps/src/dev-hub/src/frontend/sections/registry-matrix-section.ts:12#renderRegistryMatrixSection",
-        "apps/src/dev-hub/src/frontend/sections/testing-section.ts:7#renderTestingSection",
-        "apps/src/dev-hub/src/frontend/sections/sdk-section.ts:7#renderSdkSection",
-        "apps/src/dev-hub/src/frontend/sections/ui-section.ts:7#renderUiSection",
-        "apps/src/dev-hub/src/server.ts:17#startDevHubServer",
+        "apps/src/dev-hub/src/frontend/hub-view.ts:28#renderDevHubHtml",
+        "apps/src/dev-hub/src/frontend/sections/gateway-section.ts:13#renderGatewaySection",
+        "apps/src/dev-hub/src/frontend/sections/api-catalog-section.ts:13#ApiEndpointDoc",
+        "apps/src/dev-hub/src/frontend/sections/api-catalog-section.ts:178#renderApiCatalogSection",
+        "apps/src/dev-hub/src/frontend/sections/overview-section.ts:13#renderOverviewSection",
+        "apps/src/dev-hub/src/frontend/sections/sandbox-section.ts:13#renderSandboxSection",
+        "apps/src/dev-hub/src/frontend/sections/registry-matrix-section.ts:28#renderRegistryMatrixSection",
+        "apps/src/dev-hub/src/server.ts:18#startDevHubServer",
         "apps/src/dev-hub/src/index.ts:6#devHubService"
       ],
       "verifiedIn": [
