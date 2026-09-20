@@ -3,6 +3,8 @@
 # Dynamic Platform Orchestration - Help & CLI Discovery Banner (2026 LTS)
 # ==============================================================================
 
+set -e
+
 function show_help() {
     echo "======================================================================"
     echo "🚀 ${BRAND_NAME} Platform Orchestrator (2026 LTS)"
@@ -36,7 +38,7 @@ function show_help() {
     echo "  restart [svc]         Restart Docker container service"
     echo ""
     echo "Quality, Security & Toolchain:"
-    echo "  verify                Run automated AI Agent 2-Tier Quality Gate (27 Checks)"
+    echo "  verify                Run automated AI Agent 2-Tier Quality Gate (29 Checks)"
     echo "  lint                  Run Biome fast AST code quality & style checks"
     echo "  deadcode              Run Knip dead code & unexported symbol audit"
     echo "  secrets               Run Gitleaks 160+ secret & token scanner"

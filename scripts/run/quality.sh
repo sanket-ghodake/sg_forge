@@ -16,7 +16,7 @@ shift || true
 
 case "$CMD" in
     verify)
-        echo "🛡️ [${BRAND_NAME}] Running Automated AI Agent Quality Gate (27 Deterministic Gates)..."
+        echo "🛡️ [${BRAND_NAME}] Running Automated AI Agent Quality Gate (29 Deterministic Gates)..."
         $PORTABLE_BUN run "$REPO_ROOT/scripts/generate-proxy.ts"
         $PORTABLE_BUN run "$REPO_ROOT/scripts/verify-gate.ts" "$@"
         ;;

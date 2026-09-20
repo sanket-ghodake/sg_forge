@@ -11,6 +11,7 @@ Build, verification, orchestration, and audit logging scripts.
 * **[`dev-runner.ts`](scripts/dev-runner.ts)**: Dynamic native development supervisor with port collision detection, SIGINT process group cleanup, and registry-driven service discovery.
 * **[`exec-watchdog.ts`](scripts/exec-watchdog.ts)**: Subprocess execution watchdog and deadlock prevention utility enforcing hard timeouts and non-blocking I/O.
 * **[`brand-lock.ts`](scripts/brand-lock.ts)**: Brand asset Git lock & in-place customization engine leveraging skip-worktree to prevent Git drift.
+* **[`checks/`](scripts/checks)**: Modular domain-specific verification engines (`microservice-resolver.ts`, `architecture-checks.ts`, `security-checks.ts`, `code-quality-checks.ts`) adhering to the 500-line cap.
 * **[`run/`](scripts/run)**: Modular runners for `run.sh` adhering to the 500-line cap (`env.sh`, `help.sh`, `core.sh`, `docker.sh`, `quality.sh`, `ops.sh`).
 * **[`test/run-sh.test.ts`](scripts/test/run-sh.test.ts)**: Comprehensive 30-assertion Tier 1 test suite validating all commands and portable wrappers.
 

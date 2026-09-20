@@ -16,8 +16,30 @@ if [ -f "$REPO_ROOT/portables/bun/bin/bun" ]; then
     BUN_BIN="$REPO_ROOT/portables/bun/bin/bun"
 fi
 
-# Automatically synchronize multi-agent directives across root and submodules
+# ==============================================================================
+# Self-Healing Pre-Flight Reconciliation
+# Automatically reconciles ignore files, multi-agent directives, submodules,
+# and declarative proxy definitions before running quality checks.
+# ==============================================================================
+echo "🔄 [Git Pre-Commit Hook] Running automated pre-flight reconciliation..."
+"$BUN_BIN" run "$REPO_ROOT/scripts/sync-ignores.ts" 2>/dev/null || true
 "$BUN_BIN" run "$REPO_ROOT/scripts/sync-directives.ts" 2>/dev/null || true
+"$BUN_BIN" run "$REPO_ROOT/scripts/sync-submodules.ts" 2>/dev/null || true
+"$BUN_BIN" run "$REPO_ROOT/scripts/generate-proxy.ts" 2>/dev/null || true
+
+# Auto-stage self-healed files before running gates
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    git add "$REPO_ROOT/.gitignore" \
+            "$REPO_ROOT/.dockerignore" \
+            "$REPO_ROOT/.antigravityignore" \
+            "$REPO_ROOT/.cursorignore" \
+            "$REPO_ROOT/.copilotignore" \
+            "$REPO_ROOT/.graphifyignore" \
+            "$REPO_ROOT/.graftignore" \
+            "$REPO_ROOT/.repomixignore" \
+            "$REPO_ROOT/.gitattributes" \
+            "$REPO_ROOT/proxy/Caddyfile" 2>/dev/null || true
+fi
 
 # Run pre-commit quality gate. Exit with non-zero on failure to strictly block git commit.
 if ! "$BUN_BIN" run "$REPO_ROOT/scripts/verify-gate.ts"; then

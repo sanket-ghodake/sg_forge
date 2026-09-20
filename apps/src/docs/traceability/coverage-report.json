@@ -1,7 +1,7 @@
 {
   "timestamp": "2026-09-15T16:21:00.000Z",
-  "totalExportedSymbols": 855,
-  "documentedSymbols": 676,
+  "totalExportedSymbols": 856,
+  "documentedSymbols": 677,
   "symbolCoveragePercent": 79.1,
   "totalRequirements": 86,
   "implementedRequirements": 80,
@@ -9147,10 +9147,94 @@
       ]
     },
     {
-      "name": "CheckResult",
-      "kind": "interface",
-      "file": "scripts/verify-checks.ts",
-      "line": 14,
+      "name": "checkTypeCoverage",
+      "kind": "function",
+      "file": "scripts/checks/code-quality-checks.ts",
+      "line": 18,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001"
+      ]
+    },
+    {
+      "name": "checkShellScripts",
+      "kind": "function",
+      "file": "scripts/checks/code-quality-checks.ts",
+      "line": 43,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001"
+      ]
+    },
+    {
+      "name": "checkAxeAccessibility",
+      "kind": "function",
+      "file": "scripts/checks/code-quality-checks.ts",
+      "line": 65,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001"
+      ]
+    },
+    {
+      "name": "checkSpectralContracts",
+      "kind": "function",
+      "file": "scripts/checks/code-quality-checks.ts",
+      "line": 87,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001"
+      ]
+    },
+    {
+      "name": "checkCodeComplexity",
+      "kind": "function",
+      "file": "scripts/checks/code-quality-checks.ts",
+      "line": 110,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001"
+      ]
+    },
+    {
+      "name": "checkForgeAppSubmoduleCompliance",
+      "kind": "function",
+      "file": "scripts/checks/code-quality-checks.ts",
+      "line": 122,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001"
+      ]
+    },
+    {
+      "name": "checkSystemTraceability",
+      "kind": "function",
+      "file": "scripts/checks/code-quality-checks.ts",
+      "line": 225,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9163,8 +9247,38 @@
     {
       "name": "resolveMicroserviceDir",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 20,
+      "file": "scripts/checks/microservice-resolver.ts",
+      "line": 22,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007",
+        "HLR-NET-002"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001",
+        "HLR-NET-002"
+      ]
+    },
+    {
+      "name": "isCorePlatformService",
+      "kind": "function",
+      "file": "scripts/checks/microservice-resolver.ts",
+      "line": 58,
+      "hasDoc": true,
+      "requirements": [
+        "SR-GATE-001",
+        "LLR-SUB-007"
+      ],
+      "missingRequirementFiles": [
+        "SR-GATE-001"
+      ]
+    },
+    {
+      "name": "CheckResult",
+      "kind": "interface",
+      "file": "scripts/checks/architecture-checks.ts",
+      "line": 18,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9177,8 +9291,8 @@
     {
       "name": "checkDynamic5TierArchitecture",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 39,
+      "file": "scripts/checks/architecture-checks.ts",
+      "line": 29,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9193,8 +9307,8 @@
     {
       "name": "checkArchitectureBoundaries",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 84,
+      "file": "scripts/checks/architecture-checks.ts",
+      "line": 90,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9207,50 +9321,8 @@
     {
       "name": "checkCircularDependencies",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 104,
-      "hasDoc": true,
-      "requirements": [
-        "SR-GATE-001",
-        "LLR-SUB-007"
-      ],
-      "missingRequirementFiles": [
-        "SR-GATE-001"
-      ]
-    },
-    {
-      "name": "checkTypeCoverage",
-      "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 123,
-      "hasDoc": true,
-      "requirements": [
-        "SR-GATE-001",
-        "LLR-SUB-007"
-      ],
-      "missingRequirementFiles": [
-        "SR-GATE-001"
-      ]
-    },
-    {
-      "name": "checkShellScripts",
-      "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 145,
-      "hasDoc": true,
-      "requirements": [
-        "SR-GATE-001",
-        "LLR-SUB-007"
-      ],
-      "missingRequirementFiles": [
-        "SR-GATE-001"
-      ]
-    },
-    {
-      "name": "checkAxeAccessibility",
-      "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 164,
+      "file": "scripts/checks/architecture-checks.ts",
+      "line": 115,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9263,8 +9335,8 @@
     {
       "name": "checkSemgrepInvariants",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 183,
+      "file": "scripts/checks/security-checks.ts",
+      "line": 17,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9277,8 +9349,8 @@
     {
       "name": "checkOsvVulnerabilities",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 202,
+      "file": "scripts/checks/security-checks.ts",
+      "line": 39,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9291,36 +9363,8 @@
     {
       "name": "checkTrivySecurity",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 252,
-      "hasDoc": true,
-      "requirements": [
-        "SR-GATE-001",
-        "LLR-SUB-007"
-      ],
-      "missingRequirementFiles": [
-        "SR-GATE-001"
-      ]
-    },
-    {
-      "name": "checkSpectralContracts",
-      "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 278,
-      "hasDoc": true,
-      "requirements": [
-        "SR-GATE-001",
-        "LLR-SUB-007"
-      ],
-      "missingRequirementFiles": [
-        "SR-GATE-001"
-      ]
-    },
-    {
-      "name": "checkCodeComplexity",
-      "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 300,
+      "file": "scripts/checks/security-checks.ts",
+      "line": 92,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9333,8 +9377,8 @@
     {
       "name": "checkDependencyLicenses",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 309,
+      "file": "scripts/checks/security-checks.ts",
+      "line": 118,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9347,36 +9391,8 @@
     {
       "name": "checkSyftSbomIntegrity",
       "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 378,
-      "hasDoc": true,
-      "requirements": [
-        "SR-GATE-001",
-        "LLR-SUB-007"
-      ],
-      "missingRequirementFiles": [
-        "SR-GATE-001"
-      ]
-    },
-    {
-      "name": "checkForgeAppSubmoduleCompliance",
-      "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 408,
-      "hasDoc": true,
-      "requirements": [
-        "SR-GATE-001",
-        "LLR-SUB-007"
-      ],
-      "missingRequirementFiles": [
-        "SR-GATE-001"
-      ]
-    },
-    {
-      "name": "checkSystemTraceability",
-      "kind": "function",
-      "file": "scripts/verify-checks.ts",
-      "line": 512,
+      "file": "scripts/checks/security-checks.ts",
+      "line": 190,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -10128,23 +10144,24 @@
         "scripts/log-commit.ts:210#recordLatestCommit",
         "scripts/log-commit.ts:340#recordPreCommit",
         "scripts/generate-sbom.ts:25#generateSbom",
-        "scripts/verify-checks.ts:14#CheckResult",
-        "scripts/verify-checks.ts:20#resolveMicroserviceDir",
-        "scripts/verify-checks.ts:39#checkDynamic5TierArchitecture",
-        "scripts/verify-checks.ts:84#checkArchitectureBoundaries",
-        "scripts/verify-checks.ts:104#checkCircularDependencies",
-        "scripts/verify-checks.ts:123#checkTypeCoverage",
-        "scripts/verify-checks.ts:145#checkShellScripts",
-        "scripts/verify-checks.ts:164#checkAxeAccessibility",
-        "scripts/verify-checks.ts:183#checkSemgrepInvariants",
-        "scripts/verify-checks.ts:202#checkOsvVulnerabilities",
-        "scripts/verify-checks.ts:252#checkTrivySecurity",
-        "scripts/verify-checks.ts:278#checkSpectralContracts",
-        "scripts/verify-checks.ts:300#checkCodeComplexity",
-        "scripts/verify-checks.ts:309#checkDependencyLicenses",
-        "scripts/verify-checks.ts:378#checkSyftSbomIntegrity",
-        "scripts/verify-checks.ts:408#checkForgeAppSubmoduleCompliance",
-        "scripts/verify-checks.ts:512#checkSystemTraceability",
+        "scripts/checks/code-quality-checks.ts:18#checkTypeCoverage",
+        "scripts/checks/code-quality-checks.ts:43#checkShellScripts",
+        "scripts/checks/code-quality-checks.ts:65#checkAxeAccessibility",
+        "scripts/checks/code-quality-checks.ts:87#checkSpectralContracts",
+        "scripts/checks/code-quality-checks.ts:110#checkCodeComplexity",
+        "scripts/checks/code-quality-checks.ts:122#checkForgeAppSubmoduleCompliance",
+        "scripts/checks/code-quality-checks.ts:225#checkSystemTraceability",
+        "scripts/checks/microservice-resolver.ts:22#resolveMicroserviceDir",
+        "scripts/checks/microservice-resolver.ts:58#isCorePlatformService",
+        "scripts/checks/architecture-checks.ts:18#CheckResult",
+        "scripts/checks/architecture-checks.ts:29#checkDynamic5TierArchitecture",
+        "scripts/checks/architecture-checks.ts:90#checkArchitectureBoundaries",
+        "scripts/checks/architecture-checks.ts:115#checkCircularDependencies",
+        "scripts/checks/security-checks.ts:17#checkSemgrepInvariants",
+        "scripts/checks/security-checks.ts:39#checkOsvVulnerabilities",
+        "scripts/checks/security-checks.ts:92#checkTrivySecurity",
+        "scripts/checks/security-checks.ts:118#checkDependencyLicenses",
+        "scripts/checks/security-checks.ts:190#checkSyftSbomIntegrity",
         "scripts/sync-submodule-docs.ts:113#syncSubmoduleDocs",
         "scripts/brand-lock.ts:31#getLockStatus",
         "scripts/brand-lock.ts:46#setLock",
@@ -10418,23 +10435,24 @@
         "scripts/log-commit.ts:210#recordLatestCommit",
         "scripts/log-commit.ts:340#recordPreCommit",
         "scripts/generate-sbom.ts:25#generateSbom",
-        "scripts/verify-checks.ts:14#CheckResult",
-        "scripts/verify-checks.ts:20#resolveMicroserviceDir",
-        "scripts/verify-checks.ts:39#checkDynamic5TierArchitecture",
-        "scripts/verify-checks.ts:84#checkArchitectureBoundaries",
-        "scripts/verify-checks.ts:104#checkCircularDependencies",
-        "scripts/verify-checks.ts:123#checkTypeCoverage",
-        "scripts/verify-checks.ts:145#checkShellScripts",
-        "scripts/verify-checks.ts:164#checkAxeAccessibility",
-        "scripts/verify-checks.ts:183#checkSemgrepInvariants",
-        "scripts/verify-checks.ts:202#checkOsvVulnerabilities",
-        "scripts/verify-checks.ts:252#checkTrivySecurity",
-        "scripts/verify-checks.ts:278#checkSpectralContracts",
-        "scripts/verify-checks.ts:300#checkCodeComplexity",
-        "scripts/verify-checks.ts:309#checkDependencyLicenses",
-        "scripts/verify-checks.ts:378#checkSyftSbomIntegrity",
-        "scripts/verify-checks.ts:408#checkForgeAppSubmoduleCompliance",
-        "scripts/verify-checks.ts:512#checkSystemTraceability",
+        "scripts/checks/code-quality-checks.ts:18#checkTypeCoverage",
+        "scripts/checks/code-quality-checks.ts:43#checkShellScripts",
+        "scripts/checks/code-quality-checks.ts:65#checkAxeAccessibility",
+        "scripts/checks/code-quality-checks.ts:87#checkSpectralContracts",
+        "scripts/checks/code-quality-checks.ts:110#checkCodeComplexity",
+        "scripts/checks/code-quality-checks.ts:122#checkForgeAppSubmoduleCompliance",
+        "scripts/checks/code-quality-checks.ts:225#checkSystemTraceability",
+        "scripts/checks/microservice-resolver.ts:22#resolveMicroserviceDir",
+        "scripts/checks/microservice-resolver.ts:58#isCorePlatformService",
+        "scripts/checks/architecture-checks.ts:18#CheckResult",
+        "scripts/checks/architecture-checks.ts:29#checkDynamic5TierArchitecture",
+        "scripts/checks/architecture-checks.ts:90#checkArchitectureBoundaries",
+        "scripts/checks/architecture-checks.ts:115#checkCircularDependencies",
+        "scripts/checks/security-checks.ts:17#checkSemgrepInvariants",
+        "scripts/checks/security-checks.ts:39#checkOsvVulnerabilities",
+        "scripts/checks/security-checks.ts:92#checkTrivySecurity",
+        "scripts/checks/security-checks.ts:118#checkDependencyLicenses",
+        "scripts/checks/security-checks.ts:190#checkSyftSbomIntegrity",
         "scripts/sync-submodule-docs.ts:113#syncSubmoduleDocs",
         "scripts/brand-lock.ts:31#getLockStatus",
         "scripts/brand-lock.ts:46#setLock",
@@ -11643,7 +11661,8 @@
       "type": "HLR",
       "docFile": "apps/src/docs/src/content/docs/sr/SR-001_AIRGAP_NETWORK.mdx",
       "implementedIn": [
-        "scripts/verify-checks.ts:39#checkDynamic5TierArchitecture"
+        "scripts/checks/microservice-resolver.ts:22#resolveMicroserviceDir",
+        "scripts/checks/architecture-checks.ts:29#checkDynamic5TierArchitecture"
       ],
       "verifiedIn": [
         "apps/test/security/air-gap-compliance.test.ts"
