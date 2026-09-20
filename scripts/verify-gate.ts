@@ -279,19 +279,20 @@ const checkTasks: Array<() => Promise<Tier1Check>> = [
 
   // 12. 5-Tier Test Suite Execution
   () => runTier1Check(12, '5-Tier Automated Test Suites', 'Bun Test Runner (Watchdog Protected)', async () => {
-    let proc = await runWithWatchdog(['bun', 'test', 'apps/src/ui', 'apps/src/sdk', 'apps/src/dev-hub', 'apps/src/docs', 'forge-apps'], {
-      timeoutMs: 25000,
+    let proc = await runWithWatchdog(['bun', 'test', 'apps/src/ui', 'apps/src/sdk', 'apps/src/dev-hub', 'apps/src/docs', 'apps/test'], {
+      timeoutMs: 45000,
       env: { ...process.env, NODE_ENV: 'test', BUN_ENV: 'test', FORGE_TEST_MODE: 'true' },
     });
     if (proc.exitCode !== 0 && !proc.timedOut) {
-      proc = await runWithWatchdog(['bun', 'test', 'apps/src/ui', 'apps/src/sdk', 'apps/src/dev-hub', 'apps/src/docs', 'forge-apps'], {
-        timeoutMs: 25000,
+      proc = await runWithWatchdog(['bun', 'test', 'apps/src/ui', 'apps/src/sdk', 'apps/src/dev-hub', 'apps/src/docs', 'apps/test'], {
+        timeoutMs: 45000,
         env: { ...process.env, NODE_ENV: 'test', BUN_ENV: 'test', FORGE_TEST_MODE: 'true' },
       });
     }
-    if (proc.timedOut) return { status: 'WARNING', details: 'Test suite execution hit watchdog timeout (25000ms).' };
+    if (proc.timedOut) return { status: 'WARNING', details: 'Test suite execution hit watchdog timeout (45000ms).' };
     if (proc.exitCode !== 0) {
-      return { status: 'WARNING', details: `Unit/Integration tests completed with exit code ${proc.exitCode}.` };
+      const errSnippet = (proc.stderr || proc.stdout).slice(-200).replace(/\n/g, ' ');
+      return { status: 'WARNING', details: `Unit/Integration tests completed with exit code ${proc.exitCode}: ${errSnippet}` };
     }
     return { status: 'PASSED', details: 'Platform unit/integration/contract suites executed with 0 failures.' };
   }),

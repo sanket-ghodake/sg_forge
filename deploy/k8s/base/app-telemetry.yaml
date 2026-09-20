@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: forge-app-telemetry
+  namespace: forge-system
   labels:
     app.kubernetes.io/name: forge-app-telemetry
     app.kubernetes.io/part-of: ag-dashboard
@@ -15,9 +16,22 @@ spec:
       labels:
         app.kubernetes.io/name: forge-app-telemetry
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: telemetry
-          image: ag-dashboard/app-telemetry:latest
+          image: ag-dashboard/app-telemetry:v2.0.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: PORT
               value: "8087"
@@ -48,10 +62,14 @@ spec:
           volumeMounts:
             - name: telemetry-db-storage
               mountPath: /app/data
+            - name: tmp-volume
+              mountPath: /tmp
       volumes:
         - name: telemetry-db-storage
           persistentVolumeClaim:
             claimName: forge-telemetry-pvc
+        - name: tmp-volume
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

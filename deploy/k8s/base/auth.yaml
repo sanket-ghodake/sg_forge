@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: forge-auth
+  namespace: forge-system
   labels:
     app.kubernetes.io/name: forge-auth
     app.kubernetes.io/part-of: ag-dashboard
@@ -15,9 +16,22 @@ spec:
       labels:
         app.kubernetes.io/name: forge-auth
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: auth
-          image: ag-dashboard/auth:latest
+          image: ag-dashboard/auth:v2.0.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: PORT
               value: "3004"
@@ -54,10 +68,14 @@ spec:
           volumeMounts:
             - name: auth-db-storage
               mountPath: /app/data
+            - name: tmp-volume
+              mountPath: /tmp
       volumes:
         - name: auth-db-storage
           persistentVolumeClaim:
             claimName: forge-auth-pvc
+        - name: tmp-volume
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

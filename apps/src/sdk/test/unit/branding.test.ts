@@ -12,6 +12,8 @@ describe('Tier 1 Unit: Brand Configuration Resolver Engine', () => {
   const originalBrandShort = process.env.NEXT_PUBLIC_BRAND_SHORT;
   const originalBrandTagline = process.env.NEXT_PUBLIC_BRAND_TAGLINE;
   const originalBrandLogo = process.env.NEXT_PUBLIC_BRAND_LOGO_URL;
+  const originalRawBrandName = process.env.BRAND_NAME;
+  const originalRawOrgName = process.env.ORGANIZATION_NAME;
 
   beforeEach(() => {
     delete process.env.NEXT_PUBLIC_BRAND_NAME;
@@ -19,6 +21,8 @@ describe('Tier 1 Unit: Brand Configuration Resolver Engine', () => {
     delete process.env.NEXT_PUBLIC_BRAND_SHORT;
     delete process.env.NEXT_PUBLIC_BRAND_TAGLINE;
     delete process.env.NEXT_PUBLIC_BRAND_LOGO_URL;
+    delete process.env.BRAND_NAME;
+    delete process.env.ORGANIZATION_NAME;
   });
 
   afterEach(() => {
@@ -27,6 +31,8 @@ describe('Tier 1 Unit: Brand Configuration Resolver Engine', () => {
     if (originalBrandShort) process.env.NEXT_PUBLIC_BRAND_SHORT = originalBrandShort;
     if (originalBrandTagline) process.env.NEXT_PUBLIC_BRAND_TAGLINE = originalBrandTagline;
     if (originalBrandLogo) process.env.NEXT_PUBLIC_BRAND_LOGO_URL = originalBrandLogo;
+    if (originalRawBrandName) process.env.BRAND_NAME = originalRawBrandName;
+    if (originalRawOrgName) process.env.ORGANIZATION_NAME = originalRawOrgName;
   });
 
   it('Arrange, Act, Assert: loads default AG Dashboard branding when env vars are unset', () => {

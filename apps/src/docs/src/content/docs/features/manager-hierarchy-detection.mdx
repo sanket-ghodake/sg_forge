@@ -22,7 +22,9 @@ import ExecutiveCard from '../../../components/ExecutiveCard.astro';
 
 Under the SG Forge architecture, **manager status is structural, not titular**:
 
-$$\text{isManager}(u) \iff |\{ r \in \text{auth\_employee\_relationships} \mid r.\text{related\_to\_id} = u.\text{id} \land r.\text{is\_primary} = 1 \}| \ge 1$$
+```math
+isManager(u) <=> |{ r in auth_employee_relationships | r.related_to_id = u.id and r.is_primary = 1 }| >= 1
+```
 
 ### Architectural Rules
 1. **Designation Blindness**: Never check `job_title` strings or designations. A Senior Staff Engineer with direct reports is a manager; a "Product Manager" who is an individual contributor with zero reports is not a hierarchical manager.

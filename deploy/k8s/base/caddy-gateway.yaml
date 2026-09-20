@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: forge-proxy
+  namespace: forge-system
   labels:
     app.kubernetes.io/name: forge-proxy
     app.kubernetes.io/part-of: ag-dashboard
@@ -15,13 +16,26 @@ spec:
       labels:
         app.kubernetes.io/name: forge-proxy
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: proxy
-          image: caddy:2-alpine
+          image: caddy:2.9-alpine
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
-            - containerPort: 443
+            - containerPort: 8443
               name: https
           resources:
             limits:
@@ -33,15 +47,29 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 80
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /
-              port: 80
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
+          volumeMounts:
+            - name: caddy-data
+              mountPath: /data
+            - name: caddy-config
+              mountPath: /config
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: caddy-data
+          emptyDir: {}
+        - name: caddy-config
+          emptyDir: {}
+        - name: tmp-volume
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -53,10 +81,10 @@ spec:
   type: ClusterIP
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8080
       name: http
     - port: 443
-      targetPort: 443
+      targetPort: 8443
       name: https
   selector:
     app.kubernetes.io/name: forge-proxy

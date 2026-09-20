@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: forge-portal
+  namespace: forge-system
   labels:
     app.kubernetes.io/name: forge-portal
     app.kubernetes.io/part-of: ag-dashboard
@@ -17,17 +18,17 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: portal
-          image: ag-dashboard/portal:latest
+          image: ag-dashboard/portal:v2.0.0
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
@@ -61,10 +62,14 @@ spec:
           volumeMounts:
             - name: portal-db-storage
               mountPath: /app/data
+            - name: tmp-volume
+              mountPath: /tmp
       volumes:
         - name: portal-db-storage
           persistentVolumeClaim:
             claimName: forge-portal-pvc
+        - name: tmp-volume
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

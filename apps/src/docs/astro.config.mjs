@@ -77,6 +77,7 @@ export default defineConfig({
             { label: 'Developer Operations Dashboard', slug: 'tools/dev-dashboard' },
             { label: 'Developer CLI & Toolchain', slug: 'tools/cli-toolchain' },
             { label: 'Security & Strix Audit Workflows', slug: 'security/audit-workflows' },
+            { label: 'Supply Chain & Infrastructure Hardening', slug: 'security/supply-chain-hardening' },
             { label: 'Forge Apps API Security Audit (10/10)', slug: 'security/forge-apps-api-audit' },
             { label: 'Disaster Recovery & Backups', slug: 'operations/backup-recovery' },
             { label: 'Deployment & Quickstart Guide', slug: 'operations/deployment-quickstart' },

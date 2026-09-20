@@ -29,6 +29,14 @@
     "type-coverage": "^2.29.7",
     "typescript": "^5.6.3"
   },
+  "overrides": {
+    "sharp": ">=0.35.4",
+    "qs": ">=6.16.0",
+    "tmp": ">=0.2.6",
+    "cookie": ">=0.7.0",
+    "uuid": ">=9.0.1",
+    "esbuild": ">=0.28.1"
+  },
   "license": "Apache-2.0",
   "author": "Sanket Ghodake <sanketghodke03@gmail.com>"
 }

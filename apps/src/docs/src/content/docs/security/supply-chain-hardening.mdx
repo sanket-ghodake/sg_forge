@@ -1,0 +1,80 @@
+---
+title: Supply Chain & Infrastructure Hardening
+description: Enterprise dependency governance, OSV vulnerability remediation, CycloneDX 1.5 SBOM verification, and Kubernetes Pod Security Standards.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Zero-Trust Supply Chain & Cloud-Native Hardening"
+  analogy="Just as high-security facilities inspect every delivery truck and seal unused entryways, SG Forge inspects every transitive dependency in bun.lock and enforces read-only container execution across Kubernetes workloads."
+  impact="Eliminates remote code execution vectors from image decoders, blocks prototype pollution, and guarantees non-root container isolation."
+/>
+
+<TraceabilityBadge reqId="SR-SEC-001" type="SR" status="verified" />
+<TraceabilityBadge reqId="HLR-NET-001" type="HLR" status="verified" />
+<TraceabilityBadge reqId="LLR-SUB-007" type="LLR" status="verified" />
+
+## 1. Software Composition Analysis (SCA)
+
+The platform enforces strict Software Composition Analysis through continuous OSV (Open Source Vulnerabilities) scanning and lockfile pinning:
+
+### Direct & Transitive Dependency Overrides
+Critical ecosystem vulnerabilities in image decoders and utility libraries are mitigated using top-level workspace overrides in `package.json`:
+
+```json
+"overrides": {
+  "sharp": ">=0.35.4",
+  "qs": ">=6.16.0",
+  "tmp": ">=0.2.6",
+  "cookie": ">=0.7.0",
+  "uuid": ">=9.0.1",
+  "esbuild": ">=0.28.1"
+}
+```
+
+* **Sharp & Astro Image Decoupling**: Mitigates `GHSA-26w7-cxv4-gfx2` by upgrading Sharp to `>=0.35.4` and configuring `passthroughImageService()` in `@forge/docs` to eliminate runtime libheif decompression risks.
+* **Prototype Pollution Prevention**: Upgrades `qs` to `>=6.16.0` to eliminate query string object pollution attacks.
+* **Secure Ephemeral Storage**: Upgrades `tmp` to `>=0.2.6` ensuring POSIX atomic directory creation with restrictive `0700` permissions.
+
+---
+
+## 2. CycloneDX 1.5 Software Bill of Materials (SBOM)
+
+SG Forge generates continuous, automated SBOM manifests using the Syft engine (`rtk ./run.sh sbom`):
+
+* **Standard**: CycloneDX 1.5 JSON specification.
+* **Coverage**: Complete component metadata including package hashes, direct license declarations, and provenance.
+* **Verification Gate**: Verified on every pre-commit and CI verification run via `checkSyftSbomIntegrity()`.
+
+---
+
+## 3. Kubernetes Pod Security Standard (Baseline & Restricted)
+
+All base workloads in `deploy/k8s/base/` conform to the Kubernetes Restricted Pod Security Standard:
+
+```yaml
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    fsGroup: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: portal
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - ALL
+```
+
+### Security Invariants Enforced
+1. **Immutable Root Filesystem**: `readOnlyRootFilesystem: true` prevents attackers from modifying binaries or dropping foreign scripts. Ephemeral write directories (`/tmp`, `/data`) use dedicated `emptyDir` volumes.
+2. **Unprivileged UID/GID Execution**: All processes execute with UID/GID `10001` to prevent host user ID collisions.
+3. **Zero Linux Capabilities**: Containers drop all POSIX capabilities (`capabilities.drop: ["ALL"]`).
+4. **Namespace Isolation**: Workloads operate strictly in the dedicated `forge-system` namespace.

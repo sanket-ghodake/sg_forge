@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: forge-landing
+  namespace: forge-system
   labels:
     app.kubernetes.io/name: forge-landing
     app.kubernetes.io/part-of: ag-dashboard
@@ -15,9 +16,22 @@ spec:
       labels:
         app.kubernetes.io/name: forge-landing
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: landing
-          image: ag-dashboard/landing:latest
+          image: ag-dashboard/landing:v2.0.0
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           env:
             - name: PORT
               value: "3000"
@@ -45,6 +59,12 @@ spec:
               port: 3000
             initialDelaySeconds: 5
             periodSeconds: 10
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service

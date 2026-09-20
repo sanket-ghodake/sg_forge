@@ -10029,6 +10029,7 @@
       ],
       "verifiedIn": [
         "apps/test/e2e/playwright/security-10-defense.test.ts",
+        "apps/test/e2e/playwright/security-iac-headers.test.ts",
         "apps/test/security/air-gap-compliance.test.ts",
         "forge-apps/telemetry/test/security/auth-gate.test.ts"
       ]
@@ -10044,6 +10045,7 @@
         "scripts/docker-resolver.ts:266#printBanner"
       ],
       "verifiedIn": [
+        "apps/test/e2e/playwright/security-iac-headers.test.ts",
         "apps/test/security/air-gap-compliance.test.ts"
       ]
     },
@@ -10436,6 +10438,7 @@
       "verifiedIn": [
         "apps/src/docs/test/unit/token-ledger.test.ts",
         "apps/src/docs/test/unit/tokscale.test.ts",
+        "apps/test/e2e/playwright/security-iac-headers.test.ts",
         "scripts/test/run-sh.test.ts"
       ]
     },

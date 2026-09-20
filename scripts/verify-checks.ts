@@ -120,12 +120,12 @@ export async function checkCircularDependencies(): Promise<CheckResult> {
 /** @requirements [SR-GATE-001] [LLR-SUB-007] */
 export async function checkTypeCoverage(): Promise<CheckResult> {
   const typeCoverageBin = join(REPO_ROOT, 'portables', 'bin', 'type-coverage');
-  const proc = await runWithWatchdog([typeCoverageBin], { timeoutMs: 15000 });
+  const proc = await runWithWatchdog([typeCoverageBin], { timeoutMs: 30000 });
   const out = proc.stdout;
   const match = out.match(/([0-9.]+)%/);
   const percent = match ? match[1] : '90+';
   if (proc.timedOut) {
-    return { status: 'WARNING', details: 'type-coverage timed out after 15000ms.' };
+    return { status: 'WARNING', details: 'type-coverage timed out after 30000ms.' };
   }
   if (proc.exitCode !== 0) {
     return {

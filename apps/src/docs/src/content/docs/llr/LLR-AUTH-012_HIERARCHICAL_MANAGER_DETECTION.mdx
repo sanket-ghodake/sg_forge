@@ -14,8 +14,8 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
 
 1. Receive target employee identifier via route parameter (`:id`), query string (`?user_id=...` / `?email=...`), or session token (`/me`).
 2. Resolve user record in `auth_users` using strictly parameterized queries to prevent SQL injection.
-3. Compute direct subordinate report count $\text{count} = \sum [ r.\text{related\_to\_id} = u.\text{id} \land r.\text{is\_primary} = 1 ]$ in `auth_employee_relationships`.
-4. Assert boolean condition: $\text{isManager} \iff \text{count} \ge 1$.
+3. Compute direct subordinate report count `count = sum([r.related_to_id == user.id and r.is_primary == 1])` in `auth_employee_relationships`.
+4. Assert boolean condition: `isManager <=> (count >= 1)`.
 5. Return standardized `EmployeeManagerCheckResponse` payload with HTTP 200, or RFC 7807 problem details (401 for unauthenticated `/me`, 404 for non-existent employee).
 
 ## 2. Safety & Verification Invariants
