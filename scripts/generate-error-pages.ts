@@ -34,13 +34,69 @@ export function generateStaticErrorPages(): GeneratedErrorPage[] {
 
   const brand = loadBrandConfig();
 
-  const pagesConfig = [
+  const pagesConfig: {
+    statusCode: number;
+    filename: string;
+    title?: string;
+    message?: string;
+    primaryActionText?: string;
+    primaryActionHref?: string;
+    secondaryActionText?: string;
+    secondaryActionHref?: string;
+  }[] = [
+    {
+      statusCode: 400,
+      filename: '400.html',
+    },
+    {
+      statusCode: 401,
+      filename: '401.html',
+      primaryActionText: 'Sign In &rarr;',
+      primaryActionHref: '/auth/login',
+    },
+    {
+      statusCode: 403,
+      filename: '403.html',
+      primaryActionText: '&larr; Workspace Portal',
+      primaryActionHref: '/portal',
+      secondaryActionText: 'Sign In &rarr;',
+      secondaryActionHref: '/auth/login',
+    },
+    {
+      statusCode: 404,
+      filename: '404.html',
+      title: 'Page Not Found',
+      message: 'The requested resource, microservice, or destination route could not be found.',
+      primaryActionText: '&larr; Platform Hub',
+      primaryActionHref: '/',
+      secondaryActionText: 'Workspace Portal &rarr;',
+      secondaryActionHref: '/portal',
+    },
+    {
+      statusCode: 405,
+      filename: '405.html',
+    },
+    {
+      statusCode: 429,
+      filename: '429.html',
+      primaryActionText: '↻ Try Again',
+      primaryActionHref: 'javascript:window.location.reload()',
+    },
+    {
+      statusCode: 500,
+      filename: '500.html',
+      title: 'Internal Server Error',
+      message: 'An unexpected condition occurred. System telemetry has logged this incident for review.',
+      primaryActionText: '&larr; Platform Hub',
+      primaryActionHref: '/',
+      secondaryActionText: '↻ Reload Page',
+      secondaryActionHref: 'javascript:window.location.reload()',
+    },
     {
       statusCode: 502,
       filename: '502.html',
       title: 'Service Temporarily Offline',
-      message:
-        'The requested service or micro-app is currently offline, restarting, or unreachable. Telemetry has been notified.',
+      message: 'The requested service or micro-app is currently offline, restarting, or unreachable. Telemetry has been notified.',
       primaryActionText: '↻ Retry Connection',
       primaryActionHref: 'javascript:window.location.reload()',
       secondaryActionText: 'Platform Hub &rarr;',
@@ -50,34 +106,19 @@ export function generateStaticErrorPages(): GeneratedErrorPage[] {
       statusCode: 503,
       filename: '503.html',
       title: 'System Under Maintenance',
-      message:
-        'The platform is currently undergoing scheduled maintenance or system updates. All services will resume shortly.',
+      message: 'The platform is currently undergoing scheduled maintenance or system updates. All services will resume shortly.',
       primaryActionText: '↻ Check Again',
       primaryActionHref: 'javascript:window.location.reload()',
       secondaryActionText: 'Platform Hub &rarr;',
       secondaryActionHref: '/',
     },
     {
-      statusCode: 500,
-      filename: '500.html',
-      title: 'Internal Server Error',
-      message:
-        'An unexpected condition occurred. System telemetry has logged this incident for review.',
-      primaryActionText: '&larr; Platform Hub',
-      primaryActionHref: '/',
-      secondaryActionText: '↻ Reload Page',
-      secondaryActionHref: 'javascript:window.location.reload()',
-    },
-    {
-      statusCode: 404,
-      filename: '404.html',
-      title: 'Page Not Found',
-      message:
-        'The requested resource, microservice, or destination route could not be found.',
-      primaryActionText: '&larr; Platform Hub',
-      primaryActionHref: '/',
-      secondaryActionText: 'Workspace Portal &rarr;',
-      secondaryActionHref: '/portal',
+      statusCode: 504,
+      filename: '504.html',
+      primaryActionText: '↻ Retry Connection',
+      primaryActionHref: 'javascript:window.location.reload()',
+      secondaryActionText: 'Platform Hub &rarr;',
+      secondaryActionHref: '/',
     },
   ];
 

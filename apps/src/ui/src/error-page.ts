@@ -7,6 +7,7 @@
 import { getAstryxHeaderHtml } from './header';
 import { getAstryxStyles } from './styles';
 import { getHeadStateScript } from './state';
+import { astryxIcons } from './icons';
 
 /**
  * Options for configuring Astryx full-page error template.
@@ -26,46 +27,74 @@ export interface ErrorPageOptions {
   brandName?: string;
 }
 
-const STATUS_DEFAULTS: Record<number, { pill: string; title: string; message: string }> = {
+export interface StatusConfig {
+  icon: string;
+  pill: string;
+  title: string;
+  message: string;
+  badgeStyle?: string;
+}
+
+const STATUS_DEFAULTS: Record<number, StatusConfig> = {
   400: {
-    pill: '⚠️ 400 BAD REQUEST',
+    icon: astryxIcons.alertTriangle,
+    pill: '400 BAD REQUEST',
     title: 'Invalid Request',
     message: 'The request could not be processed due to invalid parameters or formatting.',
   },
   401: {
-    pill: '🔒 401 UNAUTHORIZED',
+    icon: astryxIcons.lock,
+    pill: '401 UNAUTHORIZED',
     title: 'Authentication Required',
     message: 'Your session has expired or authentication is required to access this resource.',
   },
   403: {
-    pill: '🛡️ 403 ACCESS RESTRICTED',
+    icon: astryxIcons.shieldAlert,
+    pill: '403 ACCESS RESTRICTED',
     title: 'Access Restricted',
     message: 'You do not have permission to access this application. Please contact your organization administrator if you require access.',
   },
   404: {
-    pill: '🔍 404 NOT FOUND',
+    icon: astryxIcons.search,
+    pill: '404 NOT FOUND',
     title: 'Page Not Found',
-    message: 'The requested resource, service, or destination could not be located.',
+    message: 'The requested resource, service, or destination route could not be located.',
+  },
+  405: {
+    icon: astryxIcons.slash,
+    pill: '405 METHOD NOT ALLOWED',
+    title: 'Method Not Permitted',
+    message: 'The requested HTTP method is not supported for this route.',
   },
   429: {
-    pill: '⏳ 429 RATE LIMITED',
+    icon: astryxIcons.clock,
+    pill: '429 RATE LIMITED',
     title: 'Too Many Requests',
     message: 'Request volume has exceeded safe thresholds. Please wait a moment before trying again.',
   },
   500: {
-    pill: '⚡ 500 INTERNAL ERROR',
+    icon: astryxIcons.zap,
+    pill: '500 INTERNAL ERROR',
     title: 'Internal Server Error',
     message: 'An unexpected system condition occurred. System telemetry has logged this incident for review.',
   },
   502: {
-    pill: '🔌 502 BAD GATEWAY',
+    icon: astryxIcons.powerOff,
+    pill: '502 BAD GATEWAY',
     title: 'Service Upstream Unavailable',
-    message: 'The target microservice is temporarily unreachable or restarting.',
+    message: 'The target microservice is temporarily unreachable, deploying, or restarting.',
   },
   503: {
-    pill: '🛠️ 503 SERVICE UNAVAILABLE',
+    icon: astryxIcons.wrench,
+    pill: '503 SERVICE UNAVAILABLE',
     title: 'Service Under Maintenance',
-    message: 'The requested application is currently undergoing brief maintenance. Please check back shortly.',
+    message: 'The platform or requested application is currently undergoing brief maintenance. Please check back shortly.',
+  },
+  504: {
+    icon: astryxIcons.clock,
+    pill: '504 GATEWAY TIMEOUT',
+    title: 'Gateway Timeout',
+    message: 'The target microservice or upstream process timed out before completing the request.',
   },
 };
 
@@ -90,20 +119,22 @@ export function renderAstryxSystemDownPage(options: { brandName?: string; messag
 
 /**
  * Renders consistent, high-aesthetic Astryx error screens for all HTTP error codes.
+ * 100% Vector SVGs (zero OS emojis), SEO robots defense, and SRE trace correlation.
  * @requirements [HLR-UI-401] [LLR-UI-008]
  */
 export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
   const code = options.statusCode || 500;
   const config = STATUS_DEFAULTS[code] || {
-    pill: `⚠️ ${code} ERROR`,
+    icon: astryxIcons.alertTriangle,
+    pill: `${code} ERROR`,
     title: 'System Notice',
     message: 'An unexpected status code was returned by the system.',
   };
 
+  const iconSvg = config.icon;
   const pillText = config.pill;
   const heading = options.title || config.title;
-  const description = options.message || config.message;
-  const appLabel = options.appName ? ` for <strong>${options.appName}</strong>` : '';
+  const description = options.message || (options.appName ? `${config.message} for <strong>${options.appName}</strong>` : config.message);
 
   const primaryText = options.primaryActionText || (code === 401 ? 'Sign In &rarr;' : '&larr; Return to Workspace Portal');
   const primaryHref = options.primaryActionHref || (code === 401 ? '/auth/login' : '/portal');
@@ -122,6 +153,7 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>${code} ${heading} - ${brandName}</title>
   ${getHeadStateScript({ defaultTheme: 'dark' })}
   <style>
@@ -132,6 +164,8 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
       justify-content: center;
       min-height: calc(100vh - 60px);
       padding: 1.5rem;
+      box-sizing: border-box;
+      width: 100%;
     }
     .error-card {
       background: var(--forge-bg-surface);
@@ -142,12 +176,13 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
       width: 100%;
       text-align: center;
       box-shadow: var(--forge-shadow-card);
+      box-sizing: border-box;
     }
     .badge-error-status {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
-      padding: 0.3rem 0.75rem;
+      gap: 0.45rem;
+      padding: 0.35rem 0.85rem;
       background: rgba(239, 68, 68, 0.12);
       color: var(--forge-danger, rgba(239, 68, 68, 1));
       border: 1px solid rgba(239, 68, 68, 0.3);
@@ -156,6 +191,11 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
       font-weight: 600;
       letter-spacing: 0.03em;
       margin-bottom: 1.25rem;
+    }
+    .badge-error-status svg {
+      flex-shrink: 0;
+      display: inline-block;
+      vertical-align: middle;
     }
     .user-pill {
       display: inline-block;
@@ -167,11 +207,37 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
       border-radius: var(--forge-radius-sm);
       margin-bottom: 1.25rem;
     }
-    .trace-footer {
+    .trace-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
       font-size: 0.75rem;
       color: var(--forge-text-subtle);
+      background: var(--forge-bg-root);
+      border: 1px solid var(--forge-border);
+      border-radius: var(--forge-radius-sm);
+      padding: 0.35rem 0.65rem;
       margin-top: 1.5rem;
       font-family: monospace;
+      cursor: pointer;
+      user-select: all;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .trace-pill:hover {
+      border-color: var(--forge-primary);
+      color: var(--forge-text-main);
+    }
+    .trace-pill.copied {
+      border-color: var(--forge-success, #3ecf8e);
+      color: var(--forge-success, #3ecf8e);
+    }
+    .trace-pill code {
+      font-family: inherit;
+    }
+    @media (max-width: 480px) {
+      .error-card {
+        padding: 1.5rem 1rem;
+      }
     }
   </style>
 </head>
@@ -179,11 +245,11 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
   ${getAstryxHeaderHtml('ERROR', `HTTP ${code}`)}
   <main class="error-wrapper">
     <div class="error-card">
-      <div class="badge-error-status">${pillText}</div>
+      <div class="badge-error-status">${iconSvg}<span>${pillText}</span></div>
       <h1 style="font-size: 1.65rem; color: var(--forge-text-main); margin: 0 0 0.6rem 0;">${heading}</h1>
       
       <p style="color: var(--forge-text-muted); font-size: 0.92rem; line-height: 1.55; margin-bottom: 1.25rem;">
-        ${description}${appLabel}
+        ${description}
       </p>
 
       ${options.userEmail ? `<div class="user-pill">Signed in as <strong style="color: var(--forge-text-main);">${options.userEmail}</strong></div>` : ''}
@@ -193,9 +259,15 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
         <a href="${secondaryHref}" class="astryx-btn btn-outline" style="border-color: var(--forge-border);">${secondaryText}</a>
       </div>
 
-      ${options.traceId ? `<div class="trace-footer">Incident Trace: ${options.traceId}</div>` : ''}
+      ${options.traceId ? `
+      <div class="trace-pill" id="trace-btn" onclick="navigator.clipboard.writeText('${options.traceId}').then(()=>{this.classList.add('copied');var l=this.querySelector('.trace-lbl');if(l)l.textContent='Copied!';setTimeout(()=>{this.classList.remove('copied');if(l)l.textContent='Incident Trace:'},1500)});" title="Click to copy Trace ID">
+        <span class="trace-lbl">Incident Trace:</span>
+        <code>${options.traceId}</code>
+        <span style="display:inline-flex;opacity:0.7;">${astryxIcons.copy}</span>
+      </div>` : ''}
     </div>
   </main>
 </body>
 </html>`;
 }
+

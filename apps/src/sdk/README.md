@@ -61,6 +61,11 @@ Enterprise Foundation SDK suite for **SG Forge** microservices (`apps/src/*`) an
 * `getDatabaseClient(dbFileName, options)`: Standardized SQLite connection factory with WAL mode, foreign keys, and automatic test isolation (`NODE_ENV === 'test'`).
 * `closeDatabaseClient(dbInstance)`: Flushes uncheckpointed WAL pages (`PRAGMA wal_checkpoint(TRUNCATE)`) and closes handle cleanly.
 
+### 9. Universal Route Boundary & Content Negotiation (`route-boundary.ts`)
+* `renderRouteNotFound(options)`: Dual-mode 404 responder delivering RFC 7807 problem JSON for APIs and Astryx branded 404 HTML for browsers with `Cache-Control: no-cache, no-store` and `X-Trace-Id`.
+* `renderStatusError(options)`: Unified status boundary supporting all 10 standard HTTP status codes (`400`–`504`).
+* `isApiRequest(req)`: Stripe/GitHub standard content-negotiation inspector checking `Accept: application/json` and `/api/` path prefixes.
+
 ---
 
 ## 📁 Internal Architecture
@@ -73,6 +78,7 @@ apps/src/sdk/
 │   ├── index.ts                   # Main barrel export
 │   ├── logger.ts                  # Structured logging & PII redaction engine
 │   ├── error-handler.ts           # RFC 7807 Problem Details boundary
+│   ├── route-boundary.ts          # Universal 404 & status content negotiation
 │   ├── auth-guard.ts              # Zero-Trust JWT verification & RBAC guard
 │   ├── directory-client.ts        # Scoped management chain & hierarchy client
 │   ├── registry.ts                # Declarative ingress & service discovery

@@ -24,15 +24,18 @@ describe('Tier 1 Unit: Static Error Pages & Host Fallback Server', () => {
     serverInstance.stop(true);
   });
 
-  it('Arrange, Act, Assert: pre-renders all 4 static Astryx error pages with valid HTML and branding', () => {
+  it('Arrange, Act, Assert: pre-renders all 10 static Astryx error pages with valid HTML and branding', () => {
     // Arrange
-    const expectedFiles = ['502.html', '503.html', '500.html', '404.html'];
+    const expectedFiles = [
+      '400.html', '401.html', '403.html', '404.html', '405.html',
+      '429.html', '500.html', '502.html', '503.html', '504.html'
+    ];
 
     // Act
     const generated = generateStaticErrorPages();
 
     // Assert
-    expect(generated.length).toBe(4);
+    expect(generated.length).toBe(10);
     for (const filename of expectedFiles) {
       const filePath = join(ERRORS_DIR, filename);
       expect(existsSync(filePath)).toBe(true);

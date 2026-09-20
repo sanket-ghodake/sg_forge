@@ -1,11 +1,11 @@
 {
   "timestamp": "2026-09-15T16:21:00.000Z",
-  "totalExportedSymbols": 838,
-  "documentedSymbols": 664,
-  "symbolCoveragePercent": 79.2,
-  "totalRequirements": 84,
-  "implementedRequirements": 78,
-  "verifiedRequirements": 79,
+  "totalExportedSymbols": 853,
+  "documentedSymbols": 674,
+  "symbolCoveragePercent": 79,
+  "totalRequirements": 85,
+  "implementedRequirements": 79,
+  "verifiedRequirements": 80,
   "orphanRequirements": [
     "LLR-PORTAL-001",
     "LLR-PORTAL-002",
@@ -178,6 +178,18 @@
       "requirements": [
         "HLR-AUTH-102",
         "LLR-DB-005"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "EmployeeManagerCheckResponse",
+      "kind": "interface",
+      "file": "apps/src/types/src/index.ts",
+      "line": 186,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-012"
       ],
       "missingRequirementFiles": []
     },
@@ -1400,7 +1412,7 @@
       "name": "startPortalServer",
       "kind": "function",
       "file": "apps/src/portal/src/server.ts",
-      "line": 50,
+      "line": 31,
       "hasDoc": true,
       "requirements": [
         "HLR-PORTAL-201",
@@ -1424,7 +1436,7 @@
       "name": "CUSTOM_DIR",
       "kind": "variable",
       "file": "apps/src/landing/src/server.ts",
-      "line": 31,
+      "line": 32,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -1433,7 +1445,7 @@
       "name": "CUSTOM_INDEX_HTML",
       "kind": "variable",
       "file": "apps/src/landing/src/server.ts",
-      "line": 32,
+      "line": 33,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -1442,7 +1454,7 @@
       "name": "CUSTOM_TEMPLATE_TS",
       "kind": "variable",
       "file": "apps/src/landing/src/server.ts",
-      "line": 33,
+      "line": 34,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -1451,7 +1463,7 @@
       "name": "LandingMode",
       "kind": "type",
       "file": "apps/src/landing/src/server.ts",
-      "line": 35,
+      "line": 36,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -1460,7 +1472,7 @@
       "name": "resolveLandingMode",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 42,
+      "line": 43,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1472,7 +1484,7 @@
       "name": "renderLandingHtml",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 53,
+      "line": 54,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1484,7 +1496,7 @@
       "name": "resolveLandingHtml",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 142,
+      "line": 143,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1496,7 +1508,7 @@
       "name": "resolveCustomAsset",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 167,
+      "line": 168,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1508,7 +1520,7 @@
       "name": "renderHtml",
       "kind": "variable",
       "file": "apps/src/landing/src/server.ts",
-      "line": 208,
+      "line": 209,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1520,7 +1532,7 @@
       "name": "createLandingHandler",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 215,
+      "line": 216,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -1532,7 +1544,7 @@
       "name": "startLandingServer",
       "kind": "function",
       "file": "apps/src/landing/src/server.ts",
-      "line": 276,
+      "line": 270,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -2162,6 +2174,24 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "problem",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-handlers.ts",
+      "line": 32,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "extractBearerOrCookieToken",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/api-handlers.ts",
+      "line": 57,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "handleLogin",
       "kind": "function",
       "file": "apps/src/auth/src/backend/api-handlers.ts",
@@ -2441,11 +2471,35 @@
       "name": "getScopedHierarchyData",
       "kind": "function",
       "file": "apps/src/auth/src/backend/hierarchy.ts",
-      "line": 16,
+      "line": 49,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
         "LLR-DB-005"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "checkIsManager",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/hierarchy.ts",
+      "line": 142,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-012"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "handleIsManagerCheck",
+      "kind": "function",
+      "file": "apps/src/auth/src/backend/hierarchy.ts",
+      "line": 174,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-AUTH-102",
+        "LLR-AUTH-012"
       ],
       "missingRequirementFiles": []
     },
@@ -5961,6 +6015,70 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "RouteNotFoundOptions",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/route-boundary.ts",
+      "line": 17,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-SDK-004",
+        "LLR-UI-008"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "StatusErrorOptions",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/route-boundary.ts",
+      "line": 34,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-SDK-004",
+        "LLR-UI-008"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "isApiRequest",
+      "kind": "function",
+      "file": "apps/src/sdk/src/route-boundary.ts",
+      "line": 52,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-SDK-004"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderRouteNotFound",
+      "kind": "function",
+      "file": "apps/src/sdk/src/route-boundary.ts",
+      "line": 68,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-SDK-004",
+        "LLR-UI-008"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderStatusError",
+      "kind": "function",
+      "file": "apps/src/sdk/src/route-boundary.ts",
+      "line": 87,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-SDK-004",
+        "LLR-UI-008"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "escapeHtml",
       "kind": "function",
       "file": "apps/src/ui/src/sanitize.ts",
@@ -6049,7 +6167,7 @@
       "name": "ErrorPageOptions",
       "kind": "interface",
       "file": "apps/src/ui/src/error-page.ts",
-      "line": 15,
+      "line": 16,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -6058,10 +6176,19 @@
       "missingRequirementFiles": []
     },
     {
+      "name": "StatusConfig",
+      "kind": "interface",
+      "file": "apps/src/ui/src/error-page.ts",
+      "line": 30,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
       "name": "renderAstryxSystemDownPage",
       "kind": "function",
       "file": "apps/src/ui/src/error-page.ts",
-      "line": 76,
+      "line": 105,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -6073,7 +6200,7 @@
       "name": "renderAstryxErrorHtml",
       "kind": "function",
       "file": "apps/src/ui/src/error-page.ts",
-      "line": 95,
+      "line": 125,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -6617,7 +6744,7 @@
       "name": "startTemplateServer",
       "kind": "function",
       "file": "forge-apps/app-template/src/server.ts",
-      "line": 111,
+      "line": 112,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6874,6 +7001,27 @@
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "SubmoduleErrorOptions",
+      "kind": "interface",
+      "file": "forge-apps/app-template/src/lib/error-view.ts",
+      "line": 11,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderSubmoduleErrorHtml",
+      "kind": "function",
+      "file": "forge-apps/app-template/src/lib/error-view.ts",
+      "line": 33,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
         "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
@@ -7142,7 +7290,7 @@
       "name": "startTelemetryServer",
       "kind": "function",
       "file": "forge-apps/telemetry/src/server.ts",
-      "line": 116,
+      "line": 117,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7404,6 +7552,27 @@
       "requirements": [
         "HLR-TEL-801",
         "LLR-SUB-004"
+      ],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "SubmoduleErrorOptions",
+      "kind": "interface",
+      "file": "forge-apps/telemetry/src/lib/error-view.ts",
+      "line": 11,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "renderSubmoduleErrorHtml",
+      "kind": "function",
+      "file": "forge-apps/telemetry/src/lib/error-view.ts",
+      "line": 33,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-UI-401",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -9906,6 +10075,7 @@
         "apps/src/docs/test/security/traversal-defense.test.ts",
         "apps/src/docs/test/integration/static-routes.test.ts",
         "apps/src/sdk/test/unit/external-ingress.test.ts",
+        "apps/test/e2e/playwright/error-status-pages.test.ts",
         "scripts/test/docker-resolver.test.ts"
       ]
     },
@@ -9975,6 +10145,7 @@
       ],
       "verifiedIn": [
         "apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts",
+        "apps/test/e2e/playwright/error-status-pages.test.ts",
         "scripts/test/run-sh.test.ts"
       ]
     },
@@ -9984,13 +10155,13 @@
       "docFile": "apps/src/docs/src/content/docs/operations/branding-and-logos.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:79#BrandConfig",
-        "apps/src/landing/src/server.ts:42#resolveLandingMode",
-        "apps/src/landing/src/server.ts:53#renderLandingHtml",
-        "apps/src/landing/src/server.ts:142#resolveLandingHtml",
-        "apps/src/landing/src/server.ts:167#resolveCustomAsset",
-        "apps/src/landing/src/server.ts:208#renderHtml",
-        "apps/src/landing/src/server.ts:215#createLandingHandler",
-        "apps/src/landing/src/server.ts:276#startLandingServer",
+        "apps/src/landing/src/server.ts:43#resolveLandingMode",
+        "apps/src/landing/src/server.ts:54#renderLandingHtml",
+        "apps/src/landing/src/server.ts:143#resolveLandingHtml",
+        "apps/src/landing/src/server.ts:168#resolveCustomAsset",
+        "apps/src/landing/src/server.ts:209#renderHtml",
+        "apps/src/landing/src/server.ts:216#createLandingHandler",
+        "apps/src/landing/src/server.ts:270#startLandingServer",
         "apps/src/landing/src/index.ts:6#landingService",
         "apps/src/auth/src/frontend/set-password-view.ts:14#renderSetPasswordHtml",
         "apps/src/auth/src/frontend/auth-styles.ts:12#getAuthViewStyles",
@@ -10040,9 +10211,9 @@
         "apps/src/ui/src/styles.ts:18#getAstryxStyles",
         "apps/src/ui/src/icons.ts:11#astryxIcons",
         "apps/src/ui/src/tokens.ts:10#themeTokens",
-        "apps/src/ui/src/error-page.ts:15#ErrorPageOptions",
-        "apps/src/ui/src/error-page.ts:76#renderAstryxSystemDownPage",
-        "apps/src/ui/src/error-page.ts:95#renderAstryxErrorHtml",
+        "apps/src/ui/src/error-page.ts:16#ErrorPageOptions",
+        "apps/src/ui/src/error-page.ts:105#renderAstryxSystemDownPage",
+        "apps/src/ui/src/error-page.ts:125#renderAstryxErrorHtml",
         "apps/src/ui/src/header.ts:12#AstryxHeaderOptions",
         "apps/src/ui/src/header.ts:22#getAstryxHeaderHtml",
         "apps/src/ui/src/footer.ts:10#AstryxFooterOptions",
@@ -10050,7 +10221,9 @@
         "apps/src/ui/src/index.ts:11#ASTRYX_VERSION",
         "apps/src/ui/src/styles/components.ts:9#getComponentStyles",
         "apps/src/ui/src/styles/base.ts:11#getBaseStyles",
-        "apps/src/ui/src/styles/overlays.ts:9#getOverlayStyles"
+        "apps/src/ui/src/styles/overlays.ts:9#getOverlayStyles",
+        "forge-apps/app-template/src/lib/error-view.ts:33#renderSubmoduleErrorHtml",
+        "forge-apps/telemetry/src/lib/error-view.ts:33#renderSubmoduleErrorHtml"
       ],
       "verifiedIn": [
         "apps/src/docs/test/unit/astryx-theme.test.ts",
@@ -10058,7 +10231,8 @@
         "apps/src/docs/test/security/astryx-compliance.test.ts",
         "apps/src/dev-dashboard/test/unit/org-setup.test.ts",
         "apps/src/dev-dashboard/test/e2e/devcenter-browser-resilience.pw.test.ts",
-        "apps/src/ui/test/e2e/ui-bundle-integrity.test.ts"
+        "apps/src/ui/test/e2e/ui-bundle-integrity.test.ts",
+        "apps/test/e2e/playwright/error-status-pages.test.ts"
       ]
     },
     "LLR-UI-001": {
@@ -10125,13 +10299,13 @@
         "apps/src/portal/src/backend/app-governance-service.ts:313#updateAppPolicy",
         "apps/src/portal/src/backend/app-governance-service.ts:381#getLiveAppGovernanceData",
         "apps/src/portal/src/backend/app-governance-routes.ts:44#handleAppGovernanceRoutes",
-        "apps/src/landing/src/server.ts:42#resolveLandingMode",
-        "apps/src/landing/src/server.ts:53#renderLandingHtml",
-        "apps/src/landing/src/server.ts:142#resolveLandingHtml",
-        "apps/src/landing/src/server.ts:167#resolveCustomAsset",
-        "apps/src/landing/src/server.ts:208#renderHtml",
-        "apps/src/landing/src/server.ts:215#createLandingHandler",
-        "apps/src/landing/src/server.ts:276#startLandingServer",
+        "apps/src/landing/src/server.ts:43#resolveLandingMode",
+        "apps/src/landing/src/server.ts:54#renderLandingHtml",
+        "apps/src/landing/src/server.ts:143#resolveLandingHtml",
+        "apps/src/landing/src/server.ts:168#resolveCustomAsset",
+        "apps/src/landing/src/server.ts:209#renderHtml",
+        "apps/src/landing/src/server.ts:216#createLandingHandler",
+        "apps/src/landing/src/server.ts:270#startLandingServer",
         "apps/src/landing/src/index.ts:6#landingService",
         "apps/src/auth/src/frontend/set-password-view.ts:14#renderSetPasswordHtml",
         "apps/src/auth/src/frontend/auth-styles.ts:12#getAuthViewStyles",
@@ -10468,7 +10642,7 @@
         "apps/src/portal/src/backend/security-middleware.ts:18#validateMutatingRequest",
         "apps/src/portal/src/backend/security-middleware.ts:97#checkPortalRateLimit",
         "apps/src/portal/src/backend/security-middleware.ts:153#sanitizeEmployeeDirectory",
-        "apps/src/portal/src/server.ts:50#startPortalServer",
+        "apps/src/portal/src/server.ts:31#startPortalServer",
         "apps/src/portal/src/index.ts:13#portalService"
       ],
       "verifiedIn": [
@@ -10495,9 +10669,12 @@
         "apps/src/types/src/index.ts:142#ManagerChainEntry",
         "apps/src/types/src/index.ts:156#ScopedHierarchyResponse",
         "apps/src/types/src/index.ts:172#OrgDirectoryResponse",
+        "apps/src/types/src/index.ts:186#EmployeeManagerCheckResponse",
         "apps/src/auth/src/backend/security-headers.ts:7#SECURITY_HEADERS",
         "apps/src/auth/src/backend/security-headers.ts:22#applySecurityHeaders",
-        "apps/src/auth/src/backend/hierarchy.ts:16#getScopedHierarchyData",
+        "apps/src/auth/src/backend/hierarchy.ts:49#getScopedHierarchyData",
+        "apps/src/auth/src/backend/hierarchy.ts:142#checkIsManager",
+        "apps/src/auth/src/backend/hierarchy.ts:174#handleIsManagerCheck",
         "apps/src/auth/src/backend/org-tree-service.ts:17#OrgTreeNode",
         "apps/src/auth/src/backend/org-tree-service.ts:38#OrgTreeResponse",
         "apps/src/auth/src/backend/org-tree-service.ts:75#getRealOrgTree",
@@ -10563,7 +10740,9 @@
         "apps/src/sdk/src/auth-guard.ts:143#authGuard"
       ],
       "verifiedIn": [
+        "apps/src/auth/test/security/hierarchy-security.test.ts",
         "apps/src/auth/test/security/employee-rbac.test.ts",
+        "apps/src/auth/test/integration/hierarchy-api.test.ts",
         "apps/src/dev-dashboard/test/e2e/org-setup-journey.test.ts",
         "apps/src/dev-dashboard/test/security/org-setup-security.test.ts",
         "apps/src/dev-dashboard/test/integration/org-setup-pipeline.test.ts",
@@ -10615,7 +10794,7 @@
       "docFile": "apps/src/docs/src/content/docs/features/portal-spa.mdx",
       "implementedIn": [
         "apps/src/types/src/index.ts:49#PostMessageEvent",
-        "apps/src/portal/src/server.ts:50#startPortalServer",
+        "apps/src/portal/src/server.ts:31#startPortalServer",
         "apps/src/portal/src/index.ts:13#portalService",
         "apps/src/sdk/src/client-bridge.ts:12#ForgeClientOptions",
         "apps/src/sdk/src/client-bridge.ts:21#ForgeClient"
@@ -10658,7 +10837,12 @@
         "apps/src/sdk/src/logger.ts:80#explainLog",
         "apps/src/sdk/src/logger.ts:119#ForgeLogger",
         "apps/src/sdk/src/logger.ts:287#createLogger",
-        "apps/src/sdk/src/browser-bridge.ts:15#initBrowserLogBridge"
+        "apps/src/sdk/src/browser-bridge.ts:15#initBrowserLogBridge",
+        "apps/src/sdk/src/route-boundary.ts:17#RouteNotFoundOptions",
+        "apps/src/sdk/src/route-boundary.ts:34#StatusErrorOptions",
+        "apps/src/sdk/src/route-boundary.ts:52#isApiRequest",
+        "apps/src/sdk/src/route-boundary.ts:68#renderRouteNotFound",
+        "apps/src/sdk/src/route-boundary.ts:87#renderStatusError"
       ],
       "verifiedIn": [
         "apps/src/sdk/test/unit/logger.test.ts"
@@ -10693,10 +10877,17 @@
       "docFile": "apps/src/docs/src/content/docs/features/observability.mdx",
       "implementedIn": [
         "apps/src/dev-dashboard/src/db/db.ts:78#IssueReportRecord",
-        "apps/src/sdk/src/error-handler.ts:18#createSafeHandler"
+        "apps/src/sdk/src/error-handler.ts:18#createSafeHandler",
+        "apps/src/sdk/src/route-boundary.ts:17#RouteNotFoundOptions",
+        "apps/src/sdk/src/route-boundary.ts:34#StatusErrorOptions",
+        "apps/src/sdk/src/route-boundary.ts:52#isApiRequest",
+        "apps/src/sdk/src/route-boundary.ts:68#renderRouteNotFound",
+        "apps/src/sdk/src/route-boundary.ts:87#renderStatusError"
       ],
       "verifiedIn": [
-        "apps/src/sdk/test/unit/error-handler.test.ts"
+        "apps/src/sdk/test/unit/error-handler.test.ts",
+        "apps/src/sdk/test/unit/route-boundary.test.ts",
+        "apps/test/e2e/playwright/error-status-pages.test.ts"
       ]
     },
     "SR-AUTH-001": {
@@ -10779,7 +10970,8 @@
       ],
       "verifiedIn": [
         "apps/src/auth/test/unit/employee-password-service.test.ts",
-        "apps/src/auth/test/e2e/portal-auth-gate.test.ts"
+        "apps/src/auth/test/e2e/portal-auth-gate.test.ts",
+        "apps/src/auth/test/integration/route-not-found.test.ts"
       ]
     },
     "LLR-AUTH-001": {
@@ -10965,6 +11157,78 @@
         "apps/src/ui/test/integration/auth-redirect-bridge.test.ts"
       ]
     },
+    "LLR-AUTH-012": {
+      "id": "LLR-AUTH-012",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/features/manager-hierarchy-detection.mdx",
+      "implementedIn": [
+        "apps/src/types/src/index.ts:186#EmployeeManagerCheckResponse",
+        "apps/src/auth/src/backend/hierarchy.ts:142#checkIsManager",
+        "apps/src/auth/src/backend/hierarchy.ts:174#handleIsManagerCheck"
+      ],
+      "verifiedIn": [
+        "apps/src/auth/test/unit/hierarchy.test.ts",
+        "apps/src/auth/test/security/hierarchy-security.test.ts",
+        "apps/src/auth/test/integration/hierarchy-api.test.ts"
+      ]
+    },
+    "LLR-DB-005": {
+      "id": "LLR-DB-005",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/features/manager-hierarchy-detection.mdx",
+      "implementedIn": [
+        "apps/src/types/src/index.ts:114#OrgNodeSummary",
+        "apps/src/types/src/index.ts:126#EmployeeSummary",
+        "apps/src/types/src/index.ts:142#ManagerChainEntry",
+        "apps/src/types/src/index.ts:156#ScopedHierarchyResponse",
+        "apps/src/types/src/index.ts:172#OrgDirectoryResponse",
+        "apps/src/auth/src/backend/hierarchy.ts:49#getScopedHierarchyData",
+        "apps/src/auth/src/backend/org-tree-service.ts:17#OrgTreeNode",
+        "apps/src/auth/src/backend/org-tree-service.ts:38#OrgTreeResponse",
+        "apps/src/auth/src/backend/org-tree-service.ts:75#getRealOrgTree",
+        "apps/src/auth/src/backend/org-tree-service.ts:229#getOrgTree",
+        "apps/src/auth/src/backend/employee-import.ts:17#BatchImportRecord",
+        "apps/src/auth/src/backend/employee-import.ts:32#BatchImportOptions",
+        "apps/src/auth/src/backend/employee-import.ts:42#executeBatchImport",
+        "apps/src/auth/src/backend/employee-import.ts:252#parseEmployeeCsv",
+        "apps/src/auth/src/backend/employee-controller.ts:19#sanitizeCsvField",
+        "apps/src/auth/src/backend/employee-controller.ts:32#EmployeeListItem",
+        "apps/src/auth/src/backend/employee-controller.ts:58#EmployeeController",
+        "apps/src/auth/src/backend/employee-controller.ts:487#employeeController",
+        "apps/src/dev-dashboard/src/db/db.ts:97#AuditLogRecord",
+        "apps/src/sdk/src/directory-client.ts:15#OrgTreeNodeDto",
+        "apps/src/sdk/src/directory-client.ts:23#OrgTreeResponseDto",
+        "apps/src/sdk/src/directory-client.ts:29#EmployeeListItemDto",
+        "apps/src/sdk/src/directory-client.ts:39#ListEmployeesResponseDto",
+        "apps/src/sdk/src/directory-client.ts:51#resolveAuthBaseUrl",
+        "apps/src/sdk/src/directory-client.ts:86#fetchOrgTree",
+        "apps/src/sdk/src/directory-client.ts:117#fetchEmployeesList",
+        "apps/src/sdk/src/directory-client.ts:151#fetchEmployeeHierarchy",
+        "apps/src/sdk/src/directory-client.ts:173#createEmployeeApi",
+        "apps/src/sdk/src/directory-client.ts:211#updateEmployeeApi",
+        "apps/src/sdk/src/directory-client.ts:241#revokeEmployeeSessionsApi",
+        "apps/src/sdk/src/directory-client.ts:270#batchImportEmployeesApi",
+        "apps/src/sdk/src/directory-client.ts:300#bulkActionEmployeesApi",
+        "apps/src/sdk/src/directory-client.ts:330#fetchOrgDirectory",
+        "apps/src/sdk/src/directory-client.ts:348#getScopedHierarchy",
+        "apps/src/sdk/src/directory-client.ts:374#getMyHierarchy",
+        "apps/src/sdk/src/directory-client.ts:403#isManagerOf",
+        "apps/src/sdk/src/directory-client.ts:420#fetchAuditLogs",
+        "apps/src/sdk/src/directory-client.ts:443#fetchUserSessions",
+        "apps/src/sdk/src/directory-client.ts:462#fetchManagersList",
+        "apps/src/sdk/src/directory-client.ts:478#bindAppPolicyApi",
+        "apps/src/sdk/src/crypto.ts:126#createBlindIndex",
+        "apps/src/sdk/src/employee-password-client.ts:14#ResetEmployeePasswordResultDto",
+        "apps/src/sdk/src/employee-password-client.ts:43#resetEmployeePasswordApi"
+      ],
+      "verifiedIn": [
+        "apps/src/auth/test/unit/employee-controller.test.ts",
+        "apps/src/dev-dashboard/test/e2e/org-setup-journey.test.ts",
+        "apps/src/dev-dashboard/test/security/org-setup-security.test.ts",
+        "apps/src/dev-dashboard/test/integration/org-setup-pipeline.test.ts",
+        "apps/src/dev-dashboard/test/contracts/org-setup-contract.test.ts"
+      ]
+    },
     "LLR-AUTH-008": {
       "id": "LLR-AUTH-008",
       "type": "LLR",
@@ -10987,7 +11251,7 @@
         "apps/src/sdk/src/registry.ts:62#isAppDisabled",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
         "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
-        "forge-apps/app-template/src/server.ts:111#startTemplateServer",
+        "forge-apps/app-template/src/server.ts:112#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
         "forge-apps/app-template/src/lib/sdk.ts:20#StandaloneLogger",
         "forge-apps/app-template/src/lib/sdk.ts:75#createLogger",
@@ -11116,7 +11380,7 @@
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-TEL-801_TELEMETRY_ENGINE.mdx",
       "implementedIn": [
         "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
         "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
         "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
@@ -11139,7 +11403,8 @@
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/e2e/telemetry-server.test.ts",
-        "forge-apps/telemetry/test/security/auth-gate.test.ts"
+        "forge-apps/telemetry/test/security/auth-gate.test.ts",
+        "forge-apps/telemetry/test/integration/route-not-found.test.ts"
       ]
     },
     "HLR-HUB-601": {
@@ -11166,7 +11431,8 @@
         "apps/src/docs/test/e2e/docs-server.test.ts",
         "apps/src/docs/test/integration/static-routes.test.ts",
         "apps/src/docs/test/contracts/health-schema.test.ts",
-        "apps/src/dev-hub/test/integration/hub-routes.test.ts"
+        "apps/src/dev-hub/test/integration/hub-routes.test.ts",
+        "apps/src/dev-hub/test/integration/route-not-found.test.ts"
       ]
     },
     "SR-DOC-001": {
@@ -11329,6 +11595,7 @@
         "apps/src/dev-dashboard/test/unit/vitals-engine.test.ts",
         "apps/src/dev-dashboard/test/unit/services-probe.test.ts",
         "apps/src/dev-dashboard/test/security/telemetry-privacy.test.ts",
+        "apps/src/dev-dashboard/test/integration/route-not-found.test.ts",
         "apps/src/dev-dashboard/test/integration/analytics-api.test.ts"
       ]
     },
@@ -11407,6 +11674,26 @@
         "forge-apps/telemetry/test/integration/db-isolation.test.ts"
       ]
     },
+    "LLR-UI-008": {
+      "id": "LLR-UI-008",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/architecture/error-handling.mdx",
+      "implementedIn": [
+        "apps/src/sdk/src/route-boundary.ts:17#RouteNotFoundOptions",
+        "apps/src/sdk/src/route-boundary.ts:34#StatusErrorOptions",
+        "apps/src/sdk/src/route-boundary.ts:68#renderRouteNotFound",
+        "apps/src/sdk/src/route-boundary.ts:87#renderStatusError",
+        "apps/src/ui/src/sanitize.ts:10#escapeHtml",
+        "apps/src/ui/src/sanitize.ts:35#sanitizeLocalUrl",
+        "apps/src/ui/src/error-page.ts:16#ErrorPageOptions",
+        "apps/src/ui/src/error-page.ts:105#renderAstryxSystemDownPage",
+        "apps/src/ui/src/error-page.ts:125#renderAstryxErrorHtml"
+      ],
+      "verifiedIn": [
+        "apps/src/ui/test/unit/error-page.test.ts",
+        "apps/test/e2e/playwright/error-status-pages.test.ts"
+      ]
+    },
     "LLR-AUTH-007": {
       "id": "LLR-AUTH-007",
       "type": "LLR",
@@ -11430,7 +11717,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/security/forge-apps-api-audit.mdx",
       "implementedIn": [
-        "forge-apps/app-template/src/server.ts:111#startTemplateServer",
+        "forge-apps/app-template/src/server.ts:112#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
         "forge-apps/app-template/src/lib/sdk.ts:20#StandaloneLogger",
         "forge-apps/app-template/src/lib/sdk.ts:75#createLogger",
@@ -11445,6 +11732,7 @@
         "forge-apps/app-template/src/lib/sdk.ts:409#loadBrandConfig",
         "forge-apps/app-template/src/lib/sdk.ts:420#getScopedHierarchy",
         "forge-apps/app-template/src/lib/sdk.ts:446#redactSensitiveData",
+        "forge-apps/app-template/src/lib/error-view.ts:33#renderSubmoduleErrorHtml",
         "forge-apps/app-template/src/lib/types.ts:7#AuthUser",
         "forge-apps/app-template/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/app-template/src/lib/types.ts:33#AuthGuardResult",
@@ -11453,6 +11741,7 @@
         "forge-apps/app-template/src/lib/icons.ts:8#icons",
         "forge-apps/app-template/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/app-template/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/telemetry/src/lib/error-view.ts:33#renderSubmoduleErrorHtml",
         "forge-apps/telemetry/src/lib/icons.ts:8#icons",
         "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup",
@@ -11544,7 +11833,7 @@
         "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
         "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
         "apps/src/sdk/src/logger.ts:119#ForgeLogger",
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
         "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
         "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
@@ -11599,10 +11888,11 @@
       "type": "HLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/app-template/hlr/HLR-APP-001_MICROSERVICE_BASELINE.md",
       "implementedIn": [
-        "forge-apps/app-template/src/server.ts:111#startTemplateServer",
+        "forge-apps/app-template/src/server.ts:112#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb"
       ],
       "verifiedIn": [
+        "forge-apps/app-template/test/integration/route-not-found.test.ts",
         "forge-apps/app-template/test/contracts/health-schema.test.ts"
       ]
     },
@@ -11611,7 +11901,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/submodules/app-template/hlr/HLR-APP-001_MICROSERVICE_BASELINE.md",
       "implementedIn": [
-        "forge-apps/app-template/src/server.ts:111#startTemplateServer"
+        "forge-apps/app-template/src/server.ts:112#startTemplateServer"
       ],
       "verifiedIn": [
         "forge-apps/app-template/test/contracts/health-schema.test.ts"
@@ -11710,63 +12000,6 @@
       "docFile": "apps/src/docs/src/content/docs/llr/LLR-AUTH-009_ORGANIZATION_STRUCTURE_AND_SETUP.mdx",
       "implementedIn": [],
       "verifiedIn": []
-    },
-    "LLR-DB-005": {
-      "id": "LLR-DB-005",
-      "type": "LLR",
-      "docFile": "apps/src/docs/src/content/docs/llr/LLR-DB-005_TENANT_ISOLATION_QUERY_FILTERI.mdx",
-      "implementedIn": [
-        "apps/src/types/src/index.ts:114#OrgNodeSummary",
-        "apps/src/types/src/index.ts:126#EmployeeSummary",
-        "apps/src/types/src/index.ts:142#ManagerChainEntry",
-        "apps/src/types/src/index.ts:156#ScopedHierarchyResponse",
-        "apps/src/types/src/index.ts:172#OrgDirectoryResponse",
-        "apps/src/auth/src/backend/hierarchy.ts:16#getScopedHierarchyData",
-        "apps/src/auth/src/backend/org-tree-service.ts:17#OrgTreeNode",
-        "apps/src/auth/src/backend/org-tree-service.ts:38#OrgTreeResponse",
-        "apps/src/auth/src/backend/org-tree-service.ts:75#getRealOrgTree",
-        "apps/src/auth/src/backend/org-tree-service.ts:229#getOrgTree",
-        "apps/src/auth/src/backend/employee-import.ts:17#BatchImportRecord",
-        "apps/src/auth/src/backend/employee-import.ts:32#BatchImportOptions",
-        "apps/src/auth/src/backend/employee-import.ts:42#executeBatchImport",
-        "apps/src/auth/src/backend/employee-import.ts:252#parseEmployeeCsv",
-        "apps/src/auth/src/backend/employee-controller.ts:19#sanitizeCsvField",
-        "apps/src/auth/src/backend/employee-controller.ts:32#EmployeeListItem",
-        "apps/src/auth/src/backend/employee-controller.ts:58#EmployeeController",
-        "apps/src/auth/src/backend/employee-controller.ts:487#employeeController",
-        "apps/src/dev-dashboard/src/db/db.ts:97#AuditLogRecord",
-        "apps/src/sdk/src/directory-client.ts:15#OrgTreeNodeDto",
-        "apps/src/sdk/src/directory-client.ts:23#OrgTreeResponseDto",
-        "apps/src/sdk/src/directory-client.ts:29#EmployeeListItemDto",
-        "apps/src/sdk/src/directory-client.ts:39#ListEmployeesResponseDto",
-        "apps/src/sdk/src/directory-client.ts:51#resolveAuthBaseUrl",
-        "apps/src/sdk/src/directory-client.ts:86#fetchOrgTree",
-        "apps/src/sdk/src/directory-client.ts:117#fetchEmployeesList",
-        "apps/src/sdk/src/directory-client.ts:151#fetchEmployeeHierarchy",
-        "apps/src/sdk/src/directory-client.ts:173#createEmployeeApi",
-        "apps/src/sdk/src/directory-client.ts:211#updateEmployeeApi",
-        "apps/src/sdk/src/directory-client.ts:241#revokeEmployeeSessionsApi",
-        "apps/src/sdk/src/directory-client.ts:270#batchImportEmployeesApi",
-        "apps/src/sdk/src/directory-client.ts:300#bulkActionEmployeesApi",
-        "apps/src/sdk/src/directory-client.ts:330#fetchOrgDirectory",
-        "apps/src/sdk/src/directory-client.ts:348#getScopedHierarchy",
-        "apps/src/sdk/src/directory-client.ts:374#getMyHierarchy",
-        "apps/src/sdk/src/directory-client.ts:403#isManagerOf",
-        "apps/src/sdk/src/directory-client.ts:420#fetchAuditLogs",
-        "apps/src/sdk/src/directory-client.ts:443#fetchUserSessions",
-        "apps/src/sdk/src/directory-client.ts:462#fetchManagersList",
-        "apps/src/sdk/src/directory-client.ts:478#bindAppPolicyApi",
-        "apps/src/sdk/src/crypto.ts:126#createBlindIndex",
-        "apps/src/sdk/src/employee-password-client.ts:14#ResetEmployeePasswordResultDto",
-        "apps/src/sdk/src/employee-password-client.ts:43#resetEmployeePasswordApi"
-      ],
-      "verifiedIn": [
-        "apps/src/auth/test/unit/employee-controller.test.ts",
-        "apps/src/dev-dashboard/test/e2e/org-setup-journey.test.ts",
-        "apps/src/dev-dashboard/test/security/org-setup-security.test.ts",
-        "apps/src/dev-dashboard/test/integration/org-setup-pipeline.test.ts",
-        "apps/src/dev-dashboard/test/contracts/org-setup-contract.test.ts"
-      ]
     },
     "LLR-UI-003": {
       "id": "LLR-UI-003",
@@ -11926,21 +12159,6 @@
         "apps/src/sdk/test/e2e/sdk-lifecycle.test.ts"
       ]
     },
-    "LLR-UI-008": {
-      "id": "LLR-UI-008",
-      "type": "LLR",
-      "docFile": "apps/src/docs/src/content/docs/llr/LLR-UI-008_RFC_7807_UNIVERSAL_ERROR_PAGE_.mdx",
-      "implementedIn": [
-        "apps/src/ui/src/sanitize.ts:10#escapeHtml",
-        "apps/src/ui/src/sanitize.ts:35#sanitizeLocalUrl",
-        "apps/src/ui/src/error-page.ts:15#ErrorPageOptions",
-        "apps/src/ui/src/error-page.ts:76#renderAstryxSystemDownPage",
-        "apps/src/ui/src/error-page.ts:95#renderAstryxErrorHtml"
-      ],
-      "verifiedIn": [
-        "apps/src/ui/test/unit/error-page.test.ts"
-      ]
-    },
     "LLR-SUB-005": {
       "id": "LLR-SUB-005",
       "type": "LLR",
@@ -12015,7 +12233,7 @@
       "type": "HLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-001_EVENT_INGESTION.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -12026,7 +12244,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-001_EVENT_INGESTION.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -12037,7 +12255,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-001_EVENT_INGESTION.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/integration/db-isolation.test.ts"
@@ -12048,7 +12266,7 @@
       "type": "HLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/contracts/problem-json.test.ts"
@@ -12059,7 +12277,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb"
       ],
       "verifiedIn": [
@@ -12071,7 +12289,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:116#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/e2e/telemetry-server.test.ts"

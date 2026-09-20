@@ -5,7 +5,7 @@
  * Enterprise SRE Observability & Astryx Enterprise Baseline (v2.0.0 LTS)
  */
 
-import { createLogger, createSafeHandler, handleBrandAssetRequest } from '@forge/sdk';
+import { createLogger, createSafeHandler, handleBrandAssetRequest, renderRouteNotFound } from '@forge/sdk';
 import { handleApiRequest } from './backend/api-handlers';
 import { devAuthManager } from './backend/auth-session';
 import { parseUserAgent, classifyTrafficCategory } from './backend/telemetry-parser';
@@ -43,6 +43,18 @@ export function startDevDashboardServer(port: number = PORT) {
         traffic_category: 'probe',
       });
       return res;
+    }
+
+    // 1b. Route Boundary: 404 for invalid page subpaths
+    if (!path.startsWith('/api/') && path !== '/' && path !== '/signin' && path !== '/login') {
+      return renderRouteNotFound({
+        req,
+        appName: 'Developer Dashboard',
+        primaryActionText: 'Developer Dashboard',
+        primaryActionHref: '/devcenter',
+        secondaryActionText: 'Platform Hub →',
+        secondaryActionHref: '/',
+      });
     }
 
     // 2. Public Auth API Endpoints (Login / Logout / Session Check)

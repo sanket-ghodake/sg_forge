@@ -178,3 +178,15 @@ export interface OrgDirectoryResponse {
   nodes: OrgNodeSummary[];
   users: EmployeeSummary[];
 }
+
+/**
+ * Response contract for hierarchical manager check endpoint.
+ * @requirements [HLR-AUTH-102] [LLR-AUTH-012]
+ */
+export interface EmployeeManagerCheckResponse {
+  status: 'SUCCESS';
+  userId: string;
+  isManager: boolean;
+  directReportsCount: number;
+}
+

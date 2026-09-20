@@ -212,6 +212,31 @@ export function generateCaddyfile(): string {
     }
   }
 
+  // Static Astryx Error Pages Direct Delivery
+  caddyContent += `
+    # Static Astryx Error Pages Direct Delivery
+    handle_path /errors/* {
+        root * /etc/caddy/errors
+        file_server
+    }
+
+    # Unregistered Forge Micro-Apps Catch-All (Astryx 404 Status Screen)
+    @unregisteredAppsApi {
+        path /apps/*
+        header Accept *application/json*
+    }
+    handle @unregisteredAppsApi {
+        header Content-Type application/problem+json
+        header Cache-Control "no-store"
+        respond \`{"type":"https://tools.ietf.org/html/rfc7807","title":"Not Found","status":404,"detail":"Requested application or endpoint does not exist."}\` 404
+    }
+
+    @unregisteredApps path /apps/*
+    handle @unregisteredApps {
+        error "Application Not Found" 404
+    }
+`;
+
   // Root landing / ingress handler
   const landing = services.find((s) => s.path === '/');
   if (landing) {

@@ -5,7 +5,7 @@
 
 import { describe, expect, it, beforeAll } from 'bun:test';
 import { seedAuthDatabase } from '../../src/db/seed';
-import { getScopedHierarchyData } from '../../src/backend/hierarchy';
+import { getScopedHierarchyData, checkIsManager, handleIsManagerCheck } from '../../src/backend/hierarchy';
 import { handleScopedHierarchy } from '../../src/backend/api-handlers';
 
 describe('Tier 1 Unit: Scoped Employee Hierarchy Engine [LLR-AUTH-003]', () => {
@@ -84,4 +84,73 @@ describe('Tier 1 Unit: Scoped Employee Hierarchy Engine [LLR-AUTH-003]', () => {
     expect(data.employee.id).toBe('usr-alice-eng');
     expect(data.managementChain.length).toBe(2);
   });
+
+  describe('Hierarchical Manager Detection [LLR-AUTH-012]', () => {
+    it('should return isManager true with directReportsCount for a lead with subordinates', () => {
+      const result = checkIsManager('usr-bob-lead');
+      expect(result).not.toBeNull();
+      expect(result?.userId).toBe('usr-bob-lead');
+      expect(result?.isManager).toBe(true);
+      expect(result?.directReportsCount).toBe(3);
+    });
+
+    it('should return isManager true for an engineer who manages junior team members', () => {
+      const result = checkIsManager('usr-alice-eng');
+      expect(result).not.toBeNull();
+      expect(result?.userId).toBe('usr-alice-eng');
+      expect(result?.isManager).toBe(true);
+      expect(result?.directReportsCount).toBe(2);
+    });
+
+    it('should return isManager false and directReportsCount 0 for an IC with zero reports', () => {
+      const result = checkIsManager('usr-amit-dev');
+      expect(result).not.toBeNull();
+      expect(result?.userId).toBe('usr-amit-dev');
+      expect(result?.isManager).toBe(false);
+      expect(result?.directReportsCount).toBe(0);
+    });
+
+    it('should return isManager true for top executive with reports', () => {
+      const result = checkIsManager('usr-superadmin');
+      expect(result).not.toBeNull();
+      expect(result?.userId).toBe('usr-superadmin');
+      expect(result?.isManager).toBe(true);
+      expect(result?.directReportsCount).toBeGreaterThan(0);
+    });
+
+    it('should resolve checkIsManager by email address', () => {
+      const result = checkIsManager('bob.lead@forge.internal');
+      expect(result).not.toBeNull();
+      expect(result?.userId).toBe('usr-bob-lead');
+      expect(result?.isManager).toBe(true);
+    });
+
+    it('should return null for non-existent identifier in checkIsManager', () => {
+      const result = checkIsManager('usr-ghost-id-999');
+      expect(result).toBeNull();
+    });
+
+    it('should handle REST endpoint query parameters in handleIsManagerCheck', async () => {
+      const req = new Request('http://auth:3004/api/v1/auth/hierarchy/is-manager?user_id=usr-bob-lead');
+      const resp = await handleIsManagerCheck(req);
+
+      expect(resp.status).toBe(200);
+      const data = await resp.json();
+      expect(data.status).toBe('SUCCESS');
+      expect(data.userId).toBe('usr-bob-lead');
+      expect(data.isManager).toBe(true);
+      expect(data.directReportsCount).toBe(3);
+    });
+
+    it('should return 404 RFC 7807 when employee does not exist in handleIsManagerCheck', async () => {
+      const req = new Request('http://auth:3004/api/v1/auth/hierarchy/usr-unknown/is-manager');
+      const resp = await handleIsManagerCheck(req, 'usr-unknown');
+
+      expect(resp.status).toBe(404);
+      const data = await resp.json();
+      expect(data.title).toBe('Not Found');
+      expect(data.type).toContain('rfc7807');
+    });
+  });
 });
+

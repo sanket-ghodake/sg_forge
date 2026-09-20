@@ -1,0 +1,94 @@
+---
+title: Hierarchical Manager Detection & Reporting Tree Integration
+description: Operational and integration guide for detecting manager status dynamically based purely on organizational tree children without relying on job titles or designations.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+
+<ExecutiveCard 
+  title="Real-Time Reporting Hierarchy Without Fragile Job Title Guesswork"
+  analogy="In legacy architectures, systems inspect user job titles (e.g. checking if a string contains 'Manager' or 'Lead') or hardcode admin flags to gate approval workflows. When people get promoted or transition roles, workflows break or leak unauthorized access. SG Forge evaluates the live corporate directed acyclic graph (DAG): an employee is a manager if and only if at least one active subordinate reports to them in the corporate tree."
+  impact="Guarantees 100% real-time accuracy for team approvals, leaves, and peer evaluations. O(1) indexed lookup latency (<2ms) eliminates slow tree traversals for high-frequency UI checks."
+/>
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-AUTH-012" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-DB-005" type="LLR" status="verified" />
+</div>
+
+## 1. The Hierarchical Manager Invariant
+
+Under the SG Forge architecture, **manager status is structural, not titular**:
+
+$$\text{isManager}(u) \iff |\{ r \in \text{auth\_employee\_relationships} \mid r.\text{related\_to\_id} = u.\text{id} \land r.\text{is\_primary} = 1 \}| \ge 1$$
+
+### Architectural Rules
+1. **Designation Blindness**: Never check `job_title` strings or designations. A Senior Staff Engineer with direct reports is a manager; a "Product Manager" who is an individual contributor with zero reports is not a hierarchical manager.
+2. **Real-Time Data Parity**: When team assignments change or an employee transfers, manager status updates immediately without session token revocation delays.
+3. **Dedicated O(1) Performance**: Instead of traversing linear upward chains or fetching full department trees, the endpoint evaluates an indexed count query with sub-millisecond execution time.
+
+---
+
+## 2. API Contract & Endpoints
+
+### Endpoint Specification
+* `GET /api/v1/auth/hierarchy/:id/is-manager` — Inspect any employee by user ID or email.
+* `GET /api/v1/auth/hierarchy/me/is-manager` — Inspect the currently authenticated caller via session token or cookie.
+* `GET /api/v1/auth/hierarchy/is-manager?user_id=...` — Query string syntax for frontend SDKs.
+
+### Success Response (`200 OK`)
+```json
+{
+  "status": "SUCCESS",
+  "userId": "usr-bob-lead",
+  "isManager": true,
+  "directReportsCount": 3
+}
+```
+
+### Individual Contributor Response (`200 OK`)
+```json
+{
+  "status": "SUCCESS",
+  "userId": "usr-amit-dev",
+  "isManager": false,
+  "directReportsCount": 0
+}
+```
+
+### Error Responses
+* `401 Unauthorized`: Calling `/me/is-manager` without a valid Bearer token or session cookie.
+* `404 Not Found`: Employee identifier does not exist in `auth_users`.
+* `405 Method Not Allowed`: Invoking with non-GET HTTP methods.
+
+---
+
+## 3. Integration Guidelines for Core & Forge Apps
+
+### Calling from Autonomous Forge Apps (`forge-apps/*`)
+Forge apps reside on `forge-apps-net` and should route through the reverse proxy or Auth internal gateway:
+
+```typescript
+// Inside a Forge App action or API route
+export async function checkCallerManagerStatus(sessionToken: string): Promise<boolean> {
+  const authUrl = process.env.AUTH_SERVICE_URL || 'http://auth:3004';
+  const response = await fetch(`${authUrl}/api/v1/auth/hierarchy/me/is-manager`, {
+    headers: {
+      Authorization: `Bearer ${sessionToken}`,
+      Accept: 'application/json',
+    },
+    signal: AbortSignal.timeout(3000),
+  });
+
+  if (!response.ok) return false;
+  const data = await response.json();
+  return data.isManager === true;
+}
+```
+
+### UI & Component Best Practices
+* **Navigation Menus**: Hide "My Team", "Approve Leaves", or "Direct Reports" navigation tabs if `isManager` evaluates to `false`.
+* **Client Caching**: Consuming applications may cache the boolean in local view state with a short Time-to-Live (e.g. 60 seconds) during active sessions.
+* **Separation of Concerns**: Use `isManager` for organizational hierarchy workflows (approvals, team rosters, skip-level access). Use IAM Roles (`roles/admin`, `roles/security`) for system administrative privileges.

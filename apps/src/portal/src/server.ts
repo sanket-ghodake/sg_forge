@@ -5,40 +5,21 @@
  */
 
 import {
-  authGuard,
-  createLogger,
-  createSafeHandler,
-  handleBrandAssetRequest,
-  handleServiceWorkerRequest,
-  fetchOrgTree,
-  fetchEmployeesList,
-  createEmployeeApi,
-  batchImportEmployeesApi,
-  fetchManagersList,
-  fetchAuditLogs,
-  fetchUserSessions,
+  authGuard, createLogger, createSafeHandler, handleBrandAssetRequest,
+  handleServiceWorkerRequest, fetchOrgTree, fetchEmployeesList, createEmployeeApi,
+  batchImportEmployeesApi, fetchManagersList, fetchAuditLogs, fetchUserSessions, renderRouteNotFound,
 } from '@forge/sdk';
 import { renderPortalHtml, type HeaderUserContext, getPortalApps } from './frontend';
 import {
-  getLiveNotifications,
-  markAllNotificationsAsRead,
-  dismissNotification,
-  recordCelebration,
-  getLiveCompanyEvents,
-  getUserDeliveryPreference,
-  setUserDeliveryPreference,
-  createAppAccessRequest,
-  getUserAppAccessRequests,
-  getUserApprovedAppIds,
-  cancelAppAccessRequest,
-  getPendingAppAccessRequests,
-  decideAppAccessRequest,
-  createApiToken,
-  getUserApiTokens,
-  revokeApiToken,
+  getLiveNotifications, markAllNotificationsAsRead, dismissNotification,
+  recordCelebration, getLiveCompanyEvents, getUserDeliveryPreference,
+  setUserDeliveryPreference, createAppAccessRequest, getUserAppAccessRequests,
+  getUserApprovedAppIds, cancelAppAccessRequest, getPendingAppAccessRequests,
+  decideAppAccessRequest, createApiToken, getUserApiTokens, revokeApiToken,
 } from './backend/inbox-service';
 import { handleAppGovernanceRoutes } from './backend/app-governance-routes';
 import { validateMutatingRequest, checkPortalRateLimit, sanitizeEmployeeDirectory } from './backend/security-middleware';
+
 
 const PORT = Number(process.env.PORTAL_PORT || process.env.PORT || 3001);
 const logger = createLogger('portal-service');
@@ -467,6 +448,16 @@ export function startPortalServer(port: number = PORT) {
       userAgent,
       approvedApps,
     };
+
+    if (url.pathname !== '/' && url.pathname !== '' && url.pathname !== '/portal' && url.pathname !== '/portal/') {
+      return renderRouteNotFound({
+        req,
+        appName: 'Workspace Portal',
+        userEmail: user.email,
+        primaryActionText: 'Workspace Portal',
+        primaryActionHref: '/portal',
+      });
+    }
 
     return new Response(renderPortalHtml(user), {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },

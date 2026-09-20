@@ -29,7 +29,7 @@ const logger = createLogger('auth-api');
 // In-memory temp tokens for password reset verification
 const passwordResetTokens = new Map<string, { userId: string; expiresAt: number }>();
 
-function problem(title: string, detail: string, status: number = 400, headersObj: Record<string, string> = {}, traceId?: string): Response {
+export function problem(title: string, detail: string, status: number = 400, headersObj: Record<string, string> = {}, traceId?: string): Response {
   const headers = new Headers({
     'Content-Type': 'application/problem+json',
     ...(traceId ? { 'x-trace-id': traceId } : {}),
@@ -54,7 +54,7 @@ function extractClientIp(req: Request): string {
 
 const getSessionCookieName = () => process.env.SESSION_COOKIE_NAME || 'forge_session';
 
-function extractBearerOrCookieToken(req: Request): string | null {
+export function extractBearerOrCookieToken(req: Request): string | null {
   const authHeader = req.headers.get('authorization') || '';
   if (authHeader.startsWith('Bearer ')) return authHeader.slice(7);
   const cookieHeader = req.headers.get('cookie') || '';

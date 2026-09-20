@@ -7,7 +7,40 @@
  */
 
 import { getAuthDb } from '../db';
-import type { EmployeeSummary, ManagerChainEntry, ScopedHierarchyResponse } from '@forge/types';
+import type {
+  EmployeeSummary,
+  ManagerChainEntry,
+  ScopedHierarchyResponse,
+  EmployeeManagerCheckResponse,
+} from '@forge/types';
+import { verifyJwt } from './crypto';
+
+function problem(title: string, detail: string, status: number = 400): Response {
+  return Response.json(
+    {
+      type: 'https://tools.ietf.org/html/rfc7807',
+      title,
+      status,
+      detail,
+    },
+    {
+      status,
+      headers: {
+        'Content-Type': 'application/problem+json',
+      },
+    }
+  );
+}
+
+function extractBearerOrCookieToken(req: Request): string | null {
+  const authHeader = req.headers.get('authorization') || '';
+  if (authHeader.startsWith('Bearer ')) return authHeader.slice(7);
+  const cookieHeader = req.headers.get('cookie') || '';
+  const cName = (process.env.SESSION_COOKIE_NAME || 'forge_session').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)(?:${cName}|forge_session)=([^;]+)`));
+  return match ? match[1] : null;
+}
+
 
 /**
  * getScopedHierarchyData
@@ -100,3 +133,87 @@ export function getScopedHierarchyData(identifier: string): ScopedHierarchyRespo
     },
   };
 }
+
+/**
+ * Fast O(1) check to determine if an employee is a manager by having >= 1 direct subordinate reports.
+ * Designation or job title is intentionally ignored.
+ * @requirements [HLR-AUTH-102] [LLR-AUTH-012]
+ */
+export function checkIsManager(
+  identifier: string
+): { userId: string; isManager: boolean; directReportsCount: number } | null {
+  const db = getAuthDb();
+  if (!identifier) return null;
+
+  const row = db
+    .query(
+      `SELECT 
+         u.id as userId,
+         (SELECT COUNT(*) FROM auth_employee_relationships r 
+          WHERE r.related_to_id = u.id AND r.is_primary = 1) as directReportsCount
+       FROM auth_users u
+       WHERE u.id = ? OR u.email = ?
+       LIMIT 1;`
+    )
+    .get(identifier, identifier) as { userId: string; directReportsCount: number } | null;
+
+  if (!row) return null;
+
+  const count = Number(row.directReportsCount || 0);
+  return {
+    userId: row.userId,
+    isManager: count > 0,
+    directReportsCount: count,
+  };
+}
+
+/**
+ * REST Handler for GET /api/v1/auth/hierarchy/:id/is-manager and /me/is-manager.
+ * @requirements [HLR-AUTH-102] [LLR-AUTH-012]
+ */
+export async function handleIsManagerCheck(req: Request, targetId?: string): Promise<Response> {
+  const url = new URL(req.url);
+  let identifier =
+    targetId ||
+    url.searchParams.get('user_id') ||
+    url.searchParams.get('id') ||
+    url.searchParams.get('email');
+
+  // If requesting /me or identifier is omitted, resolve caller from session
+  if (!identifier || identifier === 'me') {
+    const token = extractBearerOrCookieToken(req);
+    if (!token) {
+      return problem(
+        'Unauthorized',
+        'Authentication required to access personal manager status (/me/is-manager)',
+        401
+      );
+    }
+    const { valid, payload } = verifyJwt(token);
+    if (!valid || !payload) {
+      return problem('Unauthorized', 'Invalid or expired session token', 401);
+    }
+    identifier = payload.sub;
+  }
+
+  const result = checkIsManager(identifier);
+  if (!result) {
+    return problem(
+      'Not Found',
+      `Employee with identifier "${identifier}" was not found in organizational hierarchy`,
+      404
+    );
+  }
+
+  const responsePayload: EmployeeManagerCheckResponse = {
+    status: 'SUCCESS',
+    userId: result.userId,
+    isManager: result.isManager,
+    directReportsCount: result.directReportsCount,
+  };
+
+  return Response.json(responsePayload, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+

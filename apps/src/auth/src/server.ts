@@ -5,7 +5,7 @@
  * Manages ASVS 5.0 Authentication, GCP-Style IAM, Org Trees & 4-Pillar Observability.
  */
 
-import { createLogger, createSafeHandler, handleBrandAssetRequest } from '@forge/sdk';
+import { createLogger, createSafeHandler, handleBrandAssetRequest, renderRouteNotFound } from '@forge/sdk';
 import { seedAuthDatabase } from './db/seed';
 import { closeAuthDb } from './db/db';
 import {
@@ -21,6 +21,7 @@ import {
   handleScopedHierarchy,
   handleSetPassword,
 } from './backend/api-handlers';
+import { handleIsManagerCheck } from './backend/hierarchy';
 import {
   handleGetOrgTree,
   handleListEmployees,
@@ -52,7 +53,6 @@ import { authTelemetry } from './backend/telemetry';
 import { applySecurityHeaders } from './backend/security-headers';
 import { renderLoginHtml } from './frontend/login-view';
 import { renderSetPasswordHtml } from './frontend/set-password-view';
-import { renderAstryxErrorHtml } from '@forge/ui';
 
 const logger = createLogger('auth-service');
 const PORT = Number(process.env.AUTH_PORT || process.env.PORT || 3004);
@@ -294,8 +294,15 @@ export function startAuthServer(port: number = PORT) {
         const prefix = path.startsWith('/auth/api/v1/auth/hierarchy')
           ? '/auth/api/v1/auth/hierarchy'
           : '/api/v1/auth/hierarchy';
-        const targetId = path.slice(prefix.length).replace(/^\//, '') || undefined;
-        response = await handleScopedHierarchy(req, targetId);
+        const sub = path.slice(prefix.length).replace(/^\//, '');
+
+        if (sub.endsWith('/is-manager') || sub === 'is-manager') {
+          const targetId = sub === 'is-manager' ? undefined : sub.replace(/\/is-manager$/, '');
+          response = await handleIsManagerCheck(req, targetId);
+        } else {
+          const targetId = sub || undefined;
+          response = await handleScopedHierarchy(req, targetId);
+        }
       } else {
         response = new Response('Method Not Allowed', { status: 405 });
       }
@@ -355,37 +362,16 @@ export function startAuthServer(port: number = PORT) {
     }
 
     // 404 Fallback
-    const acceptHeader = req.headers.get('accept') || '';
-    if (acceptHeader.includes('text/html') && !path.startsWith('/api/')) {
-      response = new Response(
-        renderAstryxErrorHtml({
-          statusCode: 404,
-          title: 'Page Not Found',
-          appName: 'Identity & Auth Gateway',
-          message: `The requested path ${path} does not exist on the auth service.`,
-          primaryActionText: '&larr; Sign In',
-          primaryActionHref: '/auth/login',
-          secondaryActionText: 'Platform Hub &rarr;',
-          secondaryActionHref: '/',
-        }),
-        {
-          status: 404,
-          headers: { 'Content-Type': 'text/html; charset=utf-8' },
-        }
-      );
-      return applySecurityHeaders(response);
-    }
-
-    response = new Response(
-      JSON.stringify({
-        type: 'https://tools.ietf.org/html/rfc7807',
-        title: 'Not Found',
-        status: 404,
-        detail: `The requested path ${path} does not exist on the auth service.`,
-      }),
-      { status: 404, headers: { 'Content-Type': 'application/problem+json' } }
-    );
-    return applySecurityHeaders(response);
+    const notFoundRes = renderRouteNotFound({
+      req,
+      appName: 'Identity & Auth Gateway',
+      message: `The requested path ${path} does not exist on the auth service.`,
+      primaryActionText: '← Sign In',
+      primaryActionHref: '/auth/login',
+      secondaryActionText: 'Platform Hub →',
+      secondaryActionHref: '/',
+    });
+    return applySecurityHeaders(notFoundRes);
   });
 
   const server = Bun.serve({

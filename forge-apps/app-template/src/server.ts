@@ -14,6 +14,7 @@ import {
 import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript, getAstryxToastScript, getAstryxTooltipScript } from './lib/ui';
 import { icons } from './lib/icons';
 import { handleDocsRoute } from './lib/docs-viewer';
+import { renderSubmoduleErrorHtml } from './lib/error-view';
 import type { AuthUser, ScopedHierarchyResponse } from './lib/types';
 
 const LOG_DIR = join(import.meta.dir, '..', 'logs');
@@ -156,6 +157,52 @@ export function startTemplateServer(port: number = PORT) {
         }
       } catch {
         // Fallback for tests
+      }
+
+      // Verify valid UI path
+      const normalizedPath = url.pathname.replace(/\/+$/, '') || '/';
+      if (normalizedPath !== '/' && normalizedPath !== '/apps/template') {
+        const traceId = req.headers.get('x-trace-id') || crypto.randomUUID();
+        const acceptHeader = req.headers.get('accept') || '';
+        if (acceptHeader.includes('application/json') || normalizedPath.startsWith('/api/')) {
+          return Response.json(
+            {
+              type: 'https://tools.ietf.org/html/rfc7807',
+              title: 'Not Found',
+              status: 404,
+              detail: `The requested path ${url.pathname} does not exist on App Template.`,
+              traceId,
+            },
+            {
+              status: 404,
+              headers: {
+                'Content-Type': 'application/problem+json',
+                'Cache-Control': 'no-store',
+                'X-Trace-Id': traceId,
+              },
+            }
+          );
+        }
+
+        return new Response(
+          renderSubmoduleErrorHtml({
+            statusCode: 404,
+            appName: 'Micro-App Template',
+            appBaseHref: '/apps/template/',
+            message: `The requested path ${url.pathname} was not found on this micro-app.`,
+            traceId,
+          }),
+          {
+            status: 404,
+            headers: {
+              'Content-Type': 'text/html; charset=utf-8',
+              'Cache-Control': 'no-store',
+              'X-Trace-Id': traceId,
+              'X-Content-Type-Options': 'nosniff',
+              'X-Frame-Options': 'DENY',
+            },
+          }
+        );
       }
 
       return new Response(renderAppHtml(auth.user, hierarchy), {

@@ -39,8 +39,10 @@ Astryx Design System v2.0.0 LTS tokens, CSS variables (`--forge-*`), dual-palett
 * `getAstryxToastScript()`: Custom glassmorphic toast notification manager (`astryxToast.show()`).
 * `getAstryxDropdownScript()`: Accessible custom dropdown selector engine with smart viewport collision detection (auto-flip/shift/clamp).
 
-### 5. Universal RFC 7807 Error Pages (`error-page.ts`)
-* `renderAstryxErrorPage(options)`: Standardized enterprise error screens for 400, 401, 403, 404, 429, 500, 502, and 503 with incident trace ID correlation.
+### 5. Universal Astryx Error & Status Page Engine (`error-page.ts` & `icons.ts`)
+* `renderAstryxErrorHtml(options)`: Standardized enterprise error screens for all 10 HTTP error codes (`400`, `401`, `403`, `404`, `405`, `429`, `500`, `502`, `503`, `504`) with interactive copyable SRE incident trace ID (`X-Trace-Id`).
+* `astryxIcons`: 100% precision 1.75px Lucide vector SVGs with zero OS emojis, supporting dynamic dark and light theme contrast.
+* SEO & Crawler Defense: Injected `<meta name="robots" content="noindex, nofollow, noarchive">` into all error pages.
 
 ---
 

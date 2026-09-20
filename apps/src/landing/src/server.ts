@@ -16,9 +16,10 @@ import {
   loadBrandConfig,
   handleBrandAssetRequest,
   handleServiceWorkerRequest,
+  renderRouteNotFound,
   type ServiceEntry,
 } from '@forge/sdk';
-import { getAstryxHeaderHtml, getAstryxFooterHtml, getAstryxStyles, getHeadStateScript, renderAstryxErrorHtml } from '@forge/ui';
+import { getAstryxHeaderHtml, getAstryxFooterHtml, getAstryxStyles, getHeadStateScript } from '@forge/ui';
 
 const logger = createLogger('landing-hub');
 const PORT = Number(process.env.LANDING_PORT || process.env.PORT || 3000);
@@ -244,22 +245,15 @@ export function createLandingHandler(port: number = PORT) {
     }
 
     if (url.pathname !== '/' && url.pathname !== '') {
-      const brand = loadBrandConfig();
-      return new Response(
-        renderAstryxErrorHtml({
-          statusCode: 404,
-          title: 'Page Not Found',
-          message: `The requested path "${url.pathname}" does not exist on ${brand.name} Platform.`,
-          primaryActionText: '&larr; Return to Platform Hub',
-          primaryActionHref: '/',
-          secondaryActionText: 'Workspace Portal &rarr;',
-          secondaryActionHref: '/portal',
-        }),
-        {
-          status: 404,
-          headers: { 'Content-Type': 'text/html; charset=utf-8' },
-        }
-      );
+      return renderRouteNotFound({
+        req,
+        appName: 'Platform Hub',
+        message: `The requested path "${url.pathname}" does not exist on this platform.`,
+        primaryActionText: '← Return to Platform Hub',
+        primaryActionHref: '/',
+        secondaryActionText: 'Workspace Portal →',
+        secondaryActionHref: '/portal',
+      });
     }
 
     const html = await resolveLandingHtml();

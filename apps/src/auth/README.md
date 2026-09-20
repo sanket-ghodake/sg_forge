@@ -59,6 +59,9 @@ Central authentication, generic organizational hierarchy, GCP-style IAM policy e
 | `POST` | `/api/v1/auth/refresh` | Rotate refresh token |
 | `POST` | `/api/v1/auth/logout` | Revoke active session |
 | `GET` | `/api/v1/auth/directory` | Fetch org tree nodes & user directory |
+| `GET` | `/api/v1/auth/hierarchy/:id` | Scoped upward management chain & direct subordinate reports |
+| `GET` | `/api/v1/auth/hierarchy/:id/is-manager` | Check if employee is a manager (>=1 reporting child in hierarchy) |
+| `GET` | `/api/v1/auth/hierarchy/me/is-manager` | Check calling session user manager status (Bearer or cookie) |
 | `GET` | `/api/v1/auth/org/managers` | List eligible reporting line managers |
 | `POST` | `/api/v1/auth/org/employees/import` | Ingest batch CSV / JSON employee rosters |
 | `GET` | `/api/v1/auth/org/setup` | Retrieve organization identity, EID config, node types & hierarchy nodes |

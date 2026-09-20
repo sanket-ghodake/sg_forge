@@ -1,0 +1,99 @@
+---
+title: Universal Error Handling & Subpath Routing Architecture
+description: Deep dive into the 10-status code Astryx error engine, edge interception, content negotiation, and anti-enumeration boundaries.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Resilient Multi-Tier Error & Status Routing"
+  analogy="When an airline passenger arrives at a closed terminal or incorrect gate, the airport does not silently lead them into a maintenance closet or show an unstyled error code. Digital signboards clearly identify the issue, maintain branded continuity, and provide immediate navigation to the departure hub. SG Forge achieves this at every network layer."
+  impact="Eliminates the Catch-All 200 Trap, prevents path enumeration attacks, and guarantees consistent high-aesthetic status screens across all 10 standard HTTP status codes."
+/>
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-UI-008" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-SDK-004" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-SDK-005" type="LLR" status="verified" />
+</div>
+
+## 1. Problem Definition: The "Catch-All 200 Trap"
+
+Prior to the unified error architecture, requests to unhandled microservice subpaths (such as `/portal/invalid-path`, `/devcenter/unknown`, or `/apps/unregistered`) suffered from the Catch-All 200 Trap:
+1. **Microservice Dashboards as Default Catch-Alls**: Microservices treated any unmatched URL path as a general dashboard request and returned HTTP 200 OK with their main HTML canvas.
+2. **Reverse Proxy Fallthrough**: In the ingress gateway, requests for unregistered microservices fell through to the platform landing handler, masking nonexistent routes.
+3. **Missing Status Code Parity**: Status codes such as `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `405 Method Not Allowed`, `429 Rate Limited`, and `504 Gateway Timeout` lacked cohesive visual presentation and fallback automation.
+
+## 2. Multi-Tier Error Routing Topology
+
+The platform enforces a three-tier defensive hierarchy to intercept, categorize, and render errors:
+
+```
+[ Incoming Request ]
+        │
+        ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 1. EDGE LAYER (Caddy Gateway)                               │
+│  - Pre-rendered Static Error Pages (/etc/caddy/errors/)     │
+│  - Direct Static Delivery: /errors/*                        │
+│  - Unregistered /apps/* Catch-All (Edge 404 Interception)   │
+│  - Upstream Service Outage Fallback: 502 / 503 / 504        │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+        ┌──────────────────────┴──────────────────────┐
+        ▼                                             ▼
+┌────────────────────────────────┐    ┌────────────────────────────────┐
+│ 2. CORE PLATFORM SERVICES      │    │ 3. AUTONOMOUS MICRO-APPS       │
+│  - apps/src/{portal,auth,...}  │    │  - forge-apps/{telemetry,...}  │
+│  - @forge/sdk/route-boundary   │    │  - Portable 4-Library Engine   │
+│  - Astryx Tokens (@forge/ui)   │    │  - Standalone error-view.ts    │
+│  - Anti-Enumeration (AWS IAM)  │    │  - Local 404 Subpath Intercept │
+│  - RFC 7807 / HTML Negotiation │    │  - Zero External Monorepo Deps │
+└────────────────────────────────┘    └────────────────────────────────┘
+```
+
+## 3. Tech Giant Engineering Standards Adopted
+
+### Stripe / GitHub Content Negotiation Standard
+Every route boundary in `@forge/sdk` (`renderRouteNotFound`, `renderStatusError`) inspects incoming request headers:
+* **API Invocations**: Requests matching `Accept: application/json` or paths prefixed with `/api/` receive structured RFC 7807 Problem Details (`application/problem+json`) with `status`, `title`, `detail`, and `traceId`.
+* **Browser Navigation**: Requests from standard web browsers receive the high-aesthetic Astryx error screen.
+* **Cache Immunity**: All error responses enforce `Cache-Control: no-cache, no-store, must-revalidate` to prevent intermediate proxies or CDNs from caching transient error states.
+
+### AWS / Google IAM Anti-Enumeration Standard
+In protected workspaces such as the Canvas Portal (`/portal/*`) and RBAC-governed submodules:
+* **Unauthenticated Scans**: If an unauthenticated actor probes an invalid subpath (e.g. `GET /portal/admin/hidden-module`), the server responds with an HTTP 302 Redirect to `/auth/login?return_url=...`. Attackers cannot determine whether a private route exists or does not exist without valid credentials.
+* **Authenticated Requests**: Authenticated operators accessing an invalid subpath receive the Astryx 404 page with a direct link back to their active workspace.
+
+### Google SRE Incident Trace Correlation Standard
+* Every error response, whether JSON or HTML, generates or propagates an immutable `X-Trace-Id` (UUIDv4).
+* The Astryx error screen displays an interactive **Incident Trace** badge. Operators or end users can click the badge to copy the trace ID to their clipboard in one gesture to facilitate rapid log triaging.
+
+### Cloudflare Edge Fallback Standard
+* `scripts/generate-error-pages.ts` compiles all 10 HTTP status pages at build/startup time into `proxy/errors/`.
+* If a backend service crashes, deploys, or restarts, Caddy immediately serves the pre-rendered Astryx error screen (`502.html` or `503.html`) without executing any upstream Bun runtime code.
+
+## 4. The 10 Supported HTTP Status Codes
+
+| Code | Status Title | Lucide Vector SVG | Primary Action | Default Recovery Route |
+| :--- | :--- | :--- | :--- | :--- |
+| **400** | Bad Request | `alertTriangle` | Return to Platform Hub | `/` |
+| **401** | Unauthorized | `shieldAlert` | Sign In | `/auth/login` |
+| **403** | Forbidden | `shieldAlert` | Return to Portal | `/portal` (Secondary: `/auth/login`) |
+| **404** | Page Not Found | `search` | Return to Platform Hub | `/` (Secondary: `/portal`) |
+| **405** | Method Not Allowed | `slash` | Return to Platform Hub | `/` |
+| **429** | Rate Limited | `clock` | Try Again | `window.location.reload()` |
+| **500** | Internal Server Error | `zap` | Return to Platform Hub | `/` (Secondary: Reload) |
+| **502** | Bad Gateway | `powerOff` | Retry Connection | `window.location.reload()` |
+| **503** | Service Unavailable | `wrench` | Check Again | `window.location.reload()` |
+| **504** | Gateway Timeout | `clock` | Retry Connection | `window.location.reload()` |
+
+## 5. SEO & Crawl Defense
+
+All rendered error pages contain:
+```html
+<meta name="robots" content="noindex, nofollow, noarchive">
+```
+This guarantees search engine web spiders never index error URLs, transient maintenance spikes, or mistyped operator links.

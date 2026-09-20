@@ -1,0 +1,32 @@
+---
+title: LLR-AUTH-012 - Hierarchical Manager Detection & Direct Report Verification
+description: Low-level requirement defining real-time O(1) detection of manager status based purely on organizational tree children.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-012" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. Receive target employee identifier via route parameter (`:id`), query string (`?user_id=...` / `?email=...`), or session token (`/me`).
+2. Resolve user record in `auth_users` using strictly parameterized queries to prevent SQL injection.
+3. Compute direct subordinate report count $\text{count} = \sum [ r.\text{related\_to\_id} = u.\text{id} \land r.\text{is\_primary} = 1 ]$ in `auth_employee_relationships`.
+4. Assert boolean condition: $\text{isManager} \iff \text{count} \ge 1$.
+5. Return standardized `EmployeeManagerCheckResponse` payload with HTTP 200, or RFC 7807 problem details (401 for unauthenticated `/me`, 404 for non-existent employee).
+
+## 2. Safety & Verification Invariants
+
+* **Designation Independence**: Job title strings, designations, or IAM role names MUST NEVER influence manager status. Manager state is exclusively derived from direct child nodes in the reporting hierarchy.
+* **Bounded Latency**: The calculation must execute as an indexed $O(1)$ count query without recursing upward management chains.
+* **Authentication Boundary**: Calling `/me/is-manager` requires an active, unexpired session token or returns RFC 7807 401.
+* **Zero PII Leakage**: The response returns only `status`, `userId`, `isManager`, and `directReportsCount` without leaking credentials or unrelated user metadata.
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-102" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/auth/src/backend/hierarchy.ts`
+* **Verified in Test Suite**: `apps/src/auth/test/unit/hierarchy.test.ts`, `apps/src/auth/test/integration/hierarchy-api.test.ts`, `apps/src/auth/test/security/hierarchy-security.test.ts`

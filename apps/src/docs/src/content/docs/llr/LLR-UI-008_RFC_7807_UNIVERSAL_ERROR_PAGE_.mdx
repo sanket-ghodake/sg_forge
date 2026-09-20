@@ -1,6 +1,6 @@
 ---
-title: LLR-UI-008 - RFC 7807 Universal Error Page Template Renderer
-description: Low-level requirement rendering structured, accessible error screens for 400/403/404/500 faults.
+title: LLR-UI-008 - Universal Astryx Error & Status Page Engine
+description: Low-level requirement rendering structured, accessible error screens across all 10 standard HTTP status codes with zero emojis, SEO defense, and RFC 7807 content negotiation.
 ---
 
 import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
@@ -12,19 +12,40 @@ import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
 
 ## 1. Algorithmic Specification
 
-1. Receive RFC 7807 problem object: `{ type, title, status, detail, instance, traceId }`
-2. Render Astryx glassmorphic card with status badge and user-friendly explanation
-3. Display copyable Trace ID pill for fast SRE log correlation
-4. Provide 'Return to Dashboard' and 'Retry' recovery action buttons
-5. Never render internal raw stack traces or SQL snippets
+1. **Exhaustive Status Matrix**: Support all 10 standard HTTP error codes: `400`, `401`, `403`, `404`, `405`, `429`, `500`, `502`, `503`, `504`.
+2. **Universal Content Negotiation**: Via `@forge/sdk/route-boundary.ts`:
+   - If request header includes `Accept: application/json` or URL starts with `/api/`, return RFC 7807 `application/problem+json`.
+   - Otherwise, render Astryx high-aesthetic HTML error screen with `Cache-Control: no-cache, no-store, must-revalidate`.
+3. **Zero Raw OS Emojis**: Render all status badges and buttons using 100% crisp Lucide 1.75px stroke vector SVGs (`astryxIcons` in `@forge/ui/icons.ts`).
+4. **SRE Traceability & Incident Correlation**: Display interactive 1-click copyable `X-Trace-Id` badge.
+5. **Anti-Enumeration Defense**: In protected routes (`/portal/*`), unauthenticated requests to unknown subpaths redirect to `/auth/login?return_url=...`.
+6. **Edge Pre-Rendering**: Pre-render all 10 error pages into `proxy/errors/` at startup to protect against upstream service downtime.
+7. **SEO Spiders Defense**: Inject `<meta name="robots" content="noindex, nofollow, noarchive">` into every error page.
 
 ## 2. Safety & Verification Invariants
 
-* **Error UI must be fully responsive across mobile (320px) to desktop displays**
-* **Trace ID must always be visible to end users for troubleshooting support**
+* **Universal Dual-Theme Parity**: Error screens must seamlessly support dark and light themes using `--forge-*` CSS variables without contrast regressions.
+* **Smart Viewport Containment**: Fluid layout down to 320px mobile viewports with zero horizontal scrolling.
+* **Never Leak Sensitive Internals**: Stack traces, SQL statements, and internal server paths are strictly omitted.
 
 ## 3. Bidirectional Traceability
 
 * **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-UI-401" type="HLR" status="verified" />
-* **Implemented in Source**: `apps/src/ui/src/error-page.ts`
-* **Verified in Test Suite**: `apps/src/ui/test/unit/error-page.test.ts`
+* **Implemented in Source**:
+  - `apps/src/ui/src/error-page.ts`
+  - `apps/src/sdk/src/route-boundary.ts`
+  - `scripts/generate-error-pages.ts`
+  - `scripts/generate-proxy.ts`
+  - `forge-apps/telemetry/src/lib/error-view.ts`
+  - `forge-apps/app-template/src/lib/error-view.ts`
+* **Verified in Test Suite**:
+  - `apps/src/ui/test/unit/error-page.test.ts`
+  - `apps/src/sdk/test/unit/route-boundary.test.ts`
+  - `apps/src/portal/test/integration/route-not-found.test.ts`
+  - `apps/src/dev-dashboard/test/integration/route-not-found.test.ts`
+  - `apps/src/dev-hub/test/integration/route-not-found.test.ts`
+  - `apps/src/auth/test/integration/route-not-found.test.ts`
+  - `forge-apps/telemetry/test/integration/route-not-found.test.ts`
+  - `forge-apps/app-template/test/integration/route-not-found.test.ts`
+  - `scripts/test/fallback-server.test.ts`
+  - `apps/test/e2e/playwright/error-status-pages.pw.ts`

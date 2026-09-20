@@ -9,6 +9,8 @@ servers:
 tags:
   - name: Health
     description: Service healthcheck probes
+  - name: Auth
+    description: Identity, authentication and organizational hierarchy APIs
 paths:
   /health:
     get:
@@ -62,3 +64,78 @@ paths:
                   status:
                     type: string
                     example: ok
+  /api/v1/auth/hierarchy/{id}/is-manager:
+    get:
+      operationId: checkEmployeeIsManager
+      tags:
+        - Auth
+      summary: Check if employee is a manager by hierarchy
+      description: Returns boolean isManager based on whether employee has at least one subordinate child in the corporate hierarchy.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Employee user ID, email address, or 'me'
+          schema:
+            type: string
+            example: usr-bob-lead
+      responses:
+        '200':
+          description: Manager detection result
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - userId
+                  - isManager
+                  - directReportsCount
+                properties:
+                  status:
+                    type: string
+                    example: SUCCESS
+                  userId:
+                    type: string
+                    example: usr-bob-lead
+                  isManager:
+                    type: boolean
+                    example: true
+                  directReportsCount:
+                    type: integer
+                    example: 3
+        '401':
+          description: Unauthorized when calling /me without valid session
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                required:
+                  - title
+                  - status
+                  - detail
+                properties:
+                  title:
+                    type: string
+                  status:
+                    type: integer
+                  detail:
+                    type: string
+        '404':
+          description: Employee not found in organizational hierarchy
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                required:
+                  - title
+                  - status
+                  - detail
+                properties:
+                  title:
+                    type: string
+                  status:
+                    type: integer
+                  detail:
+                    type: string
+

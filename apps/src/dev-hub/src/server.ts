@@ -4,7 +4,7 @@
  * Astryx Enterprise Baseline (v2.0.0 LTS)
  */
 
-import { createLogger, createSafeHandler, handleBrandAssetRequest, loadServiceRegistry } from '@forge/sdk';
+import { createLogger, createSafeHandler, handleBrandAssetRequest, loadServiceRegistry, renderRouteNotFound } from '@forge/sdk';
 import { renderDevHubHtml } from './frontend/hub-view';
 import { PLATFORM_API_CATALOG } from './frontend/sections/api-catalog-section';
 
@@ -49,6 +49,19 @@ export function startDevHubServer(port: number = PORT) {
           'Content-Type': 'application/json; charset=utf-8',
           'Cache-Control': 'no-cache',
         },
+      });
+    }
+
+    // 2b. Route Boundary: 404 for invalid page subpaths
+    const normPath = url.pathname.replace(/^\/gateway/, '') || '/';
+    if (normPath !== '/' && normPath !== '') {
+      return renderRouteNotFound({
+        req,
+        appName: 'Developer Hub',
+        primaryActionText: 'Developer Hub',
+        primaryActionHref: '/gateway',
+        secondaryActionText: 'Platform Hub &rarr;',
+        secondaryActionHref: '/',
       });
     }
 
