@@ -23,4 +23,24 @@ describe('Tier 1 Unit: Service Registry Loader [LLR-SDK-001] [HLR-SDK-301]', () 
       expect(portal.port).toBe(3001);
     }
   });
+
+  it('Arrange, Act, Assert: explicitly commented APP_* keys are never resurrected by process.env', () => {
+    // Arrange: Create a temporary env file with a commented out APP_MOCK
+    const tempEnv = '/tmp/test-commented.env';
+    const content = '# APP_MOCK="Mock App|8999|/apps/mock|Tools|General|app-mock"\n';
+    require('node:fs').writeFileSync(tempEnv, content, 'utf8');
+
+    // Act: Set process.env.APP_MOCK and load with explicit envPath
+    process.env.APP_MOCK = 'Mock App|8999|/apps/mock|Tools|General|app-mock';
+    const services = loadServiceRegistry({ envPath: tempEnv });
+
+    // Assert: APP_MOCK must not be included
+    const mockApp = services.find((s) => s.id === 'mock');
+    expect(mockApp).toBeUndefined();
+
+    // Cleanup
+    delete process.env.APP_MOCK;
+    try { require('node:fs').unlinkSync(tempEnv); } catch {}
+  });
 });
+

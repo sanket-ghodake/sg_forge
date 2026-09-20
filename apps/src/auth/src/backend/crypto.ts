@@ -17,6 +17,7 @@ import {
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { resolveAuthDataDir } from '../db/db';
+import { loadServiceRegistry } from '@forge/sdk';
 
 /**
  * JwtHeader
@@ -222,7 +223,7 @@ export function signJwt(
 
 /**
  * verifyJwt
- * @requirements [HLR-AUTH-101] [LLR-AUTH-001] [LLR-AUTH-006]
+ * @requirements [HLR-AUTH-101] [LLR-AUTH-001] [LLR-AUTH-006] [LLR-AUTH-013]
  */
 export function verifyJwt(token: string): { valid: boolean; payload?: JwtPayload; error?: string } {
   try {
@@ -253,6 +254,27 @@ export function verifyJwt(token: string): { valid: boolean; payload?: JwtPayload
 
     if (payload.exp && payload.exp < now) {
       return { valid: false, error: 'Token expired' };
+    }
+
+    // Option A Zero-Trust Service Registration Validation:
+    // Verify micro-app service tokens match an active registered service in .env
+    const sub = payload.sub || '';
+    const principalType = (payload as any).principal_type;
+    if (principalType === 'SERVICE' || sub.startsWith('internal-service-')) {
+      const isCoreWorker = sub === 'internal-service-worker' || sub === 'backup-runner' || sub === 'telemetry-agent';
+      if (!isCoreWorker && sub.startsWith('internal-service-')) {
+        const appId = sub.replace(/^internal-service-/, '').toLowerCase();
+        const services = loadServiceRegistry();
+        const registered = services.find((s) => s.id === appId);
+        if (!registered || registered.status === 'disabled') {
+          if (process.env.NODE_ENV === 'production' || process.env.ALLOW_UNREGISTERED_SERVICES !== 'true') {
+            return {
+              valid: false,
+              error: `Application '${appId}' is not registered in .env or is disabled. Service token rejected.`,
+            };
+          }
+        }
+      }
     }
 
     return { valid: true, payload };

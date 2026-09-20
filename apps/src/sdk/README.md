@@ -35,7 +35,7 @@ Enterprise Foundation SDK suite for **SG Forge** microservices (`apps/src/*`) an
 * `createSafeHandler(serviceName, handler, customLogDir?)`: Wraps Bun/Node HTTP request handlers in standard RFC 7807 problem details (`application/problem+json`) with immutable `x-trace-id` propagation and execution timing.
 
 ### 3. Zero-Trust SSO Auth & RBAC Gate (`auth-guard.ts`)
-* `verifySessionToken(token)`: High-performance asymmetric Ed25519 signature validation (<0.1ms without central DB hit).
+* `verifySessionToken(token)`: High-performance asymmetric Ed25519 signature validation (<0.1ms without central DB hit). Automatically validates internal service tokens (`principal_type: "SERVICE"`) against active registry entries.
 * `authGuard(req, options)`: Zero-Trust gateway middleware with direct-jump `return_url` preservation, public path bypasses, and role/permission gates with Astryx 403 fallback.
 
 ### 4. Directory & Scoped Employee Hierarchy Client (`directory-client.ts`)
@@ -45,7 +45,7 @@ Enterprise Foundation SDK suite for **SG Forge** microservices (`apps/src/*`) an
 * `isManagerOf(candidateManagerId, employeeId, baseUrl?)`: Validates whether managerId exists in the employee's upward chain of command.
 
 ### 5. Dynamic Ingress & Service Registry (`registry.ts`)
-* `loadServiceRegistry(envPath?)`: Parses declarative `.env` app registrations (`APP_<NAME>`) to derive service topology, ports, health endpoints, and container naming.
+* `loadServiceRegistry(envPath?)`: Parses declarative `.env` app registrations (`APP_<NAME>`) to derive service topology, ports, health endpoints, and container naming. Explicitly preserves developer intent by ignoring commented lines (`# APP_*`) even if exported in inherited shell `process.env`.
 
 ### 6. Micro-App Client & Browser Bridge (`client-bridge.ts` & `browser-bridge.ts`)
 * `ForgeClient.init(options)`: `postMessage` handshake bridge between micro-app iframes and parent Portal for user context, auth tokens, theme synchronization, and authenticated `fetch()`.

@@ -22,8 +22,8 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     container_name: ${CONTAINER_PREFIX:-${PROJECT_NAME:-forge}}-template-dev
-    ports:
-      - "${PORT:-8099}:${PORT:-8099}"
+    expose:
+      - "${PORT:-8099}"
     env_file:
       - path: .env
         required: false

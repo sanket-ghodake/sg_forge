@@ -7,7 +7,7 @@
 
 ---
 
-## ⚡ 1. PRE-FLIGHT & PRE-COMMIT VERIFICATION GATE (21 CHECKS)
+## ⚡ 1. PRE-FLIGHT & PRE-COMMIT VERIFICATION GATE (22 CHECKS)
 Before writing code, running commands, or staging changes in this microservice:
 1. [ ] **Command Execution via Submodule Runner**: Prefer `./run.sh test`, `./run.sh dev`, `./run.sh verify`, or prefix with `rtk` if installed.
 2. [ ] **Zero Monorepo Bleed & 100% Autonomous Independence**: All files, code, tools, and dependencies MUST be self-contained within this repository. ZERO relative traversal imports to `../../apps/src/*` or central monorepo folders. Submodules can be cloned, built, tested, and deployed to external repositories or machines with zero dependency on the main SG Forge monorepo.
@@ -40,6 +40,11 @@ Before writing code, running commands, or staging changes in this microservice:
 19. [ ] **Complexity & Function Line Cap**: Lizard complexity inspection (CCN <= 10, lines <= 60) via `./run.sh complexity`.
 20. [ ] **Container & Config Security (Trivy)**: Trivy container and configuration audit via `./run.sh trivy`.
 21. [ ] **Supply Chain & Vulnerability Audit (OSV-Scanner / Syft)**: OSV-Scanner dependency vulnerability inspection via `./run.sh vuln` and CycloneDX 1.5 SBOM generation via `./run.sh sbom`.
+22. [ ] **Mandatory Code-Doc-Impact Synchronization Gate**: Whenever any source code, API route, database schema, or configuration is altered or added in this microservice, the AI agent MUST atomically inspect and update:
+    - **Living Documentation**: Corresponding LLRs in `docs/llr/` (or create new LLRs if a new capability is introduced).
+    - **Folder Documentation (READMEs)**: Colocated service and directory `README.md` files describing current architecture, routes, or behavior (every single folder maintains its own `README.md`).
+    - **API Specifications & Contracts**: OpenAPI schemas in `docs/api/` and contract definitions.
+    - **Impacted Dependent Files**: Reverse callers, environment configurations (`.env.example`), test fixtures (`test/`), database schemas/migrations (`src/db/`), and client types in the SAME session before completing the task. Modifying code without updating living documentation and impacted files is strictly prohibited and constitutes an immediate task failure.
 
 ---
 

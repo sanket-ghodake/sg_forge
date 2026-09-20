@@ -48,6 +48,16 @@ Central authentication, generic organizational hierarchy, GCP-style IAM policy e
 
 ---
 
+## 🛡️ Zero-Trust Service Identity Gate (Option A Standard)
+
+In addition to user SSO sessions, Central Auth validates internal inter-service tokens (`principal_type: "SERVICE"` or `sub: "internal-service-<appId>"`):
+* **Active Registry Verification**: Every micro-app token must originate from an active registered service declared in `.env` (`APP_<ID>=...`).
+* **Decommissioned / Rogue Rejection**: If an application is commented out, disabled, or missing from the service registry, token verification strictly fails (`403 Forbidden: Application '<appId>' is not registered in .env or is disabled`).
+* **Core Workers**: Infrastructure background tasks (`internal-service-worker`, `backup-runner`, `telemetry-agent`) operate under elevated system permissions.
+* **Development Override**: In non-production environments, setting `ALLOW_UNREGISTERED_SERVICES=true` permits unregistered local scripts while emitting an audit warning.
+
+---
+
 ## 📡 API Endpoints
 
 | Method | Path | Description |

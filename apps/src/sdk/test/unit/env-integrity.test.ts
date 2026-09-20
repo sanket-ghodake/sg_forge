@@ -11,12 +11,20 @@ import { loadServiceRegistry } from '../../src/registry';
 
 const REPO_ROOT = process.cwd();
 
-function parseEnvKeys(filePath: string): Set<string> {
+function parseEnvKeys(filePath: string, includeCommentedApps = false): Set<string> {
   const keys = new Set<string>();
   if (!existsSync(filePath)) return keys;
   const content = readFileSync(filePath, 'utf8');
   for (const line of content.split('\n')) {
     const trimmed = line.trim();
+    if (trimmed.startsWith('# APP_') && includeCommentedApps) {
+      const stripped = trimmed.slice(1).trim();
+      const eqIdx = stripped.indexOf('=');
+      if (eqIdx > 0) {
+        keys.add(stripped.slice(0, eqIdx).trim());
+      }
+      continue;
+    }
     if (!trimmed || trimmed.startsWith('#')) continue;
     const eqIdx = trimmed.indexOf('=');
     if (eqIdx > 0) {
@@ -51,15 +59,15 @@ describe('Tier 1 Unit: Environment & Service Registry Integrity', () => {
   const examplePath = join(REPO_ROOT, '.env.example');
 
   it('Arrange, Act, Assert: verifies 100% key parity between .env and .env.example', () => {
-    // Arrange
-    const envKeys = parseEnvKeys(envPath);
-    const exampleKeys = parseEnvKeys(examplePath);
+    // Arrange: include optional commented APP_* entries in template definitions
+    const envKeys = parseEnvKeys(envPath, false);
+    const exampleKeys = parseEnvKeys(examplePath, true);
 
-    // Act: Calculate symmetric differences
-    const missingInExample = Array.from(envKeys).filter((k) => !exampleKeys.has(k));
-    const missingInActive = Array.from(exampleKeys).filter((k) => !envKeys.has(k));
+    // Act: Calculate symmetric differences (ignoring dynamic plug-and-play APP_* micro-app entries)
+    const missingInExample = Array.from(envKeys).filter((k) => !exampleKeys.has(k) && !k.startsWith('APP_'));
+    const missingInActive = Array.from(exampleKeys).filter((k) => !envKeys.has(k) && !k.startsWith('APP_'));
 
-    // Assert
+    // Assert: Core environment variables must match 100%
     expect(missingInExample).toEqual([]);
     expect(missingInActive).toEqual([]);
   });

@@ -45,3 +45,17 @@ All exported functions, classes, and interfaces MUST declare their traceability 
 ## 4. Automated Verification Gate
 - Run `rtk ./run.sh docs:coverage` before staging changes.
 - Pre-commit gate (Gate 29) automatically scans staged TypeScript files and enforces that new exported symbols carry valid requirement tags and existing documents.
+
+---
+
+## 5. Mandatory Code-Doc-Impact Synchronization Invariant
+Whenever any source code, API route, auth boundary, database schema, or configuration is altered or added:
+1. **Identify Impacted Documentation & Files**:
+   - **Living Requirements**: Check `apps/src/docs/src/content/docs/llr/` (create new or update existing LLR specs).
+   - **Folder Documentation**: Update colocated service/module `README.md` files (every single folder maintains its own README.md per Pre-Flight Gate check 8).
+   - **API Specifications**: Update OpenAPI schemas (`apps/src/docs/api/openapi.yaml`) and contract definitions.
+   - **Impacted Dependent Files**: Inspect reverse callers, configs (`.env.example`), proxy configs (`proxy/`, `scripts/generate-proxy.ts`), test fixtures, and client libraries.
+2. **Synchronous Updates**: Update all impacted documentation and dependent files in the SAME session as the code change. Never leave code modified without updating docs, and never defer documentation updates to future sessions.
+3. **Traceability & Test Parity**: Ensure requirement tags match an active LLR, update test mappings in `scripts/link-test-requirements.ts`, and run `rtk ./run.sh docs:coverage` to guarantee 100% code-to-doc parity before task completion.
+
+

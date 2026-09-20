@@ -9,7 +9,7 @@
 import { createHash, createPrivateKey, createPublicKey, sign, verify } from 'node:crypto';
 import { renderAstryxErrorHtml } from '@forge/ui';
 import type { AuthGuardOptions, AuthGuardResult, AuthUser } from '@forge/types';
-import { isAppDisabled } from './registry';
+import { isAppDisabled, loadServiceRegistry } from './registry';
 import { loadBrandConfig } from './branding';
 
 /**
@@ -79,7 +79,7 @@ function getVerificationPublicKey(): string {
 
 /**
  * Verifies Ed25519 or HMAC JWT session token signature and expiration claims.
- * @requirements [HLR-AUTH-101] [LLR-AUTH-001]
+ * @requirements [HLR-AUTH-101] [LLR-AUTH-001] [LLR-AUTH-013]
  */
 export function verifySessionToken(token: string): { valid: boolean; payload?: any; error?: string } {
   try {
@@ -99,6 +99,27 @@ export function verifySessionToken(token: string): { valid: boolean; payload?: a
 
     if (payload.exp && payload.exp < now) {
       return { valid: false, error: 'Token expired' };
+    }
+
+    // Option A Zero-Trust Service Registration Validation:
+    // Verify micro-app service tokens match an active registered service in .env
+    const sub = payload.sub || '';
+    const principalType = payload.principal_type;
+    if (principalType === 'SERVICE' || sub.startsWith('internal-service-')) {
+      const isCoreWorker = sub === 'internal-service-worker' || sub === 'backup-runner' || sub === 'telemetry-agent';
+      if (!isCoreWorker && sub.startsWith('internal-service-')) {
+        const appId = sub.replace(/^internal-service-/, '').toLowerCase();
+        const services = loadServiceRegistry();
+        const registered = services.find((s) => s.id === appId);
+        if (!registered || registered.status === 'disabled') {
+          if (process.env.NODE_ENV === 'production' || process.env.ALLOW_UNREGISTERED_SERVICES !== 'true') {
+            return {
+              valid: false,
+              error: `Application '${appId}' is not registered in .env or is disabled. Service token rejected.`,
+            };
+          }
+        }
+      }
     }
 
     return { valid: true, payload };

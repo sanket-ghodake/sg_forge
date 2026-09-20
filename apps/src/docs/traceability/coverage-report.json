@@ -1,10 +1,10 @@
 {
   "timestamp": "2026-09-15T16:21:00.000Z",
-  "totalExportedSymbols": 853,
-  "documentedSymbols": 674,
-  "symbolCoveragePercent": 79,
-  "totalRequirements": 85,
-  "implementedRequirements": 79,
+  "totalExportedSymbols": 855,
+  "documentedSymbols": 676,
+  "symbolCoveragePercent": 79.1,
+  "totalRequirements": 86,
+  "implementedRequirements": 80,
   "verifiedRequirements": 80,
   "orphanRequirements": [
     "LLR-PORTAL-001",
@@ -3014,7 +3014,7 @@
       "name": "JwtHeader",
       "kind": "interface",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 25,
+      "line": 26,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3027,7 +3027,7 @@
       "name": "JwtPayload",
       "kind": "interface",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 35,
+      "line": 36,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3040,7 +3040,7 @@
       "name": "JwkKey",
       "kind": "interface",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 54,
+      "line": 55,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3053,7 +3053,7 @@
       "name": "hashPassword",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 72,
+      "line": 73,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3066,7 +3066,7 @@
       "name": "verifyPassword",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 85,
+      "line": 86,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3079,7 +3079,7 @@
       "name": "generateSecureToken",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 100,
+      "line": 101,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3092,7 +3092,7 @@
       "name": "hashToken",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 108,
+      "line": 109,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3105,7 +3105,7 @@
       "name": "getOrInitAuthKeys",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 128,
+      "line": 129,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3118,7 +3118,7 @@
       "name": "signJwt",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 185,
+      "line": 186,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -3131,12 +3131,13 @@
       "name": "verifyJwt",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 227,
+      "line": 228,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
         "LLR-AUTH-001",
-        "LLR-AUTH-006"
+        "LLR-AUTH-006",
+        "LLR-AUTH-013"
       ],
       "missingRequirementFiles": []
     },
@@ -3144,7 +3145,7 @@
       "name": "getPublicJwks",
       "kind": "function",
       "file": "apps/src/auth/src/backend/crypto.ts",
-      "line": 268,
+      "line": 290,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
@@ -5056,7 +5057,7 @@
       "name": "isBuiltinLandingActive",
       "kind": "function",
       "file": "apps/src/sdk/src/registry.ts",
-      "line": 229,
+      "line": 242,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -5861,7 +5862,8 @@
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-101",
-        "LLR-AUTH-001"
+        "LLR-AUTH-001",
+        "LLR-AUTH-013"
       ],
       "missingRequirementFiles": []
     },
@@ -5869,7 +5871,7 @@
       "name": "authGuard",
       "kind": "function",
       "file": "apps/src/sdk/src/auth-guard.ts",
-      "line": 143,
+      "line": 164,
       "hasDoc": true,
       "requirements": [
         "HLR-AUTH-102",
@@ -8840,7 +8842,7 @@
       "name": "linkTestRequirements",
       "kind": "function",
       "file": "scripts/link-test-requirements.ts",
-      "line": 83,
+      "line": 84,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -8864,6 +8866,33 @@
       "missingRequirementFiles": [
         "HLR-NET-001"
       ]
+    },
+    {
+      "name": "reloadRunningProxyGateway",
+      "kind": "function",
+      "file": "scripts/generate-proxy.ts",
+      "line": 302,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-301",
+        "LLR-SDK-005",
+        "HLR-NET-001"
+      ],
+      "missingRequirementFiles": [
+        "HLR-NET-001"
+      ]
+    },
+    {
+      "name": "auditOrphanContainers",
+      "kind": "function",
+      "file": "scripts/generate-proxy.ts",
+      "line": 320,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-301",
+        "LLR-SUB-001"
+      ],
+      "missingRequirementFiles": []
     },
     {
       "name": "processAndGenerateLogo",
@@ -9149,7 +9178,7 @@
       "name": "checkDynamic5TierArchitecture",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 37,
+      "line": 39,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9165,7 +9194,7 @@
       "name": "checkArchitectureBoundaries",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 82,
+      "line": 84,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9179,7 +9208,7 @@
       "name": "checkCircularDependencies",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 102,
+      "line": 104,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9193,7 +9222,7 @@
       "name": "checkTypeCoverage",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 121,
+      "line": 123,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9207,7 +9236,7 @@
       "name": "checkShellScripts",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 143,
+      "line": 145,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9221,7 +9250,7 @@
       "name": "checkAxeAccessibility",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 162,
+      "line": 164,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9235,7 +9264,7 @@
       "name": "checkSemgrepInvariants",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 181,
+      "line": 183,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9249,7 +9278,7 @@
       "name": "checkOsvVulnerabilities",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 200,
+      "line": 202,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9263,7 +9292,7 @@
       "name": "checkTrivySecurity",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 250,
+      "line": 252,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9277,7 +9306,7 @@
       "name": "checkSpectralContracts",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 276,
+      "line": 278,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9291,7 +9320,7 @@
       "name": "checkCodeComplexity",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 298,
+      "line": 300,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9305,7 +9334,7 @@
       "name": "checkDependencyLicenses",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 307,
+      "line": 309,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9319,7 +9348,7 @@
       "name": "checkSyftSbomIntegrity",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 376,
+      "line": 378,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9333,7 +9362,7 @@
       "name": "checkForgeAppSubmoduleCompliance",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 406,
+      "line": 408,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -9347,7 +9376,7 @@
       "name": "checkSystemTraceability",
       "kind": "function",
       "file": "scripts/verify-checks.ts",
-      "line": 510,
+      "line": 512,
       "hasDoc": true,
       "requirements": [
         "SR-GATE-001",
@@ -10040,6 +10069,7 @@
       "docFile": "apps/src/docs/src/content/docs/operations/deployment-quickstart.mdx",
       "implementedIn": [
         "scripts/generate-proxy.ts:20#generateCaddyfile",
+        "scripts/generate-proxy.ts:302#reloadRunningProxyGateway",
         "scripts/docker-resolver.ts:18#GatewayConfig",
         "scripts/docker-resolver.ts:45#getGatewayConfig",
         "scripts/docker-resolver.ts:266#printBanner"
@@ -10064,8 +10094,9 @@
         "apps/src/docs/src/server.ts:142#startDocsServer",
         "apps/src/docs/src/index.ts:14#docsService",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
-        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
+        "apps/src/sdk/src/registry.ts:242#isBuiltinLandingActive",
         "scripts/generate-proxy.ts:20#generateCaddyfile",
+        "scripts/generate-proxy.ts:302#reloadRunningProxyGateway",
         "scripts/docker-resolver.ts:18#GatewayConfig",
         "scripts/docker-resolver.ts:45#getGatewayConfig",
         "scripts/docker-resolver.ts:95#resolveCoreServices",
@@ -10086,7 +10117,7 @@
       "type": "SR",
       "docFile": "apps/src/docs/src/content/docs/operations/branding-and-logos.mdx",
       "implementedIn": [
-        "scripts/link-test-requirements.ts:83#linkTestRequirements",
+        "scripts/link-test-requirements.ts:84#linkTestRequirements",
         "scripts/generate-logo.ts:44#processAndGenerateLogo",
         "scripts/create-app.ts:26#CreateAppOptions",
         "scripts/create-app.ts:37#createApp",
@@ -10099,21 +10130,21 @@
         "scripts/generate-sbom.ts:25#generateSbom",
         "scripts/verify-checks.ts:14#CheckResult",
         "scripts/verify-checks.ts:20#resolveMicroserviceDir",
-        "scripts/verify-checks.ts:37#checkDynamic5TierArchitecture",
-        "scripts/verify-checks.ts:82#checkArchitectureBoundaries",
-        "scripts/verify-checks.ts:102#checkCircularDependencies",
-        "scripts/verify-checks.ts:121#checkTypeCoverage",
-        "scripts/verify-checks.ts:143#checkShellScripts",
-        "scripts/verify-checks.ts:162#checkAxeAccessibility",
-        "scripts/verify-checks.ts:181#checkSemgrepInvariants",
-        "scripts/verify-checks.ts:200#checkOsvVulnerabilities",
-        "scripts/verify-checks.ts:250#checkTrivySecurity",
-        "scripts/verify-checks.ts:276#checkSpectralContracts",
-        "scripts/verify-checks.ts:298#checkCodeComplexity",
-        "scripts/verify-checks.ts:307#checkDependencyLicenses",
-        "scripts/verify-checks.ts:376#checkSyftSbomIntegrity",
-        "scripts/verify-checks.ts:406#checkForgeAppSubmoduleCompliance",
-        "scripts/verify-checks.ts:510#checkSystemTraceability",
+        "scripts/verify-checks.ts:39#checkDynamic5TierArchitecture",
+        "scripts/verify-checks.ts:84#checkArchitectureBoundaries",
+        "scripts/verify-checks.ts:104#checkCircularDependencies",
+        "scripts/verify-checks.ts:123#checkTypeCoverage",
+        "scripts/verify-checks.ts:145#checkShellScripts",
+        "scripts/verify-checks.ts:164#checkAxeAccessibility",
+        "scripts/verify-checks.ts:183#checkSemgrepInvariants",
+        "scripts/verify-checks.ts:202#checkOsvVulnerabilities",
+        "scripts/verify-checks.ts:252#checkTrivySecurity",
+        "scripts/verify-checks.ts:278#checkSpectralContracts",
+        "scripts/verify-checks.ts:300#checkCodeComplexity",
+        "scripts/verify-checks.ts:309#checkDependencyLicenses",
+        "scripts/verify-checks.ts:378#checkSyftSbomIntegrity",
+        "scripts/verify-checks.ts:408#checkForgeAppSubmoduleCompliance",
+        "scripts/verify-checks.ts:512#checkSystemTraceability",
         "scripts/sync-submodule-docs.ts:113#syncSubmoduleDocs",
         "scripts/brand-lock.ts:31#getLockStatus",
         "scripts/brand-lock.ts:46#setLock",
@@ -10376,7 +10407,7 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/operations/docker-orchestration.mdx",
       "implementedIn": [
-        "scripts/link-test-requirements.ts:83#linkTestRequirements",
+        "scripts/link-test-requirements.ts:84#linkTestRequirements",
         "scripts/generate-logo.ts:44#processAndGenerateLogo",
         "scripts/create-app.ts:26#CreateAppOptions",
         "scripts/create-app.ts:37#createApp",
@@ -10389,21 +10420,21 @@
         "scripts/generate-sbom.ts:25#generateSbom",
         "scripts/verify-checks.ts:14#CheckResult",
         "scripts/verify-checks.ts:20#resolveMicroserviceDir",
-        "scripts/verify-checks.ts:37#checkDynamic5TierArchitecture",
-        "scripts/verify-checks.ts:82#checkArchitectureBoundaries",
-        "scripts/verify-checks.ts:102#checkCircularDependencies",
-        "scripts/verify-checks.ts:121#checkTypeCoverage",
-        "scripts/verify-checks.ts:143#checkShellScripts",
-        "scripts/verify-checks.ts:162#checkAxeAccessibility",
-        "scripts/verify-checks.ts:181#checkSemgrepInvariants",
-        "scripts/verify-checks.ts:200#checkOsvVulnerabilities",
-        "scripts/verify-checks.ts:250#checkTrivySecurity",
-        "scripts/verify-checks.ts:276#checkSpectralContracts",
-        "scripts/verify-checks.ts:298#checkCodeComplexity",
-        "scripts/verify-checks.ts:307#checkDependencyLicenses",
-        "scripts/verify-checks.ts:376#checkSyftSbomIntegrity",
-        "scripts/verify-checks.ts:406#checkForgeAppSubmoduleCompliance",
-        "scripts/verify-checks.ts:510#checkSystemTraceability",
+        "scripts/verify-checks.ts:39#checkDynamic5TierArchitecture",
+        "scripts/verify-checks.ts:84#checkArchitectureBoundaries",
+        "scripts/verify-checks.ts:104#checkCircularDependencies",
+        "scripts/verify-checks.ts:123#checkTypeCoverage",
+        "scripts/verify-checks.ts:145#checkShellScripts",
+        "scripts/verify-checks.ts:164#checkAxeAccessibility",
+        "scripts/verify-checks.ts:183#checkSemgrepInvariants",
+        "scripts/verify-checks.ts:202#checkOsvVulnerabilities",
+        "scripts/verify-checks.ts:252#checkTrivySecurity",
+        "scripts/verify-checks.ts:278#checkSpectralContracts",
+        "scripts/verify-checks.ts:300#checkCodeComplexity",
+        "scripts/verify-checks.ts:309#checkDependencyLicenses",
+        "scripts/verify-checks.ts:378#checkSyftSbomIntegrity",
+        "scripts/verify-checks.ts:408#checkForgeAppSubmoduleCompliance",
+        "scripts/verify-checks.ts:512#checkSystemTraceability",
         "scripts/sync-submodule-docs.ts:113#syncSubmoduleDocs",
         "scripts/brand-lock.ts:31#getLockStatus",
         "scripts/brand-lock.ts:46#setLock",
@@ -10740,7 +10771,7 @@
         "apps/src/sdk/src/org-setup-client.ts:250#deleteOrgNodeApi",
         "apps/src/sdk/src/employee-password-client.ts:14#ResetEmployeePasswordResultDto",
         "apps/src/sdk/src/employee-password-client.ts:43#resetEmployeePasswordApi",
-        "apps/src/sdk/src/auth-guard.ts:143#authGuard"
+        "apps/src/sdk/src/auth-guard.ts:164#authGuard"
       ],
       "verifiedIn": [
         "apps/src/auth/test/security/hierarchy-security.test.ts",
@@ -10953,17 +10984,17 @@
         "apps/src/auth/src/backend/session-manager.ts:314#getUserActiveSessions",
         "apps/src/auth/src/backend/session-manager.ts:345#revokeOtherSessions",
         "apps/src/auth/src/backend/employee-password-service.ts:28#resetEmployeePassword",
-        "apps/src/auth/src/backend/crypto.ts:25#JwtHeader",
-        "apps/src/auth/src/backend/crypto.ts:35#JwtPayload",
-        "apps/src/auth/src/backend/crypto.ts:54#JwkKey",
-        "apps/src/auth/src/backend/crypto.ts:72#hashPassword",
-        "apps/src/auth/src/backend/crypto.ts:85#verifyPassword",
-        "apps/src/auth/src/backend/crypto.ts:100#generateSecureToken",
-        "apps/src/auth/src/backend/crypto.ts:108#hashToken",
-        "apps/src/auth/src/backend/crypto.ts:128#getOrInitAuthKeys",
-        "apps/src/auth/src/backend/crypto.ts:185#signJwt",
-        "apps/src/auth/src/backend/crypto.ts:227#verifyJwt",
-        "apps/src/auth/src/backend/crypto.ts:268#getPublicJwks",
+        "apps/src/auth/src/backend/crypto.ts:26#JwtHeader",
+        "apps/src/auth/src/backend/crypto.ts:36#JwtPayload",
+        "apps/src/auth/src/backend/crypto.ts:55#JwkKey",
+        "apps/src/auth/src/backend/crypto.ts:73#hashPassword",
+        "apps/src/auth/src/backend/crypto.ts:86#verifyPassword",
+        "apps/src/auth/src/backend/crypto.ts:101#generateSecureToken",
+        "apps/src/auth/src/backend/crypto.ts:109#hashToken",
+        "apps/src/auth/src/backend/crypto.ts:129#getOrInitAuthKeys",
+        "apps/src/auth/src/backend/crypto.ts:186#signJwt",
+        "apps/src/auth/src/backend/crypto.ts:228#verifyJwt",
+        "apps/src/auth/src/backend/crypto.ts:290#getPublicJwks",
         "apps/src/auth/src/backend/audit-session-controller.ts:24#handleGetAuditLogs",
         "apps/src/auth/src/backend/audit-session-controller.ts:57#handleGetUserSessions",
         "apps/src/auth/src/server.ts:64#startAuthServer",
@@ -10974,6 +11005,7 @@
       "verifiedIn": [
         "apps/src/auth/test/unit/employee-password-service.test.ts",
         "apps/src/auth/test/e2e/portal-auth-gate.test.ts",
+        "apps/src/auth/test/security/service-identity-gate.test.ts",
         "apps/src/auth/test/integration/route-not-found.test.ts"
       ]
     },
@@ -11000,17 +11032,17 @@
         "apps/src/auth/src/backend/session-manager.ts:303#revokeSession",
         "apps/src/auth/src/backend/session-manager.ts:314#getUserActiveSessions",
         "apps/src/auth/src/backend/session-manager.ts:345#revokeOtherSessions",
-        "apps/src/auth/src/backend/crypto.ts:25#JwtHeader",
-        "apps/src/auth/src/backend/crypto.ts:35#JwtPayload",
-        "apps/src/auth/src/backend/crypto.ts:54#JwkKey",
-        "apps/src/auth/src/backend/crypto.ts:72#hashPassword",
-        "apps/src/auth/src/backend/crypto.ts:85#verifyPassword",
-        "apps/src/auth/src/backend/crypto.ts:100#generateSecureToken",
-        "apps/src/auth/src/backend/crypto.ts:108#hashToken",
-        "apps/src/auth/src/backend/crypto.ts:128#getOrInitAuthKeys",
-        "apps/src/auth/src/backend/crypto.ts:185#signJwt",
-        "apps/src/auth/src/backend/crypto.ts:227#verifyJwt",
-        "apps/src/auth/src/backend/crypto.ts:268#getPublicJwks",
+        "apps/src/auth/src/backend/crypto.ts:26#JwtHeader",
+        "apps/src/auth/src/backend/crypto.ts:36#JwtPayload",
+        "apps/src/auth/src/backend/crypto.ts:55#JwkKey",
+        "apps/src/auth/src/backend/crypto.ts:73#hashPassword",
+        "apps/src/auth/src/backend/crypto.ts:86#verifyPassword",
+        "apps/src/auth/src/backend/crypto.ts:101#generateSecureToken",
+        "apps/src/auth/src/backend/crypto.ts:109#hashToken",
+        "apps/src/auth/src/backend/crypto.ts:129#getOrInitAuthKeys",
+        "apps/src/auth/src/backend/crypto.ts:186#signJwt",
+        "apps/src/auth/src/backend/crypto.ts:228#verifyJwt",
+        "apps/src/auth/src/backend/crypto.ts:290#getPublicJwks",
         "apps/src/auth/src/backend/audit-session-controller.ts:24#handleGetAuditLogs",
         "apps/src/auth/src/backend/audit-session-controller.ts:57#handleGetUserSessions",
         "apps/src/auth/src/server.ts:64#startAuthServer",
@@ -11021,7 +11053,8 @@
         "apps/src/sdk/src/auth-guard.ts:84#verifySessionToken"
       ],
       "verifiedIn": [
-        "apps/src/auth/test/unit/crypto.test.ts"
+        "apps/src/auth/test/unit/crypto.test.ts",
+        "apps/src/auth/test/security/service-identity-gate.test.ts"
       ]
     },
     "LLR-AUTH-002": {
@@ -11253,7 +11286,7 @@
         "apps/src/sdk/src/registry.ts:45#getAppStatus",
         "apps/src/sdk/src/registry.ts:62#isAppDisabled",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
-        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
+        "apps/src/sdk/src/registry.ts:242#isBuiltinLandingActive",
         "forge-apps/app-template/src/server.ts:112#startTemplateServer",
         "forge-apps/app-template/src/db/index.ts:13#templateDb",
         "forge-apps/app-template/src/lib/sdk.ts:20#StandaloneLogger",
@@ -11281,6 +11314,8 @@
         "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup",
         "scripts/generate-proxy.ts:20#generateCaddyfile",
+        "scripts/generate-proxy.ts:302#reloadRunningProxyGateway",
+        "scripts/generate-proxy.ts:320#auditOrphanContainers",
         "scripts/docker-resolver.ts:18#GatewayConfig",
         "scripts/docker-resolver.ts:32#TargetValidation",
         "scripts/docker-resolver.ts:45#getGatewayConfig",
@@ -11505,7 +11540,7 @@
         "apps/src/auth/src/backend/iam-engine.ts:21#evaluateUserPermissions",
         "apps/src/auth/src/backend/iam-engine.ts:56#hasPermission",
         "apps/src/auth/test/e2e/playwright/auth-journey.pw.ts:13#authPlaywrightJourney",
-        "apps/src/sdk/src/auth-guard.ts:143#authGuard"
+        "apps/src/sdk/src/auth-guard.ts:164#authGuard"
       ],
       "verifiedIn": [
         "apps/src/auth/test/unit/hierarchy.test.ts",
@@ -11530,20 +11565,21 @@
       "type": "LLR",
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-AUTH-101_TENANT_SESSION.mdx",
       "implementedIn": [
-        "apps/src/auth/src/backend/crypto.ts:25#JwtHeader",
-        "apps/src/auth/src/backend/crypto.ts:35#JwtPayload",
-        "apps/src/auth/src/backend/crypto.ts:54#JwkKey",
-        "apps/src/auth/src/backend/crypto.ts:72#hashPassword",
-        "apps/src/auth/src/backend/crypto.ts:85#verifyPassword",
-        "apps/src/auth/src/backend/crypto.ts:100#generateSecureToken",
-        "apps/src/auth/src/backend/crypto.ts:108#hashToken",
-        "apps/src/auth/src/backend/crypto.ts:128#getOrInitAuthKeys",
-        "apps/src/auth/src/backend/crypto.ts:185#signJwt",
-        "apps/src/auth/src/backend/crypto.ts:227#verifyJwt",
-        "apps/src/auth/src/backend/crypto.ts:268#getPublicJwks"
+        "apps/src/auth/src/backend/crypto.ts:26#JwtHeader",
+        "apps/src/auth/src/backend/crypto.ts:36#JwtPayload",
+        "apps/src/auth/src/backend/crypto.ts:55#JwkKey",
+        "apps/src/auth/src/backend/crypto.ts:73#hashPassword",
+        "apps/src/auth/src/backend/crypto.ts:86#verifyPassword",
+        "apps/src/auth/src/backend/crypto.ts:101#generateSecureToken",
+        "apps/src/auth/src/backend/crypto.ts:109#hashToken",
+        "apps/src/auth/src/backend/crypto.ts:129#getOrInitAuthKeys",
+        "apps/src/auth/src/backend/crypto.ts:186#signJwt",
+        "apps/src/auth/src/backend/crypto.ts:228#verifyJwt",
+        "apps/src/auth/src/backend/crypto.ts:290#getPublicJwks"
       ],
       "verifiedIn": [
-        "apps/src/auth/test/unit/crypto.test.ts"
+        "apps/src/auth/test/unit/crypto.test.ts",
+        "apps/src/auth/test/security/service-identity-gate.test.ts"
       ]
     },
     "HLR-DEV-501": {
@@ -11607,7 +11643,7 @@
       "type": "HLR",
       "docFile": "apps/src/docs/src/content/docs/sr/SR-001_AIRGAP_NETWORK.mdx",
       "implementedIn": [
-        "scripts/verify-checks.ts:37#checkDynamic5TierArchitecture"
+        "scripts/verify-checks.ts:39#checkDynamic5TierArchitecture"
       ],
       "verifiedIn": [
         "apps/test/security/air-gap-compliance.test.ts"
@@ -11707,7 +11743,7 @@
         "apps/src/sdk/src/security-headers.ts:11#AIR_GAPPED_CSP",
         "apps/src/sdk/src/security-headers.ts:29#AIR_GAPPED_SECURITY_HEADERS",
         "apps/src/sdk/src/security-headers.ts:44#applySecurityHeaders",
-        "apps/src/sdk/src/auth-guard.ts:143#authGuard"
+        "apps/src/sdk/src/auth-guard.ts:164#authGuard"
       ],
       "verifiedIn": [
         "apps/src/auth/test/unit/employee-password-service.test.ts",
@@ -11750,7 +11786,8 @@
         "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup",
         "forge-apps/code/src/lib/icons.ts:8#icons",
         "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
-        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup"
+        "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "scripts/generate-proxy.ts:320#auditOrphanContainers"
       ],
       "verifiedIn": [
         "apps/test/e2e/playwright/security-10-defense.test.ts",
@@ -11874,7 +11911,7 @@
         "apps/src/sdk/src/registry.ts:45#getAppStatus",
         "apps/src/sdk/src/registry.ts:62#isAppDisabled",
         "apps/src/sdk/src/registry.ts:96#loadServiceRegistry",
-        "apps/src/sdk/src/registry.ts:229#isBuiltinLandingActive",
+        "apps/src/sdk/src/registry.ts:242#isBuiltinLandingActive",
         "scripts/docker-resolver.ts:32#TargetValidation",
         "scripts/docker-resolver.ts:95#resolveCoreServices",
         "scripts/docker-resolver.ts:137#resolveForgeApps",
@@ -12161,6 +12198,16 @@
       "verifiedIn": [
         "apps/src/sdk/test/e2e/sdk-lifecycle.test.ts"
       ]
+    },
+    "LLR-AUTH-013": {
+      "id": "LLR-AUTH-013",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/llr/LLR-AUTH-013_SERVICE_IDENTITY_REGISTRATION_GATE.mdx",
+      "implementedIn": [
+        "apps/src/auth/src/backend/crypto.ts:228#verifyJwt",
+        "apps/src/sdk/src/auth-guard.ts:84#verifySessionToken"
+      ],
+      "verifiedIn": []
     },
     "LLR-SUB-005": {
       "id": "LLR-SUB-005",

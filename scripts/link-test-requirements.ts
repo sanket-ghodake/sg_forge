@@ -26,6 +26,7 @@ const TEST_MAPPINGS: Record<string, string[]> = {
   "apps/src/auth/test/integration/org-api.test.ts": ["LLR-AUTH-003"],
   "apps/src/auth/test/integration/db-schema.test.ts": ["LLR-DB-003"],
   "apps/src/auth/test/unit/employee-controller.test.ts": ["LLR-DB-005"],
+  "apps/src/auth/test/security/service-identity-gate.test.ts": ["LLR-AUTH-013"],
 
   // SDK Tests
   "apps/src/sdk/test/unit/registry.test.ts": ["LLR-SDK-001", "HLR-SDK-301"],

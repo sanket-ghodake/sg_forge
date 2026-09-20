@@ -5,7 +5,7 @@
 
 ---
 
-## ⚡ 1. PRE-FLIGHT & PRE-COMMIT VERIFICATION GATE (21 CHECKS)
+## ⚡ 1. PRE-FLIGHT & PRE-COMMIT VERIFICATION GATE (24 CHECKS)
 Before writing code, running commands, or staging/committing changes, verify:
 1. [ ] **RTK Command Prefix & Portable PATH**: Every bash command MUST be prefixed with `rtk` (e.g. `rtk git status`, `rtk bun test`, `rtk git add .`). If `rtk` is not in the subshell's `$PATH`, invoke via `./portables/bin/rtk` (e.g. `./portables/bin/rtk git status`) or ensure `export PATH="$PWD/portables/bin:$PWD/portables/bun/bin:$PATH"` is active. ZERO commands may fail due to missing host binaries.
 2. [ ] **Zero Host Modification & Cross-Platform Toolchain**: All runtimes/tools strictly use portable repo binaries (`portables/bun/bin/bun`, `portables/bin/*`) or Docker. ZERO host modifications (`apt`, `brew`, `npm -g`, `pip install`). All tool entries MUST use self-resolving POSIX wrappers (zero OS symlinks), with `eol=lf` enforced via `.gitattributes` to prevent cross-platform Git drift on Windows/WSL/macOS.
@@ -30,6 +30,13 @@ Before writing code, running commands, or staging/committing changes, verify:
 21. [ ] **In-Chat AI Security & Code Audit (Strix Standard)**: Before staging code, the AI agent performs an in-chat code check (`strix-code-audit` / `audit code`) on modified routes, auth flows, and queries to ensure zero injection, secret leaks, or RFC 7807 problem violations; if the local or dev server is up, also run the live test (`strix-live-pentest` / `test live dev`) to confirm security headers and cookie flags.
 22. [ ] **Forge App Submodule Isolation & Core Air-Gap Network Gate**: Core platform containers operate on `core-airgap-net` (`internal: true`) with ZERO outbound egress. Forge Apps operate as autonomous Git submodules on `forge-apps-net` with independent Dockerfiles, `.dockerignore`, standalone agent directives, and ZERO imports from central apps (`apps/src/*`).
 23. [ ] **System Traceability & Living Documentation Gate (SG Forge Standard)**: Every created or modified exported symbol MUST carry an `@requirements [LLR-...]` TSDoc tag matching an active document in `docs/llr/`. Diagram generation MUST use the `diagram-design` skill (`.agents/skills/diagram-design/`) with Astryx tokens. Automated doc-to-code parity must pass `rtk ./run.sh docs:coverage` before code staging.
+24. [ ] **Mandatory Code-Doc-Impact Synchronization Gate**: Whenever any source code, API route, auth boundary, database schema, or configuration is altered or added, the AI agent MUST atomically inspect and update:
+    - **Living Documentation**: Corresponding LLRs in `apps/src/docs/src/content/docs/llr/` (or create new LLRs if a new capability is introduced).
+    - **Folder Documentation (READMEs)**: Colocated service and directory `README.md` files describing current architecture, routes, or behavior.
+    - **API Specifications & Contracts**: OpenAPI schemas, interface contracts, and Spectral rulesets.
+    - **Impacted Dependent Files**: Reverse callers, environment configurations (`.env.example`), proxy definitions (`proxy/`, `scripts/generate-proxy.ts`), test fixtures, and client libraries.
+    All documentation and dependent file updates MUST be performed in the SAME session before completing the task. Modifying code without updating living documentation and impacted files is strictly prohibited and constitutes an immediate task failure.
+
 
 ---
 
@@ -92,8 +99,11 @@ Before writing code, running commands, or staging/committing changes, verify:
 
 ### 12. System Traceability, Living Engineering Standards & Editorial Diagramming (Enterprise Standard)
 - **Bidirectional Traceability**: Every feature, microservice, and function strictly traces to `SR -> HLR -> LLR -> Code -> Test`.
+- **Mandatory Code-Doc-Impact Synchronization**: Code changes and documentation updates are strictly inseparable. Whenever an agent modifies, refactors, or adds features, routes, middleware, or config logic, the agent MUST atomically identify all impacted documentation (LLRs in `apps/src/docs/src/content/docs/llr/`, service `README.md` files, architecture guides, and user manuals) and update them in the same session. Leaving code modified without updating its corresponding living documentation constitutes non-compliance.
+- **Impacted Dependent Files Parity**: When code changes affect downstream components (proxy rules, reverse callers, environment configs, client SDK wrappers, schema migrations, or test fixtures), the agent MUST update all impacted files in the same session. Never leave downstream files broken or out of sync.
 - **Editorial Diagramming**: Schematics must strictly use `diagram-design` (`.agents/skills/diagram-design/`) with Astryx tokens (`--forge-*`); zero generic Mermaid slop or OS-default styling.
 - **100% Code-to-Doc Parity**: Monorepo and Forge apps must pass `rtk ./run.sh docs:coverage` before code staging.
+
 
 ### 13. Legal Compliance, Apache-2.0 Licensing & Trademark Neutrality (Enterprise Open-Source Standard)
 - **Strict Apache-2.0 Governance**: All platform source code, libraries, and microservices MUST strictly be licensed under the Apache License, Version 2.0. Every package manifest (`package.json`) MUST declare `"license": "Apache-2.0"`.

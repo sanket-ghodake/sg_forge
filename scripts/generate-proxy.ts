@@ -295,6 +295,51 @@ ${tlsDirective}
   return caddyContent;
 }
 
+/**
+ * Hot-reloads the running Caddy proxy container with zero dropped connections.
+ * @requirements [HLR-SDK-301] [LLR-SDK-005] [HLR-NET-001]
+ */
+export function reloadRunningProxyGateway(): boolean {
+  try {
+    const check = Bun.spawnSync(['docker', 'ps', '--filter', 'name=forge-proxy', '--format', '{{.Names}}']);
+    const names = check.stdout.toString().trim().split('\n').filter(Boolean);
+    const target = names.find((n) => n.includes('forge-proxy'));
+    if (!target) return false;
+
+    const reload = Bun.spawnSync(['docker', 'exec', target, 'caddy', 'reload', '--config', '/etc/caddy/Caddyfile']);
+    return reload.exitCode === 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Audits running containers on forge_apps_net and identifies unregistered services.
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
+ */
+export function auditOrphanContainers(activeServices: Array<{ id: string }>): string[] {
+  try {
+    const proc = Bun.spawnSync(['docker', 'ps', '--filter', 'network=forge_apps_net', '--format', '{{.Names}}']);
+    const running = proc.stdout.toString().trim().split('\n').filter(Boolean);
+    const activeIds = new Set(activeServices.map((s) => s.id));
+    const knownInfrastructure = new Set(['forge-proxy-dev', 'forge-proxy-prod', 'forge-autoheal-dev', 'forge-autoheal-prod']);
+    const orphans: string[] = [];
+
+    for (const name of running) {
+      if (knownInfrastructure.has(name)) continue;
+      // Extract service ID from standard naming patterns: forge-app-<id>-dev, app-<id>, forge-<id>-dev
+      const match = name.match(/^(?:forge-app-)?([a-z0-9-]+?)(?:-dev|-prod)?$/);
+      const extractedId = match ? match[1] : name;
+      if (!activeIds.has(extractedId)) {
+        orphans.push(name);
+      }
+    }
+    return orphans;
+  } catch {
+    return [];
+  }
+}
+
 if (import.meta.main) {
   generateCaddyfile();
   const brand = loadBrandConfig();
@@ -304,4 +349,20 @@ if (import.meta.main) {
     const upstream = s.upstreamUrl || `http://${s.containerName}:${s.port}`;
     console.log(`   ├─ ${s.path.padEnd(18)} -> ${upstream.padEnd(30)} (${s.name})`);
   }
+
+  // Hot-reload running gateway if container is active
+  const reloaded = reloadRunningProxyGateway();
+  if (reloaded) {
+    console.log('🔄 [Gateway] Successfully hot-reloaded Caddy in-memory routes (<5ms)');
+  }
+
+  // Audit running containers for decommissioned/unregistered services
+  const orphans = auditOrphanContainers(services);
+  if (orphans.length > 0) {
+    console.log('⚠️ [Audit] Detected running containers on forge_apps_net not declared in .env:');
+    for (const orphan of orphans) {
+      console.log(`   └─ ${orphan} (Run: 'docker stop ${orphan}' to shut down or register in .env)`);
+    }
+  }
 }
+

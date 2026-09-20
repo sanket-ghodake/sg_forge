@@ -30,6 +30,8 @@ export function resolveMicroserviceDir(serviceId: string): string | null {
   }
   const forgeApp = join(REPO_ROOT, 'forge-apps', serviceId);
   if (existsSync(forgeApp)) return forgeApp;
+  const externalForgeApp = join(REPO_ROOT, '..', 'forge-app', serviceId);
+  if (existsSync(externalForgeApp)) return externalForgeApp;
   return null;
 }
 

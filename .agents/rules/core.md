@@ -13,6 +13,7 @@
 10. **Version Lock & Strict Version Freeze**: NEVER update, upgrade, or downgrade any runtime version, framework version, or package dependency without prior explicit discussion and user approval.
 11. **Cross-Agent Instruction Sync Guard**: Whenever modifying or updating ANY agent instruction or rule file (`AGENTS.md`, `.agents/AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.agents/rules/*.md`, `.agents/workforce/*.md`), you MUST run `./.agents/scripts/sync-agent-instructions.sh` to ensure ALL agent instruction files stay 100% synchronized across all IDEs and tools.
 12. **Ignore & Attrib Files Uniformity**: Whenever introducing new build artifacts, temporary extensions, sensitive patterns, or database files, you MUST run `rtk bun scripts/sync-ignores.ts` to ensure all 7 root ignore files, `.gitattributes`, and subfolder `logs/.gitignore` files remain 100% synchronized.
+13. **Mandatory Code-Doc-Impact Synchronization**: Whenever code changes occur, the agent MUST immediately inspect and update affected living documentation (LLRs in `apps/src/docs/src/content/docs/llr/`, module/service `README.md` files, API specs) and any dependent or impacted files (schemas, configs, reverse callers, proxy definitions, tests) in the SAME session. Code, documentation, and impacted files must NEVER drift out of sync.
 
 ---
 
@@ -35,6 +36,8 @@ Every completed AI task must conclude with a standardized completion verificatio
 ### TASK COMPLETION REPORT
 - [x] Requirements Met: <brief explanation>
 - [x] Architecture & Layering: PASS (No forbidden imports, 0 circular deps)
+- [x] Documentation & Living Specs: PASS (LLRs, service READMEs, API docs synchronized)
+- [x] Impacted Files Synchronized: PASS (Configs, contracts, test suites updated)
 - [x] Tests: PASS (Unit / Integration / Contract)
 - [x] Security & ASVS 5.0: PASS (Tenant isolation, parameterization verified)
 - [x] Diff Scope: <N> files touched (+X / -Y lines, 0 opportunistic refactors)

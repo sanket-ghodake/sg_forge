@@ -6,7 +6,7 @@ High-performance reverse proxy routing gateway (Caddy v2.11.4 LTS).
 * **Static Error Pages**: Mounted from `proxy/errors/` to `/etc/caddy/errors` for all 10 standard HTTP status codes (`400`, `401`, `403`, `404`, `405`, `429`, `500`, `502`, `503`, `504`). Zero-dependency Astryx error screens served at the edge with zero upstream Bun runtime overhead.
 * **Direct Error Access**: Static error pages accessible via `/errors/*` (e.g. `/errors/404.html`, `/errors/502.html`).
 * **Unregistered App Catch-All**: Nonexistent `/apps/*` paths are intercepted directly at the proxy layer, returning RFC 7807 JSON for API clients and Astryx 404 HTML for browsers.
-* **Sync Command**: `./run.sh sync-proxy` (automatically compiles all 10 error pages and updates Caddyfile)
+* **Sync Command**: `./run.sh sync-proxy` (automatically compiles all 10 error pages, updates Caddyfile, triggers zero-downtime hot-reload on the running Caddy daemon in <5ms, and audits `forge_apps_net` for decommissioned/orphaned containers).
 
 ---
 

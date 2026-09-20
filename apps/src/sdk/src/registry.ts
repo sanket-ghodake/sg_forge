@@ -98,12 +98,24 @@ export function loadServiceRegistry(options?: string | LoadRegistryOptions): Ser
   const includeDisabled = typeof options === 'object' ? options.includeDisabled ?? true : true;
   const resolvedEnvPath = findEnvPath(envPath);
   const envMap: Record<string, string> = {};
+  const commentedAppKeys = new Set<string>();
 
   if (resolvedEnvPath && isRegularFile(resolvedEnvPath)) {
     const rawContent = readFileSync(resolvedEnvPath, 'utf8');
     for (const line of rawContent.split('\n')) {
       const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
+      if (!trimmed) continue;
+      if (trimmed.startsWith('#')) {
+        const withoutHash = trimmed.replace(/^#+\s*/, '');
+        const eqIdx = withoutHash.indexOf('=');
+        if (eqIdx > 0) {
+          const key = withoutHash.slice(0, eqIdx).trim();
+          if (key.startsWith('APP_')) {
+            commentedAppKeys.add(key);
+          }
+        }
+        continue;
+      }
       const eqIdx = trimmed.indexOf('=');
       if (eqIdx > 0) {
         const key = trimmed.slice(0, eqIdx).trim();
@@ -119,10 +131,11 @@ export function loadServiceRegistry(options?: string | LoadRegistryOptions): Ser
     }
   }
 
-  // Shell & process environment overrides file defaults when not loading an explicit envPath
+  // Shell & process environment overrides file defaults when not loading an explicit envPath,
+  // but explicitly commented-out applications in .env are respected and never overridden.
   if (!envPath) {
     for (const [k, v] of Object.entries(process.env)) {
-      if (v !== undefined) {
+      if (v !== undefined && !commentedAppKeys.has(k)) {
         envMap[k] = v;
       }
     }

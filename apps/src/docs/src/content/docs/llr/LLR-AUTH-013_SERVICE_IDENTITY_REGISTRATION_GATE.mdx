@@ -1,0 +1,34 @@
+---
+title: LLR-AUTH-013 - Service Identity Registration Gate & Decommissioning
+description: Low-level requirement enforcing Zero-Trust verification of internal service tokens against declared .env micro-app registrations.
+---
+
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="LLR-AUTH-013" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+</div>
+
+## 1. Algorithmic Specification
+
+1. When validating an asymmetric Ed25519 JWT session token, inspect the principal identity claims: `principal_type === 'SERVICE'` or `sub.startsWith('internal-service-')`.
+2. Differentiate core platform infrastructure workers (`internal-service-worker`, `backup-runner`, `telemetry-agent`) from autonomous micro-applications.
+3. For micro-application service tokens, parse the service application identifier: `appId = sub.replace(/^internal-service-/, '').toLowerCase()`.
+4. Cross-reference `appId` against active declared applications via `loadServiceRegistry()` from `@forge/sdk`.
+5. If the application is not declared, is commented out in `.env` (`# APP_<ID>=...`), or has status `'disabled'`:
+   - In production (`NODE_ENV === 'production'`) or strict mode: Fail token validation immediately with RFC 7807 error `Application '<appId>' is not registered in .env or is disabled. Service token rejected.`
+   - In development: Allow only if explicit bypass flag `ALLOW_UNREGISTERED_SERVICES === 'true'` is active.
+6. Return boolean verification outcome and decoded payload.
+
+## 2. Safety & Verification Invariants
+
+* **Zero-Trust Cross-Tenant Boundary**: Knowing the shared development secret or possessing an Ed25519 key does NOT grant data access to decommissioned or unregistered applications.
+* **Isolated Database Compliance (Invariant #5 & #6)**: Auth must verify application registration via the declarative `@forge/sdk` registry interface with ZERO direct SQL queries across another application's database.
+* **Preservation of Commented Intent**: Explicitly commented `# APP_*` entries in `.env` are strictly respected as disabled and must never be resurrected by inherited shell `process.env`.
+
+## 3. Bidirectional Traceability
+
+* **Parent High-Level Requirement**: <TraceabilityBadge reqId="HLR-AUTH-101" type="HLR" status="verified" />
+* **Implemented in Source**: `apps/src/auth/src/backend/crypto.ts`, `apps/src/sdk/src/auth-guard.ts`
+* **Verified in Test Suite**: `apps/src/auth/test/security/service-identity-gate.test.ts`

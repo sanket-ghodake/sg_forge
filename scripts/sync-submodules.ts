@@ -9,6 +9,7 @@
 import { existsSync, readdirSync, chmodSync, copyFileSync, readFileSync, writeFileSync, mkdirSync, cpSync } from 'node:fs';
 import { join } from 'node:path';
 import { execSync } from 'node:child_process';
+import { syncAllDirectives } from './sync-directives';
 
 const REPO_ROOT = process.cwd();
 const FORGE_APPS_DIR = join(REPO_ROOT, 'forge-apps');
@@ -269,6 +270,9 @@ function syncSubmodules(): void {
       execSync('git config core.autocrlf false', { cwd: appPath, stdio: 'ignore' });
     } catch {}
   }
+
+  // 15. Ensure Multi-Agent Directives are 100% hash in-sync
+  syncAllDirectives(false);
 
   console.log('\n🎉 All Forge App submodules successfully verified & synchronized!');
 }
