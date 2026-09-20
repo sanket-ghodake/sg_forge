@@ -113,19 +113,44 @@ export function getDatabaseClient(dbFilename: string): Database {
  */
 export function createSafeHandler(
   serviceName: string,
-  handler: (req: Request) => Promise<Response> | Response,
+  handler: (req: Request, context?: { traceId: string; incidentToken: string; orgId?: string; userId?: string }) => Promise<Response> | Response,
   logDir?: string
 ): (req: Request) => Promise<Response> {
   const logger = createLogger(serviceName, logDir);
 
   return async (req: Request): Promise<Response> => {
+    const startTime = performance.now();
+    const rawTp = req.headers.get('traceparent') || req.headers.get('x-trace-id');
+    const traceId = rawTp && rawTp.includes('-') && rawTp.split('-')[1]?.length === 32
+      ? rawTp.split('-')[1]
+      : crypto.randomUUID().replace(/-/g, '');
+    const cleanTrace = traceId.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase();
+    const cleanSrv = serviceName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase();
+    const incidentToken = `ERR-${cleanSrv}-${cleanTrace}`;
+    const orgId = req.headers.get('x-org-id') || undefined;
+    const userId = req.headers.get('x-user-id') || undefined;
+
     try {
-      return await handler(req);
+      const response = await handler(req, { traceId, incidentToken, orgId, userId });
+      const durationMs = Number((performance.now() - startTime).toFixed(2));
+      logger.info(`${req.method} ${new URL(req.url).pathname} -> ${response.status} (${durationMs}ms)`, {
+        traceId, incidentToken, orgId, userId, durationMs,
+      });
+
+      const headers = new Headers(response.headers);
+      if (!headers.has('x-trace-id')) headers.set('x-trace-id', traceId);
+      if (!headers.has('traceparent')) headers.set('traceparent', `00-${traceId}-${crypto.randomUUID().replace(/-/g, '').slice(0, 16)}-01`);
+      if (!headers.has('x-incident-token')) headers.set('x-incident-token', incidentToken);
+
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
     } catch (err: any) {
-      const traceId = `trace_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+      const durationMs = Number((performance.now() - startTime).toFixed(2));
       logger.error(`Unhandled exception in ${serviceName}: ${err?.message || err}`, {
-        traceId,
-        stack: err?.stack,
+        traceId, incidentToken, orgId, userId, durationMs, stack: err?.stack,
       });
 
       return Response.json(
@@ -133,16 +158,19 @@ export function createSafeHandler(
           type: 'https://forge.internal/errors/internal-server-error',
           title: 'Internal Server Error',
           status: 500,
-          detail: 'An unexpected error occurred. Please contact system administrator with traceId.',
+          detail: 'An unexpected error occurred. Please contact system administrator with incidentToken.',
           instance: req.url,
           traceId,
+          incidentToken,
           timestamp: new Date().toISOString(),
         },
         {
           status: 500,
           headers: {
             'Content-Type': 'application/problem+json',
-            'X-Trace-Id': traceId,
+            'x-trace-id': traceId,
+            'traceparent': `00-${traceId}-${crypto.randomUUID().replace(/-/g, '').slice(0, 16)}-01`,
+            'x-incident-token': incidentToken,
           },
         }
       );

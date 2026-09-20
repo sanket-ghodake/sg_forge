@@ -15,7 +15,7 @@ import type { AuthGuardOptions, AuthGuardResult, AuthUser, ScopedHierarchyRespon
 // ==============================================================================
 /**
  * StandaloneLogger
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export class StandaloneLogger {
   private service: string;
@@ -70,7 +70,7 @@ export class StandaloneLogger {
 
 /**
  * createLogger
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function createLogger(service: string, logDir?: string): StandaloneLogger {
   return new StandaloneLogger(service, logDir);
@@ -81,7 +81,7 @@ export function createLogger(service: string, logDir?: string): StandaloneLogger
 // ==============================================================================
 /**
  * getDatabaseClient
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function getDatabaseClient(dbFilename: string): Database {
   const isTest = process.env.NODE_ENV === 'test' || process.env.BUN_ENV === 'test';
@@ -109,23 +109,48 @@ export function getDatabaseClient(dbFilename: string): Database {
 // ==============================================================================
 /**
  * createSafeHandler
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function createSafeHandler(
   serviceName: string,
-  handler: (req: Request) => Promise<Response> | Response,
+  handler: (req: Request, context?: { traceId: string; incidentToken: string; orgId?: string; userId?: string }) => Promise<Response> | Response,
   logDir?: string
 ): (req: Request) => Promise<Response> {
   const logger = createLogger(serviceName, logDir);
 
   return async (req: Request): Promise<Response> => {
+    const startTime = performance.now();
+    const rawTp = req.headers.get('traceparent') || req.headers.get('x-trace-id');
+    const traceId = rawTp && rawTp.includes('-') && rawTp.split('-')[1]?.length === 32
+      ? rawTp.split('-')[1]
+      : crypto.randomUUID().replace(/-/g, '');
+    const cleanTrace = traceId.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase();
+    const cleanSrv = serviceName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 6).toUpperCase();
+    const incidentToken = `ERR-${cleanSrv}-${cleanTrace}`;
+    const orgId = req.headers.get('x-org-id') || undefined;
+    const userId = req.headers.get('x-user-id') || undefined;
+
     try {
-      return await handler(req);
+      const response = await handler(req, { traceId, incidentToken, orgId, userId });
+      const durationMs = Number((performance.now() - startTime).toFixed(2));
+      logger.info(`${req.method} ${new URL(req.url).pathname} -> ${response.status} (${durationMs}ms)`, {
+        traceId, incidentToken, orgId, userId, durationMs,
+      });
+
+      const headers = new Headers(response.headers);
+      if (!headers.has('x-trace-id')) headers.set('x-trace-id', traceId);
+      if (!headers.has('traceparent')) headers.set('traceparent', `00-${traceId}-${crypto.randomUUID().replace(/-/g, '').slice(0, 16)}-01`);
+      if (!headers.has('x-incident-token')) headers.set('x-incident-token', incidentToken);
+
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
     } catch (err: any) {
-      const traceId = `trace_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+      const durationMs = Number((performance.now() - startTime).toFixed(2));
       logger.error(`Unhandled exception in ${serviceName}: ${err?.message || err}`, {
-        traceId,
-        stack: err?.stack,
+        traceId, incidentToken, orgId, userId, durationMs, stack: err?.stack,
       });
 
       return Response.json(
@@ -133,16 +158,19 @@ export function createSafeHandler(
           type: 'https://forge.internal/errors/internal-server-error',
           title: 'Internal Server Error',
           status: 500,
-          detail: 'An unexpected error occurred. Please contact system administrator with traceId.',
+          detail: 'An unexpected error occurred. Please contact system administrator with incidentToken.',
           instance: req.url,
           traceId,
+          incidentToken,
           timestamp: new Date().toISOString(),
         },
         {
           status: 500,
           headers: {
             'Content-Type': 'application/problem+json',
-            'X-Trace-Id': traceId,
+            'x-trace-id': traceId,
+            'traceparent': `00-${traceId}-${crypto.randomUUID().replace(/-/g, '').slice(0, 16)}-01`,
+            'x-incident-token': incidentToken,
           },
         }
       );
@@ -158,7 +186,7 @@ let cachedPubKey: any = null;
 
 /**
  * isSafeEgressUrl
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function isSafeEgressUrl(targetUrl: string): boolean {
   try {
@@ -174,7 +202,7 @@ export function isSafeEgressUrl(targetUrl: string): boolean {
 
 /**
  * getVerificationPublicKey
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function getVerificationPublicKey(): any {
   if (cachedPubKey) return cachedPubKey;
@@ -198,7 +226,7 @@ export function getVerificationPublicKey(): any {
 
 /**
  * createInternalServiceToken
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function createInternalServiceToken(roles: string[] = ['roles/employee'], userId: string = 'usr_test'): string {
   const secret = process.env.JWT_SECRET || DEFAULT_DEV_SECRET;
@@ -229,7 +257,7 @@ export function createInternalServiceToken(roles: string[] = ['roles/employee'],
 
 /**
  * createServiceAccountToken
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function createServiceAccountToken(serviceId: string, scopes: string[] = ['*']): string {
   const secret = process.env.JWT_SECRET || DEFAULT_DEV_SECRET;
@@ -262,7 +290,7 @@ export function createServiceAccountToken(serviceId: string, scopes: string[] = 
 
 /**
  * verifySessionToken
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function verifySessionToken(token: string): { valid: boolean; payload?: any; error?: string } {
   try {
@@ -286,7 +314,7 @@ export function verifySessionToken(token: string): { valid: boolean; payload?: a
 
 /**
  * authGuard
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGuardResult {
   const url = new URL(req.url);
@@ -404,7 +432,7 @@ export function authGuard(req: Request, options: AuthGuardOptions = {}): AuthGua
 // ==============================================================================
 /**
  * loadBrandConfig
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function loadBrandConfig() {
   return {
@@ -415,7 +443,7 @@ export function loadBrandConfig() {
 
 /**
  * getScopedHierarchy
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function getScopedHierarchy(_userIdOrReq?: string | Request): ScopedHierarchyResponse {
   return {
@@ -441,7 +469,7 @@ const BEARER_REGEX = /Bearer\s+([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.
 
 /**
  * redactSensitiveData
- * @requirements [HLR-CODE-701] [LLR-SUB-003]
+ * @requirements [HLR-SDK-301] [LLR-SUB-001]
  */
 export function redactSensitiveData(data: unknown, depth = 0): unknown {
   if (depth > 6 || data === null || data === undefined) return data;

@@ -27,7 +27,9 @@ Real-time telemetry and metrics streaming micro-app for platform developers and 
 * **Public Ingress Mode**: Unauthenticated public monitoring dashboard with zero barrier to entry.
 * **Real-Time Vitals**: Auto-updating process memory RSS and platform uptime counters.
 * **Metrics Streaming API**: `/api/stream/metrics` endpoint broadcasting live JSON vitals.
-* **Astryx UI**: Clean dark dashboard layout with pulsating online indicators and return navigation.
+* **Multi-Tenant Blast Radius Accounting**: `/api/telemetry/blast-radius` calculating 5-minute sliding window tenant failure rates and incident severity (NORMAL, ELEVATED, P0_CRITICAL).
+* **Canonical Request Telemetry Ingest**: `/api/telemetry/events` (and `/api/analytics/collect`) ingesting high-cardinality request events into dedicated Turso database.
+* **Astryx UI**: Clean dark dashboard layout with pulsating online indicators, real-time Blast Radius HUD cards, and return navigation.
 
 ---
 

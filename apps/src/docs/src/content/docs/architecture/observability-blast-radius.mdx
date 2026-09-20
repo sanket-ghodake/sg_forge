@@ -1,0 +1,175 @@
+---
+title: Distributed Observability, Canonical Tracing & Blast Radius Accounting
+description: Tech-giant scale SRE observability standard featuring W3C distributed tracing, wide canonical events, RFC 7807 incident tokens, and real-time multi-tenant blast radius accounting.
+---
+
+import ExecutiveCard from '../../../components/ExecutiveCard.astro';
+import TraceabilityBadge from '../../../components/TraceabilityBadge.astro';
+
+<ExecutiveCard 
+  title="Tech-Giant Observability & Blast Radius Accounting"
+  analogy="In a commercial aviation flight operations center, when a radar beacon blips, air traffic control does not read raw radar signal waves byte-by-byte. Instead, every flight carries a discrete transponder code (Trace ID) tracking altitude, heading, and carrier. If an airport runway closes, the operations board instantly calculates the Blast Radius: the exact percentage of airborne flights and passengers diverted, isolating cascading gridlock before it spreads."
+  impact="Eliminates blind line-by-line grep triage during incidents. Unifies W3C distributed trace propagation across air-gapped containers, emits high-cardinality canonical events, arms users with 1-click incident tokens, and automates real-time tenant blast radius calculation."
+/>
+
+<div style="margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+  <TraceabilityBadge reqId="HLR-SDK-303" type="HLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-OBS-001" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-OBS-002" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="LLR-OBS-003" type="LLR" status="verified" />
+  <TraceabilityBadge reqId="SR-LOG-001" type="LLR" status="verified" />
+</div>
+
+## 1. Executive Philosophy: Why Tech Giants Don't Grep Raw Logs
+
+At modern tech scale, searching raw logs line-by-line during a SEV-1 incident is an anti-pattern:
+1. **$O(N)$ Inefficiency**: At high throughput, grepping text logs is computationally intractable and floods SRE terminal windows with noisy, disjointed logs.
+2. **Missing Causality**: A timeout in a downstream database manifests as an error in an upstream service. Without causality graphs, teams waste critical minutes debating which error was the trigger.
+3. **Misleading Error Volumes**: 5,000 errors from a single malfunctioning background script from one free user look identical to 5,000 errors locking out 500 Enterprise organizations.
+4. **Customer Communication Gap**: When end-users report *"The page broke"*, engineers cannot correlate the complaint to the exact backend execution trace.
+
+SG Forge solves this through **Observability & Blast Radius Accounting**, built on four unified pillars.
+
+---
+
+## 2. Architectural Topologies & Diagrams
+
+### Topology 1: W3C Distributed Context Propagation Flow
+
+Every request traversing SG Forge carries a standard W3C `traceparent` (`00-{traceId}-{spanId}-{flags}`) propagated seamlessly across network boundaries:
+
+```
+[ Ingress Gateway (Caddy) ]
+       │  (Injects or propagates W3C traceparent & x-trace-id)
+       ▼
+[ Astryx Portal SPA / Next.js ]
+       │  (Real User Monitoring: Captures Web Vitals, API fetch errors)
+       ▼
+[ Microservice / Forge App ]  ── createSafeHandler Boundary
+  ├── RequestContext Accumulator
+  │     ├── Tenant Context: org_id, user_id, tier
+  │     ├── Sub-Spans: In-memory trace steps & timings
+  │     └── Turso libSQL Client: Query span telemetry
+  │
+  └── On Request Completion:
+        ├── 2xx/3xx ──> Emits Strictly 1 Wide Canonical Event (JSON)
+        └── 4xx/5xx ──> Emits Canonical Event + Returns RFC 7807 Problem JSON
+                          (Includes Incident Token: ERR-SRV-8F92A)
+```
+
+---
+
+### Topology 2: The Canonical Request Event Lifecycle
+
+Instead of scattering disconnected text log statements throughout a function, SG Forge adheres to the Stripe / Honeycomb **Canonical Log Line Pattern**. A request accumulates metadata in a bounded context and emits **strictly one high-cardinality JSON record**:
+
+```
+Request Entry ──> [RequestContext Init]
+                         │
+                         ├─ addSpan('db:query_users', 4.2ms)
+                         ├─ addSpan('auth:verify_jwt', 1.8ms)
+                         ├─ setTenantContext('org_acme', 'usr_42', 'enterprise')
+                         │
+Request Return ──> [toCanonicalEvent()]
+                         │
+                         ▼
+        ┌─────────────────────────────────────────────────────────┐
+        │ CANONICAL REQUEST EVENT (Wide JSON Record)             │
+        │ • timestamp: "2026-09-20T14:15:30.120Z"                 │
+        │ • traceId: "7f8a92b0c1e44f8d9a2e3b1c"                   │
+        │ • spanId: "3e4a2c1b9f0d"                               │
+        │ • traceparent: "00-7f8a92b0...-3e4a2c1b...-01"         │
+        │ • incidentToken: "ERR-GOALS-7F8A92"                    │
+        │ • service: "goals", route: "/api/goals", method: "POST"│
+        │ • statusCode: 200, durationMs: 24.5                     │
+        │ • tenant: { orgId: "org_acme", tier: "enterprise" }    │
+        │ • metrics: { spanCount: 2, dbQueryCount: 1, dbMs: 4.2 }│
+        └─────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Topology 3: Multi-Tenant Blast Radius Accounting Topology
+
+The Blast Radius engine inside `forge-apps/telemetry` calculates organizational impact over a rolling 5-minute sliding window:
+
+$$\text{Blast Radius \%} = \frac{\text{Unique Impacted Orgs (5xx Errors)}}{\text{Total Active Orgs in Window}} \times 100$$
+
+```
+                                [ Incoming Events ]
+                                         │
+                                         ▼
+                 ┌───────────────────────────────────────────────┐
+                 │ Turso Database: `request_events` Table        │
+                 │ Indexed on: (timestamp, org_id, status_code)  │
+                 └───────────────────────┬───────────────────────┘
+                                         │
+                   Sliding 5-Minute Window Query
+                                         │
+             ┌───────────────────────────┴───────────────────────────┐
+             ▼                                                       ▼
+   [ Total Active Tenants ]                                [ 5xx Impacted Tenants ]
+             │                                                       │
+             └───────────────────────────┬───────────────────────────┘
+                                         ▼
+                        [ Blast Radius % Calculation ]
+                                         │
+             ┌───────────────────────────┼───────────────────────────┐
+             ▼                           ▼                           ▼
+        < 1.00%                    1.00% - 4.99%                  >= 5.00%
+   ┌─────────────────┐         ┌───────────────────┐       ┌───────────────────┐
+   │ SEVERITY: NORMAL│         │SEVERITY: ELEVATED │       │SEVERITY: P0 CRIT  │
+   │ Green Status HUD│         │ Amber Warning HUD │       │ Red Alert Trigger │
+   └─────────────────┘         └───────────────────┘       └───────────────────┘
+```
+
+---
+
+### Topology 4: RFC 7807 Error Boundaries & 1-Click Incident Token UX
+
+When a failure occurs, the end-user receives an Astryx branded error card or RFC 7807 problem details response with an **Incident Reference Token**:
+
+```
+[ Microservice Exception ]
+            │
+            ▼
+[ RFC 7807 Handler Boundary ]
+  ├── Generate Incident Token: ERR-GOALS-7F8A92
+  └── Content Negotiation:
+        ├── API Client (application/problem+json)
+        │     └── Returns { type, title, status: 500, detail, traceId, incidentToken }
+        │
+        └── Browser Client (text/html)
+              └── Renders Astryx Error Layout:
+                    ├── Badge: 500 ERROR
+                    ├── 1-Click Button: "Incident Token: ERR-GOALS-7F8A92"
+                    │     └── Copies formatted debug payload to clipboard
+                    └── Dev Inspection Accordion (Non-Production Only)
+                          └── Displays route, method, and sanitized stack trace
+```
+
+---
+
+## 3. Environment Strategy: Development vs. Production
+
+| Architectural Concern | Local Development Environment | Air-Gapped Production Environment |
+| :--- | :--- | :--- |
+| **Network Security** | Localhost binds (`localhost:3000`, `3002`, `8087`) | Strict `core-airgap-net` (`internal: true`) with zero outbound egress |
+| **Runtime & Toolchain** | Portable Bun standalone (`portables/bun/bin/bun`) | Minimal scratch/distroless Docker container with non-root user |
+| **Telemetry Ingestion** | Local in-memory ring buffer (1,000 entries) & local file append | Dedicated Turso libSQL telemetry database + internal socket stream |
+| **Log Rotation Policy** | 5 MB cap per log file, max 3 rolling backups (`*.log`, `*.1`, `*.2`) | 5 MB cap per container volume, automated log aggregation |
+| **Developer Inspection** | Interactive Dev Accordion showing stack trace & local log links | Stack traces stripped; RFC 7807 sanitized details only |
+| **Alerting Action** | Terminal color warning + Live Dashboard badge update | Automated P0 pager trigger when Blast Radius $> 5\%$ or Enterprise tier down |
+
+---
+
+## 4. Engineering Verification & Invariant Parity
+
+1. **Submodule Autonomy (Invariant 6 & 14)**:
+   All Forge Apps (`forge-apps/*`) maintain standalone copies of the canonical logging and tracing engine in `src/lib/sdk.ts` with zero dependencies on central `@forge/*` platform packages.
+2. **Zero OS Emojis (Invariant 3 & 4)**:
+   All HUD cards, error screens, and telemetry gauges use 100% vector SVG icons (Lucide 1.75px standard).
+3. **Air-Gap Security (Invariant 22)**:
+   Context propagation and telemetry dispatch execute strictly over local loopback or internal Docker bridge networks without third-party SaaS egress.
+4. **File Size Cap (Invariant 2)**:
+   All newly created and modified observability files remain cohesive and strictly below the 500-line limit.

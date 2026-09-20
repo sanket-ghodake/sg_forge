@@ -9,7 +9,7 @@ import { getAstryxHeaderHtml, getAstryxStyles, getHeadStateScript, getAstryxToas
 import { icons } from './lib/icons';
 import { handleDocsRoute } from './lib/docs-viewer';
 import { renderSubmoduleErrorHtml } from './lib/error-view';
-import { telemetryDb } from './db';
+import { telemetryDb, calculateBlastRadius } from './db';
 
 const LOG_DIR = join(import.meta.dir, '..', 'logs');
 const DOCS_DIR = join(import.meta.dir, '..', 'docs');
@@ -71,9 +71,42 @@ function renderAppHtml(): string {
         </div>
       </div>
 
+      <!-- Blast Radius & Enterprise Observability HUD -->
+      <div class="shadcn-card" style="margin-bottom: 1.5rem; background: var(--forge-bg-root); border: 1px solid var(--forge-border);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--forge-primary); display: flex;">${icons.shieldAlert}</span>
+            <h2 style="font-size: 1.1rem; color: var(--forge-text-main); margin: 0; font-weight: 700;">Blast Radius Accounting (5m Window)</h2>
+          </div>
+          <span id="badge-severity" style="font-size: 0.75rem; background: var(--forge-success-bg); color: var(--forge-success); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 9999px; padding: 0.2rem 0.65rem; font-weight: 700;">NORMAL</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
+          <div class="luxe-hud-card">
+            <div class="luxe-metric-label">${icons.alertCircle} Blast Radius</div>
+            <div class="luxe-metric-val" id="val-blast-pct" style="color: var(--forge-success);">0.00%</div>
+            <span style="font-size: 0.72rem; color: var(--forge-text-muted);">Impacted / Active Tenants</span>
+          </div>
+          <div class="luxe-hud-card">
+            <div class="luxe-metric-label">${icons.layers} Impacted Tenants</div>
+            <div class="luxe-metric-val" id="val-impacted-orgs">0</div>
+            <span style="font-size: 0.72rem; color: var(--forge-text-muted);">Distinct 5xx Orgs</span>
+          </div>
+          <div class="luxe-hud-card">
+            <div class="luxe-metric-label">${icons.activity} Active Tenants</div>
+            <div class="luxe-metric-val" id="val-active-orgs">0</div>
+            <span style="font-size: 0.72rem; color: var(--forge-text-muted);">Total Active Orgs (5m)</span>
+          </div>
+          <div class="luxe-hud-card">
+            <div class="luxe-metric-label">${icons.terminal} Total 5xx Failures</div>
+            <div class="luxe-metric-val" id="val-total-errors">0</div>
+            <span style="font-size: 0.72rem; color: var(--forge-text-muted);">Total 5xx Event Count</span>
+          </div>
+        </div>
+      </div>
+
       <div style="background: var(--forge-bg-surface); padding: 0.75rem 1rem; border-radius: var(--forge-radius); border: 1px solid var(--forge-border); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
         <span style="color: var(--forge-primary); display: flex;">${icons.database}</span>
-        <span style="font-size: 0.82rem; color: var(--forge-text-muted);">Database: <code style="color: var(--forge-primary);">telemetry_turso.db</code> (Isolated libSQL Instance)</span>
+        <span style="font-size: 0.82rem; color: var(--forge-text-muted);">Database: <code style="color: var(--forge-primary);">telemetry_turso.db</code> (Isolated libSQL Multi-Tenant Instance)</span>
       </div>
 
       <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
@@ -94,9 +127,41 @@ function renderAppHtml(): string {
           document.getElementById('val-uptime').innerText = Math.floor(data.uptime) + 's';
         })
         .catch(() => {});
+
+      fetch(apiBase + 'api/telemetry/blast-radius')
+        .then(res => res.json())
+        .then(data => {
+          const pctElem = document.getElementById('val-blast-pct');
+          const badgeElem = document.getElementById('badge-severity');
+          pctElem.innerText = data.blastRadiusPct.toFixed(2) + '%';
+          document.getElementById('val-impacted-orgs').innerText = String(data.impactedOrgs);
+          document.getElementById('val-active-orgs').innerText = String(data.totalActiveOrgs);
+          document.getElementById('val-total-errors').innerText = String(data.totalErrors);
+
+          if (data.severity === 'P0_CRITICAL') {
+            pctElem.style.color = 'var(--forge-error)';
+            badgeElem.innerText = 'P0 CRITICAL';
+            badgeElem.style.background = 'rgba(239, 68, 68, 0.15)';
+            badgeElem.style.color = 'var(--forge-error)';
+            badgeElem.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+          } else if (data.severity === 'ELEVATED') {
+            pctElem.style.color = 'var(--forge-warning)';
+            badgeElem.innerText = 'ELEVATED';
+            badgeElem.style.background = 'rgba(245, 158, 11, 0.15)';
+            badgeElem.style.color = 'var(--forge-warning)';
+            badgeElem.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+          } else {
+            pctElem.style.color = 'var(--forge-success)';
+            badgeElem.innerText = 'NORMAL';
+            badgeElem.style.background = 'var(--forge-success-bg)';
+            badgeElem.style.color = 'var(--forge-success)';
+            badgeElem.style.borderColor = 'rgba(52, 211, 153, 0.3)';
+          }
+        })
+        .catch(() => {});
     }
     updateVitals();
-    setInterval(updateVitals, 2000);
+    setInterval(updateVitals, 2500);
 
     window.onerror = function(msg, src, lineno, colno, err) {
       fetch(apiBase + 'api/logs/browser', {
@@ -150,6 +215,38 @@ export function startTelemetryServer(port: number = PORT) {
         const body: any = await req.json().catch(() => ({}));
         logger.logBrowserEvent(body.severity || 'INFO', body.message || 'Browser event', body);
         return Response.json({ status: 'ok' });
+      }
+
+      if (url.pathname === '/api/telemetry/blast-radius' || url.pathname.endsWith('/api/telemetry/blast-radius')) {
+        const windowSec = Number(url.searchParams.get('window') || 300);
+        const result = calculateBlastRadius(windowSec);
+        return Response.json(result);
+      }
+
+      if ((url.pathname === '/api/analytics/collect' || url.pathname.endsWith('/api/analytics/collect') ||
+           url.pathname === '/api/telemetry/events' || url.pathname.endsWith('/api/telemetry/events')) && req.method === 'POST') {
+        const body: any = await req.json().catch(() => ({}));
+        const id = crypto.randomUUID();
+        const traceId = body.traceId || crypto.randomUUID();
+        const incidentToken = body.incidentToken || null;
+        const service = body.service || 'unknown';
+        const route = body.path || body.route || '/';
+        const method = body.method || 'GET';
+        const statusCode = Number(body.statusCode || 200);
+        const durationMs = Number(body.durationMs || 0);
+        const orgId = body.orgId || body.tenant?.orgId || null;
+        const userId = body.userId || body.tenant?.userId || null;
+        const tier = body.tier || body.tenant?.tier || null;
+        const errorType = body.error?.type || null;
+        const timestamp = Number(body.timestamp || Math.floor(Date.now() / 1000));
+
+        telemetryDb.run(
+          `INSERT INTO request_events (id, trace_id, incident_token, service, route, method, status_code, duration_ms, org_id, user_id, tier, error_type, timestamp)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [id, traceId, incidentToken, service, route, method, statusCode, durationMs, orgId, userId, tier, errorType, timestamp]
+        );
+
+        return Response.json({ status: 'ok', id, traceId });
       }
 
       // 📖 Living Documentation & OpenAPI Explorer

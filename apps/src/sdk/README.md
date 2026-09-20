@@ -32,7 +32,13 @@ Enterprise Foundation SDK suite for **SG Forge** microservices (`apps/src/*`) an
 * `ForgeLogger.logBrowserEvent(severity, message, meta?, err?, traceId?)`: Browser telemetry log sink.
 
 ### 2. Error Boundaries & RFC 7807 Wrapper (`error-handler.ts`)
-* `createSafeHandler(serviceName, handler, customLogDir?)`: Wraps Bun/Node HTTP request handlers in standard RFC 7807 problem details (`application/problem+json`) with immutable `x-trace-id` propagation and execution timing.
+* `createSafeHandler(serviceName, handler, customLogDir?)`: Wraps Bun/Node HTTP request handlers in standard RFC 7807 problem details (`application/problem+json`) with immutable W3C `traceparent` propagation, `x-incident-token` generation, and single canonical event emission.
+
+### 3. Canonical Request Event & W3C Tracing (`canonical-event.ts`)
+* `RequestContext`: Multi-tenant request accumulator tracking W3C trace contexts, tenant context (`orgId`, `userId`, `tier`), sub-spans, and database query timings.
+* `parseOrCreateTraceContext(header)`: Parses W3C standard `00-{trace_id}-{span_id}-{flags}` headers with automated fallback generation.
+* `generateIncidentToken(service, traceId)`: Generates short, human-friendly incident reference tokens (`ERR-<SRV>-<ID>`) for customer support and SRE trace correlation.
+* `toCanonicalEvent(statusCode, durationMs, error?)`: Serializes request execution into strictly one wide canonical JSON event (Stripe / Honeycomb standard).
 
 ### 3. Zero-Trust SSO Auth & RBAC Gate (`auth-guard.ts`)
 * `verifySessionToken(token)`: High-performance asymmetric Ed25519 signature validation (<0.1ms without central DB hit). Automatically validates internal service tokens (`principal_type: "SERVICE"`) against active registry entries.

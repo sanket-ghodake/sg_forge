@@ -1,11 +1,11 @@
 {
   "timestamp": "2026-09-15T16:21:00.000Z",
-  "totalExportedSymbols": 856,
-  "documentedSymbols": 677,
-  "symbolCoveragePercent": 79.1,
-  "totalRequirements": 86,
-  "implementedRequirements": 80,
-  "verifiedRequirements": 80,
+  "totalExportedSymbols": 867,
+  "documentedSymbols": 687,
+  "symbolCoveragePercent": 79.2,
+  "totalRequirements": 89,
+  "implementedRequirements": 83,
+  "verifiedRequirements": 83,
   "orphanRequirements": [
     "LLR-PORTAL-001",
     "LLR-PORTAL-002",
@@ -4993,6 +4993,134 @@
       ]
     },
     {
+      "name": "W3cTraceContext",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 16,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
+    },
+    {
+      "name": "CanonicalRequestEvent",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 29,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001",
+        "SR-LOG-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001",
+        "SR-LOG-001"
+      ]
+    },
+    {
+      "name": "ExecutionSpan",
+      "kind": "interface",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 68,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
+    },
+    {
+      "name": "generateSpanId",
+      "kind": "function",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 79,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
+    },
+    {
+      "name": "generateTraceId",
+      "kind": "function",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 89,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
+    },
+    {
+      "name": "generateIncidentToken",
+      "kind": "function",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 100,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-002"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-002"
+      ]
+    },
+    {
+      "name": "parseOrCreateTraceContext",
+      "kind": "function",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 111,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
+    },
+    {
+      "name": "formatTraceparent",
+      "kind": "function",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 141,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
+    },
+    {
+      "name": "RequestContext",
+      "kind": "class",
+      "file": "apps/src/sdk/src/canonical-event.ts",
+      "line": 149,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-SDK-303",
+        "LLR-OBS-001"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
+    },
+    {
       "name": "ServiceEntry",
       "kind": "interface",
       "file": "apps/src/sdk/src/registry.ts",
@@ -5490,13 +5618,16 @@
       "name": "createSafeHandler",
       "kind": "function",
       "file": "apps/src/sdk/src/error-handler.ts",
-      "line": 18,
+      "line": 24,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-303",
-        "LLR-SDK-004"
+        "LLR-SDK-004",
+        "LLR-OBS-001"
       ],
-      "missingRequirementFiles": []
+      "missingRequirementFiles": [
+        "LLR-OBS-001"
+      ]
     },
     {
       "name": "OrgNodeTypeDto",
@@ -6181,7 +6312,7 @@
       "name": "StatusConfig",
       "kind": "interface",
       "file": "apps/src/ui/src/error-page.ts",
-      "line": 30,
+      "line": 36,
       "hasDoc": false,
       "requirements": [],
       "missingRequirementFiles": []
@@ -6190,7 +6321,7 @@
       "name": "renderAstryxSystemDownPage",
       "kind": "function",
       "file": "apps/src/ui/src/error-page.ts",
-      "line": 105,
+      "line": 111,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -6202,7 +6333,7 @@
       "name": "renderAstryxErrorHtml",
       "kind": "function",
       "file": "apps/src/ui/src/error-page.ts",
-      "line": 125,
+      "line": 131,
       "hasDoc": true,
       "requirements": [
         "HLR-UI-401",
@@ -6903,7 +7034,7 @@
       "name": "isSafeEgressUrl",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 163,
+      "line": 191,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6915,7 +7046,7 @@
       "name": "getVerificationPublicKey",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 179,
+      "line": 207,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6927,7 +7058,7 @@
       "name": "createInternalServiceToken",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 203,
+      "line": 231,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6939,7 +7070,7 @@
       "name": "createServiceAccountToken",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 234,
+      "line": 262,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6951,7 +7082,7 @@
       "name": "verifySessionToken",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 267,
+      "line": 295,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6963,7 +7094,7 @@
       "name": "authGuard",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 291,
+      "line": 319,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6975,7 +7106,7 @@
       "name": "loadBrandConfig",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 409,
+      "line": 437,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6987,7 +7118,7 @@
       "name": "getScopedHierarchy",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 420,
+      "line": 448,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -6999,7 +7130,7 @@
       "name": "redactSensitiveData",
       "kind": "function",
       "file": "forge-apps/app-template/src/lib/sdk.ts",
-      "line": 446,
+      "line": 474,
       "hasDoc": true,
       "requirements": [
         "HLR-SDK-301",
@@ -7292,7 +7423,7 @@
       "name": "startTelemetryServer",
       "kind": "function",
       "file": "forge-apps/telemetry/src/server.ts",
-      "line": 117,
+      "line": 182,
       "hasDoc": true,
       "requirements": [
         "HLR-TEL-801",
@@ -7319,6 +7450,29 @@
         "LLR-TEL-002.1"
       ],
       "missingRequirementFiles": []
+    },
+    {
+      "name": "BlastRadiusResult",
+      "kind": "interface",
+      "file": "forge-apps/telemetry/src/db/index.ts",
+      "line": 48,
+      "hasDoc": false,
+      "requirements": [],
+      "missingRequirementFiles": []
+    },
+    {
+      "name": "calculateBlastRadius",
+      "kind": "function",
+      "file": "forge-apps/telemetry/src/db/index.ts",
+      "line": 63,
+      "hasDoc": true,
+      "requirements": [
+        "HLR-TEL-801",
+        "LLR-OBS-003"
+      ],
+      "missingRequirementFiles": [
+        "LLR-OBS-003"
+      ]
     },
     {
       "name": "getHeadStateScript",
@@ -7408,8 +7562,8 @@
       "line": 20,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7420,8 +7574,8 @@
       "line": 75,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7432,8 +7586,8 @@
       "line": 86,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7444,8 +7598,8 @@
       "line": 114,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7453,11 +7607,11 @@
       "name": "isSafeEgressUrl",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 163,
+      "line": 191,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7465,11 +7619,11 @@
       "name": "getVerificationPublicKey",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 179,
+      "line": 207,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7477,11 +7631,11 @@
       "name": "createInternalServiceToken",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 203,
+      "line": 231,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7489,11 +7643,11 @@
       "name": "createServiceAccountToken",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 234,
+      "line": 262,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7501,11 +7655,11 @@
       "name": "verifySessionToken",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 267,
+      "line": 295,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7513,11 +7667,11 @@
       "name": "authGuard",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 291,
+      "line": 319,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7525,11 +7679,11 @@
       "name": "loadBrandConfig",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 409,
+      "line": 437,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7537,11 +7691,11 @@
       "name": "getScopedHierarchy",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 420,
+      "line": 448,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -7549,11 +7703,11 @@
       "name": "redactSensitiveData",
       "kind": "function",
       "file": "forge-apps/telemetry/src/lib/sdk.ts",
-      "line": 446,
+      "line": 474,
       "hasDoc": true,
       "requirements": [
-        "HLR-TEL-801",
-        "LLR-SUB-004"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8297,8 +8451,8 @@
       "line": 20,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8309,8 +8463,8 @@
       "line": 75,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8321,8 +8475,8 @@
       "line": 86,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8333,8 +8487,8 @@
       "line": 114,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8342,11 +8496,11 @@
       "name": "isSafeEgressUrl",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 163,
+      "line": 191,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8354,11 +8508,11 @@
       "name": "getVerificationPublicKey",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 179,
+      "line": 207,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8366,11 +8520,11 @@
       "name": "createInternalServiceToken",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 203,
+      "line": 231,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8378,11 +8532,11 @@
       "name": "createServiceAccountToken",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 234,
+      "line": 262,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8390,11 +8544,11 @@
       "name": "verifySessionToken",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 267,
+      "line": 295,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8402,11 +8556,11 @@
       "name": "authGuard",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 291,
+      "line": 319,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8414,11 +8568,11 @@
       "name": "loadBrandConfig",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 409,
+      "line": 437,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8426,11 +8580,11 @@
       "name": "getScopedHierarchy",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 420,
+      "line": 448,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -8438,11 +8592,11 @@
       "name": "redactSensitiveData",
       "kind": "function",
       "file": "forge-apps/code/src/lib/sdk.ts",
-      "line": 446,
+      "line": 474,
       "hasDoc": true,
       "requirements": [
-        "HLR-CODE-701",
-        "LLR-SUB-003"
+        "HLR-SDK-301",
+        "LLR-SUB-001"
       ],
       "missingRequirementFiles": []
     },
@@ -10196,6 +10350,7 @@
       "verifiedIn": [
         "apps/src/portal/test/e2e/employee-lifecycle-journey.test.ts",
         "apps/test/e2e/playwright/error-status-pages.test.ts",
+        "apps/test/e2e/playwright/observability-blast-radius.test.ts",
         "scripts/test/run-sh.test.ts"
       ]
     },
@@ -10262,8 +10417,8 @@
         "apps/src/ui/src/icons.ts:11#astryxIcons",
         "apps/src/ui/src/tokens.ts:10#themeTokens",
         "apps/src/ui/src/error-page.ts:16#ErrorPageOptions",
-        "apps/src/ui/src/error-page.ts:105#renderAstryxSystemDownPage",
-        "apps/src/ui/src/error-page.ts:125#renderAstryxErrorHtml",
+        "apps/src/ui/src/error-page.ts:111#renderAstryxSystemDownPage",
+        "apps/src/ui/src/error-page.ts:131#renderAstryxErrorHtml",
         "apps/src/ui/src/header.ts:12#AstryxHeaderOptions",
         "apps/src/ui/src/header.ts:22#getAstryxHeaderHtml",
         "apps/src/ui/src/footer.ts:10#AstryxFooterOptions",
@@ -10860,6 +11015,7 @@
       "type": "SR",
       "docFile": "apps/src/docs/src/content/docs/features/observability.mdx",
       "implementedIn": [
+        "apps/src/sdk/src/canonical-event.ts:29#CanonicalRequestEvent",
         "apps/src/sdk/src/logger.ts:59#LogEntry"
       ],
       "verifiedIn": [
@@ -10882,7 +11038,16 @@
         "apps/src/dev-dashboard/src/frontend/ui-renderer-login.ts:15#renderDevLoginHtml",
         "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
         "apps/src/dev-dashboard/src/db/db.ts:78#IssueReportRecord",
-        "apps/src/sdk/src/error-handler.ts:18#createSafeHandler",
+        "apps/src/sdk/src/canonical-event.ts:16#W3cTraceContext",
+        "apps/src/sdk/src/canonical-event.ts:29#CanonicalRequestEvent",
+        "apps/src/sdk/src/canonical-event.ts:68#ExecutionSpan",
+        "apps/src/sdk/src/canonical-event.ts:79#generateSpanId",
+        "apps/src/sdk/src/canonical-event.ts:89#generateTraceId",
+        "apps/src/sdk/src/canonical-event.ts:100#generateIncidentToken",
+        "apps/src/sdk/src/canonical-event.ts:111#parseOrCreateTraceContext",
+        "apps/src/sdk/src/canonical-event.ts:141#formatTraceparent",
+        "apps/src/sdk/src/canonical-event.ts:149#RequestContext",
+        "apps/src/sdk/src/error-handler.ts:24#createSafeHandler",
         "apps/src/sdk/src/logger.ts:14#LogLevel",
         "apps/src/sdk/src/logger.ts:25#redactSensitiveData",
         "apps/src/sdk/src/logger.ts:59#LogEntry",
@@ -10897,7 +11062,9 @@
         "apps/src/sdk/src/route-boundary.ts:87#renderStatusError"
       ],
       "verifiedIn": [
-        "apps/src/sdk/test/unit/logger.test.ts"
+        "apps/src/sdk/test/unit/logger.test.ts",
+        "apps/test/unit/canonical-event.test.ts",
+        "apps/test/e2e/playwright/observability-blast-radius.test.ts"
       ]
     },
     "LLR-SDK-002": {
@@ -10929,7 +11096,7 @@
       "docFile": "apps/src/docs/src/content/docs/features/observability.mdx",
       "implementedIn": [
         "apps/src/dev-dashboard/src/db/db.ts:78#IssueReportRecord",
-        "apps/src/sdk/src/error-handler.ts:18#createSafeHandler",
+        "apps/src/sdk/src/error-handler.ts:24#createSafeHandler",
         "apps/src/sdk/src/route-boundary.ts:17#RouteNotFoundOptions",
         "apps/src/sdk/src/route-boundary.ts:34#StatusErrorOptions",
         "apps/src/sdk/src/route-boundary.ts:52#isApiRequest",
@@ -11311,15 +11478,15 @@
         "forge-apps/app-template/src/lib/sdk.ts:75#createLogger",
         "forge-apps/app-template/src/lib/sdk.ts:86#getDatabaseClient",
         "forge-apps/app-template/src/lib/sdk.ts:114#createSafeHandler",
-        "forge-apps/app-template/src/lib/sdk.ts:163#isSafeEgressUrl",
-        "forge-apps/app-template/src/lib/sdk.ts:179#getVerificationPublicKey",
-        "forge-apps/app-template/src/lib/sdk.ts:203#createInternalServiceToken",
-        "forge-apps/app-template/src/lib/sdk.ts:234#createServiceAccountToken",
-        "forge-apps/app-template/src/lib/sdk.ts:267#verifySessionToken",
-        "forge-apps/app-template/src/lib/sdk.ts:291#authGuard",
-        "forge-apps/app-template/src/lib/sdk.ts:409#loadBrandConfig",
-        "forge-apps/app-template/src/lib/sdk.ts:420#getScopedHierarchy",
-        "forge-apps/app-template/src/lib/sdk.ts:446#redactSensitiveData",
+        "forge-apps/app-template/src/lib/sdk.ts:191#isSafeEgressUrl",
+        "forge-apps/app-template/src/lib/sdk.ts:207#getVerificationPublicKey",
+        "forge-apps/app-template/src/lib/sdk.ts:231#createInternalServiceToken",
+        "forge-apps/app-template/src/lib/sdk.ts:262#createServiceAccountToken",
+        "forge-apps/app-template/src/lib/sdk.ts:295#verifySessionToken",
+        "forge-apps/app-template/src/lib/sdk.ts:319#authGuard",
+        "forge-apps/app-template/src/lib/sdk.ts:437#loadBrandConfig",
+        "forge-apps/app-template/src/lib/sdk.ts:448#getScopedHierarchy",
+        "forge-apps/app-template/src/lib/sdk.ts:474#redactSensitiveData",
         "forge-apps/app-template/src/lib/types.ts:7#AuthUser",
         "forge-apps/app-template/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/app-template/src/lib/types.ts:33#AuthGuardResult",
@@ -11327,8 +11494,34 @@
         "forge-apps/app-template/src/lib/types.ts:62#ProblemDetails",
         "forge-apps/app-template/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/app-template/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/telemetry/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/telemetry/src/lib/sdk.ts:191#isSafeEgressUrl",
+        "forge-apps/telemetry/src/lib/sdk.ts:207#getVerificationPublicKey",
+        "forge-apps/telemetry/src/lib/sdk.ts:231#createInternalServiceToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:262#createServiceAccountToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:295#verifySessionToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:319#authGuard",
+        "forge-apps/telemetry/src/lib/sdk.ts:437#loadBrandConfig",
+        "forge-apps/telemetry/src/lib/sdk.ts:448#getScopedHierarchy",
+        "forge-apps/telemetry/src/lib/sdk.ts:474#redactSensitiveData",
         "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/code/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/code/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/code/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/code/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/code/src/lib/sdk.ts:191#isSafeEgressUrl",
+        "forge-apps/code/src/lib/sdk.ts:207#getVerificationPublicKey",
+        "forge-apps/code/src/lib/sdk.ts:231#createInternalServiceToken",
+        "forge-apps/code/src/lib/sdk.ts:262#createServiceAccountToken",
+        "forge-apps/code/src/lib/sdk.ts:295#verifySessionToken",
+        "forge-apps/code/src/lib/sdk.ts:319#authGuard",
+        "forge-apps/code/src/lib/sdk.ts:437#loadBrandConfig",
+        "forge-apps/code/src/lib/sdk.ts:448#getScopedHierarchy",
+        "forge-apps/code/src/lib/sdk.ts:474#redactSensitiveData",
         "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup",
         "scripts/generate-proxy.ts:20#generateCaddyfile",
@@ -11396,19 +11589,6 @@
         "forge-apps/code/src/db/schema.ts:7#ProjectRecord",
         "forge-apps/code/src/db/schema.ts:24#ProjectMemberRecord",
         "forge-apps/code/src/db/schema.ts:39#ActiveSessionRecord",
-        "forge-apps/code/src/lib/sdk.ts:20#StandaloneLogger",
-        "forge-apps/code/src/lib/sdk.ts:75#createLogger",
-        "forge-apps/code/src/lib/sdk.ts:86#getDatabaseClient",
-        "forge-apps/code/src/lib/sdk.ts:114#createSafeHandler",
-        "forge-apps/code/src/lib/sdk.ts:163#isSafeEgressUrl",
-        "forge-apps/code/src/lib/sdk.ts:179#getVerificationPublicKey",
-        "forge-apps/code/src/lib/sdk.ts:203#createInternalServiceToken",
-        "forge-apps/code/src/lib/sdk.ts:234#createServiceAccountToken",
-        "forge-apps/code/src/lib/sdk.ts:267#verifySessionToken",
-        "forge-apps/code/src/lib/sdk.ts:291#authGuard",
-        "forge-apps/code/src/lib/sdk.ts:409#loadBrandConfig",
-        "forge-apps/code/src/lib/sdk.ts:420#getScopedHierarchy",
-        "forge-apps/code/src/lib/sdk.ts:446#redactSensitiveData",
         "forge-apps/code/src/lib/types.ts:7#AuthUser",
         "forge-apps/code/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/code/src/lib/types.ts:33#AuthGuardResult",
@@ -11436,21 +11616,9 @@
       "docFile": "apps/src/docs/src/content/docs/hlr/HLR-TEL-801_TELEMETRY_ENGINE.mdx",
       "implementedIn": [
         "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
-        "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:86#getDatabaseClient",
-        "forge-apps/telemetry/src/lib/sdk.ts:114#createSafeHandler",
-        "forge-apps/telemetry/src/lib/sdk.ts:163#isSafeEgressUrl",
-        "forge-apps/telemetry/src/lib/sdk.ts:179#getVerificationPublicKey",
-        "forge-apps/telemetry/src/lib/sdk.ts:203#createInternalServiceToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:234#createServiceAccountToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:267#verifySessionToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:291#authGuard",
-        "forge-apps/telemetry/src/lib/sdk.ts:409#loadBrandConfig",
-        "forge-apps/telemetry/src/lib/sdk.ts:420#getScopedHierarchy",
-        "forge-apps/telemetry/src/lib/sdk.ts:446#redactSensitiveData",
+        "forge-apps/telemetry/src/db/index.ts:63#calculateBlastRadius",
         "forge-apps/telemetry/src/lib/types.ts:7#AuthUser",
         "forge-apps/telemetry/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/telemetry/src/lib/types.ts:33#AuthGuardResult",
@@ -11458,6 +11626,7 @@
         "forge-apps/telemetry/src/lib/types.ts:62#ProblemDetails"
       ],
       "verifiedIn": [
+        "apps/test/integration/blast-radius.test.ts",
         "forge-apps/telemetry/test/e2e/telemetry-server.test.ts",
         "forge-apps/telemetry/test/security/auth-gate.test.ts",
         "forge-apps/telemetry/test/integration/route-not-found.test.ts"
@@ -11744,12 +11913,58 @@
         "apps/src/ui/src/sanitize.ts:10#escapeHtml",
         "apps/src/ui/src/sanitize.ts:35#sanitizeLocalUrl",
         "apps/src/ui/src/error-page.ts:16#ErrorPageOptions",
-        "apps/src/ui/src/error-page.ts:105#renderAstryxSystemDownPage",
-        "apps/src/ui/src/error-page.ts:125#renderAstryxErrorHtml"
+        "apps/src/ui/src/error-page.ts:111#renderAstryxSystemDownPage",
+        "apps/src/ui/src/error-page.ts:131#renderAstryxErrorHtml"
       ],
       "verifiedIn": [
         "apps/src/ui/test/unit/error-page.test.ts",
         "apps/test/e2e/playwright/error-status-pages.test.ts"
+      ]
+    },
+    "LLR-OBS-001": {
+      "id": "LLR-OBS-001",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/architecture/observability-blast-radius.mdx",
+      "implementedIn": [
+        "apps/src/sdk/src/canonical-event.ts:16#W3cTraceContext",
+        "apps/src/sdk/src/canonical-event.ts:29#CanonicalRequestEvent",
+        "apps/src/sdk/src/canonical-event.ts:68#ExecutionSpan",
+        "apps/src/sdk/src/canonical-event.ts:79#generateSpanId",
+        "apps/src/sdk/src/canonical-event.ts:89#generateTraceId",
+        "apps/src/sdk/src/canonical-event.ts:111#parseOrCreateTraceContext",
+        "apps/src/sdk/src/canonical-event.ts:141#formatTraceparent",
+        "apps/src/sdk/src/canonical-event.ts:149#RequestContext",
+        "apps/src/sdk/src/error-handler.ts:24#createSafeHandler"
+      ],
+      "verifiedIn": [
+        "apps/src/docs/test/unit/token-ledger.test.ts",
+        "apps/src/docs/test/unit/tokscale.test.ts",
+        "apps/test/unit/canonical-event.test.ts",
+        "apps/test/e2e/playwright/observability-blast-radius.test.ts"
+      ]
+    },
+    "LLR-OBS-002": {
+      "id": "LLR-OBS-002",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/architecture/observability-blast-radius.mdx",
+      "implementedIn": [
+        "apps/src/sdk/src/canonical-event.ts:100#generateIncidentToken"
+      ],
+      "verifiedIn": [
+        "apps/test/unit/canonical-event.test.ts",
+        "apps/test/e2e/playwright/observability-blast-radius.test.ts"
+      ]
+    },
+    "LLR-OBS-003": {
+      "id": "LLR-OBS-003",
+      "type": "LLR",
+      "docFile": "apps/src/docs/src/content/docs/architecture/observability-blast-radius.mdx",
+      "implementedIn": [
+        "forge-apps/telemetry/src/db/index.ts:63#calculateBlastRadius"
+      ],
+      "verifiedIn": [
+        "apps/test/e2e/playwright/observability-blast-radius.test.ts",
+        "apps/test/integration/blast-radius.test.ts"
       ]
     },
     "LLR-AUTH-007": {
@@ -11781,15 +11996,15 @@
         "forge-apps/app-template/src/lib/sdk.ts:75#createLogger",
         "forge-apps/app-template/src/lib/sdk.ts:86#getDatabaseClient",
         "forge-apps/app-template/src/lib/sdk.ts:114#createSafeHandler",
-        "forge-apps/app-template/src/lib/sdk.ts:163#isSafeEgressUrl",
-        "forge-apps/app-template/src/lib/sdk.ts:179#getVerificationPublicKey",
-        "forge-apps/app-template/src/lib/sdk.ts:203#createInternalServiceToken",
-        "forge-apps/app-template/src/lib/sdk.ts:234#createServiceAccountToken",
-        "forge-apps/app-template/src/lib/sdk.ts:267#verifySessionToken",
-        "forge-apps/app-template/src/lib/sdk.ts:291#authGuard",
-        "forge-apps/app-template/src/lib/sdk.ts:409#loadBrandConfig",
-        "forge-apps/app-template/src/lib/sdk.ts:420#getScopedHierarchy",
-        "forge-apps/app-template/src/lib/sdk.ts:446#redactSensitiveData",
+        "forge-apps/app-template/src/lib/sdk.ts:191#isSafeEgressUrl",
+        "forge-apps/app-template/src/lib/sdk.ts:207#getVerificationPublicKey",
+        "forge-apps/app-template/src/lib/sdk.ts:231#createInternalServiceToken",
+        "forge-apps/app-template/src/lib/sdk.ts:262#createServiceAccountToken",
+        "forge-apps/app-template/src/lib/sdk.ts:295#verifySessionToken",
+        "forge-apps/app-template/src/lib/sdk.ts:319#authGuard",
+        "forge-apps/app-template/src/lib/sdk.ts:437#loadBrandConfig",
+        "forge-apps/app-template/src/lib/sdk.ts:448#getScopedHierarchy",
+        "forge-apps/app-template/src/lib/sdk.ts:474#redactSensitiveData",
         "forge-apps/app-template/src/lib/error-view.ts:33#renderSubmoduleErrorHtml",
         "forge-apps/app-template/src/lib/types.ts:7#AuthUser",
         "forge-apps/app-template/src/lib/types.ts:21#AuthGuardOptions",
@@ -11799,10 +12014,36 @@
         "forge-apps/app-template/src/lib/icons.ts:8#icons",
         "forge-apps/app-template/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/app-template/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/telemetry/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/telemetry/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/telemetry/src/lib/sdk.ts:191#isSafeEgressUrl",
+        "forge-apps/telemetry/src/lib/sdk.ts:207#getVerificationPublicKey",
+        "forge-apps/telemetry/src/lib/sdk.ts:231#createInternalServiceToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:262#createServiceAccountToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:295#verifySessionToken",
+        "forge-apps/telemetry/src/lib/sdk.ts:319#authGuard",
+        "forge-apps/telemetry/src/lib/sdk.ts:437#loadBrandConfig",
+        "forge-apps/telemetry/src/lib/sdk.ts:448#getScopedHierarchy",
+        "forge-apps/telemetry/src/lib/sdk.ts:474#redactSensitiveData",
         "forge-apps/telemetry/src/lib/error-view.ts:33#renderSubmoduleErrorHtml",
         "forge-apps/telemetry/src/lib/icons.ts:8#icons",
         "forge-apps/telemetry/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/telemetry/scripts/backup-db.ts:42#executeMicroAppBackup",
+        "forge-apps/code/src/lib/sdk.ts:20#StandaloneLogger",
+        "forge-apps/code/src/lib/sdk.ts:75#createLogger",
+        "forge-apps/code/src/lib/sdk.ts:86#getDatabaseClient",
+        "forge-apps/code/src/lib/sdk.ts:114#createSafeHandler",
+        "forge-apps/code/src/lib/sdk.ts:191#isSafeEgressUrl",
+        "forge-apps/code/src/lib/sdk.ts:207#getVerificationPublicKey",
+        "forge-apps/code/src/lib/sdk.ts:231#createInternalServiceToken",
+        "forge-apps/code/src/lib/sdk.ts:262#createServiceAccountToken",
+        "forge-apps/code/src/lib/sdk.ts:295#verifySessionToken",
+        "forge-apps/code/src/lib/sdk.ts:319#authGuard",
+        "forge-apps/code/src/lib/sdk.ts:437#loadBrandConfig",
+        "forge-apps/code/src/lib/sdk.ts:448#getScopedHierarchy",
+        "forge-apps/code/src/lib/sdk.ts:474#redactSensitiveData",
         "forge-apps/code/src/lib/icons.ts:8#icons",
         "forge-apps/code/scripts/backup-db.ts:26#MicroAppBackupResult",
         "forge-apps/code/scripts/backup-db.ts:42#executeMicroAppBackup",
@@ -11849,19 +12090,6 @@
         "forge-apps/code/src/db/schema.ts:7#ProjectRecord",
         "forge-apps/code/src/db/schema.ts:24#ProjectMemberRecord",
         "forge-apps/code/src/db/schema.ts:39#ActiveSessionRecord",
-        "forge-apps/code/src/lib/sdk.ts:20#StandaloneLogger",
-        "forge-apps/code/src/lib/sdk.ts:75#createLogger",
-        "forge-apps/code/src/lib/sdk.ts:86#getDatabaseClient",
-        "forge-apps/code/src/lib/sdk.ts:114#createSafeHandler",
-        "forge-apps/code/src/lib/sdk.ts:163#isSafeEgressUrl",
-        "forge-apps/code/src/lib/sdk.ts:179#getVerificationPublicKey",
-        "forge-apps/code/src/lib/sdk.ts:203#createInternalServiceToken",
-        "forge-apps/code/src/lib/sdk.ts:234#createServiceAccountToken",
-        "forge-apps/code/src/lib/sdk.ts:267#verifySessionToken",
-        "forge-apps/code/src/lib/sdk.ts:291#authGuard",
-        "forge-apps/code/src/lib/sdk.ts:409#loadBrandConfig",
-        "forge-apps/code/src/lib/sdk.ts:420#getScopedHierarchy",
-        "forge-apps/code/src/lib/sdk.ts:446#redactSensitiveData",
         "forge-apps/code/src/lib/types.ts:7#AuthUser",
         "forge-apps/code/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/code/src/lib/types.ts:33#AuthGuardResult",
@@ -11892,21 +12120,8 @@
         "apps/src/dev-dashboard/src/frontend/ui-log-scripts.ts:7#getLogDashboardScripts",
         "apps/src/dev-dashboard/src/db/db.ts:61#TrafficEventRecord",
         "apps/src/sdk/src/logger.ts:119#ForgeLogger",
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb",
-        "forge-apps/telemetry/src/lib/sdk.ts:20#StandaloneLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:75#createLogger",
-        "forge-apps/telemetry/src/lib/sdk.ts:86#getDatabaseClient",
-        "forge-apps/telemetry/src/lib/sdk.ts:114#createSafeHandler",
-        "forge-apps/telemetry/src/lib/sdk.ts:163#isSafeEgressUrl",
-        "forge-apps/telemetry/src/lib/sdk.ts:179#getVerificationPublicKey",
-        "forge-apps/telemetry/src/lib/sdk.ts:203#createInternalServiceToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:234#createServiceAccountToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:267#verifySessionToken",
-        "forge-apps/telemetry/src/lib/sdk.ts:291#authGuard",
-        "forge-apps/telemetry/src/lib/sdk.ts:409#loadBrandConfig",
-        "forge-apps/telemetry/src/lib/sdk.ts:420#getScopedHierarchy",
-        "forge-apps/telemetry/src/lib/sdk.ts:446#redactSensitiveData",
         "forge-apps/telemetry/src/lib/types.ts:7#AuthUser",
         "forge-apps/telemetry/src/lib/types.ts:21#AuthGuardOptions",
         "forge-apps/telemetry/src/lib/types.ts:33#AuthGuardResult",
@@ -12302,7 +12517,7 @@
       "type": "HLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-001_EVENT_INGESTION.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -12313,7 +12528,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-001_EVENT_INGESTION.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/unit/telemetry.test.ts"
@@ -12324,7 +12539,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-001_EVENT_INGESTION.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/integration/db-isolation.test.ts"
@@ -12335,7 +12550,7 @@
       "type": "HLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/contracts/problem-json.test.ts"
@@ -12346,7 +12561,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer",
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer",
         "forge-apps/telemetry/src/db/index.ts:13#telemetryDb"
       ],
       "verifiedIn": [
@@ -12358,7 +12573,7 @@
       "type": "LLR",
       "docFile": "forge-apps/telemetry/docs/hlr/HLR-TEL-003_AUDIT_LOG_STREAMING.md",
       "implementedIn": [
-        "forge-apps/telemetry/src/server.ts:117#startTelemetryServer"
+        "forge-apps/telemetry/src/server.ts:182#startTelemetryServer"
       ],
       "verifiedIn": [
         "forge-apps/telemetry/test/e2e/telemetry-server.test.ts"

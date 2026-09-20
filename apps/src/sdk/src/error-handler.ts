@@ -10,14 +10,20 @@ import { createLogger } from './logger';
 import { applySecurityHeaders } from './security-headers';
 import { loadBrandConfig } from './branding';
 import { renderAstryxErrorHtml } from '@forge/ui';
+import {
+  RequestContext,
+  formatTraceparent,
+  type CanonicalRequestEvent,
+} from './canonical-event';
 
 /**
- * Wraps an HTTP route handler in RFC 7807 problem details error boundary with immutable trace correlation.
- * @requirements [HLR-SDK-303] [LLR-SDK-004]
+ * Wraps an HTTP route handler in RFC 7807 problem details error boundary with immutable W3C trace correlation.
+ * Emits strictly one canonical request event upon completion.
+ * @requirements [HLR-SDK-303] [LLR-SDK-004] [LLR-OBS-001]
  */
 export function createSafeHandler(
   serviceName: string,
-  handler: (req: Request, context?: { traceId: string }) => Promise<Response> | Response,
+  handler: (req: Request, context: RequestContext) => Promise<Response> | Response,
   customLogDir?: string
 ): (req: Request) => Promise<Response> {
   const logger = createLogger(serviceName, customLogDir);
@@ -25,29 +31,34 @@ export function createSafeHandler(
   return async (req: Request): Promise<Response> => {
     const startTime = performance.now();
     const url = new URL(req.url);
-    const traceId =
-      req.headers.get('x-trace-id') ||
-      req.headers.get('x-request-id') ||
-      crypto.randomUUID();
+    const ctx = new RequestContext(serviceName, req);
 
     try {
-      const response = await handler(req, { traceId });
+      const response = await handler(req, ctx);
       const durationMs = Number((performance.now() - startTime).toFixed(2));
+      const canonical = ctx.toCanonicalEvent(response.status, durationMs);
+
       logger.info(
         `${req.method} ${url.pathname} -> ${response.status} (${durationMs}ms)`,
-        { durationMs, path: url.pathname },
-        traceId
+        { canonical, durationMs, path: url.pathname },
+        ctx.traceId
       );
 
-      // Inject immutable trace ID and apply strict air-gapped security headers
+      // Inject immutable W3C trace IDs and apply strict air-gapped security headers
       const securedResponse = applySecurityHeaders(response);
       const headers = new Headers(securedResponse.headers);
       if (!headers.has('x-trace-id')) {
-        headers.set('x-trace-id', traceId);
+        headers.set('x-trace-id', ctx.traceId);
+      }
+      if (!headers.has('traceparent')) {
+        headers.set('traceparent', formatTraceparent(ctx.traceContext));
+      }
+      if (!headers.has('x-incident-token')) {
+        headers.set('x-incident-token', ctx.incidentToken);
       }
 
-      // Asynchronously dispatch real request telemetry without blocking response
-      dispatchRequestTelemetry(serviceName, req, response.status, durationMs, traceId);
+      // Asynchronously dispatch canonical request telemetry without blocking response
+      dispatchRequestTelemetry(canonical, req);
 
       return new Response(securedResponse.body, {
         status: securedResponse.status,
@@ -57,15 +68,20 @@ export function createSafeHandler(
     } catch (err: unknown) {
       const error = err instanceof Error ? err : new Error(String(err));
       const durationMs = Number((performance.now() - startTime).toFixed(2));
+      const canonical = ctx.toCanonicalEvent(500, durationMs, {
+        type: error.name,
+        message: error.message,
+      });
+
       logger.error(
         `Unhandled error during ${req.method} ${url.pathname} (${durationMs}ms)`,
         error,
-        { durationMs, path: url.pathname },
-        traceId
+        { canonical, durationMs, path: url.pathname },
+        ctx.traceId
       );
 
       // Asynchronously dispatch error telemetry
-      dispatchRequestTelemetry(serviceName, req, 500, durationMs, traceId);
+      dispatchRequestTelemetry(canonical, req);
 
       const acceptHeader = req.headers.get('accept') || '';
       const isHtmlRequest =
@@ -74,13 +90,22 @@ export function createSafeHandler(
         req.method === 'GET';
 
       if (isHtmlRequest) {
+        const isDev = process.env.NODE_ENV !== 'production';
         const html = renderAstryxErrorHtml({
           statusCode: 500,
           title: 'Internal Server Error',
           message:
             'An unexpected system error occurred. System telemetry has logged this incident for review.',
           appName: serviceName,
-          traceId,
+          traceId: ctx.traceId,
+          incidentToken: ctx.incidentToken,
+          devDetails: isDev
+            ? {
+                stack: error.stack,
+                route: url.pathname,
+                method: req.method,
+              }
+            : undefined,
           primaryActionText: '↻ Reload Page',
           primaryActionHref: 'javascript:window.location.reload()',
           secondaryActionText: 'Platform Hub &rarr;',
@@ -91,7 +116,9 @@ export function createSafeHandler(
           status: 500,
           headers: {
             'Content-Type': 'text/html; charset=utf-8',
-            'x-trace-id': traceId,
+            'x-trace-id': ctx.traceId,
+            'traceparent': formatTraceparent(ctx.traceContext),
+            'x-incident-token': ctx.incidentToken,
           },
         });
         return applySecurityHeaders(htmlResponse);
@@ -104,16 +131,19 @@ export function createSafeHandler(
           type: `https://${domain}/errors/internal-server-error`,
           title: 'Internal Server Error',
           status: 500,
-          detail: 'An unexpected system error occurred. Please contact support.',
+          detail: 'An unexpected system error occurred. Please contact support with incidentToken.',
           service: serviceName,
-          traceId,
+          traceId: ctx.traceId,
+          incidentToken: ctx.incidentToken,
           timestamp: new Date().toISOString(),
         },
         {
           status: 500,
           headers: {
             'Content-Type': 'application/problem+json; charset=utf-8',
-            'x-trace-id': traceId,
+            'x-trace-id': ctx.traceId,
+            'traceparent': formatTraceparent(ctx.traceContext),
+            'x-incident-token': ctx.incidentToken,
           },
         }
       );
@@ -124,14 +154,11 @@ export function createSafeHandler(
 
 /**
  * Asynchronously dispatches server request telemetry without blocking response delivery.
- * @requirements [HLR-DEV-501] [LLR-TEL-001]
+ * @requirements [HLR-DEV-501] [LLR-TEL-001] [LLR-OBS-001]
  */
 function dispatchRequestTelemetry(
-  serviceName: string,
-  req: Request,
-  status: number,
-  durationMs: number,
-  traceId: string
+  canonical: CanonicalRequestEvent,
+  req: Request
 ): void {
   try {
     const url = new URL(req.url);
@@ -159,15 +186,22 @@ function dispatchRequestTelemetry(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        service: serviceName,
-        path: url.pathname,
-        method: req.method,
-        statusCode: status,
-        durationMs,
+        service: canonical.service,
+        path: canonical.route,
+        method: canonical.method,
+        statusCode: canonical.statusCode,
+        durationMs: canonical.durationMs,
         clientIp,
         userAgent,
         referer,
-        traceId,
+        traceId: canonical.traceId,
+        incidentToken: canonical.incidentToken,
+        orgId: canonical.tenant.orgId,
+        userId: canonical.tenant.userId,
+        tier: canonical.tenant.tier,
+        metrics: canonical.metrics,
+        spans: canonical.spans,
+        error: canonical.error,
         timestamp: Math.floor(Date.now() / 1000),
       }),
     }).catch(() => {
@@ -175,4 +209,5 @@ function dispatchRequestTelemetry(
     });
   } catch {}
 }
+
 

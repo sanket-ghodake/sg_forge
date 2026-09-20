@@ -20,6 +20,12 @@ export interface ErrorPageOptions {
   message?: string;
   userEmail?: string;
   traceId?: string;
+  incidentToken?: string;
+  devDetails?: {
+    stack?: string;
+    route?: string;
+    method?: string;
+  };
   primaryActionText?: string;
   primaryActionHref?: string;
   secondaryActionText?: string;
@@ -259,12 +265,21 @@ export function renderAstryxErrorHtml(options: ErrorPageOptions): string {
         <a href="${secondaryHref}" class="astryx-btn btn-outline" style="border-color: var(--forge-border);">${secondaryText}</a>
       </div>
 
-      ${options.traceId ? `
-      <div class="trace-pill" id="trace-btn" onclick="navigator.clipboard.writeText('${options.traceId}').then(()=>{this.classList.add('copied');var l=this.querySelector('.trace-lbl');if(l)l.textContent='Copied!';setTimeout(()=>{this.classList.remove('copied');if(l)l.textContent='Incident Trace:'},1500)});" title="Click to copy Trace ID">
-        <span class="trace-lbl">Incident Trace:</span>
-        <code>${options.traceId}</code>
+      ${options.traceId || options.incidentToken ? `
+      <div class="trace-pill" id="trace-btn" onclick="const payload = 'Incident Token: ' + ('${options.incidentToken || options.traceId}') + '\\nTrace ID: ' + ('${options.traceId || ''}') + '\\nService: ' + ('${options.appName || 'platform'}') + '\\nTimestamp: ' + new Date().toISOString(); navigator.clipboard.writeText(payload).then(()=>{this.classList.add('copied');var l=this.querySelector('.trace-lbl');if(l)l.textContent='Copied Diagnostic Data!';setTimeout(()=>{this.classList.remove('copied');if(l)l.textContent='${options.incidentToken ? 'Incident Token:' : 'Incident Trace:'}'},1800)});" title="Click to copy Incident Token & Diagnostic Context">
+        <span class="trace-lbl">${options.incidentToken ? 'Incident Token:' : 'Incident Trace:'}</span>
+        <code>${options.incidentToken || options.traceId}</code>
         <span style="display:inline-flex;opacity:0.7;">${astryxIcons.copy}</span>
       </div>` : ''}
+
+      ${options.devDetails && options.devDetails.stack ? `
+      <details style="margin-top: 1.25rem; text-align: left; background: var(--forge-bg-root); border: 1px solid var(--forge-border); border-radius: var(--forge-radius-sm); padding: 0.65rem 0.85rem; font-size: 0.75rem;">
+        <summary style="cursor: pointer; color: var(--forge-text-muted); font-weight: 600; outline: none;">Developer Inspection Context</summary>
+        <div style="margin-top: 0.5rem; color: var(--forge-text-subtle); font-family: monospace; line-height: 1.4;">
+          ${options.devDetails.route ? `<div>Route: <strong style="color:var(--forge-text-main);">${options.devDetails.route}</strong> [${options.devDetails.method || 'GET'}]</div>` : ''}
+          <pre style="margin: 0.5rem 0 0 0; padding: 0.5rem; background: rgba(0,0,0,0.25); border-radius: 4px; overflow-x: auto; color: var(--forge-danger, #ef4444); white-space: pre-wrap;">${options.devDetails.stack}</pre>
+        </div>
+      </details>` : ''}
     </div>
   </main>
 </body>
